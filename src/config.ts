@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
+  website: "https://daehoski.github.io/blog/", // replace this with your deployed domain
   author: "AWS SAA Learner",
   profile: "",
   desc: "AWS SAA 정답 및 핵심 키워드 정리 블로그입니다.",
