@@ -1,0 +1,18 @@
+---
+import { SITE } from "@/config";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import AwsSaaMap from "@/components/AwsSaaMap";
+---
+
+<Layout title={`AWS SAA Keyword Map | ${SITE.title}`}>
+  <Header activeNav="aws-saa" />
+  <Main 
+    pageTitle="AWS SAA Keyword Map" 
+    pageDesc="공부하면서 정리한 핵심 키워드와 정답(서비스) 맵핑 리스트입니다.">
+    <AwsSaaMap client:load />
+  </Main>
+  <Footer />
+</Layout>

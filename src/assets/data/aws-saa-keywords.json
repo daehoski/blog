@@ -1,0 +1,37 @@
+[
+  {
+    "keyword": "S3 glacier query without restore",
+    "answer": "S3 Glacier Select",
+    "category": "Storage"
+  },
+  {
+    "keyword": "HPC clusters low latency",
+    "answer": "Cluster Placement Group",
+    "category": "Compute"
+  },
+  {
+    "keyword": "On-premise to S3 large scale",
+    "answer": "AWS Snowball Edge",
+    "category": "Storage"
+  },
+  {
+    "keyword": "Managed message broker (RabbitMQ/ActiveMQ)",
+    "answer": "Amazon MQ",
+    "category": "Application Integration"
+  },
+  {
+    "keyword": "NoSQL sub-millisecond latency",
+    "answer": "DynamoDB + DAX",
+    "category": "Database"
+  },
+  {
+    "keyword": "Relational Database cross-region read replicas",
+    "answer": "Amazon RDS / Aurora",
+    "category": "Database"
+  },
+  {
+    "keyword": "Block storage for EC2 with high IOPS",
+    "answer": "EBS Provisioned IOPS (io2)",
+    "category": "Storage"
+  }
+]
