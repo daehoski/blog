@@ -2,36 +2,217 @@
   {
     "keyword": "S3 glacier query without restore",
     "answer": "S3 Glacier Select",
-    "category": "Storage"
+    "category": "Storage",
+    "options": [
+      "S3 Glacier Select",
+      "S3 standard-IA",
+      "S3 Glacier Instant Retrieval",
+      "S3 Life Cycle Policy"
+    ],
+    "explanation": "S3 Glacier Select를 사용하면 보관된 데이터를 먼저 복원하지 않고도 S3 Glacier 내의 객체에 대해 SQL 쿼리를 실행할 수 있습니다."
   },
   {
     "keyword": "HPC clusters low latency",
     "answer": "Cluster Placement Group",
-    "category": "Compute"
+    "category": "Compute",
+    "options": [
+      "Cluster Placement Group",
+      "Spread Placement Group",
+      "Partition Placement Group",
+      "Auto Scaling Group"
+    ],
+    "explanation": "Cluster Placement Group은 단일 가용 영역 내의 인스턴스를 물리적으로 가깝게 배치하여 워크로드에 낮은 네트워크 지연 시간과 높은 네트워크 처리량을 제공합니다."
   },
   {
     "keyword": "On-premise to S3 large scale",
     "answer": "AWS Snowball Edge",
-    "category": "Storage"
+    "category": "Storage",
+    "options": [
+      "AWS Snowball Edge",
+      "AWS DataSync",
+      "AWS Direct Connect",
+      "AWS Storage Gateway"
+    ],
+    "explanation": "테라바이트에서 페타바이트 규모의 대규모 데이터를 물리적 장치를 통해 AWS로 안전하게 이동할 때 가장 비용 효율적이고 빠른 방법입니다."
   },
   {
     "keyword": "Managed message broker (RabbitMQ/ActiveMQ)",
     "answer": "Amazon MQ",
-    "category": "Application Integration"
+    "category": "Application Integration",
+    "options": [
+      "Amazon MQ",
+      "Amazon SQS",
+      "Amazon SNS",
+      "Amazon EventBridge"
+    ],
+    "explanation": "Amazon MQ는 RabbitMQ나 ActiveMQ와 같은 기존 메시지 브로커 소프트웨어와 호환되는 관리형 서비스입니다."
   },
   {
     "keyword": "NoSQL sub-millisecond latency",
     "answer": "DynamoDB + DAX",
-    "category": "Database"
+    "category": "Database",
+    "options": [
+      "DynamoDB + DAX",
+      "Amazon ElastiCache",
+      "DynamoDB Global Tables",
+      "Amazon RDS"
+    ],
+    "explanation": "DAX(DynamoDB Accelerator)는 DynamoDB를 위한 완전관리형 가용성 높은 메모리 내 캐시로, 읽기 성능을 밀리초 미만 수준으로 높여줍니다."
   },
   {
-    "keyword": "Relational Database cross-region read replicas",
-    "answer": "Amazon RDS / Aurora",
-    "category": "Database"
+    "keyword": "OLTP + Unpredictable Traffic + Min Cost",
+    "answer": "Fargate + Aurora Serverless",
+    "category": "Serverless",
+    "options": [
+      "Fargate + Aurora Serverless",
+      "EC2 + RDS Provisioned",
+      "Lambda + DynamoDB",
+      "Beanstalk + Aurora"
+    ],
+    "explanation": "트래픽을 예측할 수 없는 경우, 사용량에 따라 자동으로 크기가 조정되고 사용하지 않을 때 비용이 발생하지 않는 Serverless 조합(Fargate/Aurora Serverless)이 가장 비용 효율적입니다."
   },
   {
-    "keyword": "Block storage for EC2 with high IOPS",
-    "answer": "EBS Provisioned IOPS (io2)",
-    "category": "Storage"
+    "keyword": "EC2 Instance Metadata Address",
+    "answer": "169.254.169.254",
+    "category": "Compute",
+    "options": [
+      "169.254.169.254",
+      "192.168.0.1",
+      "10.0.0.1",
+      "172.31.0.1"
+    ],
+    "explanation": "169.254.169.254는 EC2 인스턴스 메타데이터를 검색하기 위한 고정된 Link-local 주소입니다."
+  },
+  {
+    "keyword": "Prevent 5xx during ASG scale-in",
+    "answer": "Deregistration Delay",
+    "category": "Resilience",
+    "options": [
+      "Deregistration Delay",
+      "Connection Draining",
+      "Sticky Sessions",
+      "Health Check Grace Period"
+    ],
+    "explanation": "Deregistration Delay(또는 Connection Draining)는 인스턴스가 등록 취소될 때 현재 처리 중인 요청이 완료될 때까지 기다려 5xx 에러를 방지합니다."
+  },
+  {
+    "keyword": "Vulnerability scanning for EC2 and ECR",
+    "answer": "Amazon Inspector",
+    "category": "Security",
+    "options": [
+      "Amazon Inspector",
+      "AWS GuardDuty",
+      "AWS WAF",
+      "Amazon Macie"
+    ],
+    "explanation": "Amazon Inspector는 EC2 인스턴스와 ECR 이미지의 취약점을 자동으로 검색하고 평가하는 보안 서비스입니다."
+  },
+  {
+    "keyword": "DR strategy: RTO 5min + Min instance",
+    "answer": "Warm Standby",
+    "category": "Resilience",
+    "options": [
+      "Warm Standby",
+      "Pilot Light",
+      "Backup and Restore",
+      "Multi-site Active-Active"
+    ],
+    "explanation": "Warm Standby는 서비스의 축소된 버전이 다른 지역에서 항상 실행되고 있어, 재해 발생 시 빠르게 확장하여 낮은 RTO를 달성할 수 있습니다."
+  },
+  {
+    "keyword": "DR strategy: Start on failure",
+    "answer": "Pilot Light",
+    "category": "Resilience",
+    "options": [
+      "Pilot Light",
+      "Warm Standby",
+      "Multi-site",
+      "CloudEndure"
+    ],
+    "explanation": "Pilot Light는 데이터는 라이브 상태로 유지하되, 컴퓨팅 자원은 재해 발생 시에만 생성/시작하여 비용을 최소화하는 전략입니다."
+  },
+  {
+    "keyword": "High IOPS (40k) + Temp Data + Cost Effective",
+    "answer": "Instance Store",
+    "category": "Storage",
+    "options": [
+      "Instance Store",
+      "EBS io2",
+      "EBS gp3",
+      "Amazon S3"
+    ],
+    "explanation": "Instance Store는 호스트 컴퓨터에 물리적으로 부착된 NVMe SSD를 제공하여 매우 높은 IOPS가 필요하고 손실되어도 무방한 임시 데이터 처리에 가장 적절합니다."
+  },
+  {
+    "keyword": "XSS & SQL Injection protection",
+    "answer": "AWS WAF",
+    "category": "Security",
+    "options": [
+      "AWS WAF",
+      "AWS Shield",
+      "AWS Firewall Manager",
+      "Amazon GuardDuty"
+    ],
+    "explanation": "AWS WAF는 웹 ACL을 통해 L7 계층에서 XSS나 SQL Injection 같은 일반적인 웹 공격을 차단합니다."
+  },
+  {
+    "keyword": "Archive + 2hr Retrieval RTO",
+    "answer": "Glacier Instant Retrieval",
+    "category": "Storage",
+    "options": [
+      "Glacier Instant Retrieval",
+      "Glacier Flexible Retrieval",
+      "Glacier Deep Archive",
+      "S3 One Zone-IA"
+    ],
+    "explanation": "데이터를 즉시(밀리초 단위) 또는 몇 시간 내에 검색해야 하는 아카이브 데이터에 대해 가장 저렴한 스토리지 클래스입니다."
+  },
+  {
+    "keyword": "Large File (20GB+) Upload + Unstable Network",
+    "answer": "Multi-part Upload",
+    "category": "Storage",
+    "options": [
+      "S3 Transfer Acceleration",
+      "Multi-part Upload",
+      "S3 Batch Operations",
+      "S3 Gateway"
+    ],
+    "explanation": "5GB 이상의 대용량 파일은 Multi-part Upload를 통해 조각내어 전송하는 것이 효율적이며, 네트워크 중단 시에도 이어서 전송할 수 있습니다."
+  },
+  {
+    "keyword": "Fixed 1000 IOPS RDS + Cost Effective",
+    "answer": "RDS gp3",
+    "category": "Database",
+    "options": [
+      "Provisioned IOPS (io2)",
+      "RDS gp3",
+      "Throughput Optimized HDD (st1)",
+      "Cold HDD (sc1)"
+    ],
+    "explanation": "gp3는 볼륨 크기와 관계없이 3000 IOPS를 기본으로 제공하며, 비용 면에서 gp2보다 저렴하고 성능 조정이 유연합니다."
+  },
+  {
+    "keyword": "Mobile App Auth/User Mgmt",
+    "answer": "Amazon Cognito",
+    "category": "Security",
+    "options": [
+      "IAM User",
+      "AWS Directory Service",
+      "Amazon Cognito",
+      "AWS Single Sign-On"
+    ],
+    "explanation": "모바일 및 웹 앱의 사용자 가입, 로그인, 액세스 제어를 위해 가장 적합한 관리형 서비스입니다."
+  },
+  {
+    "keyword": "Cross-Account Audit Access Security",
+    "answer": "IAM Role with Trust Policy",
+    "category": "Security",
+    "options": [
+      "IAM User Access Key",
+      "IAM Group Policy",
+      "IAM Role with Trust Policy",
+      "Cross-Account Bucket Policy"
+    ],
+    "explanation": "타 계정의 감사를 허용할 때는 정적 키 대신 IAM Role과 Trust Policy를 사용하여 임시 자격 증명을 부여하는 것이 가장 안전한 보안 모범 사례입니다."
   }
 ]

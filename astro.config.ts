@@ -15,7 +15,8 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
+  site: "https://daehoski.github.io",
+  base: "/blog",
   integrations: [sitemap({
     filter: page => SITE.showArchives || !page.endsWith("/archives"),
   }), react()],

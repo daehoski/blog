@@ -1,0 +1,23 @@
+---
+import { SITE } from "@/config";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import AwsSaaQuiz from "@/components/AwsSaaQuiz";
+---
+
+<Layout title={`AWS SAA Quiz | ${SITE.title}`}>
+  <Header activeNav="aws-saa-quiz" />
+  <Main 
+    pageTitle="AWS SAA Practice Quiz" 
+    pageDesc="학습한 키워드들을 무작위 문제로 풀어보며 실력을 점검해보세요.">
+    <div className="flex justify-center mb-8">
+      <a href="/aws-saa" className="text-sm text-skin-accent hover:underline">
+        ← 키워드 맵으로 돌아가기
+      </a>
+    </div>
+    <AwsSaaQuiz client:load />
+  </Main>
+  <Footer />
+</Layout>

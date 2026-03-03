@@ -1,7 +1,18 @@
-@import "tailwindcss";
-@import "./typography.css";
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('/fonts/NanumGothic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('/fonts/NanumGothicBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root,
 html[data-theme="light"] {
@@ -21,7 +32,7 @@ html[data-theme="dark"] {
 }
 
 @theme inline {
-  --font-app: var(--font-google-sans-code);
+  --font-app: 'NanumGothic', sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
