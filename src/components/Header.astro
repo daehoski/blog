@@ -43,7 +43,7 @@ import HeaderLink from './HeaderLink.astro';
 			const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 			authSection.innerHTML = `
 				<div class="user-info">
-					<span class="desktop-text">${name}님</span>
+					<a href="/mypage" class="desktop-text user-name-link">${name}님</a>
 					<button id="header-logout-btn" class="logout-btn">
 						<span class="desktop-text">로그아웃</span>
 						<span class="mobile-icon">
@@ -56,7 +56,6 @@ import HeaderLink from './HeaderLink.astro';
 					</button>
 				</div>
 			`;
-			document.getElementById('header-logout-btn')?.addEventListener('click', () => signOut());
 		} else {
 			authSection.innerHTML = `
 				<button id="header-login-btn" class="login-btn">
@@ -69,9 +68,23 @@ import HeaderLink from './HeaderLink.astro';
 					</span>
 				</button>
 			`;
-			document.getElementById('header-login-btn')?.addEventListener('click', () => signInWithGoogle());
 		}
 	};
+
+	// Event Delegation for Auth Buttons (Fixes unresponsiveness)
+	authSection?.addEventListener('click', (e) => {
+		const target = e.target as HTMLElement;
+		const loginBtn = target.closest('#header-login-btn');
+		const logoutBtn = target.closest('#header-logout-btn');
+
+		if (loginBtn) {
+			console.log('Login button clicked');
+			signInWithGoogle();
+		} else if (logoutBtn) {
+			console.log('Logout button clicked');
+			signOut();
+		}
+	});
 
 	// Only attempt auth logic if supabase is available
 	if (supabase) {
@@ -154,6 +167,16 @@ import HeaderLink from './HeaderLink.astro';
 		color: #1d1d1f;
 		font-size: 0.9rem;
 		font-weight: 600;
+	}
+	.user-name-link {
+		color: #1d1d1f;
+		text-decoration: none;
+		padding: 0.4rem 0.8rem;
+		border-radius: 99px;
+		transition: background 0.2s;
+	}
+	.user-name-link:hover {
+		background: rgba(0, 0, 0, 0.05);
 	}
 	.login-btn, .logout-btn {
 		background: transparent;

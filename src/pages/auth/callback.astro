@@ -32,11 +32,10 @@ import BaseHead from '../../components/BaseHead.astro';
           // Sync guest data before redirecting
           await syncGuestData(session.user.id);
           
-          // Redirect back to the last visited quiz or the quiz list
-          const lastVisited = localStorage.getItem('last_visited_quiz') || '/quiz';
-          window.location.href = lastVisited;
+          // Always redirect to MyPage after login/sync as requested
+          window.location.href = '/mypage';
         } else {
-          window.location.href = '/quiz';
+          window.location.href = '/';
         }
       };
 

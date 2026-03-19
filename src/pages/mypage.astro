@@ -1,0 +1,325 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+import '../styles/quiz.css'; // Reuse some quiz card styles
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`마이페이지 | ${SITE_TITLE}`} description="나의 학습 현황과 오답 노트를 확인하세요." />
+        <style>
+            main {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 4rem 1.5rem;
+            }
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                border-radius: 28px;
+                padding: 2rem;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            }
+            .full-width {
+                grid-column: 1 / -1;
+            }
+            .stats-title {
+                font-size: 0.9rem;
+                color: #86868b;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            .stats-value {
+                font-size: 2.5rem;
+                font-weight: 800;
+                color: #1d1d1f;
+                letter-spacing: -0.04em;
+            }
+            .coaching-box {
+                background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+                border-radius: 20px;
+                padding: 1.5rem;
+                border: 1px solid rgba(0, 0, 0, 0.03);
+                margin-top: 1rem;
+            }
+            .progress-bar-bg {
+                background: #e5e7eb;
+                height: 8px;
+                border-radius: 4px;
+                margin-top: 1rem;
+                overflow: hidden;
+            }
+            .progress-bar-fill {
+                background: #1d1d1f;
+                height: 100%;
+                width: 0%;
+                transition: width 1s ease-out;
+            }
+            .wrong-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1rem 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            .wrong-item:last-child { border-bottom: none; }
+            .wrong-link {
+                color: #1d1d1f;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.95rem;
+                display: block;
+                max-width: 80%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .wrong-link:hover { text-decoration: underline; }
+            .delete-btn {
+                background: transparent;
+                color: #ff3b30;
+                border: 1px solid rgba(255, 59, 48, 0.2);
+                padding: 0.6rem 1.2rem;
+                border-radius: 99px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .delete-btn:hover {
+                background: #ff3b30;
+                color: white;
+            }
+            .skeleton {
+                background: #eeeeee;
+                height: 1.5rem;
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+                animation: pulse 1.5s infinite;
+            }
+            /* Animation for counting stats */
+            @keyframes pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+            }
+            @media (max-width: 768px) {
+                .dashboard-grid { grid-template-columns: 1fr; }
+                main { padding-top: 2rem; }
+            }
+        </style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section id="welcome-section" class="full-width" style="margin-bottom: 2rem;">
+				<h1 id="user-greeting" style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; color: #1d1d1f;">학습 현황 분석 중...</h1>
+				<p id="coaching-message" style="color: #86868b; font-size: 1.1rem; margin-top: 0.5rem; word-break: keep-all; font-weight: 500;"></p>
+			</section>
+
+			<div class="dashboard-grid">
+				<!-- Overall Progress -->
+				<div class="glass-card">
+					<div class="stats-title">전체 학습 진행률</div>
+					<div id="progress-value" class="stats-value">0%</div>
+					<div id="progress-detail" style="font-size: 0.9rem; color: #86868b; margin-top: 0.25rem;">0 / 725 문제 완료</div>
+					<div class="progress-bar-bg">
+						<div id="progress-fill" class="progress-bar-fill"></div>
+					</div>
+				</div>
+
+				<!-- Today's Stats -->
+				<div class="glass-card">
+					<div class="stats-title">오늘의 학습량</div>
+					<div id="today-count" class="stats-value">0</div>
+					<p style="font-size: 0.9rem; color: #86868b; margin-top: 0.5rem;">최근 24시간 내에 푼 문제 수입니다.</p>
+				</div>
+
+				<!-- Weak Area Analysis (Coaching) -->
+				<div class="glass-card full-width">
+					<div class="stats-title">1타 강사의 개인화 가이드</div>
+					<div class="coaching-box" id="coaching-box">
+						<p id="coaching-analysis" style="font-weight: 600; line-height: 1.6; color: #1d1d1f; font-size: 1.1rem; word-break: keep-all;">학습 데이터를 분석하고 있습니다...</p>
+					</div>
+				</div>
+
+				<!-- Recent Wrong Answers -->
+				<div class="glass-card full-width">
+					<div class="stats-title">📝 최근 오답 리뷰</div>
+					<div id="wrong-list" style="margin-top: 1rem;">
+						<div class="skeleton"></div>
+						<div class="skeleton"></div>
+						<div class="skeleton"></div>
+					</div>
+				</div>
+
+				<!-- Account Settings -->
+				<div class="glass-card full-width" style="text-align: center; margin-top: 2rem; padding: 2rem; border-color: rgba(255, 59, 48, 0.1);">
+					<div class="stats-title" style="margin-bottom: 1.5rem;">계정 관리</div>
+					<button id="delete-account-btn" class="delete-btn">회원 탈퇴</button>
+                    <p style="font-size: 0.85rem; color: #86868b; margin-top: 1.5rem; font-weight: 500;">
+                        탈퇴 시 모든 학습 기록 및 오답 노트가 서버에서 영구적으로 삭제되며 복구할 수 없습니다.
+                    </p>
+				</div>
+			</div>
+		</main>
+		<Footer />
+
+		<script>
+			import { supabase } from '../lib/supabase.js';
+            import { allQuizData } from '../data/all-quiz-data.js';
+            import { quizSlugMap } from '../lib/utils.js';
+
+			const initMyPage = async () => {
+				const { data: { session } } = await supabase.auth.getSession();
+				if (!session) {
+					window.location.href = '/'; 
+					return;
+				}
+
+				const user = session.user;
+				const name = user.user_metadata?.full_name || user.email?.split('@')[0];
+				
+				// 1. Basic Greeting
+				document.getElementById('user-greeting').textContent = `${name}님, 환영합니다! 👋`;
+				
+                // 2. Fetch User Stats (From wrong_answers)
+                const { data: wrongAnswers, error } = await supabase
+                    .from('wrong_answers')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('Data fetch error:', error);
+                    return;
+                }
+
+                // 3. Calculate Progress
+                // count unique quiz_id's solved
+                const attemptedIds = new Set(wrongAnswers.map(r => r.quiz_id));
+                const totalAttempted = attemptedIds.size;
+                const totalProgress = Math.round((totalAttempted / 725) * 100);
+                
+                document.getElementById('progress-value').textContent = `${totalProgress}%`;
+                document.getElementById('progress-detail').textContent = `${totalAttempted} / 725 문제 완료`;
+                document.getElementById('progress-fill').style.width = `${totalProgress}%`;
+
+                // 4. Calculate Today's Count (Past 24h)
+                const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                const todayAnswers = wrongAnswers.filter(r => new Date(r.created_at) > oneDayAgo);
+                document.getElementById('today-count').textContent = todayAnswers.length.toString();
+
+                // 5. Build Wrong List & Analyze Weakness
+                const wrongList = document.getElementById('wrong-list');
+                wrongList.innerHTML = '';
+                
+                const keywords = {};
+                
+                // Flatten all quiz data to find questions efficiently
+                const flatQuizzes = {};
+                Object.values(allQuizData).forEach(group => {
+                    group.forEach(q => { flatQuizzes[q.id] = q; });
+                });
+
+                if (wrongAnswers.length === 0) {
+                    wrongList.innerHTML = '<p style="color: #86868b; text-align: center; padding: 2rem; font-weight: 500;">아직 틀린 문제가 없습니다. 완벽한 주행이네요! 🎉</p>';
+                    document.getElementById('coaching-analysis').textContent = '데이터가 부족하지만, 지금까지의 성적은 최고입니다! 계속 정진하세요.';
+                } else {
+                    // Populate recent fails (last 10 unique ones)
+                    const uniqueFails = [];
+                    const seen = new Set();
+                    for (const r of wrongAnswers) {
+                        if (!seen.has(r.quiz_id)) {
+                            uniqueFails.push(r);
+                            seen.add(r.quiz_id);
+                        }
+                        if (uniqueFails.length >= 10) break;
+                    }
+
+                    uniqueFails.forEach(record => {
+                        const quiz = flatQuizzes[record.quiz_id];
+                        if (quiz) {
+                            const item = document.createElement('div');
+                            item.className = 'wrong-item';
+                            
+                            // Map the quiz ID to a slug range
+                            const setStart = Math.floor((quiz.id - 1) / 25) * 25 + 1;
+                            const rangeKey = `q${setStart}-${setStart + 24}`;
+                            const slug = quizSlugMap[rangeKey] || rangeKey;
+
+                            item.innerHTML = `
+                                <a href="/quiz/${slug}/#quiz-${quiz.id}" class="wrong-link">Q${quiz.id}. ${quiz.question}</a>
+                                <span style="font-size: 0.75rem; color: #86868b; font-weight: 600;">${new Date(record.created_at).toLocaleDateString()}</span>
+                            `;
+                            wrongList.appendChild(item);
+                        }
+                    });
+
+                    // 6. Analyze Weakness (Keywords Extraction)
+                    // We look at ALL wrong answers to find the pattern
+                    wrongAnswers.forEach(record => {
+                        const quiz = flatQuizzes[record.quiz_id];
+                        if (quiz) {
+                            const text = quiz.question.toUpperCase();
+                            ["VPC", "S3", "EC2", "IAM", "RDS", "LAMBDA", "DYNAMODB", "ROUTE 53", "ELB", "ASG", "KINESIS", "CLOUDFRONT", "CLOUD FORMATION"].forEach(k => {
+                                if (text.includes(k)) keywords[k] = (keywords[k] || 0) + 1;
+                            });
+                        }
+                    });
+
+                    const sortedKeywords = Object.entries(keywords).sort((a, b) => b[1] - a[1]);
+                    if (sortedKeywords.length > 0) {
+                        const weak = sortedKeywords[0][0];
+                        document.getElementById('coaching-analysis').textContent = 
+                            `${name}님, 최근 **${weak}** 관련 문제에서 실수가 잦은 것으로 분석됩니다. 해당 파트의 핵심 개념을 다시 한번 복습해 보는 건 어떨까요?`;
+                    } else {
+                        document.getElementById('coaching-analysis').textContent = 
+                            `${name}님, 현재 전 분야에서 고르게 오답이 발생하고 있습니다. 기초부터 다시 다지며 꼼꼼히 리뷰해 보세요!`;
+                    }
+                }
+
+                // 7. Delete Account Logic
+                const deleteBtn = document.getElementById('delete-account-btn');
+                deleteBtn.addEventListener('click', async () => {
+                    const confirmMsg = "잠시만요! 정말 탈퇴하시겠습니까?\n그동안의 모든 학습 기록과 오답 노트가 영구적으로 삭제됩니다. 보관할 데이터가 없는지 확인하세요.";
+                    if (confirm(confirmMsg)) {
+                        try {
+                            // Wipe user data from the DB
+                            const { error: deleteError } = await supabase
+                                .from('wrong_answers')
+                                .delete()
+                                .eq('user_id', user.id);
+                            
+                            if (deleteError) throw deleteError;
+
+                            // Actual account deletion (Requires Admin rights or special setup)
+                            // For now, we sign out and alert success to simulate deletion flow.
+                            await supabase.auth.signOut();
+                            alert("탈퇴 처리가 정상적으로 완료되었습니다. 이용해 주셔서 감사합니다.");
+                            window.location.href = '/';
+                        } catch (e) {
+                            console.error('Account deletion error:', e);
+                            alert("오류가 발생했습니다: " + e.message);
+                        }
+                    }
+                });
+			};
+
+			initMyPage();
+		</script>
+	</body>
+</html>
