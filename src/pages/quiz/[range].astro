@@ -1,0 +1,244 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { allQuizData } from '../../data/all-quiz-data.js';
+import '../../styles/quiz.css';
+
+export function getStaticPaths() {
+  return [
+    { params: { range: 'q01-25' } },
+    { params: { range: 'q26-50' } },
+    { params: { range: 'q51-75' } },
+    { params: { range: 'q76-100' } },
+  ];
+}
+
+const { range } = Astro.params;
+const quizData = allQuizData[range] || [];
+
+const titles = {
+  'q01-25': "AWS SAA C03 덤프 (1~25번)",
+  'q26-50': "AWS SAA C03 덤프 (26~50번)",
+  'q51-75': "AWS SAA C03 덤프 (51~75번)",
+  'q76-100': "AWS SAA C03 덤프 (76~100번)",
+};
+
+const title = titles[range] || "AWS SAA C03 덤프";
+const description = "AWS SAA-C03 덤프 문제를 인터랙티브하게 풀어보고 오답 노트를 확인하세요.";
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="quiz-container">
+				<header style="text-align: center; margin-bottom: 3rem;">
+					<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯 {title}</h1>
+					<p style="color: #666;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
+                    <nav class="quiz-nav-links" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+                        <a href="/quiz/q01-25" class={range === 'q01-25' ? 'active' : ''}>1-25</a>
+                        <a href="/quiz/q26-50" class={range === 'q26-50' ? 'active' : ''}>26-50</a>
+                        <a href="/quiz/q51-75" class={range === 'q51-75' ? 'active' : ''}>51-75</a>
+                        <a href="/quiz/q76-100" class={range === 'q76-100' ? 'active' : ''}>76-100</a>
+                    </nav>
+				</header>
+
+				{quizData.length > 0 ? (
+                    <form id="quiz-form">
+                        {quizData.map((quiz, index) => (
+                            <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)}>
+                                <div class="quiz-question-header">
+                                    <span class="quiz-badge">Q{quiz.id}</span>
+                                    <h2 class="quiz-question-text">{quiz.question}</h2>
+                                </div>
+
+                                <div class="quiz-options">
+                                    {quiz.options.map((option, optIndex) => (
+                                        <label class="quiz-option" for={`q${quiz.id}-opt${optIndex}`}>
+                                            <input 
+                                                type={Array.isArray(quiz.answer) ? "checkbox" : "radio"} 
+                                                name={`q${quiz.id}`} 
+                                                id={`q${quiz.id}-opt${optIndex}`} 
+                                                value={optIndex}
+                                            />
+                                            <span class="quiz-option-text">{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
+
+                                <button type="button" class="quiz-btn grade-btn" data-quiz-id={quiz.id}>
+                                    해설 및 채점
+                                </button>
+
+                                <div class="quiz-result-area hidden" id={`result-${quiz.id}`}>
+                                    <div class="quiz-explanation">
+                                        <div class="quiz-explanation-title">
+                                            <span>📖 해설</span>
+                                        </div>
+                                        <p class="explanation-text">{quiz.explanation}</p>
+                                    </div>
+
+                                    {quiz.glossary && Object.keys(quiz.glossary).length > 0 && (
+                                        <div class="quiz-glossary">
+                                            <div class="quiz-glossary-title">
+                                                <span>💡 이 문제의 핵심 용어</span>
+                                            </div>
+                                            <ul class="quiz-glossary-list">
+                                                {Object.entries(quiz.glossary).map(([term, desc]) => (
+                                                    <li class="quiz-glossary-item">
+                                                        <span class="quiz-glossary-term">{term}</span>: {desc}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            </article>
+                        ))}
+                    </form>
+                ) : (
+                    <div style="text-align: center; padding: 4rem; background: white; border-radius: 12px; box-shadow: var(--box-shadow);">
+                        <p style="font-size: 1.25rem; color: #666;">데이터를 준비 중입니다. 잠시만 기다려 주세요! 🚧</p>
+                    </div>
+                )}
+
+				<div class="quiz-summary-card">
+					<button id="show-summary-btn" class="quiz-btn" style="background-color: #059669;">
+						최종 덤프 결과 보기
+					</button>
+
+					<div id="summary-result" class="hidden">
+						<div class="quiz-score-circle">
+							<span id="final-score">0</span>
+							<span class="quiz-score-text">/ {quizData.length}</span>
+						</div>
+						<p id="score-message" style="font-weight: 700; font-size: 1.25rem; margin-bottom: 2rem;"></p>
+						
+						<div class="quiz-wrong-review" id="wrong-answer-note">
+							<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem;">📝 오답 노트</h3>
+							<div id="wrong-list-container"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+
+		<script is:inline define:vars={{ quizData }}>
+			document.addEventListener('DOMContentLoaded', () => {
+				const gradeButtons = document.querySelectorAll('.grade-btn');
+				const showSummaryBtn = document.getElementById('show-summary-btn');
+				const userSelections = {};
+
+				// 개별 문제 채점
+				gradeButtons.forEach(btn => {
+					btn.addEventListener('click', () => {
+						const quizId = parseInt(btn.dataset.quizId);
+						const quizCard = document.getElementById(`quiz-${quizId}`);
+						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer));
+                        
+                        let selectedOptions;
+                        if (isMultiple) {
+                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt(el.value));
+                        } else {
+                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`);
+                            selectedOptions = selected ? [parseInt(selected.value)] : [];
+                        }
+
+						if (selectedOptions.length === 0) {
+							alert("답을 선택해 주세요!");
+							return;
+						}
+
+						userSelections[quizId] = selectedOptions;
+                        const correctAnswers = JSON.parse(quizCard.dataset.answer);
+                        const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+
+						// UI 업데이트
+						const options = quizCard.querySelectorAll('.quiz-option');
+						options.forEach((opt, idx) => {
+							const input = opt.querySelector('input');
+							input.disabled = true;
+							opt.classList.add('disabled');
+
+							if (correctAnswerList.includes(idx)) {
+								opt.classList.add('correct');
+							} else if (selectedOptions.includes(idx)) {
+								opt.classList.add('wrong');
+							}
+						});
+
+						btn.classList.add('hidden');
+						document.getElementById(`result-${quizId}`).classList.remove('hidden');
+					});
+				});
+
+				// 최종 결과 보기
+				showSummaryBtn.addEventListener('click', () => {
+					let correctCount = 0;
+					const wrongListContainer = document.getElementById('wrong-list-container');
+					wrongListContainer.innerHTML = '';
+
+					quizData.forEach(quiz => {
+						const userChoices = userSelections[quiz.id] || [];
+						const correctAnswers = Array.isArray(quiz.answer) ? quiz.answer : [quiz.answer];
+						
+                        // 모든 정답이 선택되었고 오답이 없는지 확인
+                        const isCorrect = userChoices.length === correctAnswers.length && 
+                                          userChoices.every(choice => correctAnswers.includes(choice));
+
+						if (isCorrect) {
+							correctCount++;
+						} else {
+							const wrongItem = document.createElement('div');
+							wrongItem.className = 'quiz-wrong-item';
+							
+							const userChoiceTexts = userChoices.length > 0 
+                                ? userChoices.map(idx => quiz.options[idx]).join(', ') 
+                                : "미선택";
+							const correctChoiceTexts = correctAnswers.map(idx => quiz.options[idx]).join(', ');
+
+							wrongItem.innerHTML = `
+								<div style="margin-bottom: 0.5rem;">
+									<span class="quiz-badge" style="background:#ef4444;">Q${quiz.id}</span>
+									<strong style="margin-left:0.5rem;">${quiz.question}</strong>
+								</div>
+								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #fff1f2; border-radius: 4px;">
+									❌ 내 답변: ${userChoiceTexts}
+								</div>
+								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #f0fdf4; border-radius: 4px;">
+									✅ 정답: ${correctChoiceTexts}
+								</div>
+								<div style="font-size: 0.85rem; color: #666; border-top: 1px solid #eee; padding-top: 0.5rem;">
+									💡 해설: ${quiz.explanation}
+								</div>
+							`;
+							wrongListContainer.appendChild(wrongItem);
+						}
+					});
+
+					document.getElementById('final-score').textContent = correctCount;
+					document.getElementById('summary-result').classList.remove('hidden');
+					
+					const message = correctCount === quizData.length 
+						? "🎉 만점입니다! 완벽해요!" 
+						: correctCount >= quizData.length * 0.8 
+							? "👍 아주 훌륭한 성적입니다!" 
+							: `📖 ${quizData.length}문제 중 ${correctCount}문제를 맞혔습니다. 오답 노트를 확인해 보세요.`;
+					document.getElementById('score-message').textContent = message;
+
+					showSummaryBtn.classList.add('hidden');
+					
+					setTimeout(() => {
+						document.getElementById('summary-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}, 100);
+				});
+			});
+		</script>
+	</body>
+</html>
