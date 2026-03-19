@@ -127,6 +127,10 @@ import HeaderLink from './HeaderLink.astro';
 		margin: 0;
 		padding: 0 1.5rem;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+		/* ✅ 유리 효과(Glassmorphism) 복구 */
+		background: rgba(255, 255, 255, 0.7);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
 	}
 	nav {
 		display: flex;
@@ -173,48 +177,51 @@ import HeaderLink from './HeaderLink.astro';
 		font-weight: 700;
 	}
 	
-	.auth-section {
+	/* ✅ JS로 삽입되는 버튼들에 스타일 강제 적용 (:global 사용) */
+	:global(.auth-section) {
 		display: flex;
 		align-items: center;
 	}
-	.user-info {
+	:global(.user-info) {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
-		color: #1d1d1f;
-		font-size: 0.9rem;
-		font-weight: 600;
+		gap: 0.8rem;
 	}
-	.user-name-link {
+	:global(.user-name-link) {
 		color: #1d1d1f;
 		text-decoration: none;
+		font-size: 0.9rem;
+		font-weight: 600;
 		padding: 0.4rem 0.8rem;
 		border-radius: 99px;
 		transition: background 0.2s;
 	}
-	.user-name-link:hover {
+	:global(.user-name-link:hover) {
 		background: rgba(0, 0, 0, 0.05);
 	}
-	.login-btn, .logout-btn {
-		background: transparent;
-		border: 1px solid rgba(0, 0, 0, 0.1);
-		padding: 0.4rem 1rem;
-		border-radius: 999px;
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: #1d1d1f;
+
+	/* ✅ 로그인/로그아웃 버튼 디자인 (검정색 애플 스타일) */
+	:global(.login-btn), :global(.logout-btn) {
+		background: #1d1d1f !important;
+		border: none !important;
+		padding: 0.5rem 1.1rem !important;
+		border-radius: 999px !important;
+		font-size: 0.85rem !important;
+		font-weight: 600 !important;
+		color: white !important;
 		cursor: pointer;
 		transition: all 0.2s;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		gap: 6px;
 	}
-	.login-btn:hover, .logout-btn:hover {
-		background: rgba(0, 0, 0, 0.04);
-		border-color: rgba(0, 0, 0, 0.2);
+	:global(.login-btn:hover), :global(.logout-btn:hover) {
+		background: #434345 !important;
+		transform: translateY(-1px);
 	}
 
-	.mobile-icon {
+	:global(.mobile-icon) {
 		display: none;
 	}
 
@@ -225,31 +232,16 @@ import HeaderLink from './HeaderLink.astro';
 		.nav-left {
 			gap: 0.5rem;
 		}
-		.internal-links {
-			gap: 0;
-		}
-		.internal-links :global(a) {
-			padding: 0.4rem 0.5rem;
-			font-size: 0.8rem;
-		}
-		.desktop-text {
+		:global(.desktop-text) {
 			display: none;
 		}
-		.mobile-icon {
+		:global(.mobile-icon) {
 			display: flex;
 		}
-		.login-btn, .logout-btn {
-			padding: 0.5rem;
-			border: none;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.logo a {
-			font-size: 1.1rem;
-		}
-		.internal-links :global(a) {
-			padding: 0.4rem 0.4rem;
+		:global(.login-btn), :global(.logout-btn) {
+			padding: 0.5rem !important;
+			width: 36px;
+			height: 36px;
 		}
 	}
 </style>
