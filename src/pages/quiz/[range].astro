@@ -42,64 +42,83 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 		<Header />
 		<main>
 			<div class="quiz-container">
-				<header style="text-align: center; margin-bottom: 3rem;">
-					<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯 {title}</h1>
-					<p style="color: #666;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
+				<header id="main-quiz-header" style="text-align: center; margin-bottom: 2rem;">
+					<h1 style="font-size: 1.75rem; margin-bottom: 0.25rem;">🎯 {title}</h1>
+					<p style="color: #666; font-size: 0.9rem;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
 				</header>
 
 				{quizData.length > 0 ? (
-                    <form id="quiz-form">
-                        {quizData.map((quiz, index) => (
-                            <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)}>
-                                <div class="quiz-question-header">
-                                    <span class="quiz-badge">Q{quiz.id}</span>
-                                    <h2 class="quiz-question-text">{quiz.question}</h2>
-                                </div>
+                    <div id="quiz-wrapper">
+                        <!-- 상단 제어바 -->
+                        <div class="quiz-controls-top" style="margin-bottom: 1rem;">
+                            <div class="quiz-view-tabs" style="display: flex; gap: 0.5rem;">
+                                <button type="button" class="view-toggle-btn active" data-mode="slide" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">슬라이드</button>
+                                <button type="button" class="view-toggle-btn" data-mode="list" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">전체</button>
+                            </div>
+                            <div class="quiz-progress-text hidden" id="slide-progress" style="font-size: 0.9rem;">
+                                <span style="color: #666; font-weight: normal;">진행률:</span> <span id="current-idx">1</span> / {quizData.length}
+                            </div>
+                        </div>
 
-                                <div class="quiz-options">
-                                    {quiz.options.map((option, optIndex) => (
-                                        <label class="quiz-option" for={`q${quiz.id}-opt${optIndex}`}>
-                                            <input 
-                                                type={Array.isArray(quiz.answer) ? "checkbox" : "radio"} 
-                                                name={`q${quiz.id}`} 
-                                                id={`q${quiz.id}-opt${optIndex}`} 
-                                                value={optIndex}
-                                            />
-                                            <span class="quiz-option-text">{option}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                <button type="button" class="quiz-btn grade-btn" data-quiz-id={quiz.id}>
-                                    해설 및 채점
-                                </button>
-
-                                <div class="quiz-result-area hidden" id={`result-${quiz.id}`}>
-                                    <div class="quiz-explanation">
-                                        <div class="quiz-explanation-title">
-                                            <span>📖 해설</span>
-                                        </div>
-                                        <p class="explanation-text">{quiz.explanation}</p>
+                        <form id="quiz-form">
+                            {quizData.map((quiz, index) => (
+                                <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)} data-index={index}>
+                                    <div class="quiz-question-header">
+                                        <span class="quiz-badge" style="min-width: 2.5rem; height: 1.5rem; font-size: 0.75rem;">Q{quiz.id}</span>
+                                        <h2 class="quiz-question-text">{quiz.question}</h2>
                                     </div>
 
-                                    {quiz.glossary && Object.keys(quiz.glossary).length > 0 && (
-                                        <div class="quiz-glossary">
-                                            <div class="quiz-glossary-title">
-                                                <span>💡 이 문제의 핵심 용어</span>
+                                    <div class="quiz-options">
+                                        {quiz.options.map((option, optIndex) => (
+                                            <label class="quiz-option" for={`q${quiz.id}-opt${optIndex}`}>
+                                                <input 
+                                                    type={Array.isArray(quiz.answer) ? "checkbox" : "radio"} 
+                                                    name={`q${quiz.id}`} 
+                                                    id={`q${quiz.id}-opt${optIndex}`} 
+                                                    value={optIndex}
+                                                />
+                                                <span class="quiz-option-text">{option}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+
+                                    <button type="button" class="quiz-btn grade-btn" data-quiz-id={quiz.id}>
+                                        정답 확인 및 해설
+                                    </button>
+
+                                    <div class="quiz-result-area hidden" id={`result-${quiz.id}`}>
+                                        <div class="quiz-explanation">
+                                            <div class="quiz-explanation-title">
+                                                <span>📖 해설</span>
                                             </div>
-                                            <ul class="quiz-glossary-list">
-                                                {Object.entries(quiz.glossary).map(([term, desc]) => (
-                                                    <li class="quiz-glossary-item">
-                                                        <span class="quiz-glossary-term">{term}</span>: {desc}
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            <p class="explanation-text">{quiz.explanation}</p>
                                         </div>
-                                    )}
-                                </div>
-                            </article>
-                        ))}
-                    </form>
+
+                                        {quiz.glossary && Object.keys(quiz.glossary).length > 0 && (
+                                            <div class="quiz-glossary">
+                                                <div class="quiz-glossary-title">
+                                                    <span>💡 이 문제의 핵심 용어</span>
+                                                </div>
+                                                <ul class="quiz-glossary-list">
+                                                    {Object.entries(quiz.glossary).map(([term, desc]) => (
+                                                        <li class="quiz-glossary-item">
+                                                            <span class="quiz-glossary-term">{term}</span>: {desc}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                </article>
+                            ))}
+                        </form>
+
+                        <!-- 슬라이드 네비게이션 (슬라이드 모드 전용) -->
+                        <div id="slide-nav" class="slide-nav-container hidden">
+                            <button type="button" id="prev-btn" class="nav-btn">이전</button>
+                            <button type="button" id="next-btn" class="nav-btn primary">다음 문제</button>
+                        </div>
+                    </div>
                 ) : (
                     <div style="text-align: center; padding: 4rem; background: white; border-radius: 12px; box-shadow: var(--box-shadow);">
                         <p style="font-size: 1.25rem; color: #666;">데이터를 준비 중입니다. 잠시만 기다려 주세요! 🚧</p>
@@ -160,7 +179,79 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 			document.addEventListener('DOMContentLoaded', () => {
 				const gradeButtons = document.querySelectorAll('.grade-btn');
 				const showSummaryBtn = document.getElementById('show-summary-btn');
+                const viewToggleBtns = document.querySelectorAll('.view-toggle-btn');
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                const slideProgress = document.getElementById('slide-progress');
+                const currentIdxSpan = document.getElementById('current-idx');
+                const slideNav = document.getElementById('slide-nav');
+                const quizCards = document.querySelectorAll('.quiz-card');
+                
 				const userSelections = {};
+                let currentSlideIndex = 0;
+                let viewMode = 'slide'; // Default to slide mode for better mobile experience
+
+                const mainHeader = document.getElementById('main-quiz-header');
+
+                // 초기 모드 설정
+                const updateViewMode = (mode) => {
+                    viewMode = mode;
+                    viewToggleBtns.forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.mode === mode);
+                    });
+
+                    if (mode === 'slide') {
+                        slideProgress.classList.remove('hidden');
+                        slideNav.classList.remove('hidden');
+                        mainHeader.classList.add('hidden'); // 슬라이드 모드에선 메인 헤더 숨김
+                        showQuizSlide(currentSlideIndex);
+                    } else {
+                        slideProgress.classList.add('hidden');
+                        slideNav.classList.add('hidden');
+                        mainHeader.classList.remove('hidden');
+                        quizCards.forEach(card => card.classList.remove('hidden'));
+                    }
+                };
+
+                const showQuizSlide = (index) => {
+                    quizCards.forEach((card, i) => {
+                        card.classList.toggle('hidden', i !== index);
+                    });
+                    currentIdxSpan.textContent = index + 1;
+                    prevBtn.disabled = index === 0;
+                    
+                    if (index === quizData.length - 1) {
+                        nextBtn.textContent = '결과 보기';
+                    } else {
+                        nextBtn.textContent = '다음 문제';
+                    }
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+
+                viewToggleBtns.forEach(btn => {
+                    btn.addEventListener('click', () => updateViewMode(btn.dataset.mode));
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    if (currentSlideIndex > 0) {
+                        currentSlideIndex--;
+                        showQuizSlide(currentSlideIndex);
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    if (currentSlideIndex < quizData.length - 1) {
+                        currentSlideIndex++;
+                        showQuizSlide(currentSlideIndex);
+                    } else {
+                        // 마지막 문제에서 클릭 시 결과 섹션으로 이동
+                        showSummaryBtn.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+
+                // 기본 모드 실행
+                updateViewMode('slide');
 
 				// 개별 문제 채점
 				gradeButtons.forEach(btn => {
