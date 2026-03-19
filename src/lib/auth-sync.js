@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js';
+import { supabase } from './supabase';
 
 /**
  * Synchronizes host wrong answers from localStorage to Supabase.
@@ -90,7 +90,7 @@ export async function signOut() {
     window.location.reload();
     return;
   }
-  
+
   const { error } = await supabase.auth.signOut();
   if (error) console.error('Sign out error:', error.message);
   window.location.reload();

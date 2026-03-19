@@ -31,8 +31,8 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 
 <script>
-	import { supabase } from '../lib/supabase.js';
-	import { signInWithGoogle, signOut } from '../lib/auth-sync.js';
+	import { supabase } from '../lib/supabase';
+	import { signInWithGoogle, signOut } from '../lib/auth-sync';
 
 	const authSection = document.getElementById('auth-section');
 	const loginBtn = document.getElementById('header-login-btn');
