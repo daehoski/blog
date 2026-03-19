@@ -20,6 +20,11 @@ import BaseHead from '../../components/BaseHead.astro';
       import { syncGuestData } from '../../lib/auth-sync.js';
 
       const handleAuthCallback = async () => {
+        if (!supabase) {
+          console.error('Auth callback: Supabase not initialized.');
+          window.location.href = '/';
+          return;
+        }
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {

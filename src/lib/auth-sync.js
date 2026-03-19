@@ -8,7 +8,7 @@ export async function syncGuestData(userId) {
   const guestData = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
   const quizIds = Object.keys(guestData);
 
-  if (quizIds.length === 0) return;
+  if (!supabase || quizIds.length === 0) return;
 
   console.log(`Syncing ${quizIds.length} guest records for user ${userId}...`);
 
@@ -39,6 +39,12 @@ export async function syncGuestData(userId) {
  * Initiates Google Login flow (OAuth).
  */
 export async function signInWithGoogle() {
+  if (!supabase) {
+    console.error('Login failed: Supabase client is not initialized.');
+    alert('서버 설정 오류로 로그인을 진행할 수 없습니다. 관리자에게 문의하세요.');
+    return;
+  }
+  
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
@@ -56,6 +62,11 @@ export async function signInWithGoogle() {
  * Checks the current session and signs out if necessary.
  */
 export async function signOut() {
+  if (!supabase) {
+    window.location.reload();
+    return;
+  }
+  
   const { error } = await supabase.auth.signOut();
   if (error) console.error('Sign out error:', error.message);
   window.location.reload();

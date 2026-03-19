@@ -45,12 +45,20 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 		<Header />
 		<main>
 			<div class="quiz-container">
-				<header id="main-quiz-header" class="mobile-hidden" style="text-align: center; margin-bottom: 1.5rem;">
-					<h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">🎯 {title}</h1>
-					<p style="color: #666; font-size: 0.85rem;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
-                    <div id="user-greeting" class="hidden" style="margin-top: 1rem; font-size: 0.9rem; color: #1d1d1f; font-weight: 500;">
+				<nav class="quiz-top-nav">
+					<a href="/quiz" id="back-to-list" class="back-link">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<polyline points="15 18 9 12 15 6"></polyline>
+						</svg>
+						목록으로
+					</a>
+				</nav>
+
+				<header id="main-quiz-header" class="mobile-hidden" style="text-align: center; margin-bottom: 2rem;">
+					<h1 style="font-size: 1.7rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing: -0.04em;">{title}</h1>
+					<p style="color: #86868b; font-size: 0.95rem; font-weight: 500;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
+                    <div id="user-greeting" class="hidden" style="margin-top: 1.5rem; font-size: 0.95rem; color: #1d1d1f; font-weight: 600;">
                         안녕하세요, <span id="user-name"></span>님! 📚
-                        <button id="sign-out-btn" style="margin-left: 0.5rem; color: #86868b; background: none; border: none; cursor: pointer; text-decoration: underline; font-size: 0.8rem;">로그아웃</button>
                     </div>
 				</header>
 
@@ -165,6 +173,19 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 					</div>
 				</div>
 			</div>
+
+            <!-- Exit Confirmation Modal (Glassmorphism) -->
+            <div id="exit-modal" class="modal-overlay hidden">
+                <div class="modal-content glass">
+                    <h3>퀴즈를 중단하시겠습니까?</h3>
+                    <p>지금까지의 진행 상황이 저장되지 않을 수 있습니다.</p>
+                    <div class="modal-buttons">
+                        <button id="modal-continue" class="modal-btn secondary">계속 풀기</button>
+                        <button id="modal-exit" class="modal-btn primary">나가기</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Store quizData for client-side script -->
             <div id="quiz-data-store" data-quiz={JSON.stringify(quizData)} class="hidden"></div>
 		</main>
@@ -192,25 +213,59 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                 if (!quizDataStore) return;
                 const quizData = JSON.parse(quizDataStore.dataset.quiz || "[]");
 
-				// Check active session
+				// Check active session & Diagnostic Log
 				console.log('Quiz session check starting...');
 				if (supabase) {
+					console.log('Supabase client found. Fetching session...');
 					try {
 						const { data: { session } } = await supabase.auth.getSession();
 						if (session) {
+							console.log('User logged in:', session.user.email);
 							userGreeting?.classList.remove('hidden');
 							if (userName) userName.innerText = session.user.user_metadata.full_name || session.user.email?.split('@')[0];
-							
-							signOutBtn?.addEventListener('click', async () => {
-								await signOut();
-							});
+						} else {
+							console.log('No active session (Guest mode).');
 						}
 					} catch (e) {
 						console.error('Supabase session check error:', e);
 					}
 				} else {
-					console.warn('Supabase not initialized. Guest mode active.');
+					console.warn('Supabase not initialized (Live/Env check required).');
 				}
+
+                // Exit Modal Logic
+                const backBtn = document.getElementById('back-to-list');
+                const exitModal = document.getElementById('exit-modal');
+                const modalContinue = document.getElementById('modal-continue');
+                const modalExit = document.getElementById('modal-exit');
+                let pendingExitUrl = '';
+
+                const showExitModal = (e, url) => {
+                    const hasStarted = Object.keys(userSelections).length > 0;
+                    if (hasStarted) {
+                        e.preventDefault();
+                        pendingExitUrl = url;
+                        exitModal?.classList.remove('hidden');
+                    }
+                };
+
+                backBtn?.addEventListener('click', (e) => showExitModal(e, '/quiz'));
+                
+                // Also intercept Logo and Nav clicks
+                document.querySelectorAll('.logo a, .internal-links a').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = (link as HTMLAnchorElement).getAttribute('href');
+                        if (href) showExitModal(e, href);
+                    });
+                });
+
+                modalContinue?.addEventListener('click', () => {
+                    exitModal?.classList.add('hidden');
+                });
+
+                modalExit?.addEventListener('click', () => {
+                    window.location.href = pendingExitUrl;
+                });
 
 				// Individual question grading
 				gradeButtons.forEach(btn => {

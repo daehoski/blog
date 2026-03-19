@@ -37,68 +37,85 @@ import HeaderLink from './HeaderLink.astro';
 	const authSection = document.getElementById('auth-section');
 	const loginBtn = document.getElementById('header-login-btn');
 
+	// Diagnostic Logs
+	console.log('Header: Login system initialized.');
+
 	const updateAuthUI = (session) => {
+		console.log('Header: Updating Auth UI...', session ? 'Session Active' : 'No Session');
 		if (session) {
 			const user = session.user;
 			const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
-			authSection.innerHTML = `
-				<div class="user-info">
-					<a href="/mypage" class="desktop-text user-name-link">${name}님</a>
-					<button id="header-logout-btn" class="logout-btn">
-						<span class="desktop-text">로그아웃</span>
+			if (authSection) {
+				authSection.innerHTML = `
+					<div class="user-info">
+						<a href="/mypage" class="desktop-text user-name-link">${name}님</a>
+						<button id="header-logout-btn" class="logout-btn">
+							<span class="desktop-text">로그아웃</span>
+							<span class="mobile-icon">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+									<polyline points="16 17 21 12 16 7"></polyline>
+									<line x1="21" y1="12" x2="9" y2="12"></line>
+								</svg>
+							</span>
+						</button>
+					</div>
+				`;
+			}
+		} else {
+			if (authSection) {
+				authSection.innerHTML = `
+					<button id="header-login-btn" class="login-btn">
+						<span class="desktop-text">로그인</span>
 						<span class="mobile-icon">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-								<polyline points="16 17 21 12 16 7"></polyline>
-								<line x1="21" y1="12" x2="9" y2="12"></line>
+								<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+								<circle cx="12" cy="7" r="4"></circle>
 							</svg>
 						</span>
 					</button>
-				</div>
-			`;
-		} else {
-			authSection.innerHTML = `
-				<button id="header-login-btn" class="login-btn">
-					<span class="desktop-text">로그인</span>
-					<span class="mobile-icon">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-							<circle cx="12" cy="7" r="4"></circle>
-						</svg>
-					</span>
-				</button>
-			`;
+				`;
+			}
 		}
 	};
 
 	// Event Delegation for Auth Buttons (Fixes unresponsiveness)
 	authSection?.addEventListener('click', (e) => {
 		const target = e.target as HTMLElement;
-		const loginBtn = target.closest('#header-login-btn');
-		const logoutBtn = target.closest('#header-logout-btn');
+		const loginBtnCurrent = target.closest('#header-login-btn');
+		const logoutBtnCurrent = target.closest('#header-logout-btn');
 
-		if (loginBtn) {
-			console.log('Login button clicked');
+		if (loginBtnCurrent) {
+			console.log('Header: Login button clicked');
+			if (!supabase) {
+				console.error('Header: Login failed - Supabase client is null. Check PUBLIC_ environment variables.');
+				alert('인증 서버가 설정되지 않았습니다.');
+				return;
+			}
 			signInWithGoogle();
-		} else if (logoutBtn) {
-			console.log('Logout button clicked');
+		} else if (logoutBtnCurrent) {
+			console.log('Header: Logout button clicked');
 			signOut();
 		}
 	});
 
 	// Only attempt auth logic if supabase is available
 	if (supabase) {
+		console.log('Header: Supabase connected. Checking session...');
 		// Initial check
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			updateAuthUI(session);
+		}).catch(err => {
+			console.error('Header: Session fetch error:', err);
 		});
 
 		// Listen for auth changes
 		supabase.auth.onAuthStateChange((_event, session) => {
+			console.log('Header: Auth state change detected:', _event);
 			updateAuthUI(session);
 		});
 	} else {
-		console.warn('Header: Supabase not initialized. Auth features disabled.');
+		console.error('Header: Supabase NOT initialized! Auth will NOT work. Verify PUBLIC_SUPABASE_URL.');
 	}
 </script>
 
