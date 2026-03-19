@@ -1,385 +1,430 @@
 export const quizData = [
   {
     "id": 301,
-    "question": "대학 연구소는 온프레미스 Windows 파일 서버에서 Amazon FSx for Windows File Server 로 \n30TB\n의 데이터를 마이그레이션해야 합니다. 실험실에는 대학의 다른 많은 부서에서 \n공유하는 1Gbps 네트워크 링크가 있습니다. \n실험실은 데이터 전송 성능을 최대화할 데이터 마이그레이션 서비스를 구현하려고 합니다. \n그러나 실험실은 서비스가 다른 부서에 미치는 영향을 최소화하기 위해 사용하는 대역폭의 \n양을 제어할 수 있어야 합니다. 데이터 마이그레이션은 향후 5 일 이내에 이루어져야 \n합니다. \n이러한 요구 사항을 충족하는 AWS 솔루션은 무엇입니까?",
+    "question": "사내 윈도우 파일 서버의 데이터 30TB를 FSx for Windows로 옮기려 합니다. 대역폭 제한(1Gbps)을 지키면서 다른 부서에 방해를 주지 않고 전송 속도를 조절하며 마이그레이션할 수 있는 서비스는?",
     "options": [
-      "AWS 스노우콘",
-      "Amazon FSx 파일 게이트웨이",
-      "AWS 데이터싱크",
+      "AWS Snowcone",
+      "Amazon FSx File Gateway",
+      "AWS DataSync",
       "AWS Transfer Family"
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99659-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n대량의 데이터를 온라인으로 옮길 때 가장 똑똑한 도구는 DataSync입니다. 단순히 파일을 복사하는 게 아니라 전송 속도(대역폭)를 내 맘대로 조절할 수 있어서, 낮에는 업무에 방해 안 되게 조금만 쓰고 밤에는 풀가동하는 식으로 유연하게 대처할 수 있습니다. 30TB 정도의 분량도 며칠 안에 안전하고 빠르게 옮겨줍니다.\n\n다른 옵션인 A는 물리적 장비라 속도 조절이 어렵고, B는 하이브리드 연결용이며 D는 파일 전송 프로토콜 서비스라 대규모 이사용으로는 DataSync가 훨씬 강력합니다.",
+    "glossary": {
+      "AWS DataSync": "온프레미스와 AWS 사이에서 데이터를 안전하고 빠르게 동기화해주는 전용 서비스",
+      "Bandwidth (대역폭)": "네트워크 통로에서 한 번에 지나갈 수 있는 데이터의 양",
+      "Migration (마이그레이션)": "데이터나 서비스를 한 환경에서 다른 환경(예: 클라우드)으로 옮기는 과정"
+    }
   },
   {
     "id": 302,
-    "question": "회사에서 사용자가 모바일 장치에서 슬로우 모션 비디오 클립을 스트리밍할 수 있는 모바일 \n앱을 만들고자 합니다. 현재 이 앱은 비디오 클립을 캡처하고 원시 형식의 비디오 클립을 \nAmazon S3 버킷에 업로드합니다. 앱은 S3 버킷에서 직접 이러한 비디오 클립을 \n검색합니다. 그러나 비디오는 원시 형식이 큽니다. \n사용자는 모바일 장치에서 버퍼링 및 재생 문제를 겪고 있습니다. 회사는 운영 오버헤드를 \n최소화하면서 앱의 성능과 확장성을 극대화하는 솔루션을 구현하고자 합니다. \n이러한 요구 사항을 충족하는 솔루션 조합은 무엇입니까? (2 개 선택)",
+    "question": "모바일 앱에서 슬로우 모션 영상을 스트리밍하려는데, 용량이 너무 커서 버퍼링이 심합니다. 운영 수고를 줄이면서 앱의 성능과 화질을 동시에 잡을 두 가지 방법은? (2개 선택)",
     "options": [
-      "콘텐츠 전송 및 캐싱을 위해 Amazon CloudFront 를 배포합니다.",
-      "AWS DataSync\n를 사용하여 다른 S3 버킷의 AW'S 지역 전체에 비디오 파일을 \n복제합니다.",
-      "Amazon Elastic Transcoder\n를 사용하여 비디오 파일을 보다 적절한 형식으로 \n변환합니다.",
-      "콘텐츠 전송 및 캐싱을 위해 로컬 영역에 Amazon EC2 인스턴스의 Auto Sealing 그룹을 \n\n=== PAGE 327 ===\n배포합니다.",
-      "Amazon EC2 인스턴스의 Auto Scaling 그룹을 배포하여 비디오 파일을 보다 적절한 \n형식으로 변환합니다."
+      "전 세계 어디서든 빠르게 전달되도록 CloudFront를 배포합니다.",
+      "DataSync를 이용해 다른 지역의 S3 버킷으로 파일들을 복제합니다.",
+      "Elastic Transcoder를 사용하여 모바일 기기에 최적화된 형식으로 영상을 변환합니다.",
+      "각 지역(Local Zone)마다 EC2 서버 그룹을 만들어 직접 영상을 배달합니다.",
+      "EC2 인스턴스를 직접 운영하여 수동으로 영상 변환 프로그램을 돌립니다."
     ],
-    "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99693-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
+    "answer": [0, 2],
+    "explanation": "정답은 A와 C입니다.\n\n영상 서비스의 정석은 '최적화 후 배달'입니다. 먼저 Elastic Transcoder라는 자동 요리사(C)에게 영상을 맡겨서 스마트폰에서 보기 딱 좋은 가벼운 형식으로 바꾸고, 이 영상을 CloudFront(A)라는 전 세계 배달망에 실어 보내면 됩니다. 이렇게 하면 사용자는 집 근처 에지 서버에서 가벼워진 영상을 바로 받아보니 버퍼링 걱정 없이 즐길 수 있습니다.\n\n다른 옵션인 B는 단순 복제일 뿐 성능 개선과는 거리가 멀고, D와 E는 서버를 직접 관리해야 하는 수고가 커서 '운영 수고를 줄인다'는 조건에 맞지 않습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "CloudFront": "전 세계 사용자에게 콘텐츠를 빠르게 전달하는 고성능 배달망(CDN)",
+      "Elastic Transcoder": "동영상 파일을 다양한 기기(폰, 태블릿 등)에 맞는 형식으로 자동 변환해주는 서비스",
+      "Buffering (버퍼링)": "데이터가 충분히 모일 때까지 재생이 멈추는 현상"
     }
   },
   {
     "id": 303,
-    "question": "회사에서 Amazon Elastic Container Service(Amazon ECS) 클러스터에 배포된 새 \n애플리케이션을 시작하고 ECS 작업에 Fargate 시작 유형을 사용하고 있습니다. 회사는 \n실행 시 애플리케이션에 대한 높은 트래픽이 예상되기 때문에 CPU 및 메모리 사용량을 \n모니터링하고 있습니다. 그러나 회사는 활용도가 감소할 때 비용을 절감하기를 원합니다. \n솔루션 설계자는 무엇을 추천해야 합니까?",
+    "question": "ECS Fargate 환경에서 새 앱을 출시하려는데, 출시 직후 몰릴 트래픽에 대비하면서도 평소엔 비용을 아끼고 싶습니다. 어떤 조언이 가장 적절합니까?",
     "options": [
-      "Amazon EC2 Auto Scaling 을 사용하여 이전 트래픽 패턴을 기반으로 특정 기간에 \n조정합니다.",
-      "AWS Lambda 함수를 사용하여 Amazon CloudWatch 경보를 트리거하는 메트릭 위반을 \n기반으로 Amazon ECS 를 확장합니다.",
-      "간단한 조정 정책과 함께 Amazon EC2 Auto Scaling 을 사용하여 ECS 메트릭 위반이 \nAmazon CloudWatch 경보를 트리거할 때 조정합니다.",
-      "대상 추적 정책과 함께 AWS Application Auto Scaling 을 사용하여 ECS 메트릭 위반이 \nAmazon CloudWatch 경보를 트리거할 때 조정합니다."
+      "과거 트래픽 패턴을 분석하여 특정 시간에만 서버를 늘리도록 예약합니다.",
+      "Lambda 함수를 짜서 CloudWatch 알람이 울릴 때마다 수동으로 대수를 조절합니다.",
+      "EC2 Auto Scaling의 단순 조정 정책을 써서 성능 지표에 따라 서버를 넣고 뺍니다.",
+      "Application Auto Scaling의 '대상 추적 정책'을 써서 CPU 사용량을 일정하게 유지합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99813-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n참고 \n\ndocs.aws.amazon.com/ko_kr/autoscaling/application/userguide/what-is-applicati\non-auto-scaling.html",
-    "glossary": {}
+    "explanation": "정답은 D입니다.\n\n컨테이너 서비스(ECS)에는 그에 맞는 자동 조절기인 Application Auto Scaling이 필요합니다. 특히 '대상 추적 정책'은 'CPU 사용량을 50%로 맞춰줘'라고 목표만 정해주면, 트래픽이 몰릴 때 컨테이너 개수를 알아서 늘리고 한가해지면 줄여줍니다. 사용자는 복잡한 계산 없이도 성능과 비용 두 마리 토끼를 잡을 수 있습니다.\n\n다른 옵션인 A는 고정된 패턴에만 강하고, B는 수동이라 번거롭습니다. C는 EC2 전용이라 Fargate 환경에서는 Application Auto Scaling을 쓰는 D가 정답입니다.",
+    "glossary": {
+      "Application Auto Scaling": "컨테이너, DB 등 다양한 서비스의 크기를 수요에 맞춰 자동으로 조절하는 기능",
+      "Target Tracking Policy": "특정 목표 수치를 정해두면 시스템이 알아서 자원을 조절해 그 수치를 유지하는 정책",
+      "Fargate": "서버를 직접 관리할 필요 없이 컨테이너만 실행하면 되는 서버리스 엔진"
+    }
   },
   {
     "id": 304,
-    "question": "한 회사가 최근 다른 AWS 리전에 재해 복구 사이트를 만들었습니다. 회사는 정기적으로 두 \n리전의 NFS 파일 시스템 간에 대량의 데이터를 주고 받아야 합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "두 나라(리전)에 있는 각각의 리눅스 파일 시스템(NFS) 사이에 대량의 데이터를 정기적으로 주고받아야 합니다. 관리 부담이 가장 적은 방법은?",
     "options": [
-      "AWS DataSync 를 사용하십시오. \n\n=== PAGE 328 ===",
-      "AWS Snowball 디바이스를 사용합니다.",
-      "Amazon EC2 에서 SFTP 서버를 설정합니다.",
-      "AWS 데이터베이스 마이그레이션 서비스(AWS DMS)를 사용합니다."
+      "AWS DataSync를 활용합니다.",
+      "AWS Snowball 장비를 빌려 직접 데이터를 실어 나릅니다.",
+      "EC2 서버를 띄우고 SFTP 서버를 직접 구축하여 관리합니다.",
+      "데이터베이스 전용 도구인 AWS DMS를 사용하여 파일을 옮깁니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99949-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이 옵션은 온프레미스와 AWS 스토리지 서비스 간에 데이터 이동을 자동화하고 가속화하는 \n안전한 온라인 서비스인 AWS DataSync 를 사용하기 때문에 가장 효율적입니다. 또한 \nDataSync 를 사용하여 정기적으로 두 리전의 NFS 파일 시스템 간에 대량의 데이터를 \n주고받으며 최소한의 운영 오버헤드로 데이터 전송 프로세스를 단순화하고 가속화합니다. \n이 솔루션은 최소한의 운영 오버헤드로 정기적으로 두 리전의 NFS 파일 시스템 간에 \n대량의 데이터를 주고받는 요구 사항을 충족합니다. \n \n옵션 B 는 대량의 데이터를 AWS 안팎으로 전송할 수 있는 물리적 디바이스인 AWS \nSnowball 디바이스를 사용하기 때문에 효율성이 떨어집니다. 그러나 이것은 장치의 수동 \n취급 및 배송을 필요로 하기 때문에 주기적인 데이터 전송 솔루션을 제공하지 않습니다. \n \n옵션 C 는 Amazon S33 에 저장된 파일에 대한 보안 파일 전송 프로토콜(SFTP) 액세스를 \n제공하는 방법인 Amazon EC2 에 SFTP 서버를 설정하기 때문에 효율성이 떨어집니다. \n그러나 파일 전송을 수동으로 시작하고 모니터링해야 하므로 주기적인 데이터 전송 \n솔루션을 제공하지 않습니다. \n \n옵션 D 는 데이터베이스를 AWS 로 빠르고 안전하게 마이그레이션하는 데 도움이 되는 \n서비스인 AWS DMS(AWS Database Migration Service)를 사용하기 때문에 효율성이 \n떨어집니다. 그러나 이것은 관계형 데이터베이스 및 비관계형 데이터 저장소만 지원하므로 \nNFS 파일 시스템용 데이터 전송 솔루션을 제공하지 않습니다.",
+    "explanation": "정답은 A입니다.\n\n지역(Region) 간 파일 전송에도 DataSync가 전문가입니다. NFS 프로토콜을 완벽히 이해하고 있어서, 한번 설정해두면 정해진 시간마다 알아서 바뀐 데이터만 골라 반대편 지역으로 슝 보내줍니다. 서버를 직접 관리할 필요도 없고 전송 상태도 한눈에 볼 수 있어 매우 효율적입니다.\n\n다른 옵션인 B는 며칠씩 걸리는 물리적 이동이라 실시간이나 정기 전송에 안 맞고, C는 서버 관리 독박을 써야 합니다. D는 파일이 아니라 DB 전문이라 탈락입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "DataSync": "대량의 데이터를 AWS로 빠르게 옮겨주는 서비스"
+      "NFS (Network File System)": "네트워크를 통해 다른 컴퓨터의 파일을 마치 내 것처럼 쓰는 기술",
+      "Cross-region Data Transfer": "서로 다른 AWS 지역 간에 데이터를 전송하는 것",
+      "AWS DataSync": "데이터 전송을 자동화하고 가속화하는 완전 관리형 서비스"
     }
   },
   {
     "id": 305,
-    "question": "회사는 AWS 클라우드에서 호스팅되는 게임 애플리케이션을 위한 공유 스토리지 솔루션을 \n설계하고 있습니다. 회사는 SMB 클라이언트를 사용하여 데이터에 액세스할 수 있는 기능이 \n필요합니다. 솔루션은 완전히 관리되어야 합니다. \n어떤 AWS 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "게임 앱을 위해 여러 서버가 공유할 고성능 저장소가 필요한데, 윈도우 기반의 SMB 접속 방식이어야 합니다. 관리 수고가 없는 완전 관리형 서비스는?",
     "options": [
-      "탑재 가능한 파일 시스템으로 데이터를 공유하는 AWS DataSync 작업을 생성합니다. \n\n=== PAGE 329 ===\n파일 시스템을 애플리케이션 서버에 마운트하십시오.",
-      "Amazon EC2 Windows 인스턴스를 생성합니다. 인스턴스에 Windows 파일 공유 역할을 \n설치하고 구성합니다. 응용 프로그램 서버를 파일 공유에 연결합니다.",
-      "Windows 파일 서버 파일 시스템용 Amazon FSx 를 생성합니다. 원본 서버에 파일 \n시스템을 연결합니다. 애플리케이션 서버를 파일 시스템에 연결하십시오.",
-      "Amazon S3 버킷을 생성합니다. 애플리케이션에 IAM 역할을 할당하여 S3 버킷에 대한 \n액세스 권한을 부여합니다. S3 버킷을 애플리케이션 서버에 마운트합니다."
+      "DataSync 작업을 만들어 파일 시스템을 서버에 마운트합니다.",
+      "EC2 윈도우 서버를 직접 한 대 띄워서 수동으로 파일 공유 기능을 설정합니다.",
+      "Amazon FSx for Windows File Server를 생성하여 서버들과 연결합니다.",
+      "S3 버킷을 만들고 모든 서버에 억지로 연결하여 하드디스크처럼 씁니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99809-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nAmazon FSx for Windows File Server(Amazon FSx)는 서버 메시지 블록(SMB) 프로토콜을 \n사용하는 Windows Server 에 구축된 완전 관리형, 고가용성 및 확장 가능한 파일 스토리지 \n솔루션입니다. 다른 중요한 엔터프라이즈 기능 중에서 Microsoft Active Directory 통합, \n데이터 중복 제거 및 완전히 관리되는 백업을 허용합니다.  \n\naws.amazon.com/blogs/storage/accessing-smb-fileshares-remotely-with-amazo\nn-fsx-for-windows-file-server/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n윈도우 전용 공유 폴더(SMB)가 필요하다면 고민 없이 FSx for Windows를 고르면 됩니다. AWS가 윈도우 서버 엔진을 기반으로 미리 다 만들어둔 서비스라, 클릭 몇 번이면 수백 대의 서버가 동시에 쓸 수 있는 거대한 공유 하드가 생깁니다. 보안 업데이트나 백업도 AWS가 알아서 해주니 관리자는 게임 개발에만 집중하면 됩니다.\n\n다른 옵션인 A와 D는 정식 파일 공유 방식이 아니라 불안정하며, B는 서버 관리를 직접 해야 하는 '노가다' 방식입니다.",
+    "glossary": {
+      "SMB (Server Message Block)": "윈도우 운영체제에서 파일을 공유할 때 쓰는 표준 통신 규약",
+      "Managed Service": "설치, 패치, 백업 등 귀찮은 관리 작업을 서비스 제공자가 대신 해주는 방식",
+      "High Availability (고가용성)": "시스템이 중단 없이 정상적으로 계속 작동하는 능력"
+    }
   },
   {
     "id": 306,
-    "question": "회사는 Amazon EC2 인스턴스에서 실행되는 지연 시간에 민감한 애플리케이션을 위해 인 \n메모리 데이터베이스를 실행하려고 합니다. 애플리케이션은 분당 100,000\n개 이상의 \n트랜잭션을 처리하며 높은 네트워크 처리량이 필요합니다. 솔루션 설계자는 데이터 전송 \n비용을 최소화하는 비용 효율적인 네트워크 설계를 제공해야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "지연 시간에 아주 민감한 인메모리 데이터베이스를 EC2 서버들에서 돌리려 합니다. 분당 10만 건 이상의 거래를 처리하면서 데이터 전송 비용을 아끼는 가장 똑똑한 배치는?",
     "options": [
-      "동일한 AWS 리전 내의 동일한 가용 영역에서 모든 EC2 인스턴스를 시작합니다. EC2 \n인스턴스를 시작할 때 클러스터 전략으로 배치 그룹을 지정합니다.",
-      "동일한 AWS 지역 내의 다른 가용 영역에서 모든 EC2 인스턴스를 시작합니다. EC2 \n인스턴스를 시작할 때 파티션 전략으로 배치 그룹을 지정합니다.",
-      "Auto Scaling 그룹을 배포하여 네트워크 활용 목표에 따라 다른 가용 영역에서 EC2 \n인스턴스를 시작합니다.",
-      "서로 다른 가용 영역에서 EC2 인스턴스를 시작하기 위해 단계 조정 정책으로 Auto \nScaling 그룹을 배포합니다."
+      "모든 서버를 한 지역의 '같은 가용 영역'에 몰아넣고 클러스터 배치 그룹을 씁니다.",
+      "만약을 대비해 서버들을 여러 가용 영역에 흩어놓고 파티션 배치 그룹으로 묶습니다.",
+      "네트워크 사용량에 따라 여러 구역에 서버를 자동으로 흩뿌려주는 ASG를 씁니다.",
+      "단계별 조정 정책을 써서 한 구역이 꽉 차면 옆 구역으로 서버를 늘려갑니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99807-exam-aws-certified-solut",
+    "explanation": "정답은 A입니다.\n\n속도와 비용이 최우선이라면 한 울타리 안에 모이는 게 상책입니다. 서버들을 하나의 가용 영역(AZ)에 다닥다닥 붙여놓고 'Cluster Placement Group'으로 설정하면, 서버들 사이에 광속의 전용 차선이 깔립니다. 같은 구역이라 데이터 전송료도 안 나오고 속도는 전 세계 최고 수준으로 빨라집니다.\n\n다른 옵션인 B는 안정성에는 좋지만 속도(지연 시간) 면에서는 A보다 불리하며, C와 D는 서버를 분산시키기 때문에 전송 비용이 발생할 수 있습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Cluster Placement Group": "서버들을 물리적으로 아주 가까운 위치에 배치하여 네트워크 속도를 극대화하는 설정",
+      "In-memory Database": "데이터를 디스크가 아닌 메모리에 담아두어 응답 속도가 빛의 속도만큼 빠른 데이터베이스",
+      "Latency (지연 시간)": "데이터 요청 후 응답이 올 때까지 걸리는 찰나의 시간"
     }
   },
   {
     "id": 307,
-    "question": "주로 온프레미스에서 애플리케이션 서버를 실행하는 회사가 AWS 로 마이그레이션하기로 \n결정했습니다. 회사는 온프레미스에서 iSCSI(Internet Small Computer Systems Interface) \n스토리지를 확장해야 할 필요성을 최소화하려고 합니다. 회사는 최근에 액세스한 데이터만 \n로컬에 저장하기를 원합니다. \n회사는 이러한 요구 사항을 충족하기 위해 어떤 AWS 솔루션을 사용해야 합니까?",
+    "question": "사내 서버의 저장 공간이 부족해 클라우드로 확장하려 합니다. 평소 자주 쓰는 자료만 사무실 서버에 남기고 나머지는 자동으로 S3에 보관하면서 용량을 아끼는 방법은?",
     "options": [
       "Amazon S3 파일 게이트웨이",
       "AWS Storage Gateway 테이프 게이트웨이",
-      "AWS Storage Gateway 볼륨 게이트웨이 저장 볼륨",
-      "AWS Storage Gateway 볼륨 게이트웨이 캐시 볼륨"
+      "Storage Gateway 볼륨 게이트웨이 (보관형)",
+      "Storage Gateway 볼륨 게이트웨이 (캐시형)"
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99611-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nAWS Storage Gateway Volume Gateway 는 iSCSI 스토리지에 연결하기 위한 두 가지 구성, \n즉 저장 볼륨과 캐시 볼륨을 제공합니다. 저장된 볼륨 구성은 전체 데이터 세트를 \n온프레미스에 저장하고 데이터를 AWS 에 비동기식으로 백업합니다. 캐싱된 볼륨 구성은 \n최근에 액세스한 데이터를 온프레미스에 저장하고 나머지 데이터는 Amazon S3\n에 \n저장합니다. 회사는 최근에 액세스한 데이터만 로컬에 저장하기를 원하므로 캐시된 볼륨 \n구성이 가장 적절할 것입니다. 이를 통해 회사는 자주 액세스하는 데이터를 온프레미스에",
+    "explanation": "정답은 D입니다.\n\n똑똑한 '캐시(Cached) 방식'을 쓰면 됩니다. 전체 데이터는 무제한 창고인 S3에 모셔두고, 사무실 하드디스크에는 직원들이 금방 썼던 '따끈따끈한 자료'들만 올려두는 거죠. 직원들은 사무실 하드에서 바로 자료를 꺼내니 빠르고, 사무실에 큰 서버를 들일 필요도 없으니 공간과 비용이 획기적으로 절약됩니다.\n\n다른 옵션인 A는 파일 단위 접근(NFS/SMB)에 좋고, C인 '보관형'은 전체 데이터를 사내 서버에 다 두는 방식이라 용량을 아끼는 데는 캐시형(D)이 최고입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "Storage Gateway": "사내 장비와 AWS 스토리지를 연결해 하이브리드 환경을 만드는 서비스"
+      "Cached Volume Gateway": "자주 쓰는 데이터만 내 컴퓨터에, 전체는 클라우드에 두는 효율적인 저장 방식",
+      "iSCSI": "컴퓨터와 저장 장치를 네트워크로 연결해 마치 내 몸 안의 하드처럼 쓰게 해주는 기술",
+      "Amazon S3": "무제한으로 파일을 담을 수 있는 클라우드상의 거대한 창고"
     }
   },
   {
     "id": 308,
-    "question": "회사에 통합 결제를 사용하는 여러 AWS 계정이 있습니다. 이 회사는 90 일 동안 여러 개의 \n활성 고성능 Amazon RDS for Oracle 온디맨드 DB 인스턴스를 실행합니다. 회사의 재무 \n팀은 통합 결제 계정 및 기타 모든 AWS 계정에서 AWS Trusted Advisor 에 액세스할 수 \n있습니다. \n재무 팀은 적절한 AWS 계정을 사용하여 RDS 에 대한 Trusted Advisor 확인 권장 사항에 \n액세스해야 합니다. 재무팀은 적절한 Trusted Advisor 수표를 검토하여 RDS 비용을 줄여야 \n합니다. \n이러한 요구 사항을 충족하기 위해 재무 팀은 어떤 조합의 단계를 수행해야 합니까? (2 개 \n선택)",
+    "question": "여러 계정에서 비싼 오라클 DB(RDS)를 온디맨드로 굴리고 있습니다. 비용을 줄여보라는 지시가 내려왔을 때, Trusted Advisor에서 확인해야 할 두 가지 핵심 조언은? (2개 선택)",
     "options": [
-      "RDS 인스턴스가 실행 중인 계정의 Trusted Advisor 권장 사항을 사용합니다.",
-      "통합 결제 계정의 Trusted Advisor 권장 사항을 사용하여 모든 RDS 인스턴스 확인을 \n동시에 확인합니다.",
-      "Amazon RDS 예약 인스턴스 최적화에 대한 Trusted Advisor 검사를 검토합니다.",
-      "Amazon RDS 유휴 DB 인스턴스에 대한 Trusted Advisor 검사를 검토합니다.",
-      "Amazon Redshift 예약 노드 최적화에 대한 Trusted Advisor 검사를 검토합니다."
+      "각 서버가 돌아가는 개별 계정에 들어가서 권장 사항 하나하나를 확인합니다.",
+      "통합 로봇 계정(Payer Account)에서 모든 계정의 서버 상태를 한꺼번에 조회합니다.",
+      "RDS 예약 인스턴스(RI)를 구매했을 때 돈을 얼마나 아낄 수 있는지 추천을 봅니다.",
+      "서버를 켜두고 아무도 안 쓰는 '유휴 상태'인 DB가 있는지 찾아내서 정리합니다.",
+      "분석 전용인 Redshift 서버의 예약 할인을 확인하여 비용을 깎습니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99936-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
+    "answer": [1, 3],
+    "explanation": "정답은 B와 D입니다.\n\n비용 절감의 지름길은 '노는 서버 찾기(D)'와 '전체 계정 총괄 감시(B)'입니다. Trusted Advisor를 통해 아무 일도 안 하면서 전기세(비용)만 먹는 유휴 DB를 찾아내서 끄고, 이 모든 과정을 통합 결제 계정에서 한눈에 파악하면 관리가 훨씬 쉽습니다. 24시간 계속 돌아가는 서버라면 예약 인스턴스(RI) 추천도 함께 보면 금상첨화입니다.\n\n다른 옵션인 A는 너무 비효율적이고, C는 좋은 옵션이지만 D처럼 당장 새나가는 돈을 막는 게 우선순위인 경우가 많습니다. E는 오라클 DB와 상관없는 Redshift 이야기입니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "AWS Trusted Advisor": "돈 낭비는 없는지, 보안은 뚫린 곳 없는지 AWS가 직접 점검해주는 똑똑한 조력자",
+      "Idle DB Instance": "비싸게 빌려놓고 실제론 데이터를 하나도 처리하지 않고 있는 놀고 있는 데이터베이스",
+      "Payer Account": "여러 계정의 요금을 한꺼번에 몰아서 결제하는 대장 계정"
     }
   },
   {
     "id": 309,
-    "question": "솔루션 설계자는 스토리지 비용을 최적화해야 합니다. 솔루션 설계자는 더 이상 액세스하지 \n않거나 거의 액세스하지 않는 Amazon S3 버킷을 식별해야 합니다. \n최소한의 운영 오버헤드로 이 목표를 달성할 수 있는 솔루션은 무엇입니까?",
+    "question": "수백 개의 S3 버킷 중 아무도 안 쓰거나 잊혀진 것을 찾아내서 돈 낭비를 막고 싶습니다. 관리자가 일일이 확인하지 않고 한눈에 파악하는 방법은 무엇입니까?",
     "options": [
-      "고급 활동 메트릭에 대한 S3 Storage Lens 대시보드를 사용하여 버킷 액세스 패턴을 \n분석합니다.",
-      "AWS Management Console\n에서 S3 대시보드를 사용하여 버킷 액세스 패턴을 \n\n=== PAGE 332 ===\n분석합니다.",
-      "버킷에 대한 Amazon CloudWatch BucketSizeBytes 지표를 켭니다. Amazon Athena 에서 \n메트릭 데이터를 사용하여 버킷 액세스 패턴을 분석합니다.",
-      "S3 객체 모니터링을 위해 AWS CloudTrail 을 켭니다. Amazon CloudWatch Logs 와 \n통합된 CloudTrail 로그를 사용하여 버킷 액세스 패턴을 분석합니다."
+      "S3 Storage Lens 대시보드를 열어 활동 지표와 액세스 패턴을 분석합니다.",
+      "기본 S3 관리 화면에서 버킷들을 하나씩 눌러보며 최근 날짜를 확인합니다.",
+      "CloudWatch 지표를 켜고 Athena로 복잡한 쿼리를 날려 통계를 냅니다.",
+      "모든 활동을 기록하는 CloudTrail을 켜고 로그 수백만 건을 직접 분석합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99803-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nS3 Storage Lens 는 객체 스토리지 사용량, 활동 추세 및 비용 최적화를 위한 권장 사항에 \n대한 종합적인 보기를 제공하는 완전관리형 S3 스토리지 분석 솔루션입니다. Storage \nLens 를 사용하면 모든 S3 버킷에서 객체 액세스 패턴을 분석하고 자세한 지표와 보고서를 \n생성할 수 있습니다.",
+    "explanation": "정답은 A입니다.\n\nS3 전용 망원경인 'Storage Lens'를 써보세요. 굳이 로그를 분석하지 않아도, 어떤 버킷에 사람이 안 오는지, 어디에 용량만 차지하는 찌꺼기 파일이 많은지 대시보드로 예쁘게 보여줍니다. 이걸 보면 어떤 버킷을 지워도 될지 바로 알 수 있어 비용 최적화에 큰 도움이 됩니다.\n\n다른 옵션인 B는 수동이라 불가능에 가깝고, C와 D는 분석 전문가 수준의 실력이 필요하며 공수도 너무 많이 듭니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "S3 Storage Lens": "수많은 버킷의 사용 현황을 분석해 비용 절감 포인트와 보안 위험을 알려주는 가이던스 도구",
+      "Access Pattern": "사용자가 데이터를 얼마나 자주, 어떤 방식으로 읽고 쓰는지에 대한 경향성",
+      "Visualization (시각화)": "복잡한 데이터를 그래프나 도표로 한눈에 들어오게 만드는 일"
     }
   },
   {
     "id": 310,
-    "question": "회사에서 인공 지능 및 기계 학습(AI/ML)을 연구하는 고객에게 데이터 세트를 판매합니다. \n데이터 세트는 us-east-1 리전의 Amazon S3 버킷에 저장되는 형식이 지정된 대용량 \n파일입니다. 회사는 고객이 주어진 데이터 세트에 대한 액세스를 구매하는 데 사용하는 웹 \n애플리케이션을 호스팅합니다. 웹 애플리케이션은 Application Load Balancer 뒤의 여러 \nAmazon EC2 인스턴스에 배포됩니다. 구매 후 고객은 파일에 대한 액세스를 허용하는 S3 \n서명 URL 을 받습니다. \n고객은 북미와 유럽 전역에 분산되어 있습니다. 회사는 데이터 전송과 관련된 비용을 \n줄이고 성능을 유지하거나 개선하고자 합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "북미와 유럽 고객들에게 대용량 AI 학습 데이터를 판매하려 합니다. 전송 속도는 유지하면서 비용은 아끼고 보안까지 챙기는 가장 세련된 방법은 무엇입니까?",
     "options": [
-      "기존 S3 버킷에서 S3 Transfer Acceleration 을 구성합니다. 고객 요청을 S3 Transfer \nAcceleration 엔드포인트로 안내합니다. 액세스 제어를 위해 S3 서명 URL\n을 계속 \n사용하십시오.",
-      "기존 S3 버킷을 원본으로 사용하여 Amazon CloudFront 배포를 배포합니다. 고객 \n요청을 CloudFront URL 로 전달합니다. 액세스 제어를 위해 CloudFront 서명 URL 로 \n전환하십시오.",
-      "버킷 사이에 S3 교차 리전 복제가 있는 eu-central-1 리전에서 두 번째 S3 버킷을 \n설정합니다. 가장 가까운 지역으로 고객 요청을 전달합니다. 액세스 제어를 위해 S3 서명 \nURL 을 계속 사용하십시오.",
-      "데이터세트를 최종 사용자에게 스트리밍할 수 있도록 웹 애플리케이션을 수정합니다. \n\n=== PAGE 333 ===\n기존 S3 버킷에서 데이터를 읽도록 웹 애플리케이션을 구성합니다. 애플리케이션에서 직접 \n액세스 제어를 구현합니다."
+      "기존 S3 버킷의 '전송 가속(Acceleration)' 기능을 켜고 S3 서명 주소를 줍니다.",
+      "S3 앞에 CloudFront 배포를 만들고, 보안을 위해 'CloudFront 전용 서명 주소'를 줍니다.",
+      "유럽에도 똑같은 S3 버킷을 하나 더 만들고 실시간으로 복제하며 관리합니다.",
+      "웹 서비스를 수정해서 서버가 S3 파일을 읽어 사용자에게 직접 전달하게 합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99697-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n참고: \n\ndocs.aws.amazon.com/ko_kr/AmazonCloudFront/latest/DeveloperGuide/PrivateCo\nntent.html",
+    "explanation": "정답은 B입니다.\n\n전 세계 배달망인 CloudFront를 활용하는 게 가장 이득입니다. 먼 나라 고객들도 자기 근처 에지 서버에서 데이터를 받아가니 훨씬 빠르고, AWS 내부망을 이용하니 직접 S3에서 내려받는 것보다 전송료도 훨씬 저렴해집니다. 여기에 'CloudFront 서명 URL'을 더하면, 돈을 낸 유료 고객만 일정 시간 동안 자료를 받을 수 있게 완벽히 통제할 수 있습니다.\n\n다른 옵션인 A는 전송료가 더 비싸질 수 있고, C는 관리 노가다가 심합니다. D는 서버 부하만 늘리는 최악의 선택입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "CloudFront": "전 세계 사용자에게 콘텐츠를 빠르게 전달하는 CDN 서비스"
+      "CloudFront Signed URL": "일정 시간 동안만 유효한 암호화된 주소로, 유료 콘텐츠나 보안 파일을 공유할 때 쓰는 필수 기술",
+      "Data Transfer Costs": "데이터가 네트워크 타고 나갈 때 발생하는 통신료",
+      "Edge Location": "CloudFront가 전 세계에 깔아둔 소규모 데이터 거점 서버"
     }
   },
   {
     "id": 311,
-    "question": "한 회사에서 AWS 를 사용하여 보험 견적을 처리할 웹 애플리케이션을 설계하고 있습니다. \n사용자는 애플리케이션에서 견적을 요청합니다. 견적은 견적 유형별로 구분되어야 하며, \n24 시간 이내에 응답해야 하며 분실해서는 안 됩니다. 솔루션은 운영 효율성을 극대화하고 \n유지 보수를 최소화해야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "보험 견적 요청이 들어오면 유형별로 분류해서 24시간 안에 답변을 줘야 하며, 어떤 요청도 누락되면 안 됩니다. 유지보수가 가장 쉬우면서도 확실한 분류 시스템은?",
     "options": [
-      "견적 유형에 따라 여러 Amazon Kinesis 데이터 스트림을 생성합니다. 적절한 데이터 \n스트림으로 메시지를 보내도록 웹 애플리케이션을 구성합니다. Kinesis Client Library(KCL)를 \n사용하여 자체 데이터 스트림에서 메시지를 풀링하도록 애플리케이션 서버의 각 백엔드 \n그룹을 구성합니다.",
-      "각 견적 유형에 \n대해 AWS Lambda \n함수 및 Amazon Simple Notification \nService(Amazon SNS) 주제를 생성합니다. 연결된 SNS 주제에 Lambda 함수를 구독합니다. \n견적 요청을 적절한 SNS 주제에 게시하도록 애플리케이션을 구성합니다.",
-      "단일 Amazon Simple Notification Service(Amazon SNS) 주제를 생성합니다. SNS 주제에 \n대한 Amazon Simple Queue Service(Amazon SQS) 대기열을 구독합니다. 견적 유형에 따라 \n적절한 SQS 대기열에 메시지를 게시하도록 SNS 메시지 필터링을 구성합니다. 자체 SQS \n대기열을 사용하도록 각 백엔드 애플리케이션 서버를 구성합니다.",
-      "데이터 스트림을 Amazon OpenSearch Service 클러스터로 전달하기 위해 견적 유형을 \n기반으로 여러 Amazon Kinesis Data Firehose 전달 스트림을 생성합니다. 적절한 전송 \n스트림으로 메시지를 보내도록 애플리케이션을 구성합니다. OpenSearch Service\n에서 \n메시지를 검색하고 그에 따라 처리하도록 애플리케이션 서버의 각 백엔드 그룹을 \n구성합니다."
+      "Kinesis 데이터 스트림을 여러 개 만들고 서버들이 직접 데이터를 가져가게 합니다.",
+      "모든 요청마다 Lambda를 실행하고 SNS라는 알림판을 통해 유형별로 전파합니다.",
+      "SNS 하나를 만들고, 그 밑에 유형별로 걸러내는 필터를 둔 뒤 각 SQS 대기열로 연결합니다.",
+      "Kinesis Firehose와 검색 전문 엔진(OpenSearch)을 엮어 복잡한 분석 시스템을 짭니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99627-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n가장 믿음직한 조합인 'SNS + SQS'를 쓰면 됩니다. 먼저 SNS라는 우체국에 모든 요청을 던지면, 우체국이 '이건 자동차 보험이네?', '이건 생명 보험이네?' 하고 미리 정해둔 규칙(필터)대로 해당 SQS 대기열(바구니)에 쏙 넣어줍니다. 서버들은 자기 바구니에 담긴 일감만 차례대로 처리하면 되니 섞일 염려도 없고 절대 잃어버리지도 않습니다.\n\n다른 옵션인 A와 D는 구사가 너무 복잡하고 운영 부담이 큽니다. B는 알림 위주라 데이터 보존성(누락 방지) 면에서 SQS를 섞어 쓰는 C보다 약합니다.",
+    "glossary": {
+      "SNS Message Filtering": "들어오는 메시지의 내용을 보고 약속된 사람(혹은 대기열)에게만 골라 보내주는 기능",
+      "Loose Coupling": "시스템 구성 요소들이 서로를 너무 깊게 알 필요 없이 느슨하게 연결되어 한곳이 고장 나도 전체가 멈추지 않는 성질",
+      "Queue (대기열)": "일감을 순서대로 쌓아두고 처리하는 임시 보관소"
+    }
   },
   {
     "id": 312,
-    "question": "한 회사에 여러 Amazon EC2 인스턴스에서 실행되는 애플리케이션이 있습니다. 각 EC2 \n인스턴스에는 여러 Amazon Elastic Block Store(Amazon EBS) 데이터 볼륨이 연결되어 \n있습니다. 애플리케이션의 EC2 인스턴스 구성 및 데이터는 야간에 백업해야 합니다. 또한 \n애플리케이션은 다른 AWS 리전에서 복구 가능해야 합니다. \n운영상 가장 효율적인 방식으로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "매일 밤 수십 대의 서버와 하드디스크(EBS)의 설정을 통째로 백업하고, 혹시 모를 지역 재난에 대비해 다른 나라 리전으로도 복사해두려 합니다. 가장 효율적인 관리는?",
     "options": [
-      "애플리케이션 EBS 볼륨의 야간 스냅샷을 예약하고 스냅샷을 다른 리전에 복사하는 \nAWS Lambda 함수를 작성하십시오.",
-      "야간 백업을 수행하기 위해 AWS Backup 을 사용하여 백업 계획을 생성합니다. 백업을 \n다른 리전에 복사합니다. 애플리케이션의 EC2 인스턴스를 리소스로 추가합니다.",
-      "야간 백업을 수행하기 위해 AWS Backup 을 사용하여 백업 계획을 만듭니다. 백업을 \n다른 리전에 복사합니다. 애플리케이션의 EBS 볼륨을 리소스로 추가합니다.",
-      "애플리케이션 EBS 볼륨의 야간 스냅샷을 예약하고 스냅샷을 다른 가용 영역에 복사하는 \nAWS Lambda 함수를 작성합니다."
+      "직접 Lambda 함수를 짜서 밤마다 스냅샷을 찍고 다른 나라로 전송하게 시킵니다.",
+      "AWS Backup을 사용하여 '계정 전체 서버'를 대상으로 백업 계획을 짜고 자동 리전 복사를 켭니다.",
+      "AWS Backup으로 '하드디스크(EBS)만' 골라서 백업 계획을 세우고 다른 리전으로 보냅니다.",
+      "EBS 스냅샷 기능을 활성화하고 수동으로 옆 동네 가용 영역으로 파일들을 옮깁니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99785-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이러한 요구 사항을 충족하는 운영상 가장 효율적인 솔루션은 AWS Backup 을 사용하여 \n야간 백업을 수행하고 백업을 다른 리전에 복사하는 백업 계획을 만드는 것입니다. \n애플리케이션의 EBS 볼륨을 리소스로 추가하면 애플리케이션의 EC2 인스턴스 구성 및 \n데이터가 백업되고 백업을 다른 리전에 복사하면 애플리케이션을 다른 AWS 리전에서 \n복구할 수 있습니다.",
+    "explanation": "정답은 B입니다.\n\n서버 전체(EC2)를 대상으로 AWS Backup을 돌리는 게 가장 완벽합니다. 단순히 하드디스크뿐만 아니라 CPU 사양이나 네트워크 설정 같은 서버 통째의 정보(AMI)를 백업해주기 때문입니다. 백업 계획표에 '다른 나라 리전으로 자동 복사' 옵션 하나만 체크해두면, 나중에 한국 리전이 정전되어도 미국 리전에서 즉시 서버를 똑같이 살려낼 수 있습니다.\n\n다른 옵션인 A는 코딩 노가다가 심하고, C는 서버 본체 설정이 빠져서 나중에 복구할 때 머리가 아파집니다. D는 너무 원시적인 방법입니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "EBS": "EC2 인스턴스에 붙여서 사용하는 하드디스크 역할의 저장소"
+      "AWS Backup": "여러 AWS 서비스의 백업을 한곳에서 통합 예약하고 관리하는 관제 센터",
+      "Disaster Recovery (DR)": "재난 상황 발생 시 시스템을 빠르게 정상 복구하는 일련의 대책",
+      "AMI (Amazon Machine Image)": "서버의 OS, 설정, 데이터 등을 통째로 찍어낸 복사 이미지"
     }
   },
   {
     "id": 313,
-    "question": "회사가 AWS 에서 모바일 앱을 구축하고 있습니다. 회사는 수백만 명의 사용자에게 도달 \n범위를 확장하려고 합니다. 회사는 승인된 사용자가 모바일 장치에서 회사의 콘텐츠를 볼 \n수 있도록 플랫폼을 구축해야 합니다. \n\n=== PAGE 335 ===\n이러한 요구 사항을 충족하기 위해 솔루션 설계자는 무엇을 권장해야 합니까?",
+    "question": "수백만 명의 사용자가 쓰는 모바일 앱에서 승인된 사용자만 영상을 볼 수 있게 하려 합니다. 짧은 지연 시간과 강력한 보안을 동시에 잡는 방법은?",
     "options": [
-      "퍼블릭 Amazon S3 버킷에 콘텐츠를 게시합니다. AWS Key Management Service(AWS \nKMS) 키를 사용하여 콘텐츠를 스트리밍합니다.",
-      "모바일 앱과 AWS 환경 간에 IPsec VPN 을 설정하여 콘텐츠를 스트리밍합니다.",
-      "Amazon CloudFront 를 사용합니다. 스트리밍 콘텐츠에 서명된 URL 을 제공합니다.",
-      "모바일 앱과 AWS 환경 간에 AWS Client VPN 을 설정하여 콘텐츠를 스트리밍합니다."
+      "S3 버킷을 공개로 풀고 암호화 키를 이용해 복호화하며 스트리밍합니다.",
+      "전용선(VPN)을 깔아서 모든 모바일 기기가 회사 내부망으로 들어오게 합니다.",
+      "CloudFront를 전면에 세우고, 각 사용자에게 '서명된 URL'을 줘서 접근을 통제합니다.",
+      "앱과 서버 사이에 별도의 VPN 장비를 두고 모든 영상 트래픽을 거쳐 가게 합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/100130-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAmazon CloudFront 는 짧은 지연 시간과 높은 전송 속도로 데이터, 비디오, 애플리케이션 \n및 API\n를 전 세계 고객에게 안전하게 전달하는 콘텐츠 전송 네트워크(CDN)입니다. \nCloudFront 는 콘텐츠에 대한 인증된 액세스를 제공하는 서명된 URL 을 지원합니다. 이 \n기능을 통해 회사는 콘텐츠에 액세스할 수 있는 사람과 기간을 제어하여 수백만 명의 \n사용자에게 안전하고 확장 가능한 솔루션을 제공할 수 있습니다.",
+    "explanation": "정답은 C입니다.\n\n수백만 명을 감당하려면 CloudFront 외엔 대안이 없습니다. 보안은 '서명된 URL(Signed URL)'이 책임집니다. 사용자가 로그인하면 서버가 '이 주소는 10분만 유효해요'라는 암호가 붙은 전용 링크를 만들어주고, CloudFront는 이 링크를 가진 정당한 사용자에게만 영상을 빠르게 쏴줍니다. 속도와 보안, 두 마리 토끼를 다 잡는 표준적인 방법입니다.\n\n다른 옵션인 A는 보안이 너무 취약하고, B와 D는 수백만 명의 연결을 감당하다가 네트워크 장비가 불타버릴 것입니다.",
     "glossary": {
-      "CloudFront": "전 세계 사용자에게 콘텐츠를 빠르게 전달하는 CDN 서비스"
+      "Signed URL": "특정 기간 동안만 유효한 암호화된 서명이 들어간 주소",
+      "CDN (Content Delivery Network)": "콘텐츠를 사용자 근처 서버에 복사해두고 빠르게 배달해주는 전 지구적 네트워크",
+      "Authentication (인증)": "이 사람이 진짜 정규 회원인지 확인하는 절차"
     }
   },
   {
     "id": 314,
-    "question": "회사에는 드물게 액세스하는 패턴으로 글로벌 영업 팀에서 사용하는 온프레미스 MySQL \n데이터베이스가 있습니다. 영업팀은 데이터베이스의 가동 중지 시간을 최소화해야 합니다. \n데이터베이스 관리자는 향후 더 많은 사용자를 예상하여 특정 인스턴스 유형을 선택하지 \n않고 이 데이터베이스를 AWS 로 마이그레이션하려고 합니다. \n솔루션 설계자는 어떤 서비스를 추천해야 합니까?",
+    "question": "글로벌 영업팀이 가끔씩만 사용하는 사내 MySQL 데이터베이스가 있습니다. 평소엔 한가하다가 가끔 몰릴 때 서버 사양을 고민하지 않아도 알아서 확장되는 AWS 서비스는 무엇입니까?",
     "options": [
-      "아마존 오로라 MySQL",
-      "MySQL 용 Amazon Aurora 서버리스",
-      "아마존 레드시프트 스펙트럼",
-      "MySQL 용 Amazon RDS"
+      "Amazon Aurora MySQL",
+      "Amazon Aurora Serverless for MySQL",
+      "Amazon Redshift Spectrum",
+      "Amazon RDS for MySQL"
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99769-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nAmazon Aurora Serverless for MySQL 은 애플리케이션 수요에 따라 자동으로 확장 또는 \n축소되는 완전관리형 자동 확장 관계형 데이터베이스 서비스입니다. 이 서비스는 고객이 \n데이터베이스 인스턴스를 프로비저닝할 필요 없이 고가용성, 내구성 및 보안과 같은",
+    "explanation": "정답은 B입니다.\n\n가끔씩 쓰는 창고라면 '서버리스(Serverless)' 모델이 딱입니다. Aurora Serverless는 아무도 안 쓰면 잠자코 있다가, 누가 접속하면 즉시 깨어나 서버를 구성하고 손님이 많아지면 용량을 알아서 키웁니다. 관리자가 서버 크기(CPU, 메모리)를 미리 정할 필요도 없고, 쓴 만큼만 돈을 내니 비용 면에서도 매우 경제적입니다.\n\n다른 옵션인 A와 D는 정해진 크기의 서버를 계속 켜둬야 하며, C는 데이터 분석용이지 일반 DB가 아닙니다.",
     "glossary": {
-      "Aurora": "AWS가 구축한 클라우드 전용 고성능 관계형 데이터베이스 엔진"
+      "Aurora Serverless": "서버 하드웨어를 관리할 필요 없이 데이터 사용량만큼 자동으로 성능이 늘고 주는 데이터베이스",
+      "On-demand Scaling": "필요할 때 즉각적으로 자원을 늘리거나 줄이는 유연한 능력",
+      "Point-in-time Recovery": "과거 특정 시점으로 데이터를 되돌릴 수 있는 편리한 복구 기능"
     }
   },
   {
     "id": 315,
-    "question": "회사는 온프레미스 데이터 센터의 여러 애플리케이션에 영향을 미치는 위반을 경험했습니다. \n공격자는 서버에서 실행 중인 맞춤형 애플리케이션의 취약점을 이용했습니다. 이 회사는 \n현재 Amazon EC2 인스턴스에서 실행되도록 애플리케이션을 마이그레이션하고 있습니다. \n이 회사는 EC2 인스턴스의 취약성을 능동적으로 스캔하고 결과를 자세히 설명하는 \n보고서를 보내는 솔루션을 구현하려고 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "사내 서버들이 해킹 공격을 받은 적이 있어, 클라우드로 옮긴 후에는 서버 안에 혹시 모를 취약점이 있는지 매일 검사하고 보고서를 받고 싶습니다. 어떤 서비스를 켜야 할까요?",
     "options": [
-      "AWS Shield\n를 배포하여 EC2 인스턴스의 취약점을 스캔합니다. 결과를 AWS \nCloudTrail 에 기록하는 AWS Lambda 함수를 생성합니다.",
-      "Amazon Macie 및 AWS Lambda 함수를 배포하여 EC2 인스턴스의 취약점을 스캔합니다. \n결과를 AWS CloudTrail 에 기록합니다.",
-      "Amazon GuardDuty 를 켭니다. GuardDuty 에이전트를 EC2 인스턴스에 배포합니다. \n결과를 자세히 설명하는 보고서의 생성 및 배포를 자동화하도록 AWS Lambda 함수를 \n구성합니다.",
-      "Amazon Inspector를 켭니다. Amazon Inspector 에이전트를 EC2 인스턴스에 배포합니다. \n결과를 자세히 설명하는 보고서의 생성 및 배포를 자동화하도록 AWS Lambda 함수를 \n구성합니다."
+      "AWS Shield를 켜서 서버 구석구석을 훑고 Lambda로 로그를 남깁니다.",
+      "Amazon Macie를 이용해 서버 안의 나쁜 코드를 찾아내고 CloudTrail에 기록합니다.",
+      "GuardDuty를 켜고 서버에 요원을 심어 이상 활동을 감시한 뒤 결과를 보고합니다.",
+      "Amazon Inspector를 활성화하고 서버에 에이전트를 깔아 보안 취약점을 자동 스캔합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99808-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nAmazon Inspector(Amazon 검사기): \n* EC2 인스턴스의 활성 취약성 스캔을 수행합니다. 소프트웨어 취약성, 의도하지 않은 \n네트워크 접근성 및 기타 보안 문제를 찾습니다. \n* 스캔을 수행하려면 EC2 인스턴스에 에이전트를 설치해야 합니다. 에이전트는 각 \n인스턴스에 배포되어야 합니다.",
+    "explanation": "정답은 D입니다.\n\n서버의 '건강 검진'은 Inspector의 몫입니다. 서버 안에 요원(에이전트)을 한 명씩 배치해두면, 매일 같이 서버 설정이 잘못됐는지, 낡아서 해킹 위험이 있는 소프트웨어가 깔려 있는지 꼼꼼히 검사해서 보고서를 써줍니다. 운영 체제 내부의 취약점을 직접 파고드는 서비스는 Inspector가 유일하다고 봐도 무방합니다.\n\n다른 옵션인 A는 디도스 방어용이고, B는 파일 속 개인 정보 찾기용입니다. C는 전반적인 네트워크 행동을 감시하는 '레이더' 역할이지 내부 취약점을 직접 스캔하지는 않습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Amazon Inspector": "서버(EC2) 내부를 직접 조사하여 보안 취약점과 표준 규칙 위반을 찾아내는 도구",
+      "Software Vulnerability": "해커가 침입할 수 있는 프로그램상의 약점이나 결함",
+      "Agent (에이전트)": "특정 임무를 수행하기 위해 서버 내부에서 상주하며 일하는 작은 프로그램"
     }
   },
   {
     "id": 316,
-    "question": "회사는 Amazon EC2 인스턴스를 사용하여 스크립트를 실행하여 Amazon Simple Queue \nService(Amazon SQS) 대기열에서 메시지를 폴링하고 처리합니다. 이 회사는 대기열에 \n추가되는 점점 더 많은 수의 메시지를 처리할 수 있는 능력을 유지하면서 운영 비용을 \n절감하고자 합니다. \n이러한 요구 사항을 충족하기 위해 솔루션 설계자는 무엇을 권장해야 합니까?",
+    "question": "EC2 서버가 SQS 대기열을 계속 감시하며 메시지를 처리 중인데, 메시지가 없을 때도 서버가 켜져 있어 돈이 아깝습니다. 비용을 아끼면서 늘어나는 일감도 잘 감당하려면?",
     "options": [
-      "메시지를 더 빠르게 처리하려면 EC2 인스턴스의 크기를 늘리십시오.",
-      "인스턴스가 충분히 활용되지 않을 때 Amazon EventBridge 를 사용하여 EC2 인스턴스를 \n끕니다.",
-      "EC2 \n인스턴스의 \n스크립트를 \n적절한 \n런타임이 \n있는 \nAWS \nLambda \n함수로 \n마이그레이션합니다.",
-      "AWS Systems Manager Run Command 를 사용하여 요청 시 스크립트를 실행합니다."
+      "일감을 빨리 끝내기 위해 더 힘센(비싼) EC2 인스턴스로 바꿉니다.",
+      "EventBridge로 밤에는 서버를 강제로 끄고 낮에만 켜게 예약합니다.",
+      "서버 방식이 아닌, 일감이 들어올 때만 잠깐 깨어나서 일하는 Lambda로 갈아탑니다.",
+      "Systems Manager의 실행 명령 기능을 써서 사람이 필요할 때만 스크립트를 돌립니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99698-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n24시간 대기하는 서버는 비효율적입니다. 메시지가 들어올 때만 반응하는 Lambda로 바꾸는 게 최선입니다. Lambda는 SQS에 메시지가 쌓이면 알아서 깨어나 일을 시작하고, 메시지가 수백 개면 수백 개의 Lambda가 동시에 나타나 일을 처리한 뒤 다시 사라집니다. 일한 만큼만 돈을 내니 비용은 확 줄고 처리 능력은 무한대로 커집니다.\n\n다른 옵션인 A는 여전히 돈이 낭비되고, B는 낮에도 일감이 없을 때 돈을 내야 합니다. D는 수동이라 인건비가 더 나올 판입니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)"
+      "AWS Lambda": "서버 관리 고생 없이 코드만 올려두면 자동으로 실행되는 서버리스 서비스",
+      "Polling (폴링)": "새로운 소식이 있는지 주기적으로 물어보고 확인하는 과정",
+      "Scalability (확장성)": "갑자기 일이 몰려도 거뜬히 처리해낼 수 있는 유연한 능력"
     }
   },
   {
     "id": 317,
-    "question": "회사에서 레거시 애플리케이션을 사용하여 데이터를 CSV 형식으로 생성합니다. 레거시 \n애플리케이션은 출력 데이터를 Amazon S3 에 저장합니다. 이 회사는 복잡한 SQL 쿼리를 \n수행하여 Amazon Redshift 및 Amazon S3 에만 저장된 데이터를 분석할 수 있는 새로운 \n상용 기성품(COTS) 애플리케이션을 배포하고 있습니다. 그러나 COTS 애플리케이션은 \n레거시 애플리케이션이 생성하는 .csv 파일을 처리할 수 없습니다. \n회사는 레거시 애플리케이션을 업데이트하여 다른 형식으로 데이터를 생성할 수 없습니다. \n회사는 COTS 애플리케이션이 레거시 애플리케이션이 생성하는 데이터를 사용할 수 있도록 \n솔루션을 구현해야 합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "옛날 앱이 자꾸 CSV 파일만 뱉어내는데, 새로 산 분석 도구(COTS)는 이 파일을 못 읽고 데이터베이스(Redshift)에 든 것만 읽습니다. 운영 수고를 최소화하며 둘을 연결하려면?",
     "options": [
-      "일정에 따라 실행되는 AWS Glue 추출, 변환 및 로드(ETL) 작업을 생성합니다. .csv \n파일을 처리하고 처리된 데이터를 Amazon Redshift 에 저장하도록 ETL 작업을 구성합니다.",
-      "Amazon EC2 인스턴스에서 실행되는 Python 스크립트를 개발하여 .csv 파일을 .sql \n파일로 변환합니다. Cron 일정에서 Python 스크립트를 호출하여 출력 파일을 Amazon S3 에 \n\n=== PAGE 338 ===\n저장합니다.",
-      "AWS Lambda 함수와 Amazon DynamoDB 테이블을 생성합니다. S3 이벤트를 사용하여 \nLambda 함수를 호출합니다. ETL(추출, 변환 및 로드) 작업을 수행하여 .csv 파일을 \n처리하고 처리된 데이터를 DynamoDB 테이블에 저장하도록 Lambda 함수를 구성합니다.",
-      "Amazon EventBridge\n를 사용하여 매주 일정에 따라 Amazon EMR 클러스터를 \n시작합니다. 추출, 변환 및 로드(ETL) 작업을 수행하여 .csv 파일을 처리하고 처리된 \n데이터를 Amazon Redshift 테이블에 저장하도록 EMR 클러스터를 구성합니다."
+      "AWS Glue ETL 작업을 예약해서 CSV 파일을 Redshift 테이블로 자동 변환해 넣습니다.",
+      "EC2 한 대 빌려서 파이썬 스크립트를 짜고 Cron으로 매일 돌리며 수동으로 변환합니다.",
+      "Lambda와 DynamoDB를 엮어서 실시간 변환 시스템을 만들고 DB에 데이터를 쌓습니다.",
+      "매주 EMR이라는 거대 분석 서버를 조립해서 CSV를 Redshift로 옮기는 작업을 수행합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99817-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이 솔루션은 COTS 애플리케이션이 최소한의 운영 오버헤드로 레거시 애플리케이션이 \n생성하는 데이터를 사용할 수 있도록 솔루션 구현 요구 사항을 충족합니다. AWS Glue 는 \n분석을 위해 데이터를 준비하고 로드하는 서버리스 ETL 플랫폼을 제공하는 완전 관리형 \n서비스입니다. \nAWS Glue 는 .csv 파일을 비롯한 다양한 형식의 데이터를 처리하고 복잡한 SQL 쿼리를 \n지원하는 완전관리형 데이터 웨어하우스 서비스인 Amazon Redshift 에 처리된 데이터를 \n저장할 수 있습니다. AWS Glue 는 데이터 처리 및 로드 프로세스를 자동화할 수 있는 \n일정에 따라 ETL 작업을 실행할 수 있습니다. \n \n옵션 B 는 올바르지 않습니다. Amazon EC2 인스턴스에서 실행되는 Python 스크립트를 \n개발하여 .csv 파일을 sql 파일로 변환하면 운영 오버헤드와 복잡성이 증가하고 COTS \n애플리케이션에 일관된 데이터 처리 및 로드를 제공하지 못할 수 있기 때문입니다. \n \n.csv 파일을 처리하고 처리된 데이터를 DynamoDB 테이블에 저장하기 위해 AWS Lambda \n함수 및 Amazon DynamoDB 테이블을 생성하는 것은 Amazon Redshift\n를 COTS \n애플리케이션의 데이터 소스로 사용하기 위한 요구 사항을 충족하지 않기 때문에 옵션 C 는 \n올바르지 않습니다. \n \nAmazon EventBridge(Amazon CloudWatch Events)를 사용하여 주간 일정에 따라 Amazon \nEMR 클러스터를 시작하여 .csv 파일을 처리하고 처리된 데이터를 Amazon Redshift \n테이블에 저장할 수 있으므로 옵션 D 는 올바르지 않습니다. COTS 애플리케이션에 적시에 \n데이터 처리 및 로드를 제공하지 않습니다. \n참조: \n\naws.amazon.com/glue/",
+    "explanation": "정답은 A입니다.\n\n데이터 형식 변환의 달인은 'AWS Glue'입니다. 'S3에 든 CSV를 가져가서 Redshift 모양으로 예쁘게 깎아 넣어줘'라고 작업(ETL) 하나만 만들어두면 됩니다. 서버 한 대 관리할 필요 없는 완전 관리형 서비스라, 정해진 시간마다 로봇처럼 파일을 변환해서 DB에 넣어주니 분석 도구는 평화롭게 데이터만 읽으면 됩니다.\n\n다른 옵션인 B는 코딩과 서버 관리가 고역이고, C는 배보다 배꼽이 더 큰 설계입니다. D는 빅데이터 분석용이라 단순 변환에는 너무 과한 장비입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스",
-      "CloudWatch": "AWS 리소스 사용량과 로그를 모니터링하는 서비스"
+      "ETL (Extract, Transform, Load)": "데이터를 추출하고, 변환해서, 원하는 저장소에 적재하는 일련의 과정",
+      "AWS Glue": "데이터 분석을 위해 파일들을 변환하고 정리해주는 똑똑한 데이터 공장",
+      "Redshift": "거대한 양의 데이터를 빠르게 분석하기 위한 성능 좋은 클라우드 창고"
     }
   },
   {
     "id": 318,
-    "question": "한 회사가 최근 전체 IT 환경을 AWS 클라우드로 마이그레이션했습니다. 회사는 사용자가 \n적절한 변경 제어 프로세스를 사용하지 않고 과도한 크기의 Amazon EC2 인스턴스를 \n프로비저닝하고 보안 그룹 규칙을 수정하고 있음을 발견했습니다. 솔루션 설계자는 이러한 \n인벤토리 및 구성 변경 사항을 추적하고 감사하기 위한 전략을 고안해야 합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 어떤 조치를 취해야 합니까? (2 개 \n선택)",
+    "question": "마이그레이션 후에 직원들이 마음대로 비싼 서버를 만들거나 보안 설정을 바꿔서 걱정입니다. 누가 언제 어떤 설정을 건드렸는지 추적하고 감사하려면? (2개 선택)",
     "options": [
-      "AWS CloudTrail 을 활성화하고 감사에 사용하십시오.",
-      "Amazon EC2 인스턴스에 대한 데이터 수명 주기 정책을 사용합니다.",
-      "AWS Trusted Advisor 를 활성화하고 보안 대시보드를 참조합니다.",
-      "AWS Config 를 활성화하고 감사 및 규정 준수를 위한 규칙을 생성합니다.",
-      "AWS CloudFormation 템플릿을 사용하여 이전 리소스 구성을 복원합니다."
+      "AWS CloudTrail을 켜서 모든 API 활동 기록을 샅샅이 남기고 감시합니다.",
+      "서버의 데이터 수명 주기 정책을 세워서 오래된 설정 파일을 지웁니다.",
+      "Trusted Advisor를 켜서 보안 점수가 몇 점인지 대시보드를 매일 봅니다.",
+      "AWS Config를 활성화하여 리소스 설정의 변화를 기록하고 규정 준수 여부를 따집니다.",
+      "CloudFormation을 이용해 모든 설정을 초기 상태로 매일 되돌립니다."
     ],
-    "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99804-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nA) AWS CloudTrail 을 활성화하고 감사에 사용합니다. AWS CloudTrail 은 API 호출 기록을 \n제공하며 EC2 인스턴스 및 보안 그룹에 대한 변경 사항을 감사하는 데 사용할 수 있습니다. \n솔루션 설계자는 CloudTrail 로그를 분석하여 적절한 승인 없이 누가 대규모 인스턴스를 \n프로비저닝했거나 보안 그룹을 수정했는지 추적할 수 있습니다. \nD) AWS Config 를 활성화하고 감사 및 규정 준수를 위한 규칙을 생성합니다. AWS Config 는 \nEC2 인스턴스 및 보안 그룹과 같은 리소스에 대한 구성 변경 사항을 기록할 수 있습니다. \n솔루션 설계자는 특정 인스턴스 유형을 시작하거나 권한 없이 보안 그룹 포트를 여는 것과 \n같은 비준수 변경 사항을 모니터링하기 위해 AWS Config 규칙을 생성할 수 있습니다. AWS \nConfig 는 이러한 규칙 위반에 대해 경고합니다.",
+    "answer": [0, 3],
+    "explanation": "정답은 A와 D입니다.\n\n범인을 잡고 규칙을 세우는 팀입니다. CloudTrail(A)이란 CCTV로 '누가' 했는지 기록을 남기고, Config(D)라는 기록관을 통해 리소스가 어떻게 '변했는지' 히스토리를 관리합니다. 특히 Config에 '비싼 서버는 못 만든다'는 규칙을 적어두면, 누군가 규칙을 어겼을 때 즉시 알림을 주므로 사후 감사나 관리가 매우 쉬워집니다.\n\n다른 옵션인 B나 C는 기록 추적과는 거리가 멀고, E는 너무 극단적인 대처라 실무에서 쓰기 힘듭니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "CloudTrail": "AWS 계정에서 일어나는 모든 활동을 기록하는 감사 서비스",
-      "Config": "AWS 리소스의 설정 변경 사항을 기록하고 규정을 준수하는지 확인하는 서비스"
+      "AWS CloudTrail": "AWS 계정에서 벌어지는 모든 활동(로그인, 생성 등)을 기록하는 블랙박스",
+      "AWS Config": "설정이 바뀌는 과정을 타임라인으로 보여주고 회사 규정에 맞는지 감시하는 감독관",
+      "Compliance (규정 준수)": "회사의 보안이나 비용 규칙을 잘 지키고 있는지 확인하는 일"
     }
   },
   {
     "id": 319,
-    "question": "회사는 AWS 클라우드에 수백 개의 Amazon EC2 Linux 기반 인스턴스를 보유하고 있습니다. \n시스템 관리자는 공유 SSH 키를 사용하여 인스턴스를 관리했습니다. 최근 감사 후 회사의 \n보안 팀은 모든 공유 키를 제거하도록 지시하고 있습니다. 솔루션 설계자는 EC2 \n인스턴스에 대한 보안 액세스를 제공하는 솔루션을 설계해야 합니다. \n\n=== PAGE 340 ===\n최소한의 관리 오버헤드로 이 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "수백 개의 리눅스 서버를 관리하면서 보안을 위해 공용 SSH 키를 다 없애려고 합니다. 키 관리 고생 없이 브라우저에서 안전하게 서버에 접속하는 방법은?",
     "options": [
-      "AWS Systems Manager Session Manager 를 사용하여 EC2 인스턴스에 연결합니다.",
-      "AWS Security Token Service(AWS STS)를 사용하여 온디맨드 방식으로 일회성 SSH 키를 \n생성합니다.",
-      "배스천 인스턴스 집합에 대한 공유 SSH 액세스를 허용합니다. 배스천 인스턴스에서 \nSSH 액세스만 허용하도록 다른 모든 인스턴스를 구성합니다.",
-      "Amazon Cognito 사용자 지정 권한 부여자를 사용하여 사용자를 인증합니다. AWS \nLambda 함수를 호출하여 임시 SSH 키를 생성합니다."
+      "AWS Systems Manager의 'Session Manager' 기능을 사용하여 간편하게 접속합니다.",
+      "STS 서비스를 이용해 1회용 비밀번호를 매번 생성해서 문을 엽니다.",
+      "배스천 호스트(Bastion Host)라는 징검다리 서버들을 촘촘히 세워 관리합니다.",
+      "Cognito와 Lambda를 엮어서 매번 복잡한 인증 과정을 거쳐 임시 키를 만듭니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99628-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nSession Manager\n는 완전히 관리되는 AWS Systems Manager 기능입니다. Session \nManager 를 사용하여 Amazon Elastic Compute Cloud(Amazon EC2) 인스턴스, 에지 장치, \n온프레미스 서버 및 가상 머신(VM)을 관리할 수 있습니다. 대화형 원클릭 브라우저 기반 셸 \n또는 AWS Command Line Interface(AWS CLI)를 사용할 수 있습니다. Session Manager 는 \n인바운드 포트를 열거나 배스천 호스트를 유지하거나 SSH 키를 관리할 필요 없이 안전하고 \n감사 가능한 노드 관리를 제공합니다. \n또한 Session Manager 를 사용하면 관리 노드에 대한 제어된 액세스, 엄격한 보안 관행, \n노드 액세스 세부 정보가 포함된 완전히 감사 가능한 로그가 필요한 기업 정책을 준수하는 \n동시에 최종 사용자에게 관리 노드에 대한 간단한 원클릭 교차 플랫폼 액세스를 제공할 수 \n있습니다. \n\ndocs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html",
+    "explanation": "정답은 A입니다.\n\n이제 '열쇠(Key)'는 잊어버리세요. Session Manager를 쓰면 브라우저 화면에서 버튼 하나만 누르면 서버 터미널이 바로 뜹니다. SSH 포트(22번)를 열어둘 필요도 없고, 열쇠를 잃어버려 당황할 일도 없습니다. 누가 들어왔는지 기록도 남고 관리하기에 너무나 편한 최신 방식입니다.\n\n다른 옵션인 C는 여전히 키 관리와 징검다리 서버 관리가 필요해서 보안상 더 복잡합니다. B와 D는 바퀴를 새로 발명하는 격의 과한 설계입니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Session Manager": "SSH 키나 복잡한 네트워크 설정 없이도 서버에 안전하게 원격 접속하게 해주는 서비스",
+      "Bastion Host": "외부에서 내부망 서버에 접속하기 위해 중간 거점으로 사용하는 보안 전용 서버",
+      "IAM Policy": "어떤 사원이 어떤 서버에 들어갈 수 있는지 결정하는 명단"
     }
   },
   {
     "id": 320,
-    "question": "회사에서 Amazon EC2 인스턴스 플릿을 사용하여 온프레미스 데이터 소스에서 데이터를 \n수집하고 있습니다. 데이터는 JSON 형식이며 수집 속도는 최대 1MB/s\n입니다. EC2 \n인스턴스가 재부팅되면 진행 중인 데이터가 손실됩니다. 회사의 데이터 과학 팀은 거의 \n실시간으로 수집된 데이터를 쿼리하려고 합니다. \n데이터 손실을 최소화하면서 확장 가능한 거의 실시간 데이터 쿼리를 제공하는 솔루션은 \n무엇입니까?",
+    "question": "사내 장비에서 쏟아지는 JSON 데이터를 실시간으로 수집 중인데, 서버가 꺼지면 작업 중인 데이터가 날아갑니다. 손실 없이 거의 실시간으로 데이터를 쿼리까지 하고 싶다면?",
     "options": [
-      "Amazon Kinesis Data Streams 에 데이터를 게시하고 Kinesis Data Analytics 를 사용하여 \n데이터를 쿼리합니다.",
-      "Amazon Redshift 를 대상으로 사용하여 Amazon Kinesis Data Firehose 에 데이터를 \n\n=== PAGE 341 ===\n게시합니다. Amazon Redshift 를 사용하여 데이터를 쿼리합니다.",
-      "수집된 데이터를 EC2 인스턴스 스토어에 저장합니다. Amazon S3 를 대상으로 Amazon \nKinesis Data Firehose 에 데이터를 게시합니다. Amazon Athena 를 사용하여 데이터를 \n쿼리합니다.",
-      "수집된 데이터를 Amazon Elastic Block Store(Amazon EBS) 볼륨에 저장합니다. Redis 용 \nAmazon ElastiCache 에 데이터를 게시합니다. Redis 채널을 구독하여 데이터를 쿼리합니다."
+      "Kinesis Data Streams로 데이터를 모으고 Analytics를 연결해 실시간으로 쿼리합니다.",
+      "Kinesis Firehose에 데이터를 태우고 Redshift라는 거대 창고에 담아 조회합니다.",
+      "서버 본체(인스턴스 스토어)에 임시로 저장한 뒤 S3로 천천히 옮깁니다.",
+      "모든 데이터를 EBS 하드에 차곡차곡 쌓고 성능 좋은 Redis 캐시에 올려서 봅니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99752-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n참고 \n\ndocs.aws.amazon.com/ko_kr/kinesisanalytics/latest/dev/what-is.html",
+    "explanation": "정답은 A입니다.\n\n실시간 데이터의 정석 'Streams-Analytics' 조합입니다. 데이터를 시냇물(Streams)처럼 끊임없이 받아내고, 그 흐르는 물속에서 즉시 SQL로 분석(Analytics)을 수행합니다. 데이터는 AWS 내부에서 3곳 이상에 안전하게 복제되므로 서버가 꺼져도 절대 잃어버리지 않으며 실시간 조회까지 완벽하게 해냅니다.\n\n다른 옵션인 B는 쿼리를 하기까지 몇 분의 지연이 발생하며, C는 서버가 꺼지면 데이터가 증발하는 가장 위험한 선택입니다. D는 실시간 분석용이 아니라 웹 서빙용에 가깝습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Kinesis Data Streams": "들어오는 실시간 스트리밍 데이터를 안전하게 쥐고 대기하는 대기열 서비스",
+      "Real-time Query": "데이터가 저장되기를 기다리지 않고 들어오는 즉시 분석하고 결과를 보는 것",
+      "JSON": "컴퓨터끼리 데이터를 주고받을 때 쓰는 가장 대중적인 문서 형식"
     }
   },
   {
     "id": 321,
-    "question": "솔루션 설계자는 Amazon S3 버킷에 업로드된 모든 객체가 암호화되도록 하려면 어떻게 \n해야 합니까?",
+    "question": "S3 버킷 에 누가 파일을 올리든 무조건 암호화가 된 상태로 저장되게 강제하고 싶습니다. 이를 위한 가장 강력한 버킷 정책 설정은?",
     "options": [
-      "PutObject\n에 s3:x-amz-acl 헤더 세트가 없는 경우 거부하도록 버킷 정책을 \n업데이트합니다.",
-      "PutObject 에 프라이빗으로 설정된 s3:x-amz-acl 헤더가 없는 경우 거부하도록 버킷 \n정책을 업데이트합니다.",
-      "PutObject 에 true 로 설정된 aws:SecureTransport 헤더가 없는 경우 거부하도록 버킷 \n정책을 업데이트합니다.",
-      "PutObject 에 x-amz-server-side-encryption 헤더 세트가 없는 경우 거부하도록 버킷 \n정책을 업데이트합니다."
+      "파일을 올릴 때 '내 거 아님(ACL)' 헤더가 없으면 거절하는 규칙을 넣습니다.",
+      "공개 설정(Private) 헤더가 명시되지 않은 모든 업로드 요청을 차단합니다.",
+      "전송 단계에서 보안 통신(HTTPS)을 쓰지 않는 모든 요청을 거부합니다.",
+      "서버 측 암호화(SSE)를 하겠다는 도장이 찍힌 헤더가 없으면 아예 못 올리게 막습니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99685-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
+    "explanation": "정답은 D입니다.\n\n업로드 요청(PutObject)에 '암호화해서 저장해줘!'라는 쪽지(x-amz-server-side-encryption 헤더)가 없으면 퇴짜를 놓는 정책을 세우면 됩니다. 이렇게 하면 실수로 생으로 파일을 올리려는 시도가 원천 차단되므로, S3에 저장되는 모든 파일은 무조건 AWS가 알아서 잠궈주는 안전한 상태가 됩니다.\n\n다른 옵션인 A, B, C는 암호화와는 직접적인 관련이 없는 엉뚱한 보안 설정들입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "Server-side Encryption (SSE)": "데이터를 저장할 때 AWS가 서버에서 알아서 암호화해주는 기술",
+      "Bucket Policy": "S3 버킷에 누가 들어오고 무엇을 할 수 있는지 정의하는 상세한 규칙 설명서",
+      "HTTP Header": "데이터를 보낼 때 맨 앞머리에 붙이는 일종의 '메모지'나 '라벨'"
     }
   },
   {
     "id": 322,
-    "question": "솔루션 설계자는 회사를 위한 다중 계층 애플리케이션을 설계하고 있습니다. 애플리케이션 \n사용자는 모바일 장치에서 이미지를 업로드합니다. 애플리케이션은 각 이미지의 썸네일을 \n생성하고 이미지가 성공적으로 업로드되었음을 확인하는 메시지를 사용자에게 반환합니다. \n썸네일 생성에는 최대 60\n초가 소요될 수 있지만 회사는 사용자에게 원본 이미지가 \n수신되었음을 알리기 위해 더 빠른 응답 시간을 제공하고자 합니다. 솔루션 설계자는 서로 \n\n=== PAGE 342 ===\n다른 애플리케이션 계층에 요청을 비동기식으로 전달하도록 애플리케이션을 설계해야 \n합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "사용자가 모바일에서 이미지를 올리면 썸네일을 만드는데 1분이나 걸립니다. 사용자를 그동안 기다리게 하지 않고 '잘 받았어요!'라고 먼저 응답해주며 작업을 처리하는 설계는?",
     "options": [
-      "사용자 지정 AWS Lambda 함수를 작성하여 썸네일을 생성하고 사용자에게 알립니다. \n이미지 업로드 프로세스를 이벤트 소스로 사용하여 Lambda 함수를 호출합니다.",
-      "AWS Step Functions 워크플로를 생성합니다. 애플리케이션 계층 간의 오케스트레이션을 \n처리하고 썸네일 생성이 완료되면 사용자에게 알리도록 Step Functions 를 구성합니다.",
-      "Amazon Simple Queue Service(Amazon SQS) 메시지 대기열을 생성합니다. 이미지가 \n업로드되면 \n썸네일 \n생성을 \n위해 \nSQS \n대기열에 \n메시지를 \n배치합니다. \n이미지가 \n수신되었음을 애플리케이션 메시지를 통해 사용자에게 알립니다.",
-      "Amazon Simple Notification Service(Amazon SNS) 알림 주제 및 구독을 생성합니다. \n애플리케이션과 함께 하나의 구독을 사용하여 이미지 업로드가 완료된 후 썸네일을 \n생성하십시오. 섬네일 생성이 완료된 후 푸시 알림을 통해 사용자의 모바일 앱에 메시지를 \n보내려면 두 번째 구독을 사용하십시오."
+      "Lambda 함수를 짜서 이미지 업로드 완료 직후 사용자에게 알리고 작업을 시작합니다.",
+      "Step Functions라는 복잡한 워크플로를 만들어 모든 과정을 오케스트레이션합니다.",
+      "SQS 대기열을 중간에 둡니다. 이미지가 오면 대기열에 일감을 넣고 사용자에게 즉시 답을 줍니다.",
+      "SNS 알림 주제를 만들어서 업로드 완료 후 썸네일 생성을 문자로 알려주게 합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99753-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이 옵션은 메시지 손실이나 다른 서비스를 사용할 필요 없이 모든 볼륨의 소프트웨어 구성 \n요소 간에 메시지를 전송, 저장 및 수신할 수 있는 완전 관리형 메시지 대기열 서비스인 \nAmazon SQS 를 사용하기 때문에 가장 효율적입니다. 또한 SQS 메시지 대기열을 사용하여 \n서로 다른 애플리케이션 계층에 요청을 비동기식으로 전달하여 썸네일 생성 프로세스에서 \n이미지 업로드 프로세스를 분리하고 확장성과 안정성을 활성화합니다. 또한 이미지가 \n수신되었다는 애플리케이션 메시지를 통해 사용자에게 경고하므로 섬네일 생성이 완료될 \n때까지 기다리는 것보다 사용자에게 더 빠른 응답 시간을 제공합니다. \n \n옵션 A 는 서버를 프로비저닝하거나 관리하지 않고 코드를 실행하는 방법인 사용자 지정 \nAWS Lambda 함수를 사용하여 썸네일을 생성하고 사용자에게 경고하기 때문에 효율성이 \n떨어집니다. \n그러나 이것은 썸네일 생성 프로세스에서 이미지 업로드 프로세스를 분리하기 위해 비동기 \n디스패치 메커니즘을 사용하지 않습니다. 또한 이미지 업로드 프로세스를 이벤트 소스로 \n사용하여 Lambda 함수를 호출하므로 한 번에 업로드된 이미지가 많은 경우 동시성 문제가 \n발생할 수 있습니다. \n \n옵션 B 는 애플리케이션의 구성 요소를 일련의 단계로 배열하고 시각화하는 그래픽 콘솔을",
+    "explanation": "정답은 C입니다.\n\n비동기 처리를 위한 'SQS 바구니' 전략입니다. 사용자가 이미지를 올리면 '알았어요, 이 바구니(SQS)에 넣어둘 테니 나중에 확인하세요'라고 0.1초 만에 답을 줍니다. 그럼 한가한 일꾼 서버가 이 바구니에서 일감을 꺼내 60초 동안 정성껏 썸네일을 만드는 거죠. 사용자는 기다리지 않아도 되니 앱이 아주 빠릿빠릿하다고 느끼게 됩니다.\n\n다른 옵션인 A는 여전히 사용자가 람다 결과가 나올 때까지 기다릴 위험이 있고, B나 D는 단순한 이 작업에 비해 너무 거창하거나 알림에만 치중되어 있습니다.",
     "glossary": {
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)"
+      "Asynchronous Processing (비동기 처리)": "앞선 작업이 끝날 때까지 기다리지 않고 다음 작업을 진행하는 방식",
+      "SQS Message Queue": "시스템끼리 메시지를 주고받을 때 일시적으로 담아두는 가상의 우편함",
+      "Thumbnail": "원래 이미지를 아주 작게 줄여서 한눈에 보이게 만든 미리보기 이미지"
     }
   },
   {
     "id": 323,
-    "question": "회사 시설에는 건물 전체의 모든 입구에 배지 판독기가 있습니다. 배지를 스캔하면 \n판독기가 HTTPS\n를 통해 메시지를 보내 누가 해당 입구에 액세스하려고 시도했는지 \n나타냅니다. \n솔루션 설계자는 센서에서 보내는 이러한 메시지를 처리하는 시스템을 설계해야 합니다. \n솔루션은 가용성이 높아야 하며 회사의 보안 팀이 분석할 수 있도록 결과를 제공해야 \n합니다. \n솔루션 설계자는 어떤 시스템 아키텍처를 추천해야 합니까?",
+    "question": "건물 입구에서 직원이 카드를 찍으면 실시간으로 서버에 누가 들어왔는지 기록을 보냅니다. 가용성이 높아야 하고 보안팀이 분석도 가능해야 할 때 가장 깔끔한 설계는?",
     "options": [
-      "Amazon EC2 인스턴스를 시작하여 HTTPS 엔드포인트 역할을 하고 메시지를 처리합니다. \n결과를 Amazon S3 버킷에 저장하도록 EC2 인스턴스를 구성합니다.",
-      "Amazon API Gateway 에서 HTTPS 엔드포인트를 생성합니다. AWS Lambda 함수를 \n호출하여 메시지를 처리하고 결과를 Amazon DynamoDB 테이블에 저장하도록 API \nGateway 엔드포인트를 구성합니다.",
-      "Amazon Route 53 을 사용하여 들어오는 센서 메시지를 AWS Lambda 함수로 보냅니다. \n메시지를 처리하고 결과를 Amazon DynamoDB 테이블에 저장하도록 Lambda 함수를 \n구성합니다.",
-      "Amazon S3\n용 게이트웨이 VPC 엔드포인트를 생성합니다. 센서 데이터가 VPC \n엔드포인트를 통해 S3 버킷에 직접 기록될 수 있도록 시설 네트워크에서 VPC\n로의 \nSite-to-Site VPN 연결을 구성합니다."
+      "EC2 한 대 띄워서 신호를 받고 직접 S3에 파일을 하나하나 적습니다.",
+      "API 게이트웨이로 신호를 받고, Lambda가 이를 처리해서 DynamoDB에 차곡차곡 쌓습니다.",
+      "Route 53의 똑똑한 기능을 써서 신호를 바로 Lambda로 연결하게 복잡하게 설계합니다.",
+      "VPC 내부망과 사이트 간 VPN을 연결해서 물리 장비와 클라우드를 직접 잇습니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99699-exam-aws-certified-solut",
-    "glossary": {}
+    "explanation": "정답은 B입니다.\n\n서버리스 콤비인 'API Gateway + Lambda'가 제격입니다. 건물 입구의 장치는 이 문지기(API)에게 데이터만 던지면 되고, Lambda라는 일꾼이 나타나서 출입 기록을 DynamoDB라는 고속 수첩에 착 적어줍니다. 서버 관리도 필요 없고 24시간 멈추지 않는 아주 견고하고 현대적인 출입 관리 시스템이 됩니다.\n\n다른 옵션인 A는 서버가 죽으면 기록이 다 날아가고, C는 길 찾기 도구를 엄무에 동원하는 격입니다. D는 단순 데이터 전송을 위해 너무 비싼 전용선을 까는 낭비입니다.",
+    "glossary": {
+      "API Gateway": "외부 서비스가 내 시스템과 대화하기 위한 정문 역할을 하는 서비스",
+      "DynamoDB": "성능이 일정하고 확장이 쉬운 AWS의 NoSQL 데이터베이스",
+      "Serverless": "서버 컴퓨터를 내가 직접 만지지 않고 서비스 형태로 기능만 빌려 쓰는 것"
+    }
   },
   {
     "id": 324,
-    "question": "회사는 기본 온프레미스 파일 스토리지 볼륨에 대한 재해 복구 계획을 구현하려고 합니다. \n파일 스토리지 볼륨은 로컬 스토리지 서버의 iSCSI(Internet Small Computer Systems \nInterface) 장치에서 마운트됩니다. 파일 스토리지 볼륨은 수백 테라바이트(TB)의 데이터를 \n보유합니다. \n회사는 최종 사용자가 대기 시간 없이 온프레미스 시스템의 모든 파일 유형에 즉시 \n액세스할 수 있기를 원합니다. \n회사의 기존 인프라를 최소한으로 변경하면서 이러한 요구 사항을 충족하는 솔루션은 \n무엇입니까?",
+    "question": "사내 하드디스크 볼륨들을 위해 재해 복구(DR) 계획을 세우려 합니다. 원본은 사무실에 100% 보관하면서도, 사고 시 S3에 있는 백업본을 바로 쓸 수 있게 하려면 어떤 게이트웨이가 필요합니까?",
     "options": [
-      "온프레미스에서 호스팅되는 가상 머신(VM)으로 Amazon S3 파일 게이트웨이를 \n프로비저닝합니다. 로컬 캐시를 10TB\n로 설정합니다. NFS 프로토콜을 통해 파일에 \n액세스하도록 기존 애플리케이션을 수정합니다. 재해에서 복구하려면 Amazon EC2 \n인스턴스를 프로비저닝하고 파일이 포함된 S3 버킷을 탑재합니다.",
-      "AWS Storage Gateway 테이프 게이트웨이를 프로비저닝합니다. 데이터 백업 솔루션을 \n사용하여 모든 기존 데이터를 가상 테이프 라이브러리에 백업하십시오. 초기 백업이 완료된 \n후 야간에 실행되도록 데이터 백업 솔루션을 구성합니다. 재해에서 복구하려면 Amazon \nEC2 인스턴스를 프로비저닝하고 가상 테이프 라이브러리의 볼륨에서 Amazon Elastic Block \nStore(Amazon EBS) 볼륨으로 데이터를 복원합니다.",
-      "AWS Storage Gateway 볼륨 게이트웨이 캐시 볼륨을 프로비저닝합니다. 로컬 캐시를 \n10TB 로 설정합니다. iSCSI 를 사용하여 볼륨 게이트웨이 캐싱 볼륨을 기존 파일 서버에 \n마운트하고 모든 파일을 스토리지 볼륨에 복사합니다. 스토리지 볼륨의 예약된 스냅샷을 \n구성합니다. 재해에서 복구하려면 스냅샷을 Amazon Elastic Block Store(Amazon EBS) \n볼륨으로 복원하고 EBS 볼륨을 Amazon EC2 인스턴스에 연결합니다.",
-      "기존 파일 스토리지 볼륨과 동일한 양의 디스크 공간으로 AWS Storage Gateway 볼륨 \n게이트웨이 저장 볼륨을 프로비저닝합니다. iSCSI 를 사용하여 볼륨 게이트웨이 저장 볼륨을 \n기존 파일 서버에 마운트하고 모든 파일을 스토리지 볼륨에 복사합니다. 스토리지 볼륨의 \n예약된 스냅샷을 구성합니다. 재해에서 복구하려면 스냅샷을 Amazon Elastic Block \n\n=== PAGE 345 ===\nStore(Amazon EBS) 볼륨으로 복원하고 EBS 볼륨을 Amazon EC2 인스턴스에 연결합니다."
+      "VM 방식의 S3 파일 게이트웨이를 씁니다.",
+      "가상 테이프 라이브러리를 만드는 테이프 게이트웨이를 도입합니다.",
+      "캐시 볼륨 게이트웨이를 써서 데이터의 일부만 사무실에 둡니다.",
+      "보관형(Stored) 볼륨 게이트웨이를 써서 전체 데이터와 백업 스냅샷을 관리합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99711-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n\"회사는 최종 사용자가 온프레미스 시스템의 모든 파일 유형에 즉시 액세스할 수 있기를 \n원합니다.\" \n- 캐싱된 볼륨(Cached volumes): 가장 최근 데이터에 대한 액세스 대기 시간이 짧습니다. \n- 저장 볼륨(Stored volumes): 전체 데이터 세트는 온프레미스이며 S3 로 예약 백업되므로 \n볼륨 게이트웨이 저장 볼륨이 적절한 선택입니다.",
+    "explanation": "정답은 D입니다.\n\n직원들이 대기 시간 없이 즉시 파일을 열어봐야 하므로, 모든 데이터가 사무실에 그대로 있는 '보관형(Stored)'이 정답입니다. 이 방식은 사무실 장비에 데이터를 저장하면서 동시에 S3로 복사본을 날려줍니다. 나중에 사무실이 침수되어도 클라우드에 든 스냅샷 파일을 클릭 한 번으로 새 서버에 붙저서 복구할 수 있는 아주 든든한 보험입니다.\n\n다른 옵션인 C는 일부 데이터만 로컬에 두는 방식이라 '원본 100% 보관' 조건에 어긋나며, A와 B는 용도가 전혀 다릅니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "Stored Volume Gateway": "주요 데이터 저장소는 온프레미스에 두고 백업만 AWS로 보내는 하이브리드 연결 방식",
+      "Snapshot (스냅샷)": "특정 시점의 데이터 상태를 사진 찍듯 그대로 저장해놓은 것",
+      "Volume (볼륨)": "데이터를 저장하는 가상의 하드디스크 단위"
     }
   },
   {
     "id": 325,
-    "question": "회사는 Amazon S3 버킷에서 웹 애플리케이션을 호스팅하고 있습니다. 이 애플리케이션은 \nAmazon Cognito 를 자격 증명 공급자로 사용하여 사용자를 인증하고 다른 S3 버킷에 \n저장된 보호된 리소스에 대한 액세스를 제공하는 JSON 웹 토큰(JWT)을 반환합니다. \n응용 프로그램 배포 시 사용자는 오류를 보고하고 보호된 콘텐츠에 액세스할 수 없습니다. \n솔루션 설계자는 사용자가 보호된 콘텐츠에 액세스할 수 있도록 적절한 권한을 제공하여 이 \n문제를 해결해야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "Cognito를 통해 로그인한 사용자가 다른 S3 버킷의 중요한 자료를 보려는데 자꾸 권한 오류가 납니다. 무엇을 확인하고 설정해줘야 사용자가 자기 자료에 접근할 수 있을까요?",
     "options": [
-      "Amazon Cognito 자격 증명 풀을 업데이트하여 보호된 콘텐츠에 액세스하기 위한 적절한 \nIAM 역할을 맡습니다.",
-      "애플리케이션이 보호된 콘텐츠에 액세스할 수 있도록 S3 ACL 을 업데이트합니다.",
-      "애플리케이션을 Amazon S3 에 재배포하여 S3 버킷의 최종적으로 일관된 읽기가 보호된 \n콘텐츠에 액세스하는 사용자의 기능에 영향을 미치지 않도록 합니다.",
-      "자격 증명 풀 내에서 사용자 지정 속성 매핑을 사용하고 사용자에게 보호된 콘텐츠에 \n액세스할 수 있는 적절한 권한을 부여하도록 Amazon Cognito 풀을 업데이트합니다."
+      "Cognito 자격 증명 풀(Identity Pool)에 연결된 IAM 역할의 권한을 확인하고 수정합니다.",
+      "S3 버킷의 ACL 설정에 들어가서 애플리케이션 주소를 수동으로 허용합니다.",
+      "S3 버킷의 읽기 방식이 실시간이 아니라서 생기는 문제이니 재배포를 수행합니다.",
+      "사용자 풀의 속성 매핑을 바운딩하여 더 복잡한 인증 과정을 거치게 합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/99754-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nAmazon Cognito 자격 증명 풀은 인증된 사용자에게 AWS 리소스에 액세스할 수 있는 \n권한이 제한된 임시 자격 증명 세트를 할당합니다. 각 사용자의 권한은 생성한 IAM 역할을 \n통해 \n제어됩니다.",
+    "explanation": "정답은 A입니다.\n\n로그인하는 곳(User Pool)과 권한을 주는 곳(Identity Pool)은 다릅니다. 사용자가 로그인하면 그에게 '이런 일을 할 수 있다'는 신분증(IAM Role)을 줘야 하는데, 이 신분증 설정이 부실해서 금지된 구역(S3)에 못 들어가는 것입니다. 자격 증명 풀 설정에서 적절한 권한을 가진 역할을 지정해주기만 하면 문제는 깔끔하게 해결됩니다.\n\n다른 옵션인 B는 구식 방식이라 추천하지 않고, C는 뜬금없는 소리입니다. D는 로그인을 더 복잡하게 만들 뿐 정작 중요한 '금고 열쇠(권한)'와는 상관이 없습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "IAM": "AWS 리소스에 대한 접근 권한을 관리하는 보안 시스템"
+      "Cognito Identity Pool": "로그인한 사용자에게 실제 AWS 리소스를 만질 수 있는 임시 통행증을 주는 서비스",
+      "IAM Role (역할)": "서비스나 사용자가 임무를 수행하기 위해 부여받는 권한의 묶음",
+      "User Pool (사용자 풀)": "회원가입, 로그인 등 사용자 정보를 관리하는 명부"
     }
   }
 ];

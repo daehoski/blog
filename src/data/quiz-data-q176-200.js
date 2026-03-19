@@ -1,414 +1,416 @@
 export const quizData = [
   {
     "id": 176,
-    "question": "애플리케이션은 프라이빗 서브넷의 Amazon EC2 인스턴스에서 실행됩니다. 애플리케이션은 \nAmazon DynamoDB 테이블에 액세스해야 합니다. \n트래픽이 AWS 네트워크를 벗어나지 않도록 하면서 테이블에 액세스하는 가장 안전한 \n\n=== PAGE 190 ===\n방법은 무엇입니까?",
+    "question": "프라이빗 서브넷의 EC2 인스턴스에서 실행 중인 애플리케이션이 DynamoDB 테이블에 접근해야 합니다. 트래픽이 보안을 위해 절대 인터넷망(공용 네트워크)으로 나가지 않게 하면서, 가장 안전하게 테이블에 연결하는 비결은?",
     "options": [
-      "DynamoDB 용 VPC 엔드포인트를 사용합니다.",
-      "퍼블릭 서브넷에서 NAT 게이트웨이를 사용합니다.",
-      "프라이빗 서브넷에서 NAT 인스턴스를 사용합니다.",
-      "VPC 에 연결된 인터넷 게이트웨이를 사용합니다."
+      "DynamoDB용 VPC 게이트웨이 엔드포인트를 생성하여 사용합니다.",
+      "퍼블릭 서브넷에 NAT 게이트웨이를 설치하여 통신합니다.",
+      "프라이빗 서브넷에 NAT 인스턴스를 두고 외부 연결을 시도합니다.",
+      "VPC에 인터넷 게이트웨이를 달고 인스턴스에 퍼블릭 IP를 부여합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87532-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nVPC 내에 있는 프라이빗 서브넷의 EC2 인스턴스와 DynamoDB 간 가장 안전한 AWS \n네트워크 통신 = VPC Gateway Endpoint. \n게이트웨이 엔드포인트는 VPC 용 인터넷 게이트웨이 또는 NAT 디바이스가 없어도 Amazon \nS3 및 DynamoDB 에 대한 안정적인 연결을 제공합니다. \n\ndocs.aws.amazon.com/ko_kr/vpc/latest/privatelink/vpce-gateway.html#vpc-endp\noints-limitations \n \n \n2: \nDynamoDB 용 VPC 엔드포인트를 사용하면 VPC 의 Amazon EC2 인스턴스가 프라이빗 IP \n주소를 사용하여 퍼블릭 인터넷에 노출되지 않고 DynamoDB 에 액세스할 수 있습니다. EC2 \n인스턴스에는 퍼블릭 IP 주소가 필요하지 않으며 VPC 에 인터넷 게이트웨이, NAT 디바이스 \n또는 가상 프라이빗 게이트웨이가 필요하지 않습니다. 엔드포인트 정책을 사용하여 \nDynamoDB 에 대한 액세스를 제어합니다. VPC 와 AWS 서비스 간의 트래픽은 Amazon \n네트워크를 벗어나지 않습니다.",
+    "explanation": "정답은 A입니다.\n\nVPC 내부에서 S3나 DynamoDB 같은 AWS 공용 서비스에 프라이빗하게 접근하고 싶을 때는 게이트웨이 엔드포인트가 정답입니다. 이 방식을 쓰면 데이터가 인터넷을 한 발짝도 밟지 않고 AWS 내부 전용망을 통해서만 이동하므로, 보안성이 가장 높으면서도 별도의 장비 비용(NAT 등)이 들지 않아 매우 경제적입니다.\n\n다른 옵션인 B와 C는 결국 NAT라는 중계기를 통해 외부망(인터넷) 경로를 거쳐야 하므로 보안상 덜 안전하며, D의 인터넷 게이트웨이 방식은 프라이빗 서브넷이라는 전제 조건을 아예 무너뜨리는 위험한 설계입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "VPC Endpoint (Gateway)": "인터넷망을 거치지 않고 VPC 내부에서 S3나 DynamoDB에 직접 연결되는 전용 통로",
+      "Private Subnet": "외부 인터넷에서 직접 들어올 수 없는 안전한 내부 네트워크 구역",
+      "DynamoDB": "서버 없이 사용하는 초고속 NoSQL 데이터베이스"
     }
   },
   {
     "id": 177,
-    "question": "엔터테인먼트 회사는 Amazon DynamoDB\n를 사용하여 미디어 메타데이터를 저장하고 \n있습니다. 애플리케이션이 읽기 집약적이며 지연이 발생합니다. 회사에는 추가 운영 \n오버헤드를 처리할 직원이 없으며 애플리케이션을 재구성하지 않고 DynamoDB 의 성능 \n효율성을 개선해야 합니다. \n이 요구 사항을 충족하기 위해 솔루션 설계자는 무엇을 권장해야 합니까?",
+    "question": "DynamoDB에 미디어 정보를 담아 쓰고 있는데, 읽기 요청이 너무 많아 지연 시간이 발생하고 있습니다. 운영 인력은 부족하고 앱 코드를 뜯어고칠 여유도 없을 때, 성능을 단숨에 끌어올릴 최고의 추천 서비스는?",
     "options": [
-      "Redis 용 Amazon ElastiCache 를 사용합니다.",
-      "Amazon DynamoDB Accelerator(DAX)를 사용합니다. \n\n=== PAGE 191 ===",
-      "DynamoDB 전역 테이블을 사용하여 데이터를 복제합니다.",
-      "자동 검색이 활성화된 Memcached 용 Amazon ElastiCache 를 사용합니다."
+      "Redis용 Amazon ElastiCache를 도입합니다.",
+      "Amazon DynamoDB Accelerator(DAX)를 사용합니다.",
+      "전역 테이블(Global Tables)을 만들어 데이터를 여러 곳에 복제합니다.",
+      "Memcached용 Amazon ElastiCache 클러스터를 구성합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87572-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nDynamoDB 와 DAX 가 결합되면 성능을 한 단계 업그레이드하여 읽기 중심의 워크로드에서 \n초당 수백만 개의 요청에도 마이크로초의 응답 시간을 지원합니다. DynamoDB\n와 \n마찬가지로 DAX 는 완전관리형입니다. 따라서 하드웨어나 소프트웨어 프로비저닝, 설정 및 \n구성, 소프트웨어 패치, 분산 캐시 클러스터 운영 또는 확장 시 여러 인스턴스에 데이터 \n복제 등과 같은 관리 작업에 대해 더 이상 걱정할 필요가 없습니다. DAX 는 장애 탐지, \n장애 복구, 소프트웨어 패치와 같은 일반적인 관리 작업 상당 부분을 자동화합니다. DAX 는 \nDynamoDB API 와 호환되므로 작동하는 애플리케이션 코드를 변경할 필요가 없습니다.  \n \n참고: \n\naws.amazon.com/dynamodb/dax/",
+    "explanation": "정답은 B입니다.\n\nDynamoDB의 성능 효율을 높이면서 '앱 코드 수정 최소화'와 '운영 부담 감소'라는 두 마리 토끼를 잡으려면 DAX가 유일한 해답입니다. DAX는 DynamoDB 전용 캐시 서버로, 기존 API와 완벽히 호환되기 때문에 코드 수정 없이 설정만으로 읽기 성능을 마이크로초 단위로 단축해주는 효자 서비스입니다.\n\n다른 옵션인 A와 D의 ElastiCache는 범용 캐시라 성능은 좋지만, 이를 쓰기 위해 애플리케이션의 데이터 읽기/쓰기 로직을 대대적으로 수정해야 하므로 이번 요구 사항과는 맞지 않습니다. C의 전역 테이블은 전 세계 배포에는 유리하지만 단일 리전 내의 읽기 지연 해소와는 직접적인 관계가 적습니다.",
     "glossary": {
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스"
+      "DAX (DynamoDB Accelerator)": "DynamoDB 앞에 붙어서 읽기 속도를 획기적으로 높여주는 전용 인메모리 캐시",
+      "Latency": "데이터 요청 후 응답이 올 때까지 걸리는 지연 시간"
     }
   },
   {
     "id": 178,
-    "question": "회사의 인프라는 단일 AWS 리전에 있는 Amazon EC2 인스턴스와 Amazon RDS DB \n인스턴스로 구성됩니다. 회사는 별도의 리전에 데이터를 백업하려고 합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "단일 리전에서 EC2와 RDS를 운영 중인 회사가 모든 데이터를 다른 리전으로 백업하려 합니다. 관리자가 일일이 손대지 않아도 되는 '최소한의 운영 오버헤드'를 보장하는 똑똑한 솔루션은?",
     "options": [
-      "AWS Backup 을 사용하여 EC2 백업과 RDS 백업을 별도의 리전에 복사합니다.",
-      "Amazon Data Lifecycle Manager(Amazon DLM)를 사용하여 EC2 백업 및 RDS 백업을 \n별도의 리전에 복사합니다.",
-      "EC2 인스턴스의 Amazon 머신 이미지(AMI)를 생성합니다. AMI\n를 별도의 리전에 \n복사합니다. 별도의 리전에서 RDS DB 인스턴스에 대한 읽기 전용 복제본을 생성합니다.",
-      "Amazon Elastic Block Store(Amazon EBS) 스냅샷을 생성합니다. EBS 스냅샷을 별도의 \n리전에 복사합니다. RDS 스냅샷을 생성합니다. RDS 스냅샷을 Amazon S3 로 내보냅니다. S3 \nCRR(Cross-Region Replication)을 별도의 리전에 구성합니다."
+      "AWS Backup을 사용하여 EC2와 RDS 백업을 타 리전으로 자동 복제합니다.",
+      "Data Lifecycle Manager(DLM)를 써서 백업본을 타 리전으로 복사합니다.",
+      "EC2는 AMI로 구워 옮기고, RDS는 타 리전에 읽기 복제본을 만듭니다.",
+      "EBS 스냅샷을 찍어 옮기고, RDS 스냅샷은 S3로 내보낸 뒤 CRR 기능을 켭니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87639-exam-aws-certified-solut\nions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\n여러 서비스의 백업을 한곳에서 통합 관리하고 타 리전 복사까지 알아서 해주는 'AWS Backup'이 정답입니다. 관리 콘솔에서 정책 하나만 세워두면 EC2와 RDS 모두를 약속된 시간에 백업하고 안전한 다른 나라 리전으로 옮겨주기 때문에, 운영자의 수고를 가장 많이 덜어주는 현대적인 방식입니다.\n\n다른 옵션인 B의 DLM은 주로 EBS 볼륨 백업에 특화되어 있어 RDS까지 아우르기엔 부족하며, C와 D는 서비스마다 설정법이 다르고 수동 작업이나 복잡한 파이프라인이 들어가서 운영 오버헤드가 크게 발생합니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "AWS Backup": "AWS의 다양한 자산(EC2, RDS, S3 등)을 한곳에서 중앙 관리하는 백업 비서",
+      "Cross-Region Copy": "재해 복구를 위해 백업 데이터를 물리적으로 멀리 떨어진 다른 리전으로 옮겨두는 것"
     }
   },
   {
     "id": 179,
-    "question": "솔루션 설계자는 애플리케이션이 Amazon RDS DB 인스턴스에 액세스하는 데 사용하는 \n데이터베이스 사용자 이름과 암호를 안전하게 저장해야 합니다. 데이터베이스에 액세스하는 \n애플리케이션은 Amazon EC2 인스턴스에서 실행됩니다. 솔루션 설계자는 AWS Systems \nManager Parameter Store 에서 보안 매개변수를 생성하려고 합니다. \n솔루션 설계자는 이 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "EC2 인스턴스에서 돌아가는 앱이 RDS에 접속할 때 쓰는 아이디와 비번을 안전하게 보관하려 합니다. Systems Manager의 파라미터 스토어(Parameter Store)를 쓰기로 했을 때, 인스턴스가 이 정보를 가져오게 하는 가장 정석적인 방법은?",
     "options": [
-      "Parameter Store 파라미터에 대한 읽기 액세스 권한이 있는 IAM 역할을 생성합니다. \n파라미터를 암호화하는 데 사용되는 AWS Key Management Service(AWS KMS) 키에 대한 \nDecrypt 액세스를 허용합니다. 이 IAM 역할을 EC2 인스턴스에 할당합니다.",
-      "Parameter Store 파라미터에 대한 읽기 액세스를 허용하는 IAM 정책을 생성합니다. \n파라미터를 암호화하는 데 사용되는 AWS Key Management Service(AWS KMS) 키에 대한 \nDecrypt 액세스를 허용합니다. 이 IAM 정책을 EC2 인스턴스에 할당합니다.",
-      "Parameter Store 파라미터와 EC2 인스턴스 간에 IAM 신뢰 관계를 생성합니다. 신뢰 \n정책에서 Amazon RDS 를 보안 주체로 지정합니다.",
-      "DB 인스턴스와 EC2 인스턴스 간에 IAM 신뢰 관계를 생성합니다. 신뢰 정책에서 \nSystems Manager 를 보안 주체로 지정합니다."
+      "파라미터 읽기 권한과 KMS 복호화 권한이 있는 IAM 역할을 만들어 인스턴스에 부여합니다.",
+      "파라미터 읽기 및 KMS 복호화 권한을 담은 IAM 정책을 인스턴스 사용자에게 직접 할당합니다.",
+      "파라미터 스토어와 EC2 사이의 신뢰 관계를 맺고 보안 주체를 RDS로 정합니다.",
+      "RDS와 EC2 사이에 신뢰 관계를 맺고 보안 주체를 Systems Manager로 정합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87582-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n데이터베이스 사용자 이름과 암호를 AWS 시스템 관리자 파라미터 스토어에 안전하게 \n저장하고 EC2 인스턴스에서 실행 중인 애플리케이션이 액세스할 수 있도록 하려면",
+    "explanation": "정답은 A입니다.\n\nEC2 인스턴스에게 특정 권한(파라미터 읽기 및 암호 풀기)을 안전하게 전달하는 표준 방법은 IAM 역할을 사용하는 것입니다. 아이디와 비번 같은 민감 정보는 파라미터 스토어에서 암호화되어 저장되므로, 이를 읽기 위한 'Get' 권한과 암호를 풀기 위한 'KMS Decrypt' 권한을 하나로 묶어 역할로 부여하는 것이 가장 보안상 우수하고 깔끔합니다.\n\n다른 옵션인 B의 정책 직접 할당은 인스턴스 단위가 아닌 개별 사용자 단위라 관리 효율이 떨어지며, C와 D에서 언급한 신뢰 관계 설정 방식은 이 상황의 권한 부여 로직과는 전혀 다른 엉뚱한 기술적 접근입니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Parameter Store": "비밀번호나 설정값 같은 민감한 데이터를 안전하게 보관해주는 저장소",
+      "KMS (Key Management Service)": "데이터를 암호화하거나 풀 때 사용하는 열쇠(암호화 키)를 관리하는 서비스",
+      "IAM Role": "서버나 서비스에게 일시적으로 특정 행동을 할 수 있는 자격을 주는 가상의 신분증"
     }
   },
   {
     "id": 180,
-    "question": "회사에서 API 로 구동되는 클라우드 통신 플랫폼을 설계하고 있습니다. 애플리케이션은 \nNLB(Network Load Balancer) 뒤의 Amazon EC2 인스턴스에서 호스팅됩니다. 이 회사는 \nAmazon API Gateway 를 사용하여 외부 사용자에게 API 를 통해 애플리케이션에 대한 \n액세스 권한을 제공합니다. 이 회사는 SQL 인젝션과 같은 웹 익스플로잇으로부터 플랫폼을 \n보호하고 대규모의 정교한 DDoS 공격을 감지하고 완화하기를 원합니다. \n어떤 솔루션 조합이 MOST 보호를 제공합니까? (두 가지를 선택하세요.)",
+    "question": "NLB 뒤에 EC2 서버가 있고 API Gateway를 통해 외부 유저를 받고 있습니다. SQL 인젝션 공격을 막고, 대규모 지능형 DDoS 공격까지 완벽하게 차단하고 싶을 때 설계자가 추천하는 최강 보안 조합 두 가지는? (2개 선택)",
     "options": [
-      "AWS WAF 를 사용하여 NLB 를 보호하십시오.",
-      "NLB 와 함께 AWS Shield Advanced 를 사용합니다.",
-      "AWS WAF 를 사용하여 Amazon API Gateway 를 보호합니다.",
-      "AWS Shield Standard 와 함께 Amazon GuardDuty 사용",
-      "Amazon API Gateway 와 함께 AWS Shield Standard 를 사용합니다."
+      "AWS WAF를 사용하여 NLB를 철저히 보호합니다.",
+      "NLB 앞에 AWS Shield Advanced를 활성화하여 방어력을 높입니다.",
+      "AWS WAF를 Amazon API Gateway에 연결하여 웹 공격을 필터링합니다.",
+      "GuardDuty와 Shield Standard를 결합하여 탐지 시스템을 구축합니다.",
+      "API Gateway와 Shield Standard를 연동하여 기본 방어 체계를 갖춥니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87640-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nAWS Shield Advanced 는 Amazon EC2 인스턴스, Elastic Load Balancing 로드 밸런서, \nCloudFront 배포, Route 53 호스팅 영역 및 AWS Global Accelerator 표준 가속기에 대해 \n확장된 DDoS 공격 보호 기능을 제공합니다. AWS WAF 는 보호된 웹 애플리케이션 리소스로 \n전달되는 HTTP 및 HTTPS 요청을 모니터링할 수 있는 웹 애플리케이션 방화벽입니다. \n다음 리소스 유형을 보호할 수 있습니다. \nAmazon CloudFront 배포 \n아마존 API 게이트웨이 REST API \n애플리케이션 로드 밸런서 \nAWS AppSync GraphQL API \nAmazon Cognito 사용자 풀",
+    "answer": [1, 2],
+    "explanation": "정답은 B와 C입니다.\n\n웹 공격(L7)과 네트워크 공격(L3/L4)을 모두 잡으려면 WAF와 Shield Advanced의 협공이 필요합니다. 먼저 API Gateway에 WAF를 붙여 SQL 인젝션 같은 지저분한 웹 공격을 1차로 걸러내고, NLB에는 Shield Advanced를 적용해 폭풍처럼 쏟아지는 대규모 DDoS 공격으로부터 인프라를 지켜내는 것이 가장 완벽한 방패 구성입니다.\n\n다른 옵션인 A의 WAF는 NLB에 직접 붙일 수 없고(ALB만 가능), D와 E의 Standard 서비스는 기본적인 방어는 해주지만 '대규모 지능형 공격'을 확실히 밀어내기에는 힘이 부칩니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "CloudFront": "전 세계 사용자에게 콘텐츠를 빠르게 전달하는 CDN 서비스",
-      "Route 53": "AWS의 클라우드 DNS(도메인 이름 서비스)"
+      "SQL Injection": "입력창에 악성 코드를 심어 데이터베이스의 정보를 탈취하거나 망가뜨리는 공격 기법",
+      "DDoS": "엄청난 트래픽을 한꺼번에 쏘아 서버를 마비시키는 거친 공격",
+      "AWS Shield Advanced": "공격이 들어오면 전문가들이 직접 투입되어 대응까지 해주는 프리미엄 보안 서비스"
     }
   },
   {
     "id": 181,
-    "question": "회사에는 Amazon EC2 인스턴스에서 실행되는 레거시 데이터 처리 애플리케이션이 \n있습니다. 데이터는 순차적으로 처리되지만 결과의 순서는 중요하지 않습니다. 응용 \n프로그램은 모놀리식 아키텍처를 사용합니다. 회사에서 수요 증가에 맞춰 애플리케이션을 \n확장할 수 있는 유일한 방법은 인스턴스 크기를 늘리는 것입니다. \n이 회사의 개발자는 Amazon Elastic Container Service(Amazon ECS)에서 마이크로서비스 \n아키텍처를 사용하도록 애플리케이션을 다시 작성하기로 결정했습니다. \n솔루션 설계자는 마이크로서비스 간의 통신을 위해 무엇을 권장해야 합니까?",
+    "question": "덩치가 큰 레거시 앱을 ECS 마이크로서비스로 쪼개서 다시 만들려 합니다. 데이터 처리 순서는 상관없지만, 서비스끼리 서로 영향을 주지 않고 안정적으로 데이터를 주고받게 만들고 싶을 때 가장 좋은 통신 방식은?",
     "options": [
-      "Amazon Simple Queue Service(Amazon SQS) 대기열을 생성합니다. 데이터 생산자에 \n코드를 추가하고 데이터를 대기열로 보냅니다. 데이터 소비자에 코드를 추가하여 대기열의 \n데이터를 처리합니다.",
-      "Amazon Simple Notification Service(Amazon SNS) 주제를 생성합니다. 데이터 생산자에 \n코드를 추가하고 주제에 알림을 게시합니다. 데이터 소비자에 코드를 추가하여 주제를 \n구독합니다.",
-      "메시지를 전달할 AWS Lambda 함수를 생성합니다. 데이터 생산자에 코드를 추가하여 \n데이터 객체로 Lambda 함수를 호출합니다. 데이터 소비자에 코드를 추가하여 Lambda \n함수에서 전달되는 데이터 객체를 수신합니다.",
-      "Amazon DynamoDB 테이블을 생성합니다. DynamoDB 스트림을 활성화합니다. 데이터 \n생산자에 코드를 추가하여 테이블에 데이터를 삽입합니다. 데이터 소비자에 코드를 \n추가하여 DynamoDB Streams API\n를 사용하여 새 테이블 항목을 감지하고 데이터를 \n검색합니다."
+      "SQS 대기열을 만들어 생산자가 데이터를 넣고 소비자가 꺼내 쓰게 합니다.",
+      "SNS 주제를 만들어 생산자가 알림을 쏘고 소비자가 구독하게 합니다.",
+      "Lambda 함수를 거쳐서 데이터를 전달하는 로직을 앱에 추가합니다.",
+      "DynamoDB에 데이터를 쓰고 스트림 기능을 켜서 변화를 감지하게 합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87647-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \n분리와 함께 처리할 응용 프로그램에 대한 메시지를 보관할 큐를 수용하도록 아키텍처를 \n변경하기만 하면 됨 A(O) – SQS \n \n2: \n대기열의 처리량이 제한됨(일괄 처리 없이 300msg/s, 일괄 처리 시 3000msg/s, 일괄 \n작업당 최대 10msg, 대기열에서 메시지 복제가 허용되지 않음(정확히 한 번 전달), 메시지",
+    "explanation": "정답은 A입니다.\n\n마이크로서비스들 사이에서 '서로 몰라도 일이 되게' 만드는(디커플링) 일등 공신은 SQS입니다. 데이터가 들어오는 대로 SQS라는 바구니에 담아두면, 받는 쪽 서버가 바쁘더라도 데이터가 날아가지 않고 안전하게 보관되었다가 여유가 생길 때 순차적으로 처리할 수 있어 시스템 전체의 안정성이 비약적으로 상승합니다.\n\n다른 옵션인 B의 SNS는 알림을 뿌리는 용도라 데이터를 안전하게 '보관'했다가 처리하기엔 부족하며, C와 D는 불필요하게 구조가 복잡해지거나 추가적인 코딩 부담이 커서 운영 효율 면에서 SQS에게 밀립니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)"
+      "Microservices": "하나의 거대한 앱을 작고 독립적인 기능들로 나누어 만드는 방식",
+      "SQS (Simple Queue Service)": "메시지를 잃어버리지 않게 비동기로 보관했다가 전달해주는 완충 바구니",
+      "Decoupling": "시스템 구성 요소들이 서로 의존하지 않게 떼어놓아 하나가 고장 나도 전체가 멈추지 않게 하는 설계"
     }
   },
   {
     "id": 182,
-    "question": "회사에서 MySQL 데이터베이스를 온프레미스에서 AWS 로 마이그레이션하려고 합니다. 이 \n회사는 최근 비즈니스에 상당한 영향을 미치는 데이터베이스 중단을 경험했습니다. 이러한 \n일이 다시 발생하지 않도록 회사는 데이터 손실을 최소화하고 모든 트랜잭션을 최소 두 \n개의 노드에 저장하는 안정적인 AWS 데이터베이스 솔루션을 원합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "온프레미스 MySQL을 AWS로 옮기려 합니다. 최근 DB 중단 사고로 큰 피해를 보았던 터라, 이번에는 어떤 사고가 터져도 절대 데이터 손실이 없도록 최소 두 개의 노드에 실시간으로 복제되는 구조를 만들고 싶습니다. 정답은?",
     "options": [
-      "3 개의 가용 영역에 있는 3 개의 노드에 대한 동기식 복제로 Amazon RDS DB 인스턴스를 \n생성합니다.",
-      "다중 AZ 기능이 활성화된 Amazon RDS MySQL DB 인스턴스를 생성하여 데이터를 \n동기식으로 복제합니다.",
-      "Amazon RDS MySQL DB 인스턴스를 생성한 다음 데이터를 동기식으로 복제하는 별도의 \nAWS 리전에서 읽기 전용 복제본을 생성합니다.",
-      "Amazon RDS MySQL DB 인스턴스에 데이터를 동기식으로 복제하기 위해 AWS Lambda \n함수를 트리거하는 MySQL 엔진이 설치된 Amazon EC2 인스턴스를 생성합니다."
+      "3개의 가용 영역에 3개의 노드를 동기식으로 복제하는 RDS를 만듭니다.",
+      "다중 AZ(Multi-AZ) 기능을 켠 RDS MySQL 인스턴스를 생성합니다.",
+      "RDS를 만들고 다른 리전에 비동기식으로 복제되는 읽기 전용 복제본을 둡니다.",
+      "EC2에 MySQL을 깔고 Lambda 함수를 짜서 실시간으로 데이터를 복사합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87641-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \n데이터베이스의 고가용성이 필요한 상황이므로 Multi AZ 가 필수인 상황. \nA(X) : AWS 로 MySQL 데이터베이스를 마이그레이션하려고 한다 했으므로 Amazon RDS for \nMySQL 이 맞음. \nB(O) : Amazon RDS 다중 AZ 동기 복제 기술을 사용하여 대기 데이터베이스 인스턴스의 \n데이터를 프라이머리와 함께 최신 상태로 유지합니다. 장애를 감지하면 Amazon RDS 는 \n수동 개입 없이 자동으로 대기 인스턴스로 장애 조치합니다. \n\naws.amazon.com/ko/rds/features/multi-az/ \nC(X) : RDS read replica 는 동기식이 아닌 비동기식 방식임. \n기본 DB 인스턴스에 적용된 업데이트는 읽기 전용 복제본에 비동기식으로 복사됩니다. \n\ndocs.aws.amazon.com/ko_kr/AmazonRDS/latest/UserGuide/USER_ReadRepl.html \nD(X) : 다른 AZ 나 리전에 복제하는지에 대한 여부가 안 나와 있음. 그리고 굳이 Lambda 를 \n사용해야 하는지도 의문. \n \n2:",
+    "explanation": "정답은 B입니다.\n\n고가용성과 데이터 무결성을 위한 AWS의 표준 답안은 '다중 AZ(Multi-AZ) 배포'입니다. 이 기능을 켜면 AWS가 알아서 다른 가용 영역에 똑같은 복제본을 동기식으로 만들어 관리하며, 메인 DB가 죽더라도 0.1초의 망설임 없이 복제본을 메인으로 승격시켜 서비스를 유지해주기 때문에 데이터 손실 걱정을 싹 날려줍니다.\n\n다른 옵션인 A는 비용이 너무 많이 들고 관리 포인트가 늘어나며, C의 읽기 복제본은 '비동기' 방식이라 메인 DB가 죽는 찰나의 데이터는 잃어버릴 위험이 있습니다. D는 사람이 수동으로 시스템을 구축하는 것이라 신뢰도가 낮고 운영 부담만 큽니다.",
     "glossary": {
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Multi-AZ (Multi-Availability Zone)": "물리적으로 떨어진 두 곳의 데이터 센터에 실시간으로 데이터를 복사해두는 고가용성 기술",
+      "Synchronous Replication (동기 복제)": "메인에 기록할 때 복제본에도 똑같이 기록될 때까지 기다렸다가 완료하는 철저한 방식"
     }
   },
   {
     "id": 183,
-    "question": "회사에서 새로운 동적 주문 웹사이트를 구축하고 있습니다. 회사는 서버 유지 관리 및 \n패치를 최소화하려고 합니다. 웹 사이트는 가용성이 높아야 하며 사용자 요구의 변화를 \n충족하기 위해 가능한 한 빨리 읽기 및 쓰기 용량을 확장해야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "새로운 주문 사이트를 만드는데, 서버 관리나 패치 같은 노가다는 아예 안 하고 싶습니다. 앱은 사용량에 따라 읽기/쓰기 용량이 즉시 확장되어야 하고 가용성도 높아야 합니다. 어떤 조합이 가장 이상적일까요?",
     "options": [
-      "Amazon S3 에서 정적 콘텐츠를 호스팅합니다. Amazon API Gateway 및 AWS Lambda 를 \n사용하여 동적 콘텐츠를 호스팅합니다. 데이터베이스에 대한 온디맨드 용량과 함께 \nAmazon DynamoDB 를 사용합니다. 웹 사이트 콘텐츠를 제공하도록 Amazon CloudFront 를 \n구성합니다.",
-      "Amazon S3 에서 정적 콘텐츠를 호스팅합니다. Amazon API Gateway 및 AWS Lambda 를 \n사용하여 동적 콘텐츠를 호스팅합니다. 데이터베이스에는 Aurora Auto Scaling 과 함께 \nAmazon Aurora 를 사용하십시오. 웹 사이트 콘텐츠를 제공하도록 Amazon CloudFront 를 \n구성합니다.",
-      "Amazon EC2 인스턴스에서 모든 웹 사이트 콘텐츠를 호스팅합니다. Auto Scaling 그룹을 \n생성하여 EC2 인스턴스를 확장합니다. Application Load Balancer 를 사용하여 트래픽을 \n분산합니다. 데이터베이스에 대해 프로비저닝된 쓰기 용량과 함께 Amazon DynamoDB 를 \n사용합니다.",
-      "Amazon EC2 인스턴스에서 모든 웹 사이트 콘텐츠를 호스팅합니다. Auto Scaling 그룹을 \n생성하여 EC2 인스턴스를 확장합니다. Application Load Balancer 를 사용하여 트래픽을 \n분산합니다. 데이터베이스에는 Aurora Auto Scaling\n과 함께 Amazon Aurora\n를 \n사용하십시오."
+      "S3(정적) + API Gateway/Lambda(동적) + DynamoDB 온디맨드 조합을 씁니다.",
+      "S3(정적) + API Gateway/Lambda(동적) + Aurora 오토 스케일링 조합을 씁니다.",
+      "EC2 오토 스케일링 그룹과 ALB를 쓰고 DB는 DynamoDB 프로비저닝 모드를 씁니다.",
+      "EC2 오토 스케일링 그룹과 ALB를 쓰고 DB는 Aurora 오토 스케일링을 씁니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87570-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n질문의 핵심 문구는 읽기 및 쓰기 용량을 확장해야 한다는 것입니다. Aurora 는 읽기",
+    "explanation": "정답은 A입니다.\n\n'서버 관리 최소화'와 '무한 확장성'을 원한다면 무조건 서버리스(Serverless) 라인을 타야 합니다. 화면은 S3, 로직은 람다, 디비는 다이너모DB로 구성하면 우리가 직접 관리할 서버가 단 한 대도 없게 됩니다. 특히 DynamoDB 온디맨드 모드는 미리 용량을 정할 필요 없이 손님이 1만 명 오든 100만 명 오든 알아서 받아내기 때문에 이번 요구 사항에 완벽히 부합합니다.\n\n다른 옵션인 B의 Aurora도 훌륭하지만 기본 설정이 서버리스라기보단 관리형에 가깝고, C와 D는 EC2라는 '관리해야 할 서버'가 포함되어 있어 운영 수고를 줄이고 싶다는 목표에 어긋납니다.",
     "glossary": {
-      "Aurora": "AWS가 구축한 클라우드 전용 고성능 관계형 데이터베이스 엔진"
+      "Serverless": "서버를 빌려 쓰는 게 아니라 서비스 단위로 사용하여 인프라 고민을 없앤 기술",
+      "DynamoDB On-demand": "사용량에 상관없이 쓴 만큼만 돈 내고 용량 조절도 필요 없는 똑똑한 DB 모드"
     }
   },
   {
     "id": 184,
-    "question": "회사에 소프트웨어 엔지니어링에 사용되는 AWS 계정이 있습니다. AWS 계정은 한 쌍의 \nAWS Direct Connect 연결을 통해 회사의 온프레미스 데이터 센터에 액세스할 수 있습니다. \n모든 비 VPC 트래픽은 가상 프라이빗 게이트웨이로 라우팅됩니다. \n개발팀은 최근 콘솔을 통해 AWS Lambda 함수를 생성했습니다. 개발 팀은 함수가 회사 \n데이터 센터의 프라이빗 서브넷에서 실행되는 데이터베이스에 액세스할 수 있도록 허용해야 \n합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "프라이빗 서브넷에 있는 온프레미스 데이터베이스에 우리 쪽 Lambda 함수가 접속해야 합니다. 이미 Direct Connect라는 전용선은 깔려 있는 상태네요. 람다 일꾼이 사내망 DB로 안전하게 찾아가게 하려면 무엇을 해줘야 할까요?",
     "options": [
-      "적절한 보안 그룹을 사용하여 VPC 에서 실행되도록 Lambda 함수를 구성합니다.",
-      "AWS 에서 데이터 센터로 VPN 연결을 설정합니다. VPN 을 통해 Lambda 함수의 트래픽을 \n라우팅합니다.",
-      "Lambda 함수가 Direct Connect 를 통해 온프레미스 데이터 센터에 액세스할 수 있도록 \nVPC 의 라우팅 테이블을 업데이트합니다.",
-      "탄력적 IP 주소를 생성합니다. 탄력적 네트워크 인터페이스 없이 탄력적 IP 주소를 통해 \n트래픽을 보내도록 Lambda 함수를 구성합니다."
+      "VPC에 연결되도록 람다 함수 설정을 변경하고 적절한 보안 그룹을 부여합니다.",
+      "AWS와 사내망 사이에 VPN을 따로 뚫어서 람다 트래픽을 거기로 보냅니다.",
+      "VPC 라우팅 테이블을 고쳐서 람다가 전용선을 바로 타게 길을 내줍니다.",
+      "람다에게 탄력적 IP를 주고 전용선 없이 인터넷을 통해 돌아가게 만듭니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87534-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n해설: \nA(O) : 보안 그룹을 정의하여 VPC 에 Lambda 연결 가능. \nAWS 계정의 가상 사설 클라우드(VPC)에 있는 사설 서브넷에 연결하도록 Lambda 함수를 \n구성할 수 있습니다. Amazon Virtual Private Cloud(Amazon VPC)를 사용하여 데이터베이스, \n캐시 인스턴스 또는 내부 서비스와 같은 리소스에 대한 사설 네트워크를 생성합니다. \n함수가 실행되는 동안 프라이빗 리소스에 액세스하려면 함수를 VPC 에 연결합니다. 함수를 \nVPC 에 연결하면 Lambda 는 함수의 VPC 구성에 있는 각 서브넷의 Hyperplane ENI(탄력적 \n네트워크 인터페이스)에 함수를 할당합니다. Lambda 는 계정의 VPC 지원 기능에 대해",
+    "explanation": "정답은 A입니다.\n\n람다 함수가 우리 쪽 VPC 안의 사설망 자원(전용선 포함)을 쓰게 하려면, 먼저 람다를 VPC에 소속시켜야 합니다. 일단 VPC 일원이 되면 기존에 깔려 있는 Direct Connect나 VPN 통로를 마치 자기 집 안방 쓰듯 자연스럽게 이용해서 사내 데이터베이스까지 안전하게 도달할 수 있게 됩니다.\n\n다른 옵션인 B는 이미 전용선이 있는데 또 길을 만드는 꼴이라 낭비이며, C는 람다를 먼저 VPC에 넣어야만 의미가 있는 조치입니다. D는 보안상 매우 위험할뿐더러 프라이빗 서브넷에 있는 DB에는 아예 접근조차 할 수 없는 방식입니다.",
     "glossary": {
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간",
-      "Direct Connect": "전용선을 이용해 사내망과 AWS를 직접 연결하는 기술"
+      "VPC (Virtual Private Cloud)": "AWS 안에 만든 우리 회사 전용 가상 네트워크 운동장",
+      "Hyperplane ENI": "람다가 VPC 내부와 통신하기 위해 사용하는 보이지 않는 특수 네트워크 카드",
+      "Direct Connect": "인터넷망이 아닌 회사와 AWS를 직접 잇는 전용 물리 회선"
     }
   },
   {
     "id": 185,
-    "question": "회사에서 Amazon ECS\n를 사용하여 애플리케이션을 실행합니다. 애플리케이션은 원본 \n이미지의 크기가 조정된 버전을 생성한 다음 Amazon S3 API 를 호출하여 크기가 조정된 \n이미지를 Amazon S3 에 저장합니다. \n솔루션 설계자는 애플리케이션이 Amazon S3 에 액세스할 권한이 있는지 어떻게 확인할 수 \n있습니까?",
+    "question": "ECS에서 돌아가는 이미지 앱이 S3에 결과물을 저장하려 합니다. 앱이 S3 창고에 들어갈 '열쇠(권한)'를 확실히 쥐어주는 가장 올바른 IAM 설정 방법은 무엇인가요?",
     "options": [
-      "Amazon ECS 에서 읽기/쓰기 액세스를 허용하도록 AWS IAM 에서 S3 역할을 업데이트한 \n다음 컨테이너를 다시 시작합니다.",
-      "S3 권한이 있는 IAM 역할을 생성한 다음 작업 정의에서 해당 역할을 taskRoleArn 으로 \n지정합니다.",
-      "Amazon ECS 에서 Amazon S3 로의 액세스를 허용하는 보안 그룹을 생성하고 ECS \n클러스터에서 사용하는 시작 구성을 업데이트합니다.",
-      "S3 권한이 있는 IAM 사용자를 만든 다음 이 계정으로 로그인한 상태에서 ECS \n클러스터에 대한 Amazon EC2 인스턴스를 다시 시작합니다."
+      "ECS의 전체 관리 권한을 업데이트하고 모든 컨테이너를 한 번 껐다 켭니다.",
+      "S3 권한을 담은 IAM 역할을 만들고, ECS 작업 정의(Task Definition)에 taskRoleArn으로 등록합니다.",
+      "ECS 클러스터의 실행 설정(Launch Configuration)에서 보안 그룹을 열어줍니다.",
+      "S3 전용 IAM 계정을 하나 파서 ID/PW로 로그인한 뒤 클러스터를 재부학합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87648-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \nA(X) : S3 에 관한 권한을 물어본 거지 ECS 에 대한 권한을 물어본 게 아님. \nB(O) : 태스크 정의를 등록할 때 태스크 권한의 컨테이너가 사용자 대신 연결된 정책에 \n지정된 AWS API 를 호출하도록 허용하는 IAM 역할에 태스크 역할을 제공할 수 있습니다. \n\ndocs.aws.amazon.com/ko_kr/AmazonECS/latest/developerguide/task_definition_p\narameters.html",
+    "explanation": "정답은 B입니다.\n\nECS에서 권한 관리를 할 때 가장 중요한 원칙은 '작업(Task)' 단위로 권한을 주는 것입니다. '태스크 역할(Task Role)'을 하나 구워두고 이를 작업 정의서에 딱 적어두면, 컨테이너가 실행될 때 자동으로 필요한 권한을 부여받아 안전하게 S3에 파일을 올릴 수 있습니다. 이는 서버 전체에 권한을 주는 것보다 훨씬 안전하고 세밀한 보안 관리 방식입니다.\n\n다른 옵션인 A는 보안 범위가 너무 넓어 위험하고, C의 보안 그룹은 '통로'만 여는 것이지 '열쇠'를 주는 것이 아닙니다. D는 아이디와 비번을 코드나 설정에 노출하게 되어 보안의 금기를 깨는 방식입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "IAM": "AWS 리소스에 대한 접근 권한을 관리하는 보안 시스템"
+      "ECS Task Role": "컨테이너 하나하나가 AWS 서비스를 이용할 때 쓰는 전용 권한 카드",
+      "Task Definition": "컨테이너가 어떤 CPU, 메모리를 쓰고 어떤 역할 카드를 가질지 적어둔 명세서"
     }
   },
   {
     "id": 186,
-    "question": "회사에 AWS\n로 마이그레이션해야 하는 Windows 기반 애플리케이션이 있습니다. 이 \n애플리케이션은 여러 가용 영역에 배포된 여러 Amazon EC2 Windows 인스턴스에 연결된 \n공유 Windows 파일 시스템을 사용해야 합니다. \n솔루션 설계자는 이 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "윈도우 기반 앱들을 AWS로 옮기려는데, 여러 대의 서버(EC2 Windows)가 동시에 접속해서 읽고 쓸 수 있는 '공유 파일 시스템'이 꼭 필요합니다. 어떤 솔루션을 구축하는 것이 가장 현명할까요?",
     "options": [
-      "볼륨 게이트웨이 모드에서 AWS Storage Gateway\n를 구성합니다. 각 Windows \n인스턴스에 볼륨을 마운트합니다.",
-      "Windows 파일 서버용 Amazon FSx 를 구성합니다. Amazon FSx 파일 시스템을 각 \nWindows 인스턴스에 탑재합니다.",
-      "Amazon Elastic File System(Amazon EFS)을 사용하여 파일 시스템을 구성합니다. EFS \n파일 시스템을 각 Windows 인스턴스에 마운트합니다.",
-      "필요한 크기로 Amazon Elastic Block Store(Amazon EBS) 볼륨을 구성합니다. 각 EC2 \n인스턴스를 볼륨에 연결합니다. 볼륨 내의 파일 시스템을 각 Windows 인스턴스에 \n마운트합니다."
+      "Storage Gateway를 볼륨 게이트웨이 모드로 구성해서 인스턴스에 붙입니다.",
+      "Windows 파일 서버용 Amazon FSx를 만들어 각 인스턴스에 마운트합니다.",
+      "Amazon EFS를 만들고 각 윈도우 인스턴스에 네트워크 드라이브로 연결합니다.",
+      "거대한 EBS 볼륨을 하나 만들어서 여러 서버에 동시에 연결(Multi-Attach)합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87650-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이 솔루션은 여러 가용 영역에 배포된 여러 Amazon EC2 Windows 인스턴스에 연결된 공유 \nWindows 파일 시스템을 사용해야 하는 Windows 기반 애플리케이션 마이그레이션 요구 \n사항을 충족합니다. Amazon FSx for Windows File Server 는 Windows Server 에 구축된 완전 \n관리형 공유 스토리지를 제공하며 광범위한 데이터 액세스, 데이터 관리 및 관리 기능을 \n제공합니다. SMB(서버 메시지 블록) 프로토콜을 지원하며 여러 가용 영역에서 EC2 \nWindows 인스턴스에 탑재할 수 있습니다. \nWindows 기반 애플리케이션이 핵심 키워드. 답은 B. \n \n옵션 A 의 볼륨 게이트웨이 모드의 AWS Storage Gateway 는 온프레미스 애플리케이션 \n서버에서 iSCSI 디바이스로 마운트할 수 있는 클라우드 지원 스토리지 볼륨을 제공하지만 \nSMB 프로토콜 또는 EC2 Windows 인스턴스를 지원하지 않기 때문에 올바르지 않습니다.",
+    "explanation": "정답은 B입니다.\n\n윈도우 서버끼리 파일을 공유할 때 쓰는 표준 기술(SMB)을 AWS가 통째로 서비스화한 것이 바로 'FSx for Windows File Server'입니다. 윈도우 환경과 100% 호환되므로 기존 앱을 고칠 필요 없이 바로 연결해서 쓸 수 있고, 여러 가용 영역에 걸쳐 고가용성까지 보장하기 때문에 윈도우 마이그레이션의 필수 아이템입니다.\n\n다른 옵션인 A는 사내망과 클라우드를 잇는 용도라 성격이 다르고, C의 EFS는 리눅스 전용이라 윈도우에서는 성능과 호환성이 크게 떨어집니다. D의 EBS Multi-Attach는 특정 타입의 초고속 디스크에서만 동작하며 윈도우 파일 시스템 수준의 공유 기능(파일 잠금 등)을 제공하지 않아 적절치 않습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "Storage Gateway": "사내 장비와 AWS 스토리지를 연결해 하이브리드 환경을 만드는 서비스"
+      "FSx for Windows File Server": "윈도우 서버의 정석적인 파일 공유 방식을 클라우드에서 그대로 제공하는 서비스",
+      "SMB (Server Message Block)": "윈도우 컴퓨터끼리 파일을 주고받을 때 사용하는 표준 대화 언어",
+      "Mount (마운트)": "외부 저장 장치를 내 컴퓨터의 폴더나 드라이브처럼 연결해서 쓰는 과정"
     }
   },
   {
     "id": 187,
-    "question": "한 회사에서 로드 밸런싱된 프런트 엔드, 컨테이너 기반 애플리케이션 및 관계형 \n데이터베이스로 구성될 전자상거래 애플리케이션을 개발하고 있습니다. 솔루션 설계자는 \n가능한 한 적은 수동 개입으로 작동하는 고가용성 솔루션을 만들어야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까? (2 개 선택)",
+    "question": "전자상거래 사이트를 개발 중인데, 관계형 데이터베이스와 컨테이너 앱을 고가용성으로 구성하고 싶습니다. 사람이 일일이 손대지 않아도 '알아서 잘' 굴러가는 자동화된 고가용성 솔루션 두 가지를 고른다면? (2개 선택)",
     "options": [
-      "다중 AZ 모드에서 Amazon RDS DB 인스턴스를 생성합니다.",
-      "다른 가용 영역에서 Amazon RDS DB 인스턴스와 하나 이상의 복제본을 생성합니다.",
-      "동적 애플리케이션 로드를 처리하기 위해 Amazon EC2 인스턴스 기반 Docker \n클러스터를 생성합니다.",
-      "동적 애플리케이션 로드를 처리하기 위해 Fargate 시작 유형으로 Amazon Elastic \nContainer Service(Amazon ECS) 클러스터를 생성합니다.",
-      "동적 애플리케이션 로드를 처리하기 위해 Amazon EC2 시작 유형으로 Amazon Elastic \nContainer Service(Amazon ECS) 클러스터를 생성합니다."
+      "다중 AZ(Multi-AZ) 모드로 RDS 데이터베이스를 생성합니다.",
+      "다른 가용 영역에도 RDS를 만들고 읽기 복제본을 수동으로 여러 개 둡니다.",
+      "EC2 기반의 Docker 클러스터를 직접 구축하여 부하에 대응합니다.",
+      "Fargate 기반의 ECS 클러스터를 만들어 애플리케이션 부하를 처리합니다.",
+      "EC2 타입을 명시한 ECS 클러스터를 만들어 애플리케이션을 배포합니다."
     ],
-    "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87695-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nA(O) : 다중 AZ 모드로 고가용성 충족. 관계형 데이터베이스로 구성된 프로그램이어야 \n하므로 RDS 사용. \n다중 AZ 배포로 실행되도록 DB 인스턴스를 생성 또는 수정하면 Amazon RDS 가 다른 가용 \n영역에 동기식 ‘예비’ 복제본을 자동으로 프로비저닝하고 유지합니다. 특정 유형의 계획된 \n유지 관리를 수행하는 도중에, 또는 예기치 않은 DB 인스턴스 장애나 가용 영역 장애가 \n발생할 경우 Amazon RDS 가 자동으로 예비 복제본으로 장애 조치하므로 예비 복제본이",
+    "answer": [0, 3],
+    "explanation": "정답은 A와 D입니다.\n\n'수동 개입 최소화'와 '고가용성'을 달성하는 치트키는 완전 관리형 서비스를 쓰는 것입니다. DB는 알아서 백업하고 장애를 감지하는 Multi-AZ RDS에게 맡기고, 앱은 서버 사량 고민 없이 알아서 늘어나는 서버리스 엔진인 Fargate(ECS)에게 맡기면, 시스템이 폭주하거나 데이터 센터 한 곳이 무너져도 관리자가 밤잠 설칠 일 없이 안정적으로 서비스가 유지됩니다.\n\n다른 옵션인 B는 수동으로 복제본을 관리해야 해서 힘들고, C와 E는 결국 '서버(EC2) 본체'를 우리가 관리하고 패치해야 하는 수고가 남아 있어 요구 사항을 100% 만족하지 못합니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "High Availability (고가용성)": "장비 고장이 나도 서비스가 중단 없이 끈질기게 계속되는 성능",
+      "Fargate": "서버를 빌리는 게 아니라 컨테이너만 던져주면 알아서 굴려주는 서버리스 컴퓨팅"
     }
   },
   {
     "id": 188,
-    "question": "회사는 Amazon S3 를 데이터 레이크로 사용합니다. 회사에는 SFTP 를 사용하여 데이터 \n파일을 업로드해야 하는 새로운 파트너가 있습니다. 솔루션 설계자는 운영 오버헤드를 \n최소화하는 고가용성 SFTP 솔루션을 구현해야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "S3를 데이터 레이크로 쓰는데, 새로운 파트너사가 옛날 방식인 SFTP로 파일을 올리겠다고 고집합니다. 운영 부담은 싹 줄이면서도 탄탄하게 돌아가는 SFTP 통로를 만들어주는 정답 서비스는?",
     "options": [
-      "AWS Transfer Family 를 사용하여 공개적으로 액세스할 수 있는 엔드포인트가 있는 SFTP \n\n=== PAGE 204 ===\n지원 서버를 구성합니다. S3 데이터 레이크를 대상으로 선택합니다.",
-      "Amazon S3 파일 게이트웨이를 SFTP 서버로 사용합니다. S3 파일 게이트웨이 \n엔드포인트 URL\n을 새 파트너에게 노출합니다. S3 파일 게이트웨이 엔드포인트를 새 \n파트너와 공유합니다.",
-      "VP 의 프라이빗 서브넷에서 Amazon EC2 인스턴스를 시작합니다. 새 파트너에게 VPN 을 \n사용하여 EC2 인스턴스에 파일을 업로드하도록 지시합니다. EC2 인스턴스에서 cron 작업 \n스크립트를 실행하여 S3 데이터 레이크에 파일을 업로드합니다.",
-      "VPC 의 프라이빗 서브넷에서 Amazon EC2 인스턴스를 시작합니다. EC2 인스턴스 앞에 \nNLB(Network Load Balancer)를 배치합니다. NLB 에 대한 SFTP 수신기 포트를 만듭니다. \nNLB 호스트 이름을 새 파트너와 공유합니다. EC2 인스턴스에서 cron 작업 스크립트를 \n실행하여 S3 데이터 레이크에 파일을 업로드합니다."
+      "AWS Transfer Family를 써서 S3를 종착지로 하는 SFTP 서버를 만듭니다.",
+      "S3 파일 게이트웨이를 만들고 그 주소를 파트너사에게 공유합니다.",
+      "EC2 서버를 하나 띄우고 VPN을 뚫은 뒤 크론탭으로 파일을 S3로 옮깁니다.",
+      "EC2 서버 앞에 NLB를 세우고 수동으로 SFTP 서비스를 구축한 뒤 S3로 쏘아줍니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87566-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n \n이 솔루션은 수동 관리 또는 운영 오버헤드 없이 고가용성 SFTP 솔루션을 제공합니다. \nAWS Transfer Family 를 사용하면 인증, 권한 부여 및 스토리지 백엔드로 S3 와의 통합을 \n통해 SFTP 서버를 쉽게 설정할 수 있습니다. \n \n옵션 B 는 SFTP 액세스가 아닌 NFS 또는 SMB 프로토콜을 통한 S3 스토리지에 대한 파일 \n기반 액세스에 주로 사용되는 Amazon S3 파일 게이트웨이 사용을 제안하므로 최선의 \n선택이 아닙니다. \n옵션 C 는 파일 업로드를 위한 EC2 인스턴스, VPN 설정 및 cron 작업 스크립트의 수동 \n관리가 필요하여 운영 오버헤드와 잠재적인 복잡성을 유발하므로 최선의 선택이 아닙니다. \n옵션 D 는 파일 업로드를 위한 EC2 인스턴스, Network Load Balancer 및 cron 작업 \n스크립트의 수동 관리도 필요하므로 최선의 선택이 아닙니다. 옵션 A 에서 AWS Transfer \nFamily 가 제공하는 더 단순하고 완벽하게 관리되는 솔루션에 비해 더 복잡하고 추가 구성 \n요소가 필요합니다.",
+    "explanation": "정답은 A입니다.\n\nSFTP 같은 낡은 통신 규약을 최신 S3 저장소와 바로 잇고 싶을 땐 'AWS Transfer Family'가 최고의 솔루션입니다. 우리가 직접 서버를 설치하고 보안 패치를 할 필요 없이, 설정 몇 번으로 고가용성 SFTP 입구를 만들어주기 때문에 운영자의 오버헤드를 제로에 가깝게 줄여주면서도 파트너사의 요구를 완벽히 들어줄 수 있습니다.\n\n다른 옵션인 B의 파일 게이트웨이는 사내망 컴퓨터가 S3를 하드디스크처럼 쓸 때 쓰는 용도이며, C와 D는 서버를 직접 관리하고 패치해야 하는 노가다가 뒤따르기 때문에 운영 효율성이 매우 낮습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "SFTP (Secure File Transfer Protocol)": "암호화된 통로를 통해 파일을 주고받는 고전적이고 안전한 방식",
+      "AWS Transfer Family": "SFTP, FTPS, FTP 같은 옛날 프로토콜을 AWS 스토리지와 바로 연결해주는 관리형 서비스",
+      "Data Lake": "나중에 분석하기 위해 온갖 종류의 데이터를 원본 그대로 쌓아두는 거대한 저장 공간"
     }
   },
   {
     "id": 189,
-    "question": "회사는 계약 문서를 보관해야 합니다. 계약은 5 년 동안 지속됩니다. 회사는 5 년 동안 \n문서를 덮어쓰거나 삭제할 수 없도록 해야 합니다. 회사는 미사용 문서를 암호화하고 매년 \n암호화 키를 자동으로 교체해야 합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하기 위해 솔루션 설계자가 수행해야 \n\n=== PAGE 205 ===\n하는 단계 조합은 무엇입니까? (두 가지를 선택하세요.)",
+    "question": "중요한 계약 문서를 5년 동안 보관해야 하는데, 이 기간 동안 절대 누구도 지우거나 덮어쓸 수 없게 철저히 보호해야 합니다. 또한 매년 암호화 키를 자동으로 갈아주는 기능까지 원할 때 가장 좋은 조합은? (2개 선택)",
     "options": [
-      "Amazon S3 에 문서를 저장합니다. 거버넌스 모드에서 S3 객체 잠금을 사용합니다.",
-      "Amazon S3 에 문서를 저장합니다. 규정 준수 모드에서 S3 객체 잠금을 사용합니다.",
-      "Amazon S3 관리형 암호화 키(SSE-S3)로 서버 측 암호화를 사용합니다. 키 순환을 \n구성합니다.",
-      "AWS Key Management Service(AWS KMS) 고객 관리형 키로 서버 측 암호화를 \n사용합니다. 키 순환을 구성합니다.",
-      "AWS Key Management Service(AWS KMS) 고객 제공(가져온) 키로 서버 측 암호화를 \n사용합니다. 키 순환을 구성합니다. \nAnswer: B, D \nhttps://www.examtopics.com/discussions/amazon/view/87535-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n설명:",
-      "규정 준수 모드에서 S3 객체 잠금을 사용하면 객체에 엄격한 보존 정책을 적용하여 \n수정이나 삭제를 방지합니다.",
-      "AWS KMS 고객 관리형 키와 함께 서버 측 암호화를 사용하면 문서가 고객 제어형 키로 \n암호화됩니다. 키 순환을 활성화하면 정의된 순환 간격으로 새 암호화 키가 자동으로 \n생성되어 보안이 강화됩니다. \n \n옵션 A: 거버넌스 모드의 S3 객체 잠금은 문서에 필요한 불변성을 제공하지 않으므로 \n잠재적인 수정 또는 삭제가 허용됩니다. \n옵션 C: SSE-S3 만으로는 서버 측 암호화가 명시적으로 지정된 암호화 키 순환 요구 \n사항을 충족하지 않습니다. \n옵션 E: AWS KMS 고객 관리 키(옵션 D)를 사용할 수 있는 경우 고객 제공(가져온) \n키(SSE-C)를 사용한 서버 측 암호화는 필요하지 않으며, 이는 보다 통합되고 관리 가능한 \n솔루션을 제공합니다."
+      "거버넌스 모드에서 S3 Object Lock을 사용합니다.",
+      "규정 준수(Compliance) 모드에서 S3 Object Lock을 설정합니다.",
+      "S3 관리 키(SSE-S3)를 사용하고 자동 키 순환을 켭니다.",
+      "AWS KMS 고객 관리형 키(CMK)를 사용하고 키 순환 옵션을 활성화합니다.",
+      "고객이 직접 가져온 키(SSE-C)를 써서 수동으로 키를 교체합니다."
     ],
-    "answer": 0,
-    "explanation": "",
-    "glossary": {}
+    "answer": [1, 3],
+    "explanation": "정답은 B와 D입니다.\n\n절대로 지워지면 안 되는 강력한 금지령을 내리려면 S3 Object Lock의 '규정 준수(Compliance) 모드'가 필수입니다. 이 설정은 루트 계정조차도 잠금을 풀 수 없게 만들어버리거든요. 여기에 우리가 직접 관리하고 세밀하게 설정할 수 있는 'KMS 고객 관리형 키'를 쓰면서 '자동 순환' 옵션을 체크해두면, 보안 규정을 100% 충실히 이행하는 철통 보안 시스템이 완성됩니다.\n\n다른 옵션인 A는 권한이 있으면 지울 수 있어서 위험하고, C의 SSE-S3는 키 관리가 너무 단순해서 매년 자동 교체되는지 제어하기 어렵습니다. E는 사람이 수동으로 키를 갈아줘야 해서 운영 부담이 크고 실수의 위험이 있습니다.",
+    "glossary": {
+      "S3 Object Lock": "파일을 금고에 넣고 일정 기간 동안 절대 못 꺼내게 잠그는 하드웨어적 보안 기능",
+      "Key Rotation": "보안을 위해 주기적으로 암호화 열쇠를 새것으로 교체하는 과정",
+      "Compliance Mode": "법규 준수를 위해 관리자도 함부로 못 건드리게 막는 가장 높은 단계의 보호 모드"
+    }
   },
   {
     "id": 190,
-    "question": "회사에 Java 및 PHP 기반 웹 애플리케이션이 있습니다. 회사는 애플리케이션을 \n온프레미스에서 AWS 로 옮길 계획입니다. 회사는 새로운 사이트 기능을 자주 테스트할 수 \n있는 능력이 필요합니다. 회사는 또한 최소한의 운영 오버헤드를 필요로 하는 가용성이 \n높고 관리되는 솔루션이 필요합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "Java와 PHP로 만든 웹 앱을 AWS로 옮기려는데, 새로운 기능을 자주 테스트해야 하고 운영 수고는 최소로 줄이고 싶습니다. 가용성까지 챙겨주는 가장 '관리하기 쉬운' 솔루션은 무엇일까요?",
     "options": [
-      "Amazon S3 버킷을 생성합니다. S3 버킷에서 정적 웹 호스팅을 활성화합니다. 정적 \n\n=== PAGE 206 ===\n콘텐츠를 S3 버킷에 업로드합니다. AWS Lambda\n를 사용하여 모든 동적 콘텐츠를 \n처리합니다.",
-      "웹 애플리케이션을 AWS Elastic Beanstalk 환경에 배포합니다. 기능 테스트를 위해 URL \n스와핑을 사용하여 여러 Elastic Beanstalk 환경 간에 전환합니다.",
-      "Java 및 PHP 로 구성된 Amazon EC2 인스턴스에 웹 애플리케이션을 배포합니다. Auto \nScaling 그룹과 Application Load Balancer 를 사용하여 웹 사이트의 가용성을 관리하십시오.",
-      "웹 애플리케이션을 컨테이너화합니다. 웹 애플리케이션을 Amazon EC2 인스턴스에 \n배포합니다. AWS 로드 밸런서 컨트롤러를 사용하여 테스트용 새 사이트 기능이 포함된 \n컨테이너 간에 트래픽을 동적으로 라우팅합니다."
+      "S3 정적 호스팅을 켜고, 동적 로직은 전부 람다(Lambda)로 새로 짭니다.",
+      "Elastic Beanstalk에 앱을 올리고, 기능 테스트 시 URL 스와핑을 활용합니다.",
+      "EC2 서너 대에 수동으로 앱을 깔고 ALB와 오토 스케일링으로 관리합니다.",
+      "앱을 컨테이너로 만든 뒤 EC2에 올리고 로드 밸런서로 트래픽을 제어합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/87536-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nElastic Beanstalk 를 사용하면 애플리케이션을 실행하는 인프라에 대해 자세히 알지 못해도 \nAWS 클라우드에서 애플리케이션을 신속하게 배포하고 관리할 수 있습니다. \nElastic Beanstalk 는 Go, Java, .NET, Node.js, PHP, Python 및 Ruby 에서 개발된 \n애플리케이션을 지원합니다....애플리케이션을 생성 및 배포한 후에는 지표, 이벤트, 환경 \n상태 등의 애플리케이션 정보를 Elastic Beanstalk 콘솔, API 또는 통합된 AWS CLI 를 \n비롯한 명령줄 인터페이스를 통해 확인할 수 있습니다. \n\ndocs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/Welcome.html \n \n2: \n빈번한 기능 테스트 - \n- 개발, 테스트 및 프로덕션 사용 사례를 위해 여러 Elastic Beanstalk 환경을 쉽게 생성할 \n수 있습니다. \n- 간단한 URL 스와핑 기술을 사용하여 A/B 테스트 및 기능 반복을 위한 환경 간에 \n트래픽을 라우팅할 수 있습니다. 복잡한 라우팅 규칙이나 인프라 변경이 필요하지 \n않습니다.",
-    "glossary": {}
+    "explanation": "정답은 B입니다.\n\n기존의 Java/PHP 코드를 거의 고치지 않으면서도 클라우드의 자동화 혜택을 다 누리고 싶을 땐 'Elastic Beanstalk'가 딱입니다. 이 서비스는 서버 구성부터 부하 분산, 자동 확장까지 다 알아서 해주며, 특히 새 기능을 테스트할 때 현재 서버와 새 서버의 주소만 슥 바구는 'URL 스와핑' 기능을 지원해서 위험 부담 없이 자주 배포하고 실험하기에 최적입니다.\n\n다른 옵션인 A는 코드를 통째로 다시 짜야 하는 대공사가 필요하고, C와 D는 서버 한 대 한 대를 우리가 직접 관리하고 조율해야 해서 운영자의 다크서클이 깊어지는 비효율적인 방식입니다.",
+    "glossary": {
+      "AWS Elastic Beanstalk": "코드만 올리면 서버, 네트워크, DB 설정을 AWS가 다 차려주는 뷔페식 배포 서비스",
+      "URL Swapping": "서비스 중단 없이 새 버전과 구 버전을 교체하는 세련된 배포 기술(Blue/Green 배포)"
+    }
   },
   {
     "id": 191,
-    "question": "회사에는 MySQL 용 Amazon RDS 에 고객 정보를 저장하는 주문 애플리케이션이 있습니다. \n정규 업무 시간 동안 직원은 보고 목적으로 일회성 쿼리를 실행합니다. 보고 쿼리를 \n실행하는 데 시간이 오래 걸리기 때문에 주문 처리 중에 시간 초과가 발생합니다. 회사는 \n직원이 쿼리를 수행하는 것을 막지 않으면서 시간 초과를 제거해야 합니다. \n\n=== PAGE 207 ===\n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "주문 시스템 DB(MySQL)에서 직원들이 무거운 보고서 쿼리를 자꾸 돌리는 바람에 고객 주문이 타임아웃 나고 난리가 났습니다. 직원들이 쿼리를 마음껏 돌리게 해주면서도 주문 서비스는 생생하게 유지하는 비결은?",
     "options": [
-      "읽기 전용 복제본을 생성합니다. 보고 쿼리를 읽기 전용 복제본으로 이동합니다.",
-      "읽기 전용 복제본을 생성합니다. 주문 애플리케이션을 기본 DB 인스턴스와 읽기 전용 \n복제본에 배포합니다.",
-      "주문형 용량이 있는 Amazon DynamoDB 로 주문 애플리케이션을 마이그레이션합니다.",
-      "사용량이 적은 시간에 보고 쿼리를 예약합니다. \nAnswer: A \nhttps://www.examtopics.com/discussions/amazon/view/89077-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n설명:",
-      "보고 쿼리를 읽기 전용 복제본으로 이동하면 주문 처리에 사용되는 기본 DB 인스턴스가 \n장기 실행 보고 쿼리의 영향을 받지 않습니다. 이렇게 하면 주문 처리 중 시간 초과를 \n제거하는 동시에 직원이 애플리케이션 성능에 영향을 주지 않고 쿼리를 수행할 수 \n있습니다.",
-      "이것은 일정 수준의 부하 분산을 제공할 수 있지만 주문 처리 중 쿼리 보고로 인해 \n발생하는 시간 초과 문제를 구체적으로 다루지는 않습니다.",
-      "DynamoDB 는 확장성과 성능상의 이점을 제공하지만 애플리케이션의 데이터 모델 및 \n쿼리 접근 방식을 크게 변경해야 할 수 있습니다.",
-      "이 접근 방식은 주문 처리에 미치는 영향을 완화하는 데 도움이 될 수 있지만 직원이 \n쿼리를 수행하는 것을 막지 않고 시간 초과를 제거해야 하는 요구 사항을 해결하지는 \n못합니다."
+      "읽기 전용 복제본(Read Replica)을 만들고 보고서 팀은 그쪽으로만 접속하게 합니다.",
+      "읽기 복제본을 만들고 주문 앱 자체를 메인과 복제본에 반반씩 나눠서 돌립니다.",
+      "아예 모든 시스템을 확장성이 좋은 DynamoDB로 통째로 옮겨버립니다.",
+      "직원들이 일하는 낮 시간엔 쿼리를 못 날리게 막고 밤에만 예약제로 운영합니다."
     ],
     "answer": 0,
-    "explanation": "",
+    "explanation": "정답은 A입니다.\n\n가장 확실하고 간단한 해결책은 '일하는 곳과 보고서 뽑는 곳'을 물리적으로 떼어놓는 것입니다. 원본 DB의 내용을 실시간으로 복사해가는 '읽기 전용 복제본'을 하나 만들어주고 무거운 쿼리는 그쪽에서만 돌리게 하면, 메인 DB의 CPU는 고객 주문 처리에만 집중할 수 있게 되어 타임아웃 문제가 눈 녹듯 사라집니다.\n\n다른 옵션인 B는 복제본에 부하가 걸리면 여전히 주문 처리에 지장을 줄 수 있고, C는 시스템을 뜯어고치는 수준의 대공사라 위험합니다. D는 직원들의 업무 효율을 깎아먹는 임시방편일 뿐 근본적인 기술 해결책이 아닙니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Read Replica": "메인 DB에 무리를 주지 않고 조화 작업만 전담하는 실시간 복사본 서버",
+      "Time-out": "요청을 보냈는데 정해진 시간 안에 답이 안 와서 실패 처리되는 것"
     }
   },
   {
     "id": 192,
-    "question": "한 병원에서 대규모 기록 기록 수집을 위한 디지털 사본을 만들고자 합니다. 병원은 매일 \n수백 개의 새로운 문서를 계속 추가할 것입니다. 병원의 데이터 팀이 문서를 스캔하고 \n문서를 AWS 클라우드에 업로드합니다. \n솔루션 설계자는 애플리케이션이 데이터에 대해 SQL 쿼리를 실행할 수 있도록 문서를 \n분석하고, 의료 정보를 추출하고, 문서를 저장하는 솔루션을 구현해야 합니다. 솔루션은 \n확장성과 운영 효율성을 극대화해야 합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 어떤 단계 조합을 수행해야 합니까? \n(2 개 선택)",
+    "question": "병원에서 매일 쏟아지는 수백 장의 종이 서류를 스캔해서 디지털화하려 합니다. 단순히 저장만 하는 게 아니라 의료 정보를 쏙쏙 뽑아내고, 나중에 SQL로 편리하게 검색까지 하고 싶습니다. 운영 효율을 극대화한 비법은? (2개 선택)",
     "options": [
-      "MySQL 데이터베이스를 실행하는 Amazon EC2 인스턴스에 문서 정보를 씁니다.",
-      "문서 정보를 Amazon S3 버킷에 씁니다. Amazon Athena\n를 사용하여 데이터를 \n쿼리합니다. \n\n=== PAGE 208 ===",
-      "Amazon EC2 인스턴스의 Auto Scaling 그룹을 생성하여 스캔한 파일을 처리하고 의료 \n정보를 추출하는 사용자 지정 애플리케이션을 실행합니다.",
-      "새 문서가 업로드될 때 실행되는 AWS Lambda 함수를 생성합니다. Amazon \nRekognition 을 사용하여 문서를 원시 텍스트로 변환합니다. Amazon Transcribe Medical 을 \n사용하여 텍스트에서 관련 의료 정보를 감지하고 추출합니다.",
-      "새 문서가 업로드될 때 실행되는 AWS Lambda 함수를 생성합니다. Amazon Textract 를 \n사용하여 문서를 원시 텍스트로 변환합니다. Amazon Comprehend Medical 을 사용하여 \n텍스트에서 관련 의료 정보를 감지하고 추출합니다."
+      "EC2 서버를 띄워 MySQL을 직접 깔고 문서 정보를 하나하나 기록합니다.",
+      "뽑아낸 정보를 S3에 담아두고 Amazon Athena를 써서 SQL로 즉시 쿼리합니다.",
+      "EC2 오토 스케일링 그룹을 만들고 직접 만든 문서 분석 앱을 계속 돌립니다.",
+      "람다와 Amazon Rekognition을 써서 이미지를 텍스트로 바꾸고 분석합니다.",
+      "람다와 Textract를 써서 글자를 추출하고, Comprehend Medical로 전문 의료 정보를 뽑아냅니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89133-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nA(X) : AWS 클라우드에 문서를 업로드할 거라고 했으니 적절치 않음. MySQL 이 아니라 \nAmazon RDS for MySQL 이 됐던지 했어야 함. \nB(O) : S3 는 자료를 저장하는데 많이 사용되고, Athena 는 S3 에 쿼리하는 대화형 서비스임. \nAmazon Athena 는 표준 SQL 을 사용하여 Amazon S3(Amazon Simple Storage Service)에 \n있는 데이터를 직접 간편하게 분석할 수 있는 대화형 쿼리 서비스입니다. \n\ndocs.aws.amazon.com/ko_kr/athena/latest/ug/what-is.html \nC(?) : 프로그램을 AWS 에서 돌려야한다는 말이 없어서 불명확. \nD(X) : Amazon Rekognition 은 이미지나 비디오 분석 서비스인데, 문서라면 텍스트 위주라서 \n탈락. 그리고 Transcribe Medical 은 음성->텍스트 변환이지 텍스트->의료 정보 추출이 \n아님. \nAmazon Transcribe Medical 은 사용자가 의료 관련 음성 데이터를 텍스트로 변환하는 \n기능을 사용자의 음성 지원 애플리케이션에 쉽게 추가할 수 있도록 하는 자동 음성 \n인식(ASR) 서비스입니다. \n\naws.amazon.com/ko/transcribe/medical/ \nE(O) : Lambda 로 Scalabilty 확보 가능. Amazon Textract 는 이미지 등에서 텍스트를 \n추출하는 OCR 서비스로 문서화에 적합. Amazon Comprehend Medical 은 미리 학습된 기계 \n학습을 사용하여 처방전, 처치, 진단과 같은 의료 텍스트에서 의료 데이터를 파악하고 \n추출하는 서비스로 병원에서 사용하기 적합. \n확장성 : Lambda 는 코드를 실행하는 인프라를 관리하고 수신 요청에 대한 응답으로 자동 \n확장됩니다. \n\ndocs.aws.amazon.com/ko_kr/lambda/latest/dg/gettingstarted-features.html#getti\nngstarted-features-scaling \nAmazon Textract 는 스캔한 문서에서 텍스트, 필기 및 데이터를 자동으로 추출하는 기계",
+    "answer": [1, 4],
+    "explanation": "정답은 B와 E입니다.\n\n병원 노가다를 줄이려면 AI와 서버리스를 제대로 써야 합니다. 먼저 Textract라는 AI가 스캔 이미지에서 글자를 긁어모으고, Comprehend Medical이라는 전문가 AI가 그 안에서 처방전이나 병명 같은 핵심 의료 데이터를 콕 집어 추출하게 만듭니다. 이렇게 뽑은 데이터를 S3에 쌓아두면, 서버 한 대 없이도 SQL로 즉시 검색 가능한 Athena가 환상적인 데이터 분석 환경을 완성해줍니다.\n\n다른 옵션인 A와 C는 직접 서버를 관리하고 앱을 짜야 해서 운영 부담이 크고, D의 Rekognition은 일반 사진 분석용이지 문서 글자 추출이나 의료 전문 용어를 이해하는 데는 적합하지 않습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "Athena": "S3에 있는 대규모 데이터를 SQL 쿼리로 직접 분석하는 도구"
+      "Amazon Textract": "종이 문서나 이미지 속의 글자와 표를 AI가 정확히 읽어내는 서비스(OCR)",
+      "Amazon Comprehend Medical": "복잡한 의료 텍스트를 분석해 병명, 투약 정보 등을 알아내는 의료 전문 AI",
+      "Amazon Athena": "S3에 있는 결과물들을 마치 DB 테이블처럼 SQL로 검색하게 해주는 서비스"
     }
   },
   {
     "id": 193,
-    "question": "회사는 \nAmazon \nEC2 \n인스턴스에서 \n배치 \n애플리케이션을 \n실행하고 \n있습니다. \n애플리케이션은 여러 Amazon RDS 데이터베이스가 있는 백엔드로 구성됩니다. 응용 \n프로그램으로 인해 데이터베이스에서 많은 수의 읽기가 발생하고 있습니다. 솔루션 \n설계자는 고가용성을 보장하면서 데이터베이스 읽기 수를 줄여야 합니다. \n솔루션 설계자는 이 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "EC2 배치 애플리케이션이 여러 RDS 데이터베이스에서 수많은 데이터를 읽어오느라 DB가 비명을 지르고 있습니다. DB 읽기 횟수를 확 줄여서 부하를 낮추는 동시에 고가용성까지 챙기는 가장 빠른 길은?",
     "options": [
-      "Amazon RDS 읽기 전용 복제본을 추가합니다.",
-      "Redis 용 Amazon ElastiCache 를 사용합니다.",
-      "Amazon Route 53 DNS 캐싱 사용",
-      "Memcached 용 Amazon ElastiCache 를 사용합니다. \nAnswer: A \nhttps://www.examtopics.com/discussions/amazon/view/89134-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n설명1: \n이 \n솔루션은 \n여러 \nAmazon \nRDS \n데이터베이스가 \n있는 \n백엔드로 \n구성된 \n배치 \n애플리케이션의 고가용성을 보장하면서 데이터베이스 읽기 수를 줄이는 요구 사항을 \n충족합니다. \nAmazon RDS 읽기 전용 복제본은 읽기 전용 트래픽을 처리할 수 있는 기본 데이터베이스 \n인스턴스의 복사본입니다. 기본 데이터베이스 인스턴스에 대해 하나 이상의 읽기 전용 \n복제본을 만들고 특수 엔드포인트를 사용하여 연결할 수 있습니다. 읽기 전용 복제본은 \n기본 데이터베이스 인스턴스에서 읽기 쿼리를 오프로드하여 애플리케이션의 성능과 \n가용성을 향상시킬 수 있습니다. \n \nRedis 용 Amazon ElastiCache 를 사용하면 자주 액세스하는 데이터를 캐시할 수 있는 빠른 \n인 메모리 데이터 스토어를 제공할 수 있지만 Amazon RDS 데이터베이스에서 복제를 \n지원하지 않기 때문에 옵션 B 는 올바르지 않습니다. \n \n\n=== PAGE 211 ===\nAmazon Route 53 DNS 캐싱을 사용하면 DNS 쿼리의 성능과 가용성을 개선할 수 있지만 \n데이터베이스 읽기 수는 줄어들지 않기 때문에 옵션 C 는 올바르지 않습니다. \n \nMemcached 용 Amazon ElastiCache 를 사용하면 자주 액세스하는 데이터를 캐시할 수 있는 \n빠른 메모리 데이터 스토어를 제공할 수 있지만 Amazon RDS 데이터베이스에서 복제를 \n지원하지 않기 때문에 옵션 D 는 올바르지 않습니다. \n \n설명2: \nAmazon RDS 데이터베이스에 읽기 전용 복제본을 추가하면 읽기 워크로드를 복제본으로 \n오프로드하여 데이터베이스 읽기 수를 줄이고 성능을 향상할 수 있습니다. 읽기 전용 \n복제본은 고가용성을 제공하고 읽기 트래픽을 독립적으로 처리하여 로드를 분산하고 기본 \n데이터베이스의 부담을 줄일 수 있습니다.",
-      "Redis 용 Amazon ElastiCache 는 주로 캐싱에 사용되는 인 메모리 데이터 스토어로, 읽기 \n성능을 향상시킬 수 있지만 데이터베이스 읽기 수를 직접적으로 줄이지는 않습니다.",
-      "Amazon Route 53 DNS 캐싱은 DNS 응답을 캐시하는 서비스로, 전체 네트워크 성능을 \n향상시킬 수 있지만 데이터베이스 읽기 감소를 구체적으로 다루지는 않습니다.",
-      "Memcached 용 Amazon ElastiCache 는 Redis 와 유사한 또 다른 캐싱 서비스이지만 \n데이터베이스 읽기 감소 문제를 직접적으로 해결하지는 않습니다. \n \n참조: \nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+      "RDS 읽기 전용 복제본(Read Replica)을 추가하여 조회 요청을 분산시킵니다.",
+      "Redis용 ElastiCache를 도입해서 자주 보는 정보를 메모리에 캐싱합니다.",
+      "Route 53 DNS 캐싱을 활용해 네트워크 지연을 줄입니다.",
+      "Memcached용 ElastiCache를 구성해서 데이터베이스 연결을 최적화합니다."
     ],
     "answer": 0,
-    "explanation": "",
+    "explanation": "정답은 A입니다.\n\n데이터베이스 자체의 읽기 부하를 정공법으로 해결하는 방법은 '읽기 전용 복제본'을 늘리는 것입니다. 조화 전용 비서(복제본)를 여러 명 두면 원본 DB는 중요한 기록 작업에만 집중할 수 있고, 혹시 하나가 고장 나더라도 다른 비서가 즉시 업무를 대신할 수 있어 읽기 성능 향상과 고가용성이라는 두 마리 토끼를 가장 깔끔하게 잡을 수 있습니다.\n\n다른 옵션인 B와 D의 캐싱도 훌륭하지만, 이를 적용하려면 앱 코드를 상당 부분 뜯어고쳐야 하므로 즉각적인 대응으로는 복제본 추가가 훨씬 빠르고 확실합니다. C의 DNS 캐싱은 도메인 주소 찾는 속도만 높일 뿐 DB 안의 데이터 읽기 부하와는 무관합니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Read Replica": "메인 DB의 부하를 덜어주기 위해 읽기 전용으로 운영되는 실시간 복사본 서버",
+      "Offloading": "원본 서버가 할 일을 다른 곳으로 넘겨서 부담을 줄여주는 기술"
     }
   },
   {
     "id": 194,
-    "question": "회사는 AWS\n에서 중요한 애플리케이션을 실행해야 합니다. 회사는 애플리케이션의 \n데이터베이스에 Amazon EC2 를 사용해야 합니다. 데이터베이스는 가용성이 높아야 하며 \n중단 이벤트가 발생할 경우 자동으로 장애 조치되어야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "회사가 아주 중요한 앱의 데이터베이스를 굳이 EC2에 직접 깔아서 쓰겠다고 합니다. 그런데 죽어도 가용성은 포기 못 한답니다. 서버 한 대가 꺼져도 자동으로 다음 서버가 일을 이어받게 만들려면 어떻게 설계해야 할까요?",
     "options": [
-      "동일한 AWS 지역의 다른 가용 영역에서 각각 두 개의 EC2 인스턴스를 시작합니다. 두 \nEC2 인스턴스 모두에 데이터베이스를 설치합니다. EC2 인스턴스를 클러스터로 구성합니다. \n데이터베이스 복제를 설정합니다.",
-      "가용 영역에서 EC2 인스턴스를 시작합니다. EC2 인스턴스에 데이터베이스를 설치합니다. \nAmazon 머신 이미지(AMI)를 사용하여 데이터를 백업하십시오. 중단 이벤트가 발생할 경우 \nAWS CloudFormation 을 사용하여 EC2 인스턴스의 프로비저닝을 자동화하십시오.",
-      "각각 다른 AWS 지역에서 두 개의 EC2 인스턴스를 시작합니다. 두 EC2 인스턴스 \n모두에 데이터베이스를 설치합니다. 데이터베이스 복제를 설정합니다. 데이터베이스를 두 \n\n=== PAGE 212 ===\n번째 리전으로 장애 조치합니다.",
-      "가용 영역에서 EC2 인스턴스를 시작합니다. EC2 인스턴스에 데이터베이스를 설치합니다. \nAmazon 머신 이미지(AMI)를 사용하여 데이터를 백업하십시오. 중단 이벤트가 발생하면 \nEC2 자동 복구를 사용하여 인스턴스를 복구하십시오. \nAnswer: A \nhttps://www.examtopics.com/discussions/amazon/view/89136-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n설명: \n서로 다른 가용 영역에서 두 개의 EC2 인스턴스를 시작하고 데이터베이스 복제가 있는 \n클러스터로 구성하면 데이터베이스에서 고가용성과 자동 장애 조치를 달성할 수 있습니다. \n한 인스턴스 또는 가용 영역을 사용할 수 없게 되더라도 다른 인스턴스는 중단 없이 \n애플리케이션을 계속 제공할 수 있습니다.",
-      "단일 EC2 인스턴스를 시작하고 백업 및 프로비저닝 자동화를 위해 AMI 를 사용하면 \n자동 장애 조치 또는 고가용성이 제공되지 않습니다.",
-      "다른 AWS 리전에서 EC2 인스턴스를 시작하고 데이터베이스 복제를 설정하는 것은 \n재해 복구 기능을 제공할 수 있지만 단일 리전 내에서 자동 장애 조치를 제공하지 않는 \n다중 리전 설정입니다.",
-      "EC2 자동 복구를 사용하면 하드웨어 문제로 인해 인스턴스가 실패하는 경우 인스턴스를 \n복구할 수 있지만 여러 인스턴스 또는 가용 영역에서 자동 장애 조치 또는 고가용성을 \n제공하지는 않습니다."
+      "서로 다른 가용 영역(AZ)에 EC2 두 대를 띄우고 데이터베이스 복제와 클러스터 구성을 합니다.",
+      "한 가용 영역에 EC2를 띄우고 AMI로 계속 백업하다가 사고 나면 CloudFormation으로 새로 굽습니다.",
+      "각각 다른 리전(나라)에 서버를 두고 동기식 복제를 하다가 수동으로 장애 조치를 합니다.",
+      "단일 가용 영역에서 EC2를 보다가 하드웨어 에러 나면 자동 복구(Auto Recovery)가 되게 설정합니다."
     ],
     "answer": 0,
-    "explanation": "",
+    "explanation": "정답은 A입니다.\n\nEC2에서 돌아가는 DB를 고가용성으로 만드는 정석은 '다중 AZ 클러스터' 구성입니다. 물리적으로 떨어진 두 데이터 센터(AZ)에 서버를 각각 두고, 데이터가 들어올 때마다 양쪽에 똑같이 기록되게(복제) 설정한 뒤 한쪽이 죽으면 나머지 한쪽이 즉시 주인공이 되도록 묶어주는 것이 가장 확실한 생존 전략입니다.\n\n다른 옵션인 B와 D는 서버가 새로 켜질 때까지 한동안 서비스가 멈추는 '다운타임'을 피할 수 없어 고가용성이라 부르기 부족하며, C는 리전 간 통신 속도가 느려 실시간 복제가 힘들뿐더러 '자동 장애 조치'가 안 되어 관리자가 직접 뛰어야 하는 불편함이 있습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Failover (장애 조치)": "주인공 서버가 쓰러졌을 때 대기하던 보조 서버가 즉시 주인공 자리를 이어받는 과정",
+      "Cluster": "여러 대의 서버를 하나처럼 묶어서 성능을 높이거나 안정성을 지키는 기술"
     }
   },
   {
     "id": 195,
-    "question": "회사의 주문 시스템은 클라이언트의 요청을 Amazon EC2 인스턴스로 보냅니다. EC2 \n인스턴스는 주문을 처리한 다음 Amazon RDS\n의 데이터베이스에 주문을 저장합니다. \n사용자는 시스템이 실패하면 주문을 다시 처리해야 한다고 보고합니다. 회사는 시스템 \n중단이 발생할 경우 주문을 자동으로 처리할 수 있는 탄력적인 솔루션을 원합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "주문 시스템이 가끔 뻗어버리면 그동안 들어온 주문들이 다 증발해서 난리입니다. 시스템이 잠시 멈추더라도 주문 데이터는 안전하게 보관되었다가 나중에 자동으로 처리되는 '끈기 있는' 시스템을 만들고 싶을 때 무엇을 추가해야 할까요?",
     "options": [
-      "EC2 인스턴스를 Auto Scaling 그룹으로 이동합니다. Amazon Elastic Container \nService(Amazon ECS) 작업을 대상으로 하는 Amazon EventBridge(Amazon CloudWatch \nEvents) 규칙을 생성합니다.",
-      "Application Load Balancer(ALB) 뒤에 있는 Auto Scaling 그룹으로 EC2 인스턴스를 \n이동합니다. ALB 엔드포인트에 메시지를 보내도록 주문 시스템을 업데이트합니다.",
-      "EC2 인스턴스를 Auto Scaling 그룹으로 이동합니다. Amazon Simple Queue \nService(Amazon SQS) 대기열로 메시지를 보내도록 주문 시스템을 구성합니다. 대기열의 \n\n=== PAGE 213 ===\n메시지를 사용하도록 EC2 인스턴스를 구성합니다.",
-      "Amazon Simple Notification Service(Amazon SNS) 주제를 생성합니다. AWS Lambda \n함수를 생성하고 함수를 SNS 주제에 구독합니다. SNS 주제에 메시지를 보내도록 주문 \n시스템을 구성합니다. AWS Systems Manager Run Command\n를 사용하여 메시지를 \n처리하도록 EC2 인스턴스에 명령을 보냅니다."
+      "EC2를 오토 스케일링 그룹에 넣고 EventBridge로 에러를 감시합니다.",
+      "Application Load Balancer(ALB)를 앞에 두고 서버가 죽으면 다른 서버로 토스하게 합니다.",
+      "SQS 대기열(바구니)을 만들어서 주문을 일단 담아두고 서버가 하나씩 꺼내 쓰게 합니다.",
+      "SNS 주제를 만들고 람다 함수를 구독시켜서 비상시 경보를 울리게 합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89138-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nSQS 는 Dead Letter Queue 등 다양한 옵션으로 메시지 처리가 실패했을 경우 해당 \n메시지를 보관했다가 다시 처리할 수 있게끔 하는 기능을 제공하고 있음. \n \n2: \n시스템 중단 시 자동으로 주문을 처리할 수 있는 탄력적인 솔루션을 보유해야 한다는 \n회사의 요구 사항을 충족하려면 솔루션 설계자가 내결함성 아키텍처를 구현해야 합니다. \n주어진 시나리오에 따라 가능한 솔루션은 EC2 인스턴스를 Auto Scaling 그룹으로 이동하고 \n메시지를 Amazon Simple Queue Service(Amazon SQS) 대기열로 보내도록 주문 시스템을 \n구성하는 것입니다. 그런 다음 EC2 인스턴스는 대기열의 메시지를 사용할 수 있습니다.",
+    "explanation": "정답은 C입니다.\n\n시스템 장애에도 굴하지 않는 맷집을 키우는 최고의 무기는 'SQS(메시지 대기열)'입니다. 주문이 들어오는 즉시 SQS라는 튼튼한 바구니에 담아두면, 서버가 잠시 고장 나서 고치고 오는 동안에도 주문은 그 안에서 얌전히 기다립니다. 서버가 다시 살아나서 바구니를 확인하면 밀려있던 일을 하나씩 처리할 수 있어, 주문 유실 없이 탄력적인 운영이 가능해집니다.\n\n다른 옵션인 A와 B는 서버의 건강 상태만 챙길 뿐 이미 날아간 '데이터'를 살려주지는 못하며, D는 소식만 전할 뿐이지 실제 데이터를 안전하게 보관해주는 역할과는 거리가 멉니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)",
-      "Auto Scaling": "서버 부하에 따라 자동으로 인스턴스 수를 늘리거나 줄이는 기능"
+      "SQS (Simple Queue Service)": "할 일을 잊지 않게 차곡차곡 쌓아두는 클라우드의 안전한 작업 바구니",
+      "Resilience (탄력성)": "장애가 발생해도 시스템이 무너지지 않고 빠르게 회복하여 서비스를 이어가는 능력"
     }
   },
   {
     "id": 196,
-    "question": "회사는 \n대규모 \nAmazon \nEC2 \n인스턴스 \n플릿에서 \n애플리케이션을 \n실행합니다. \n애플리케이션은 항목을 읽고 Amazon DynamoDB 테이블에 씁니다. DynamoDB 테이블의 \n크기는 지속적으로 증가하지만 애플리케이션에는 지난 30 일 동안의 데이터만 필요합니다. \n회사는 비용과 개발 노력을 최소화하는 솔루션이 필요합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "EC2 서버들이 DynamoDB에 데이터를 계속 쌓고 있는데, 가만 보니 최근 30일치 데이터만 쓰면 된답니다. 옛날 데이터 지우는 코드를 짜기엔 귀찮고 비용은 아끼고 싶을 때, 클릭 몇 번으로 해결하는 가장 우아한 비법은?",
     "options": [
-      "AWS CloudFormation 템플릿을 사용하여 전체 솔루션을 배포합니다. 30\n일마다 \nCloudFormation 스택을 재배포하고 원래 스택을 삭제합니다.",
-      "AWS Marketplace 에서 모니터링 애플리케이션을 실행하는 EC2 인스턴스를 사용합니다. \nAmazon DynamoDB Streams 를 사용하여 테이블에 새 항목이 생성될 때 타임스탬프를 \n저장하도록 모니터링 애플리케이션을 구성합니다. EC2 인스턴스에서 실행되는 스크립트를 \n사용하여 30 일보다 오래된 타임스탬프가 있는 항목을 삭제합니다.",
-      "테이블에 새 항목이 생성될 때 AWS Lambda 함수를 호출하도록 Amazon DynamoDB \nStreams 를 구성합니다. 테이블에서 30 일보다 오래된 항목을 삭제하도록 Lambda 함수를 \n구성합니다. \n\n=== PAGE 214 ===",
-      "애플리케이션을 확장하여 현재 타임스탬프에 30 일을 더한 값을 테이블에 생성된 각 새 \n항목에 추가하는 속성을 추가합니다. 속성을 TTL 속성으로 사용하도록 DynamoDB\n를 \n구성합니다."
+      "30일마다 전체 시스템을 밀어버리고(CloudFormation 삭제) 새로 구축합니다.",
+      "별도의 감시용 EC2를 띄워서 스캔 돌리며 30일 지난 건 수동으로 지우는 스크립트를 돌립니다.",
+      "DynamoDB 스트림을 켜고 람다 함수를 연결해서 30일 지난 데이터를 지우게 코딩합니다.",
+      "테이블에 '만료 시간' 항목을 추가하고, DynamoDB의 TTL 기능을 켜서 자동 삭제되게 합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89140-exam-aws-certified-solut \nions-architect-associate-saa-c03/ \n \n해설1: \n30 일 동안의 데이터만 필요하다고 했으니 30 일이 지나면 자동 삭제되도록 하는 기능이 \n필요. \nA(X) : 30 일마다 재배포하는 것은 번거로움. \nB(X) : 스크립트를 사용하는 것은 스크립트를 짜야하므로 번거로움. \nC(X) : Lambda 함수를 매번 쓰는 것은 비용 효율성 면에서 좋지 않고 Lambda 코드 짜는 \n것도 번거로움. \nD(O) : TTL 속성을 사용하면 별다른 코딩이나 노력 없이 설정만 해두면 자동으로 \n삭제되므로 간편함. \nAmazon DynamoDB TTL(Time to Live)을 사용하면 항목별 타임스탬프를 정의하여 항목이 더 \n이상 필요하지 않은 시기를 결정할 수 있습니다. 지정된 타임스탬프의 날짜 및 시간 직후 \nDynamoDB 는 쓰기 처리량을 소모하지 않고 테이블에서 항목을 삭제합니다. \n\ndocs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html \n \n2: \nAmazon DynamoDB TTL(Time to Live)을 사용하면 항목별 타임스탬프를 정의하여 항목이 더 \n이상 필요하지 않은 시기를 결정할 수 있습니다. 지정된 타임스탬프의 날짜 및 시간 직후 \nDynamoDB\n는 쓰기 처리량을 소비하지 않고 테이블에서 항목을 삭제합니다. TTL\n은 \n워크로드 요구 사항에 따라 최신 상태로 유지되는 항목만 유지하여 저장된 데이터 볼륨을 \n줄이는 수단으로 추가 비용 없이 제공됩니다. TTL 은 특정 시간이 지나면 관련성을 잃는 \n항목을 저장할 때 유용합니다. \n다음은 TTL 사용 사례의 예입니다. \n애플리케이션에서 1 년 동안 활동이 없으면 사용자 또는 센서 데이터를 제거합니다. 만료된 \n항목을 Amazon DynamoDB Streams 및 AWS Lambda 를 통해 Amazon S3 데이터 레이크에 \n보관합니다. 계약 또는 규제 의무에 따라 일정 기간 동안 민감한 데이터를 보관합니다. \n\ndocs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html",
+    "explanation": "정답은 D입니다.\n\n데이터에 '수명'을 부여하는 자동 기능인 'TTL(Time to Live)'이 이번 문제의 정답입니다. 항목을 만들 때 30일 뒤의 날짜를 딱 적어주면, DynamoDB가 알아서 시계를 보다가 시간이 지난 데이터들을 별도의 비용이나 개발 노력 없이 공짜로 슥 지워주기 때문에 지갑도 지키고 개발자의 주말도 지켜주는 아주 고마운 기능입니다.\n\n다른 옵션인 A는 서비스 중단 위험이 있고, B와 C는 지우는 데 드는 비용(쓰기 용량)과 개발 수고가 발생하여 '비용과 노력 최소화'라는 요구 사항에 정면으로 어긋나는 구식 방식입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스"
+      "TTL (Time To Live)": "데이터에 유효 기간을 정해주고 시간이 지나면 알아서 소멸하게 만드는 기능",
+      "Attribute (속성)": "데이터베이스의 한 칸에 들어가는 구체적 정보(이름, 날짜 등)"
     }
   },
   {
     "id": 197,
-    "question": "=== PAGE 215 ===\n회사에는 온프레미스 Windows Server\n에서 실행되는 Microsoft .NET 애플리케이션이 \n있습니다. 애플리케이션은 Oracle Database Standard 를 사용하여 데이터를 저장합니다. \n에디션 서버. 이 회사는 AWS\n로의 마이그레이션을 계획하고 있으며 애플리케이션을 \n이동하는 동안 개발 변경을 최소화하려고 합니다. AWS 애플리케이션 환경은 가용성이 \n높아야 합니다. \n이러한 요구 사항을 충족하기 위해 회사는 어떤 조합의 조치를 취해야 합니까? (두 가지를 \n선택하세요.)",
+    "question": "윈도우 서버에서 .NET 앱과 Oracle DB를 운영 중인데, 이걸 AWS로 옮기면서도 코드 수정은 거의 안 하고 고가용성은 챙기고 싶습니다. 어떤 서비스들로 이사를 보내는 게 가장 속 편할까요? (2개 선택)",
     "options": [
-      ".NET Core 를 실행하는 AWS Lambda 함수를 사용하여 애플리케이션을 서버리스로 \n리팩터링합니다.",
-      "다중 AZ 배포에서 .NET 플랫폼을 사용하여 AWS Elastic Beanstalk 에서 애플리케이션을 \n다시 호스팅합니다.",
-      "Amazon Linux Amazon 머신 이미지(AMI)를 사용하여 Amazon EC2 에서 실행되도록 \n애플리케이션 플랫폼을 변경합니다.",
-      "다중 AZ 배포에서 AWS DMS(AWS Database Migration Service)를 사용하여 Oracle \n데이터베이스에서 Amazon DynamoDB 로 마이그레이션합니다.",
-      "다중 AZ 배포에서 AWS Database Migration Service(AWS DMS)를 사용하여 Oracle \n데이터베이스에서 Amazon RDS 의 Oracle 로 마이그레이션합니다."
+      ".NET Core로 리팩터링해서 람다(Lambda) 서버리스로 옮깁니다.",
+      "다중 AZ 설정을 한 AWS Elastic Beanstalk에 .NET 앱을 통째로 올립니다.",
+      "Amazon Linux 서버로 OS를 바꾸고 EC2 인스턴스로 이식합니다.",
+      "DMS를 써서 관계형인 Oracle DB를 비관계형인 DynamoDB로 바꿉니다.",
+      "다중 AZ 환경의 RDS for Oracle 서비스를 이용해서 DB를 마이그레이션합니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89068-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nA(X) : 리팩터링은 코드 변경을 수반하므로 개발 변경 사항 최소화 조건 불충족. \nB(O) : AWS Elastic Beanstalk.NET 용 에서 Amazon Web Services 를 사용하는 ASP.NET 웹 \n애플리케이션을 보다 쉽게 배포, 관리 및 조정할 수 있습니다. \n\ndocs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/create_deploy_NET.html \nC(X) : 재플랫폼화는 개발 변경 사항 최소화 조건 불충족. \nD(X) : Oracle 데이터베이스는 관계형 데이터베이스이고, DynamoDB\n는 비관계형 \n데이터베이스로 유형이 다름. 개발 변경 최소화 조건 불충족. \nE(O) : 다중 AZ 배포로 고가용성 조건 충족. DMS 서비스로 데이터베이스 마이그레이션 \n가능. RDS for Oracle 로 개발 변경 최소화 가능. \n \n2: \n애플리케이션을 AWS 로 이동하는 동안 개발 변경을 최소화하고 높은 수준의 가용성을 \n보장하기 위해 회사는 다중 AZ 배포에서 .NET 플랫폼을 사용하여 AWS Elastic \nBeanstalk 에서 애플리케이션을 다시 호스팅할 수 있습니다. 이렇게 하면 애플리케이션",
+    "answer": [1, 4],
+    "explanation": "정답은 B와 E입니다.\n\n기존 환경을 최대한 유지하면서(최소한의 개발 변경) 클라우드의 혜택만 쏙쏙 빼먹는 최고의 조합입니다. 앱은 코드 변경 없이 바로 받아주는 Elastic Beanstalk에게 맡기고, 데이터베이스는 쓰던 엔진 그대로인 RDS for Oracle로 옮기면 됩니다. 둘 다 클릭 몇 번으로 '다중 AZ' 고가용성 설정을 할 수 있어, 운영 부담은 줄이고 안정성은 최고로 높이는 깔끔한 이사 전략이 완성됩니다.\n\n다른 옵션인 A와 C, D는 코드를 처음부터 다시 짜거나 데이터 구조를 통째로 뒤흔드는 큰 공사가 필요해서 '개발 변경 최소화'라는 약속을 지킬 수 없게 됩니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스"
+      "AWS Elastic Beanstalk": "소스 코드만 던져주면 서버 세팅부터 배포까지 알아서 다 해주는 기사님 같은 서비스",
+      "RDS for Oracle": "오라클 데이터베이스를 AWS 가이드에 맞춰 관리형으로 편하게 쓰는 서비스"
     }
   },
   {
     "id": 198,
-    "question": "회사는 온프레미스 데이터 센터의 Kubernetes 클러스터에서 컨테이너화된 애플리케이션을 \n실행합니다. 회사는 데이터 저장을 위해 MongoDB 데이터베이스를 사용하고 있습니다. \n회사는 이러한 환경 중 일부를 AWS\n로 마이그레이션하려고 하지만 현재로서는 코드 \n변경이나 배포 방법 변경이 불가능합니다. 회사는 운영 오버헤드를 최소화하는 솔루션이 \n필요합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "온프레미스 쿠버네티스에서 MongoDB를 써서 앱을 굴리고 있습니다. 이걸 AWS로 그대로 옮기고 싶은데 코드를 고치거나 배포 방식을 바꿀 여유가 전혀 없네요. 운영 수고를 최소로 줄이면서 그대로 옮길 수 있는 서비스 세트는?",
     "options": [
-      "컴퓨팅을 위해 Amazon EC2 작업자 노드와 함께 Amazon Elastic Container \nService(Amazon ECS)를 사용하고 데이터 저장을 위해 EC2 의 MongoDB 를 사용합니다.",
-      "컴퓨팅용 AWS Fargate 및 데이터 저장용 Amazon DynamoDB 와 함께 Amazon Elastic \nContainer Service(Amazon ECS)를 사용합니다.",
-      "Amazon Elastic Kubernetes Service(Amazon EKS)를 Amazon EC2 작업자 노드와 함께 \n컴퓨팅용으로 사용하고 Amazon DynamoDB 를 데이터 저장용으로 사용합니다.",
-      "컴퓨팅용 AWS Fargate 및 데이터 스토리지용 Amazon DocumentDB(MongoDB 호환)와 \n함께 Amazon Elastic Kubernetes Service(Amazon EKS)를 사용합니다."
+      "EC2 서버를 직접 관리하며 ECS 클러스터를 만들고 MongoDB도 직접 깝니다.",
+      "Fargate와 DynamoDB 조합으로 ECS 시스템을 새로 구축합니다.",
+      "EC2 노드를 쓰는 EKS를 구축하고 데이터베이스는 DynamoDB를 씁니다.",
+      "서버리스인 Fargate 기반 EKS를 구축하고, MongoDB와 호환되는 DocumentDB를 씁니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89078-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nKubernetes 클러스터 = EKS \nMongoDB 호환 = DocumentDB \n \n2: \nAmazon DocumentDB(MongoDB\n와 호환)는 빠르고 안정적이며 완벽하게 관리되는 \n데이터베이스 서비스입니다. \nAmazon DocumentDB 를 사용하면 클라우드에서 MongoDB 호환 데이터베이스를 쉽게 설정, \n운영 및 확장할 수 있습니다. Amazon DocumentDB 를 사용하면 동일한 애플리케이션 \n코드를 실행하고 MongoDB 에서 사용하는 것과 동일한 드라이버 및 도구를 사용할 수",
-    "glossary": {}
+    "explanation": "정답은 D입니다.\n\n기존의 쿠버네티스(K8s)와 몽고DB 환경을 '코드 수정 없이' 옮기는 가장 영리한 방법입니다. 컴퓨팅 엔진은 K8s의 AWS 버전인 EKS를 쓰되 서버 관리가 필요 없는 Fargate를 선택하고, 데이터베이스는 몽고DB와 대화 방식이 똑같은 DocumentDB를 고르면 됩니다. 이렇게 하면 겉모양은 그대로 유지하면서 운영의 고통에서만 해방되는 최고의 결과를 얻을 수 있습니다.\n\n다른 옵션인 B와 C는 몽고DB와 데이터 담는 방식이 아예 다른 DynamoDB를 쓰라고 해서 대규모 코드 수정이 필수적이며, A는 서버 관리라는 지옥에서 벗어날 수 없는 구식 방식입니다.",
+    "glossary": {
+      "Amazon EKS": "쿠버네티스를 AWS가 직접 관리하고 업데이트해주는 전문 서비스",
+      "Amazon DocumentDB": "MongoDB를 쓰던 사람들이 코드 한 줄 안 고치고 그대로 갈아탈 수 있는 초고성능 관리형 DB"
+    }
   },
   {
     "id": 199,
-    "question": "텔레마케팅 회사는 AWS 에서 고객 콜 센터 기능을 설계하고 있습니다. 이 회사는 여러 \n화자 인식을 제공하고 대본 파일을 생성하는 솔루션이 필요합니다. 회사는 비즈니스 패턴을 \n분석하기 위해 트랜스크립트 파일을 쿼리하려고 합니다. 기록 파일은 감사 목적으로 7 년 \n동안 저장되어야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "고객 전화 내용을 받아적어서 대본(Transcript)을 만들고, 여러 사람의 목소리를 구별해서 분석해야 합니다. 이 대본 파일들은 나중에 SQL로 꼼꼼히 뒤져볼 수 있어야 하고 7년이나 보관해야 하네요. 어떤 서비스들이 필요할까요?",
     "options": [
-      "여러 화자 인식을 위해 Amazon Rekognition 을 사용하십시오. 성적표 파일을 Amazon \nS3 에 저장합니다. 성적표 파일 분석을 위해 기계 학습 모델을 사용합니다.",
-      "여러 화자 인식을 위해 Amazon Transcribe 를 사용합니다. 성적표 파일 분석에 Amazon \nAthena 를 사용합니다.",
-      "여러 화자 인식을 위해 Amazon Translate 를 사용합니다. Amazon Redshift 에 기록 \n파일을 저장합니다. 성적표 파일 분석에 SQL 쿼리를 사용합니다.",
-      "여러 화자 인식을 위해 Amazon Rekognition 을 사용합니다. 성적표 파일을 Amazon \nS3 에 저장합니다. 성적표 파일 분석에 Amazon Textract 를 사용하십시오."
+      "Rekognition으로 사람 얼굴을 인식하고, 람다로 대본을 대조 분석합니다.",
+      "Amazon Transcribe로 목소리를 글자로 바꾸고, S3에 담긴 파일을 Athena로 바로 검색합니다.",
+      "Translate로 다른 나라 말을 번역하고, Redshift 대형 분석실에 담아 분석합니다.",
+      "Rekognition으로 영상을 분석하고, S3에 저장한 뒤 Textract로 글자를 긁어모읍니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89141-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nA(X) : Amazon Rekognition 은 이미지/비디오 분석 서비스. 콜센터라고 했으므로 오디오를 \n다른 걸로 변환시켜주는 서비스가 필요하므로 오답. \nAmazon Rekognition 은 애플리케이션에 강력한 시각 분석 기능을 쉽게 추가할 수 있게 해 \n주는 서비스입니다. Rekognition Image 를 통해 수백만 개의 이미지를 검색, 확인 및 구성할 \n수 있는 강력한 애플리케이션을 쉽게 구축할 수 있습니다. Rekognition Video 를 통해 \n저장된 동영상 또는 실시간 스트림 동영상에서 동작 기반 컨텍스트를 추출하고 이를 분석할 \n수 있습니다. \naws.amazon.com/ko/rekognition/faqs/ \nB(O) : Amazon Transcribe 로 다중 Speaker 인식 가능. 7 년 동안 저장해야한다고 했으므로 \nS3 같은 스토리지 서비스가 필요한데, 해당 선택지에서는 S3 가 언급은 되지 않았으나 \nS3 에 쿼리하는 Athena 가 있으므로 S3 를 사용하고 있다고 추측할 수 있음. \nAmazon Transcribe\n는 고객이 손쉽게 음성을 텍스트로 변환할 수 있게 해주는 AWS \n서비스입니다. \naws.amazon.com/ko/transcribe/faqs/ \nC(X) : Amazon Translate 는 기계 번역 서비스.",
+    "explanation": "정답은 B입니다.\n\n음성을 텍스트로 바꾸는 일에는 'Transcribe'가 세계 최고의 전문가입니다. 심지어 화자 분리(SpeakerID) 기능까지 있어서 누가 무슨 말을 했는지도 정확히 가려냅니다. 이렇게 뽑아낸 대본들을 S3 저장소에 잘 쌓아두면, 원할 때마다 Athena라는 돋보기를 통해 SQL 문법으로 대본 구석구석을 순식간에 검색해 비즈니스 인사이트를 얻을 수 있습니다.\n\n다른 옵션인 A와 D의 Rekognition은 이미지/영상 전문이라 소리를 못 들으며, C의 Translate는 번역 서비스라 말소리를 글자로 적는 이번 업무와는 핀트가 어긋납니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "Athena": "S3에 있는 대규모 데이터를 SQL 쿼리로 직접 분석하는 도구"
+      "Amazon Transcribe": "오디오 파일을 텍스트로 받아 적어주고 목소리의 주인공까지 구별하는 신묘한 서비스",
+      "Amazon Athena": "S3 바구니에 담긴 수많은 텍스트 파일들을 마치 DB처럼 SQL로 분석하는 도구"
     }
   },
   {
     "id": 200,
-    "question": "회사는 AWS 에서 애플리케이션을 호스팅합니다. 이 회사는 Amazon Cognito 를 사용하여 \n사용자를 관리합니다. 사용자가 애플리케이션에 로그인하면 애플리케이션은 Amazon API \nGateway 에서 호스팅되는 REST API 를 사용하여 Amazon DynamoDB 에서 필요한 데이터를 \n가져옵니다. 이 회사는 개발 노력을 줄이기 위해 REST API 에 대한 액세스를 제어하는 AWS \n관리형 솔루션을 원합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "Cognito로 로그인한 회원들이 앱에서 API Gateway를 거쳐 DynamoDB 데이터를 가져가려 합니다. 개발자의 수고는 줄이면서 오직 '승인된 우리 회원'만 API를 쓸 수 있게 입구를 막아주는 가장 손쉬운 AWS 관리형 솔루션은?",
     "options": [
-      "어떤 사용자가 요청했는지 확인하기 위해 API Gateway 에서 권한 부여자가 되도록 AWS \nLambda 함수를 구성합니다.",
-      "각 사용자에 대해 각 요청과 함께 전송되어야 하는 API 키를 생성하고 할당합니다. AWS \nLambda 함수를 사용하여 키를 검증합니다.",
-      "모든 요청과 함께 헤더에 사용자의 이메일 주소를 보냅니다. 해당 이메일 주소를 가진 \n사용자에게 적절한 액세스 권한이 있는지 확인하려면 AWS Lambda 함수를 호출하십시오.",
-      "Amazon Cognito 가 각 요청을 검증할 수 있도록 API Gateway 에서 Amazon Cognito \n사용자 풀 권한 부여자를 구성합니다."
+      "API Gateway 입구에 직접 람다 함수 권한 부여자를 소스코드로 짜넣습니다.",
+      "회원마다 전용 API 키를 발행해주고 람다로 번번이 유효성을 검사합니다.",
+      "헤더에 이메일 주소를 실어보내게 하고 람다가 그 이메일이 우리 회원인지 조회합니다.",
+      "API Gateway 설정에서 'Amazon Cognito 사용자 풀 권한 부여기'를 구성합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/89142-exam-aws-certified-solut\nions-architect-associate-saa-c03/ \n \n1: \nAmazon Cognito 콘솔, CLI/SDK 또는 API 를 사용하여 사용자 풀을 만들거나 다른 AWS",
+    "explanation": "정답은 D입니다.\n\n이미 Cognito 회원 정보를 가지고 있다면, API Gateway와 한 몸처럼 연결되는 'Cognito 권한 부여기(Authorizer)' 기능을 켜기만 하면 됩니다. 복잡한 코딩 한 줄 없이 설정 몇 번으로 로그인한 사람의 신분증(토큰)을 검사해서 문(API)을 열어주기 때문에, 보안은 완벽하게 챙기면서 운영 오버헤드는 획기적으로 줄일 수 있습니다.\n\n다른 옵션인 A, B, C는 개발자가 직접 보안 로직을 코딩해야 해서 버그가 생길 위험도 크고, 관리해야 할 코드가 늘어나는 비효율적인 방식이기에 정답에서 멀어집니다.",
     "glossary": {
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스"
+      "Amazon Cognito User Pool": "웹이나 앱의 회원 가입, 로그인을 담당하는 통합 회원 관리 시스템",
+      "Authorizer (권한 부여기)": "API 입구에서 손님이 올바른 신분증을 갖고 있는지 검사하는 디지털 수문장"
     }
   }
 ];

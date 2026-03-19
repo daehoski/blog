@@ -1,377 +1,429 @@
 export const quizData = [
   {
     "id": 601,
-    "question": "회사는 PostgreSQL DB 인스턴스용 Amazon RDS 에서 중요 데이터베이스를 실행합니다. 이 \n회사는 가동 중지 시간과 데이터 손실을 최소화하면서 Amazon Aurora PostgreSQL 로 \n마이그레이션하려고 합니다. \n최소한의 운영 오버헤드로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "RDS PostgreSQL에서 가동 중지(Downtime)와 데이터 손실을 최소화하면서 고성능 Aurora PostgreSQL로 이사하고 싶습니다. 가장 편한 마이그레이션 방법은?",
     "options": [
-      "RDS for PostgreSQL DB 인스턴스의 DB 스냅샷을 생성하여 새로운 Aurora PostgreSQL \nDB 클러스터를 채웁니다.",
-      "RDS for PostgreSQL DB 인스턴스의 Aurora 읽기 전용 복제본을 생성합니다. Aurora 읽기 \n\n=== PAGE 559 ===\n복제를 새로운 Aurora PostgreSQL DB 클러스터로 승격합니다.",
-      "Amazon S3 에서 데이터 가져오기를 사용하여 데이터베이스를 Aurora PostgreSQL DB \n클러스터로 마이그레이션합니다.",
-      "pg_dump 유틸리티를 사용하여 PostgreSQL 용 RDS 데이터베이스를 백업합니다. 새 \nAurora PostgreSQL DB 클러스터로 백업을 복원합니다."
+      "RDS 스냅샷을 찍어서 새 Aurora 클러스터를 처음부터 다시 만듭니다.",
+      "RDS의 'Aurora 읽기 전용 복제본'을 생성한 뒤, 동기가 맞춰지면 이 복제본을 대장(Primary)으로 승격시킵니다.",
+      "데이터를 S3에 엑셀 파일로 뽑아낸 뒤 Aurora에서 다시 불러오기(Import)를 수행합니다.",
+      "pg_dump 툴을 사용하여 수동으로 백업하고 복원하는 전통적인 방식을 씁니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121210-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\n사용 중인 RDS의 'Aurora 읽기 전용 복제본'을 만드는 것이 가장 똑똑한 방법입니다. AWS가 배경에서 실시간으로 데이터를 맞춰주기 때문에, 복제가 거의 다 되었을 때 버튼 하나만 눌러 복제본을 대장으로 승격(Promote)시키면 가동 중지 시간을 단 몇 분 내외로 줄일 수 있습니다.\n\n다른 옵션인 D(pg_dump)는 데이터 양이 많을 경우 백업과 복원에 긴 시간이 걸려 서비스 중단이 길어집니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "Aurora": "AWS가 구축한 클라우드 전용 고성능 관계형 데이터베이스 엔진"
+      "Amazon Aurora": "AWS에서 관계형 DB를 클라우드 환경에 최적화하여 5배(MySQL 대비) 이상 빠르게 만든 고성능 엔진",
+      "Read Replica (읽기 전용 복제본)": "주 서버의 데이터를 실시간으로 복사해 가지고 있는 조수 서버",
+      "Promotion (승격)": "조수(복제본) 서버를 주 서버(Master)로 역할을 바꾸는 과정"
     }
   },
   {
     "id": 602,
-    "question": "회사의 인프라는 Amazon Elastic Block Store(Amazon EBS) 스토리지를 사용하는 수백 개의 \nAmazon EC2 인스턴스로 구성됩니다. 솔루션 아키텍트는 재해 발생 후 모든 EC2 \n인스턴스를 복구할 수 있는지 확인해야 합니다. \n최소한의 노력으로 이 요구 사항을 충족하려면 솔루션 설계자가 무엇을 해야 합니까?",
+    "question": "수백 대의 EC2 서버와 하드디스크(EBS)를 쓰고 있는데, 재난 상황을 대비해 한꺼번에 복구할 수 있는 장치가 필요합니다. 운영 수고가 제일 적은 방법은?",
     "options": [
-      "각 EC2 인스턴스에 연결된 EBS 스토리지의 스냅샷을 찍습니다. EBS 스토리지에서 새 \nEC2 인스턴스를 시작하려면 AWS CloudFormation 템플릿을 생성하세요.",
-      "각 EC2 인스턴스에 연결된 EBS 스토리지의 스냅샷을 찍습니다. AWS Elastic \nBeanstalk 를 사용하여 EC2 템플릿 기반으로 환경을 설정하고 EBS 스토리지를 연결하세요.",
-      "AWS Backup을 사용하여 전체 EC2 인스턴스 그룹에 대한 백업 계획을 설정합니다. AWS \nBackup API 또는 AWS CLI 를 사용하면 여러 EC2 인스턴스의 복원 프로세스 속도를 높일 \n수 있습니다.",
-      "각 \nEC2 \n인스턴스에 \n연결된 \nEBS \n스토리지의 \n스냅샷을 \n찍고 \nAmazon \n머신 \n이미지(AMI)를 복사하는 AWS Lambda 함수를 생성합니다. 복사된 AMI 로 복원을 수행하고 \nEBS 스토리지를 연결하는 또 다른 Lambda 함수를 생성합니다."
+      "일일이 수동으로 스냅샷을 찍고 CloudFormation 템플릿을 직접 코딩해 관리합니다.",
+      "Elastic Beanstalk라는 배포 툴을 써서 전체 인프라 환경을 다시 구축합니다.",
+      "AWS Backup 서비스를 사용하여 전체 서버 그룹에 대한 통합 백업 계획을 세웁니다.",
+      "람다(Lambda) 함수를 여럿 짜서 스냅샷 찍기와 AMI 복사를 자동화하는 코드를 유지 관리합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121212-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n수백 대의 서버를 하나하나 관리할 수는 없습니다. 'AWS Backup'이라는 전용 중앙 관리 서비스를 쓰면, 마우스 클릭 몇 번으로 전체 EC2 그룹에 대한 백업 정책(주기, 보관 기간 등)을 세울 수 있고 복구도 일괄적으로 처리할 수 있어 가장 효율적입니다.\n\n다른 옵션인 D는 초기 개발 비용과 유지보수 코드가 발생하므로 '최소한의 노력' 조건에 맞지 않습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "EBS": "EC2 인스턴스에 붙여서 사용하는 하드디스크 역할의 저장소"
+      "AWS Backup": "EC2, EBS, RDS 등 다양한 AWS 리소스의 백업을 한곳에서 중앙 관리하는 서비스",
+      "Disaster Recovery (재해 복구)": "전산실 화재나 정전 같은 큰 사고가 터졌을 때 시스템을 원래대로 되돌리는 일",
+      "Operational Effort (운영 수고)": "시스템을 관리하기 위해 담당자가 들여야 하는 시간과 노력의 양"
     }
   },
   {
     "id": 603,
-    "question": "최근 한 회사가 AWS 클라우드로 마이그레이션했습니다. 회사는 반구조화된 데이터 세트의 \n대규모 병렬 주문형 처리를 위한 서버리스 솔루션을 원합니다. 데이터는 Amazon S3 에 \n저장되는 로그, 미디어 파일, 판매 거래 및 IoT 센서 데이터로 구성됩니다. 회사는 데이터 \n세트에 있는 수천 개의 항목을 병렬로 처리하는 솔루션을 원합니다. \n가장 효율적인 운영 효율성으로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까? \n\n=== PAGE 560 ===",
+    "question": "S3에 쌓인 수천 개의 반구조화 데이터(로그, IoT 센서값 등)를 한꺼번에 병렬로 처리하고 싶습니다. 서버 관리 없는 '서버리스' 방식으로 가장 효율적인 지휘 툴은?",
     "options": [
-      "인라인 모드에서 AWS Step Functions 맵 상태를 사용하여 데이터를 병렬로 처리합니다.",
-      "분산 모드에서 AWS Step Functions 맵 상태를 사용하여 데이터를 병렬로 처리합니다.",
-      "AWS Glue 를 사용하여 데이터를 병렬로 처리합니다.",
-      "여러 AWS Lambda 함수를 사용하여 데이터를 병렬로 처리합니다."
+      "AWS Step Functions의 일반(Inline) 맵 상태를 사용하여 데이터를 하나씩 돌립니다.",
+      "AWS Step Functions의 '분산 모드(Distributed mode)' 맵 상태를 사용하여 수만 개의 작업을 동시에 처리합니다.",
+      "AWS Glue라는 데이터 변환 툴을 써서 배치 처리를 수행합니다.",
+      "여러 개의 람다(Lambda) 함수를 수동으로 동시에 호출하여 작동시킵니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121211-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\nStep Functions의 '분산 맵(Distributed Map)' 모드는 S3에 있는 수백만 개의 객체를 한꺼번에 훑으면서 수천 개의 람다를 동시에 실행할 수 있는 대규모 병렬 처리 기능입니다. 서버 관리 걱정 없이 엄청난 양의 데이터를 쾌속으로 처리하기에 가장 적합한 최신 솔루션입니다.\n\n다른 옵션인 A(일반 모드)는 병렬 처리에 한계(동시 실행 수 제한)가 있어 수천 개 이상의 대규모 작업에는 적합하지 않습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "AWS Step Functions": "여러 AWS 서비스들을 순서대로 엮어서 하나의 긴 업무 프로세스(워크플로)로 만들어주는 도구",
+      "Distributed Map (분산 맵)": "수천 개의 작업을 동시에 병렬로 실행할 수 있게 해주는 Step Functions의 고성능 옵션",
+      "Serverless (서버리스)": "사용자가 서버 사양을 고민하거나 운영하지 않아도 AWS가 알아서 자원을 할당해주는 방식"
     }
   },
   {
     "id": 604,
-    "question": "회사는 6주 안에 10PB 의 데이터를 Amazon S3 로 마이그레이션할 예정입니다. 현재 데이터 \n센터에는 인터넷에 대한 500Mbps 업링크가 있습니다. 다른 온프레미스 애플리케이션은 \n업링크를 공유합니다. 회사는 이 일회성 마이그레이션 작업에 인터넷 대역폭의 80%를 \n사용할 수 있습니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "10PB(페타바이트)라는 어마어마한 데이터를 6주 안에 S3로 옮겨야 합니다. 인터넷은 느리고 다른 팀과 나눠 써야 하는데, 이 거대한 이사를 끝낼 무기는?",
     "options": [
-      "데이터를 Amazon S3\n로 마이그레이션하고 자동으로 데이터를 확인하도록 AWS \nDataSync 를 구성합니다.",
-      "rsync 를 사용하여 데이터를 Amazon S3 로 직접 전송합니다.",
-      "AWS CLI 와 여러 복사 프로세스를 사용하여 데이터를 Amazon S3 에 직접 보냅니다.",
-      "여러 AWS Snowball 디바이스를 주문합니다. 데이터를 장치에 복사합니다. 디바이스를 \nAWS 로 보내 데이터를 Amazon S3 에 복사합니다."
+      "DataSync 서비스를 켜서 인터넷망을 통해 조금씩 전송하며 자동으로 검증하게 합니다.",
+      "전통적인 rsync 명령어를 사용하여 인터넷으로 직접 전송을 계속 시도합니다.",
+      "AWS CLI 복사 명령을 여러 개 띄워서 24시간 내내 업로드를 돌립니다.",
+      "여러 대의 'AWS Snowball Edge' 장비를 한꺼번에 주문해서 데이터를 담아 트럭으로 보냅니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121186-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 D입니다.\n\n10PB 데이터를 500Mbps 인터넷망으로 보내면 단순 계산으로도 수년이 걸립니다. 이럴 땐 인터넷을 아예 포기하고 거대 외장 하드 장비인 Snowball에 데이터를 담아 물리적으로 배송하는 것이 유일한 해법입니다. 6주라는 기한 안에 10PB를 옮기려면 여러 대의 장비를 동시에 투입해야 합니다.\n\n다른 옵션인 A, B, C는 인터넷 속도라는 한계(Bottleneck) 때문에 기한 내 이사가 절대 불가능합니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "AWS Snowball Edge": "인터넷 속도가 감당 못 할 수준의 대용량 데이터를 물리적으로 담아서 옮겨주는 이동형 데이터 보관 장비",
+      "Petabyte (PB)": "1,024테라바이트(TB). 일반적인 하드디스크 수천 개를 합친 엄청난 용량",
+      "Bandwidth (대역폭)": "인터넷망이 한 번에 보낼 수 있는 데이터 통로의 크기"
     }
   },
   {
     "id": 605,
-    "question": "회사에는 온프레미스 ISCSI(Internet Small Computer Systems Interface) 네트워크 스토리지 \n서버가 여러 대 있습니다. 회사는 AWS 클라우드로 이동하여 이러한 서버의 수를 줄이고 \n싶어합니다. 솔루션 설계자는 자주 사용되는 데이터에 대한 짧은 대기 시간 액세스를 \n제공하고 최소한의 인프라 변경으로 온프레미스 서버에 대한 종속성을 줄여야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "온프레미스 iSCSI 저장 방식을 그대로 쓰면서, 자주 쓰는 데이터는 바로 내 옆(Local)에 두고 나머지는 S3로 보내고 싶습니다. 어떤 게이트웨이가 딱일까요?",
     "options": [
-      "Amazon S3 파일 게이트웨이를 배포합니다.",
-      "Amazon S3 에 대한 백업과 함께 Amazon Elastic Block Store(Amazon EBS) 스토리지를 \n배포합니다.",
-      "저장된 볼륨으로 구성된 AWS Storage Gateway 볼륨 게이트웨이를 배포합니다. \n\n=== PAGE 561 ===",
-      "캐시된 볼륨으로 구성된 AWS Storage Gateway 볼륨 게이트웨이를 배포합니다."
+      "파일 단위로 관리하는 'Amazon S3 파일 게이트웨이'를 설치합니다.",
+      "EBS 하드디스크 통째로 S3에 백업하는 단순 백업 방식을 씁니다.",
+      "데이터 전부를 로컬 장비에 다 담아두는 '보관된 볼륨(Stored Volume)' 게이트웨이를 씁니다.",
+      "자주 쓰는 건 로컬에, 나머지는 클라우드에 두는 '캐시된 볼륨(Cached Volume)' 게이트웨이를 씁니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121170-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 D입니다.\n\n'캐시된 볼륨' 모드를 선택하면, 전체 데이터는 저렴한 S3에 보관하되 사람들이 자주 찾는 데이터만 우리 사무실 장비의 메모리(캐시)에 남겨둡니다. 덕분에 하드디스크 증설 비용은 아끼면서도 실제 체감 속도는 로컬 하드디스크를 쓰는 것처럼 빠르게 유지할 수 있습니다.\n\n다른 옵션인 C는 로컬에 전체 데이터를 다 보관해야 하므로 사무실 저장 공간(서버)을 줄이려는 목적에 맞지 않습니다.",
+    "glossary": {
+      "AWS Volume Gateway": "기존 iSCSI 방식의 저장 장치를 클라우드 S3와 연결해 하이브리드 저장소로 만들어주는 서비스",
+      "Cached Volume (캐시된 볼륨)": "데이터를 S3에 원본으로 두되, 자주 쓰는 것만 로컬 서버에 속도 향상을 위해 남겨두는 방식",
+      "iSCSI": "네트워크를 통해 하드디스크(블록) 데이터를 주고받는 표준 통신 규격"
+    }
   },
   {
     "id": 606,
-    "question": "솔루션 아키텍트는 비즈니스 사용자가 Amazon S3\n에 객체를 업로드할 수 있는 \n애플리케이션을 설계하고 있습니다. 솔루션은 객체 내구성을 극대화해야 합니다. 또한 \n객체는 언제든지 언제든지 쉽게 사용할 수 있어야 합니다. 사용자는 객체가 업로드된 후 \n처음 30\n일 이내에 객체에 자주 액세스하지만 30\n일보다 오래된 객체에는 사용자가 \n액세스할 가능성이 훨씬 적습니다. \n이러한 요구 사항을 가장 비용 효율적으로 충족하는 솔루션은 무엇입니까?",
+    "question": "처음 30일 동안은 자주 보고, 그 이후엔 거의 안 보는 파일들이 있습니다. 파일은 절대 잃어버리면 안 되는데, 가장 가성비 좋은 저장 전략은?",
     "options": [
-      "S3 수명 주기 규칙을 사용하여 모든 객체를 S3 Standard 에 저장하여 30 일 후에 객체를 \nS3 Glacier 로 전환합니다.",
-      "30 일 후에 객체를 S3 Standard-Infrequent Access(S3 Standard-IA)로 전환하려면 S3 \n수명 주기 규칙을 사용하여 모든 객체를 S3 Standard 에 저장합니다.",
-      "30 일 후에 객체를 S3 One Zone-Infrequent Access(S3 One Zone-IA)로 전환하는 S3 \n수명 주기 규칙을 사용하여 모든 객체를 S3 Standard 에 저장합니다.",
-      "S3 수명 주기 규칙을 사용하여 모든 객체를 S3 Intelligent-Tiering 에 저장하여 30 일 \n후에 객체를 S3 Standard-Infrequent Access(S3 Standard-IA)로 전환합니다."
+      "처음부터 아주 저렴한 S3 Glacier에 넣고 30일 뒤에는 삭제 정책을 겁니다.",
+      "S3 정식 저장소인 Standard에 두다가 30일이 지나면 'Standard-IA(Infrequent Access)'로 옮깁니다.",
+      "비용을 아끼기 위해 30일 뒤에는 한 곳에만 저장하는 'One Zone-IA'로 무조건 보냅니다.",
+      "S3 Intelligent-Tiering 기능을 켜고 30일 뒤에 다시 수동으로 Standard-IA로 강제 이동시킵니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121214-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\n'Standard-IA'는 데이터를 절대 잃어버리지 않는 내구성(여러 곳에 복제)은 standard와 똑같지만, 자주 안 찾는 대신 보관료가 훨씬 저렴한 요금제입니다. 수명 주기(Lifecycle) 설정을 통해 30일 뒤에 자동으로 옮기게 하면, 안전은 챙기면서 지갑도 지킬 수 있는 가장 합리적인 선택입니다.\n\n다른 옵션인 C(One Zone-IA)는 한 곳에만 저장하므로 사고 시 데이터 유실 위험이 있어 '내구성 극대화' 조건에 맞지 않습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "S3 Standard-IA": "자주 접속하지 않는 데이터를 저렴하게 보관하면서도, 필요할 때 즉시 읽을 수 있는 요금 등급",
+      "Lifecycle Policy (수명 주기 정책)": "시간이 흐름에 따라 파일을 더 저렴한 저장소로 옮기거나 삭제하도록 예약하는 기능",
+      "Durability (내구성)": "저장된 데이터가 사고나 하드웨어 고장으로 인해 사라지지 않고 보존되는 정도"
     }
   },
   {
     "id": 607,
-    "question": "한 회사가 온프레미스 데이터 센터에서 AWS 클라우드로 2\n계층 애플리케이션을 \n마이그레이션했습니다. 데이터 계층은 12TB\n의 범용 SSD Amazon Elastic Block \nStore(Amazon EBS) 스토리지를 갖춘 Oracle 용 Amazon RDS 의 다중 AZ 배포입니다. 이 \n애플리케이션은 평균 문서 크기가 6MB 인 이진 대형 개체(BLOB)로 데이터베이스의 문서를 \n처리하고 저장하도록 설계되었습니다. \n시간이 지남에 따라 데이터베이스 크기가 증가하여 성능이 저하되고 스토리지 비용이 \n증가했습니다. 회사는 데이터베이스 성능을 개선해야 하며 가용성과 탄력성이 뛰어난 \n솔루션이 필요합니다. \n이러한 요구 사항을 가장 비용 효율적으로 충족하는 솔루션은 무엇입니까? \n\n=== PAGE 562 ===",
+    "question": "Oracle DB(RDS)에 수많은 큼직한 문서 파일(BLOB)을 같이 넣었더니 DB가 무겁고 느려졌습니다. 성능도 높이고 비용도 줄이는 묘수는?",
     "options": [
-      "RDS DB 인스턴스 크기를 줄입니다. 스토리지 용량을 24TiB 로 늘립니다. 스토리지 \n유형을 마그네틱으로 변경합니다.",
-      "RDS DB 인스턴스 크기를 늘리십시오. 스토리지 용량을 24Ti 로 늘립니다. 스토리지 \n유형을 프로비저닝된 IOPS 로 변경합니다.",
-      "Amazon S3 버킷을 생성합니다. S3 버킷에 문서를 저장하도록 애플리케이션을 \n업데이트합니다. 기존 데이터베이스에 개체 메타데이터를 저장합니다.",
-      "Amazon DynamoDB 테이블을 생성합니다. DynamoDB 를 사용하도록 애플리케이션을 \n업데이트합니다. AWS Database Migration Service(AWS DMS)를 사용하여 Oracle \n데이터베이스에서 DynamoDB 로 데이터를 마이그레이션합니다."
+      "DB 서버 사양을 낮추고 하드디스크만 24TB로 늘린 뒤 값싼 자기 테이프(Magnetic) 방식을 씁니다.",
+      "DB 서버를 훨씬 큰 사양으로 바꾸고 비싼 프로비저닝된 IOPS(SSD)로 도배합니다.",
+      "거대한 문서 데이터는 저렴한 S3 버킷으로 빼고, DB에는 파일이 어디 있는지 알려주는 '주소(메타데이터)'만 남깁니다.",
+      "전통적인 관계형 DB를 버리고 NoSQL로 유명한 DynamoDB로 모든 데이터를 강제 마이그레이션합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121215-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n데이터베이스는 '정보'를 찾는 데 특화된 녀석이지 큰 파일을 담아두는 창고가 아닙니다. 덩치 큰 파일은 무제한 창고인 S3에 넣고 DB에는 그 파일 이름만 기록해두면, DB는 가벼워져서 빨라지고 저장 비용은 획기적으로 줄어듭니다. 이것이 바로 전형적인 'DB 다이어트' 기법입니다.\n\n다른 옵션인 B는 비싼 장비 비용만 늘어날 뿐, DB가 무거운 근본적인 원인을 해결하지 못합니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "EBS": "EC2 인스턴스에 붙여서 사용하는 하드디스크 역할의 저장소"
+      "S3 Bucket (S3 버킷)": "파일들을 담아두는 클라우드상의 가상 바구니(폴더)",
+      "Metadata (메타데이터)": "데이터에 대한 데이터. 여기서는 실제 파일이 어디 있는지 알려주는 주소나 정보를 뜻함",
+      "BLOB (Binary Large Object)": "이미지, 문서, 비디오처럼 덩치가 큰 데이터 덩어리"
     }
   },
   {
     "id": 608,
-    "question": "회사에는 전 세계 20,000\n개 이상의 소매점 위치에 배포된 클라이언트에게 서비스를 \n제공하는 애플리케이션이 있습니다. 애플리케이션은 포트 443에서 HTTPS 를 통해 노출되는 \n백엔드 웹 서비스로 구성됩니다. 애플리케이션은 ALB(Application Load Balancer) 뒤의 \nAmazon EC2 인스턴스에서 호스팅됩니다. 소매점은 공용 인터넷을 통해 웹 애플리케이션과 \n통신합니다. 회사는 각 소매점에서 현지 ISP\n가 할당한 IP 주소를 등록할 수 있도록 \n허용합니다. \n회사 보안팀에서는 소매점에서 등록한 IP 주소로만 접속을 제한하여 애플리케이션 \n엔드포인트의 보안을 강화할 것을 권장합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "전 세계 2만 개 매장 직원들만 접속해야 하는 웹 서비스입니다. 매장에서 미리 등록한 특정 IP 주소들만 들어오게 입구 컷을 하려면?",
     "options": [
-      "AWS WAF 웹 ACL 을 ALB 와 연결합니다. ALB 의 IP 규칙 세트를 사용하여 트래픽을 \n필터링합니다. 등록된 IP 주소를 포함하도록 규칙의 IP 주소를 업데이트합니다.",
-      "AWS Firewall Manager 를 배포하여 ALConfigure 방화벽 규칙을 관리하여 AL 로의 \n트래픽을 제한합니다. 등록된 IP 주소를 포함하도록 방화벽 규칙을 수정합니다.",
-      "Amazon DynamoDB 테이블에 IP 주소를 저장합니다. ALB 에서 AWS Lambda 인증 \n기능을 구성하여 수신 요청이 등록된 IP 주소에서 오는지 확인합니다.",
-      "ALB 의 공용 인터페이스가 포함된 서브넷에서 네트워크 ACL 을 구성합니다. 등록된 각 \nIP 주소에 대한 항목으로 네트워크 ACL 의 수신 규칙을 업데이트합니다."
+      "ALB(로드 밸런서)에 'AWS WAF'를 붙이고, 등록된 IP들만 허용하는 규칙(White List)을 만듭니다.",
+      "Firewall Manager를 써서 복잡한 방화벽 스크립트를 수동으로 모든 매장에 배포합니다.",
+      "DynamoDB에 IP 목록을 넣고, 접속할 때마다 람다(Lambda) 함수를 띄워 IP를 일일이 대조합니다.",
+      "네트워크 ACL(NACL)을 사용하여 2만 개의 IP 규칙을 수동으로 하나하나 등록합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121216-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\n특정 IP 주소나 국가를 막는 '입구 컷'은 AWS WAF(웹 방화벽)의 전문 분야입니다. WAF를 로드 밸런서 앞에 두면, 허락받지 않은 낯선 IP의 접근을 손쉽게 차단할 수 있습니다. 2만 개 매장 주소 목록을 관리하기에도 WAF의 IP 규칙 세트가 가장 깔끔합니다.\n\n다른 옵션인 D(NACL)는 한 서브넷당 등록 가능한 규칙 개수가 수십 개 정도로 제한되어 있어 2만 개를 감당할 수 없습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "ALB": "애플리케이션 계층(L7)에서 트래픽을 분산해주는 부하 분산 장치"
+      "AWS WAF (Web Application Firewall)": "SQL 삽입이나 특정 IP 차단 등 웹 보안 위협으로부터 서버를 지켜주는 웹 전용 방화벽",
+      "White List (화이트리스트)": "모두를 금지하고, 명단에 있는 안전한 사용자만 입장을 허용하는 방식",
+      "IP Address Set (IP 세트)": "WAF에서 여러 개의 IP 주소를 그룹화하여 한꺼번에 관리하는 기능"
     }
   },
   {
     "id": 609,
-    "question": "회사에서 AWS Lake Formation 을 사용하여 AWS 에 데이터 분석 플랫폼을 구축하고 \n있습니다. 플랫폼은 Amazon S3 및 Amazon RDS 와 같은 다양한 소스에서 데이터를 \n수집합니다. 회사는 중요한 정보가 포함된 데이터 부분에 대한 액세스를 방지하기 위한 \n보안 솔루션이 필요합니다.",
+    "question": "데이터 분석 플랫폼(Lake Formation)을 운영 중인데, 특정 부서원은 이름만 보고 다른 부서원은 전화번호까지 보게 하는 등 아주 상세한 보안 설정이 필요합니다.",
     "options": [
-      "Lake Formation 테이블에 액세스할 수 있는 권한이 포함된 IAM 역할을 생성합니다.",
-      "데이터 필터를 생성하여 행 수준 보안 및 셀 수준 보안을 구현합니다.",
-      "Lake Formation 이 다시 데이터를 수집하기 전에 민감한 정보를 제거하는 AWS Lambda \n함수를 생성합니다.",
-      "Lake Formation 테이블에서 민감한 정보를 주기적으로 쿼리하고 제거하는 AWS Lambda \n함수를 생성합니다."
+      "부서별로 아예 다른 IAM 역할을 만들어서 테이블 접근 권한을 쪼갭니다.",
+      "데이터 필터(Data Filters) 기능을 써서 '행(Row)'이나 '셀(Cell)' 단위로 접근을 제한합니다.",
+      "데이터를 읽기 전에 람다(Lambda) 함수로 민감한 정보를 가린 뒤 복사본을 따로 만듭니다.",
+      "SQL 명령어로 주기적으로 민감한 데이터를 삭제하는 전용 청소 봇을 운영합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121162-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \n이 옵션은 Lake Formation 과 통합된 엔진 및 쿼리 결과의 특정 데이터에 대한 액세스를 \n제한하는 사양인 데이터 필터를 사용하기 때문에 가장 효율적입니다. 데이터 필터는 중요한 \n정보가 포함된 데이터 부분에 대한 액세스를 방지하는 기술인 행 수준 보안 및 셀 수준 \n보안을 구현하는 데 사용할 수 있습니다. Data Catalog 테이블에 대한 Lake Formation \n권한을 부여할 때 데이터 필터를 적용할 수 있으며 PartiQL 표현식을 사용하여 조건에 따라 \n데이터를 필터링할 수 있습니다. 이 솔루션은 중요한 정보가 포함된 데이터 부분에 대한 \n액세스를 방지하는 보안 솔루션을 제공해야 한다는 요구 사항을 충족합니다. \n \n옵션 A 는 IAM 정책을 사용하여 Lake Formation 의 데이터에 대한 액세스 권한을 부여하는 \n방법인 Lake Formation 테이블에 대한 액세스 권한이 포함된 IAM 역할을 사용하기 때문에 \n효율성이 떨어집니다. 그러나 이것은 중요한 정보가 포함된 데이터 부분에 대한 액세스를 \n방지하는 방법을 제공하지 않습니다. \n \n옵션 C 는 Lake Formation 이 데이터를 수집하기 전에 민감한 정보를 제거하는 AWS \nLambda 함수를 사용하기 때문에 효율성이 떨어집니다. 이는 서버리스 함수를 사용하여 \n데이터 정리 또는 변환을 수행하는 방법입니다. 그러나 여기에는 애플리케이션 코드 및 \n논리에 대한 상당한 변경이 포함될 수 있으며 데이터 손실 또는 불일치가 발생할 수도 \n있습니다.",
+    "explanation": "정답은 B입니다.\n\nLake Formation의 강력한 기능 중 하나가 바로 '데이터 필터'입니다. 마치 엑셀에서 특정 줄이나 칸을 숨기는 것처럼, 사용자의 권한에 따라 똑같은 표 안에서도 보지 말아야 할 칸(Cell)이나 줄(Row)을 자동으로 가려줍니다. 가장 세밀하고 정확한 보안 방법입니다.\n\n다른 옵션인 C는 데이터가 바뀔 때마다 복사본을 계속 만들어야 하므로 관리가 엉망이 되고 저장 비용도 낭비됩니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "IAM": "AWS 리소스에 대한 접근 권한을 관리하는 보안 시스템"
+      "AWS Lake Formation": "여러 곳에 흩어진 데이터를 한곳에 모아 안전하게 공유하고 분석할 수 있게 돕는 데이터 호수 관리 서비스",
+      "Row-level Security (행 수준 보안)": "자신의 지역 데이터만 볼 수 있게 가로줄(행) 단위로 권한을 주는 기술",
+      "Cell-level Security (셀 수준 보안)": "고객의 주소는 봐도 주민번호는 못 보게 특정 칸(열) 단위로 권한을 주는 기술"
     }
   },
   {
     "id": 610,
-    "question": "회사는 VPC 에서 실행되는 Amazon EC2 인스턴스를 배포합니다. EC2 인스턴스는 나중에 \n데이터를 처리할 수 있도록 소스 데이터를 Amazon S3 버킷에 로드합니다. 규정 준수법에 \n따라 데이터는 공용 인터넷을 통해 전송되어서는 안 됩니다. 회사의 온프레미스 데이터 \n센터에 있는 서버는 EC2 인스턴스에서 실행되는 애플리케이션의 출력을 사용합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "EC2 서버가 S3에 데이터를 올리는데 공용 인터넷을 절대 타면 안 됩니다. 또한 사무실 서버도 이 결과를 안전하게 가져가야 할 때 가장 교과서적인 조합은?",
     "options": [
-      "Amazon EC2 용 인터페이스 VPC 엔드포인트를 배포합니다. 회사와 VPC 간에 AWS \nSite-to-Site VPN 연결을 생성합니다.",
-      "Amazon S3 용 게이트웨이 VPC 엔드포인트를 배포합니다. 온프레미스 네트워크와 VPC \n간에 AWS Direct Connect 연결을 설정합니다.",
-      "VPC 에서 S3 버킷으로의 AWS Transit Gateway 연결을 설정합니다. 회사와 VPC 간에 \nAWS Site-to-Site VPN 연결을 생성합니다.",
-      "NAT 게이트웨이에 대한 경로가 있는 프록시 EC2 인스턴스를 설정합니다. S3 데이터를 \n가져오고 애플리케이션 인스턴스에 공급하도록 프록시 EC2 인스턴스를 구성합니다."
+      "EC2용 인터페이스 VPC 엔드포인트를 깔고 사무실과는 VPN으로 연결합니다.",
+      "S3용 게이트웨이 VPC 엔드포인트를 설치하고 사무실과는 Direct Connect(전용선)로 연결합니다.",
+      "Transit Gateway를 통해 S3와 직접 통로를 뚫고 전산실과는 VPN을 엮습니다.",
+      "NAT 게이트웨이를 겹겹이 쌓아 외부에서는 우리 정체를 모르게 세탁해서 보냅니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121217-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\nS3에 인터넷 없이 접속하는 가장 싸고 확실한 방법은 '게이트웨이 VPC 엔드포인트'입니다. 여기에 사무실과 AWS를 인터넷이 아닌 물리적 전용선으로 연결하는 'Direct Connect'를 더하면, 데이터가 처음부터 끝까지 공용 인터넷 세상 구경 한 번 안 하고 안전하게 집 안 망처럼 흐르게 됩니다.\n\n다른 옵션인 D는 인터넷을 타지 말라는 조건에 정면으로 위배되는 방식(NAT은 인터넷으로 연결하는 문)입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "Gateway VPC Endpoint": "S3나 DynamoDB를 공용 인터넷망 없이 AWS 전용망으로 바로 연결해주는 가상 통로",
+      "AWS Direct Connect": "사무실 전산실과 AWS 데이터 센터를 광케이블로 직접 이어주는 클라우드 전용선",
+      "Public Internet (공용 인터넷)": "누구나 접속 가능하여 해킹이나 데이터 가로채기 위험이 있는 공공 망"
     }
   },
   {
     "id": 611,
-    "question": "회사에는 제3 자 공급업체로부터 거의 실시간으로 데이터를 수신할 수 있는 REST 기반 \n인터페이스가 있는 애플리케이션이 있습니다. 일단 수신되면 애플리케이션은 추가 분석을 \n위해 데이터를 처리하고 저장합니다. 애플리케이션이 Amazon EC2 인스턴스에서 실행 \n중입니다. \n타사 공급업체에서 애플리케이션에 데이터를 보낼 때 503 서비스를 사용할 수 없음 오류가 \n많이 발생했습니다. 데이터 볼륨이 급증하면 컴퓨팅 용량이 최대 한도에 도달하고 \n애플리케이션이 모든 요청을 처리할 수 없게 됩니다. \n보다 확장 가능한 솔루션을 제공하기 위해 솔루션 설계자는 어떤 디자인을 권장해야 \n합니까?",
+    "question": "외부 업체가 우리 API에 데이터를 쏘는데, 갑자기 트래픽이 몰리면 503(서버 바쁨) 오류가 납니다. 서버가 터지지 않게 '완충 지대'를 만드는 가장 확장성 있는 설계는?",
     "options": [
-      "Amazon Kinesis Data Streams 를 사용하여 데이터를 수집하십시오. AWS Lambda 함수를 \n\n=== PAGE 565 ===\n사용하여 데이터를 처리합니다.",
-      "기존 애플리케이션 위에 Amazon API Gateway 를 사용하십시오. 타사 공급업체에 대한 \n할당량 제한이 있는 사용량 계획을 만듭니다.",
-      "Amazon Simple 알림 서비스(Amazon SNS)를 사용하여 데이터를 수집합니다. Application \nLoad Balancer 뒤의 Auto Scaling 그룹에 EC2 인스턴스를 배치합니다.",
-      "애플리케이션을 컨테이너로 다시 패키징합니다. Auto Scaling 그룹과 함께 EC2 시작 \n유형을 \n사용하는 \nAmazon \nElastic \nContainer \nService(Amazon \nECS)를 \n사용하여 \n애플리케이션을 배포합니다."
+      "Kinesis Data Streams를 입구에 두어 일단 데이터를 다 받아두고, 람다(Lambda)가 뒷수습을 하게 합니다.",
+      "API Gateway의 '사용량 계획'을 빡빡하게 세워서 업체가 더 이상 못 보내게 막습니다.",
+      "SNS(알림 서비스)로 데이터를 수집하고 서버들을 오토 스케일링으로 마냥 늘립니다.",
+      "앱을 컨테이너화(ECS)해서 트래픽이 올 때마다 서버 개수를 빠르게 수천 개로 복제합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121218-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\n실시간으로 쏟아지는 데이터를 일단 '안전하게 담아두는 바구니'가 바로 Kinesis Data Streams입니다. 입구에서 업체들 데이터를 가차 없이 다 받아주기 때문에 업체는 503 오류를 보지 않게 됩니다. 뒷단에서는 람다가 자신의 속도에 맞춰 차근차근 데이터를 처리하면 되므로 시스템이 훨씬 안정적이고 유연해집니다.\n\n다른 옵션인 B는 업체의 전송을 강제로 끊어버리므로 진정한 '확장성' 있는 해결책이라 보기 어렵습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Amazon Kinesis Data Streams": "수많은 소스에서 쏟아지는 거대한 데이터를 실시간으로 수집하고 보관하는 대용량 컨베이어 벨트",
+      "503 Service Unavailable": "서버가 너무 바쁘거나 점검 중이라 요청을 처리할 수 없을 때 주는 오류 코드",
+      "Decoupling (결합 해제)": "입구(데이터 전송)와 출구(데이터 처리)를 분리하여 한쪽이 느려져도 전체가 멈추지 않게 하는 설계 원칙"
     }
   },
   {
     "id": 612,
-    "question": "회사에는 프라이빗 서브넷의 Amazon EC2 인스턴스에서 실행되는 애플리케이션이 있습니다. \n애플리케이션은 Amazon S3 버킷의 민감한 정보를 처리해야 합니다. 애플리케이션은 S3 \n버킷에 연결하기 위해 인터넷을 사용해서는 안 됩니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "인터넷이 차단된 구역(프라이빗 서브넷)에 있는 EC2가 S3 버킷에 있는 기밀 정보를 읽어야 합니다. 인터넷 세상은 절대 안 거치고 연결하고 싶은데 어떡하죠?",
     "options": [
-      "인터넷 게이트웨이를 구성하십시오. 인터넷 게이트웨이에서의 액세스를 허용하도록 S3 \n버킷 \n정책을 \n업데이트합니다. \n새 \n인터넷 \n게이트웨이를 \n사용하도록 \n애플리케이션을 \n업데이트합니다.",
-      "VPN 연결을 구성합니다. VPN 연결에서 액세스를 허용하도록 S3 버킷 정책을 \n업데이트합니다. 새 VPN 연결을 사용하도록 애플리케이션을 업데이트하세요.",
-      "NAT 게이트웨이를 구성합니다. NAT 게이트웨이에서의 액세스를 허용하도록 S3 버킷 \n정책을 업데이트합니다. 새 NAT 게이트웨이를 사용하도록 애플리케이션을 업데이트합니다.",
-      "VPC 엔드포인트를 구성합니다. VPC 엔드포인트에서의 액세스를 허용하도록 S3 버킷 \n정책을 업데이트합니다. 새 VPC 엔드포인트를 사용하도록 애플리케이션을 업데이트합니다."
+      "인터넷 게이트웨이를 살짝 열고 S3 버킷 권한만 우리 팀에 허용합니다.",
+      "아무도 모르게 VPN을 뚫어서 S3까지 우회해서 접근하게 만듭니다.",
+      "NAT 게이트웨이라는 중간 다리를 놔서 인터넷을 통해 내보내되 흔적을 숨깁니다.",
+      "VPC 엔드포인트를 구성하여 내부 전용망을 통해 S3와 직접 악수하게 합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121159-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 D입니다.\n\n'VPC 엔드포인트'는 AWS 구름 안에서 전용 통로를 뚫는 것과 같습니다. 인터넷망(Public IP)을 전혀 타지 않고도 EC2와 S3가 옆방처럼 대화할 수 있게 해주므로, 기밀 데이터를 인터넷 노출 위험 없이 가장 안전하게 처리할 수 있는 정통 솔루션입니다.\n\n다른 옵션인 C(NAT 게이트웨이)는 결국 인터넷 세상으로 나가는 문이므로 '인터넷 사용 금지' 조건에 어긋납니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "VPC Endpoint": "AWS 서비스들을 공용 인터넷을 거치지 않고 VPC 내부 비공개 채널로 연결하는 장치",
+      "Private Subnet (프라이빗 서브넷)": "외부 인터넷에서 직접 들어올 수도 없고 나갈 수도 없는 고립된 보안 구역",
+      "Public IP": "인터넷상에서 누구나 찾을 수 있는 공용 집 주소"
     }
   },
   {
     "id": 613,
-    "question": "회사는 \nAmazon \nElastic \nKubernetes \nService(Amazon \nEKS)를 \n사용하여 \n컨테이너 \n애플리케이션을 실행합니다. EKS 클러스터는 Kubernetes 비밀 객체에 민감한 정보를 \n저장합니다. 회사는 정보가 암호화되었는지 확인하기를 원합니다. 어떤 솔루션이 이러한 \n\n=== PAGE 566 ===\n요구 사항을 충족합니까? \n최소한의 운영 오버헤드로 요구 사항을 충족합니까?",
+    "question": "EKS(쿠버네티스) 클러스터에서 쓰는 비밀번호나 API 키(Secrets)를 암호화해서 숨기고 싶습니다. 운영 수고가 거의 없는 정석적인 방법은?",
     "options": [
-      "컨테이너 애플리케이션을 사용하여 AWS Key Management Service(AWS KMS)를 \n사용하여 정보를 암호화합니다.",
-      "AWS Key Management Service(AWS KMS)를 사용하여 EKS 클러스터에서 비밀 암호화를 \n활성화합니다.",
-      "AWS KMS(AWS Key Management Service)를 사용하여 정보를 암호화하는 AWS Lambda \ntuncuon 을 구현합니다.",
-      "AWS Systems Manager Parameter Store 를 사용하여 AWS Key Management Service(AWS \nKMS)를 사용하여 정보를 암호화합니다."
+      "개발자가 앱 코드 안에서 직접 AWS KMS를 호출해 암호화하도록 코드를 수정합니다.",
+      "EKS 클러스터 설정 메뉴에서 'KMS 암호화' 기능을 켜서 자동으로 숨기게 만듭니다.",
+      "비밀 정보를 처리할 때마다 람다(Lambda) 함수를 거쳐 가도록 구조를 바꿉니다.",
+      "AWS Systems Manager Parameter Store에 저장하고 매번 불러오게 설정합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121158-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \n이를 통해 회사는 최소한의 운영 오버헤드로 EKS 클러스터의 Kubernetes 비밀 개체를 \n암호화할 수 있습니다. EKS 클러스터에서 비밀 암호화를 활성화함으로써 회사는 AWS Key \nManagement Service(AWS KMS)를 사용하여 저장된 비밀을 암호화하고 해독하기 위한 \n암호화 키를 생성하고 관리할 수 있습니다. 이는 EKS 클러스터의 중요한 정보를 보호하는 \n간단하고 안전한 방법입니다.",
+    "explanation": "정답은 B입니다.\n\nEKS에는 'Kubernetes Secrets' 전용 암호화 기능이 내장되어 있습니다. 이 기능을 켜고 AWS의 금고 열쇠인 KMS와 연결만 해두면, 여러분이 비밀번호를 저장할 때마다 AWS가 배경에서 알아서 척척 암호화해주고 읽을 때만 풀어줍니다. 운영자가 따로 할 게 거의 없는 가장 깔끔한 방식입니다.\n\n다른 옵션인 A는 개발자가 모든 코드를 고쳐야 하므로 '최소 운영 오버헤드' 조건에 맞지 않습니다.",
     "glossary": {
-      "KMS": "데이터 암호화에 사용되는 키를 생성하고 관리하는 보안 서비스"
+      "AWS KMS (Key Management Service)": "데이터를 자물쇠로 잠그고 열 때 쓰는 열쇠(키)를 안전하게 보관하고 관리해주는 보안실",
+      "Kubernetes Secrets": "비밀번호, 토큰 등 노출되면 안 되는 정보를 안전하게 저장하는 쿠버네티스의 바구니",
+      "Encryption at Rest (저장 시 암호화)": "데이터가 하드디스크에 저장되어 있을 때 누가 훔쳐 가도 못 읽게 암호로 잠가두는 것"
     }
   },
   {
     "id": 614,
-    "question": "한 회사는 다음 구성 요소로 구성된 새로운 다중 계층 웹 애플리케이션을 설계하고 \n있습니다. \n \n• Auto Scaling 그룹의 일부로 Amazon EC2 인스턴스에서 실행되는 웹 및 애플리케이션 \n서버 \n• 데이터 저장을 위한 Amazon RDS DB 인스턴스 \n \n솔루션 설계자는 웹 서버만 액세스할 수 있도록 애플리케이션 서버에 대한 액세스를 \n제한해야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "웹 서버와 앱 서버로 나뉜 구조에서, 앱 서버에는 '오직 우리 웹 서버'만 노크할 수 있게 빗장을 걸고 싶습니다. 어떤 장치를 쓰는 게 가장 좋을까요?",
     "options": [
-      "애플리케이션 서버 앞에 AWS PrivateLink 를 배포합니다. 웹 서버만 애플리케이션 서버에 \n액세스할 수 있도록 네트워크 ACL 을 구성합니다.",
-      "애플리케이션 서버 앞에 VPC 엔드포인트를 배포합니다. 웹 서버만 애플리케이션 서버에 \n\n=== PAGE 567 ===\n액세스할 수 있도록 보안 그룹을 구성합니다.",
-      "애플리케이션 서버의 Auto Scaling 그룹이 포함된 대상 그룹으로 Network Load \nBalancer 를 배포합니다. 웹 서버만 애플리케이션 서버에 액세스할 수 있도록 네트워크 \nACL 을 구성합니다.",
-      "애플리케이션 서버의 Auto Scaling 그룹이 포함된 대상 그룹과 함께 Application Load \nBalancer 를 배포합니다. 웹 서버만 애플리케이션 서버에 액세스할 수 있도록 보안 그룹을 \n구성합니다."
+      "PrivateLink를 앱 서버 앞에 두고 깐깐한 네트워크 ACL로 특정 포트만 엽니다.",
+      "VPC 엔드포인트를 배치하고 보안 그룹(Security Group)에서 웹 서버의 그룹 ID만 허용합니다.",
+      "Network Load Balancer(NLB)를 쓰고 방화벽 규칙으로 웹 서버 IP를 일일이 등록합니다.",
+      "앱 서버들 앞에 'Application Load Balancer(ALB)'를 두고, 보안 그룹을 통해 웹 서버 그룹만 입장을 허용합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121157-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 D입니다.\n\n다중 계층(Multi-tier) 앱 보안의 정석은 '보안 그룹(Security Group) 체이닝'입니다. 로드 밸런서(ALB)를 입구에 두고, 보안 그룹 설정에서 \"웹 서버 보안 그룹에 속한 녀석들의 80번 포트 요청만 받아줄게\"라고 설정하면 됩니다. IP 주소가 바뀌어도 그룹만 같으면 자동으로 인식되므로 매우 편리하고 안전합니다.\n\n다른 옵션인 C(NLB)는 IP 주소 기반으로만 막을 수 있어 서버가 늘어나거나 바뀔 때마다 규칙을 일일이 수정해야 하는 번거로움이 있습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "Auto Scaling": "서버 부하에 따라 자동으로 인스턴스 수를 늘리거나 줄이는 기능"
+      "Security Group (보안 그룹)": "서버의 가상 방화벽으로, 어떤 주소나 어떤 그룹에서 오는 트래픽을 허용할지 결정함",
+      "Application Load Balancer (ALB)": "여러 대의 앱 서버에 골고루 트래픽을 나눠주는 똑똑한 안내 데스크",
+      "Chaining (체이닝)": "보안 그룹 설정 시 특정 IP 대신 다른 보안 그룹의 ID를 허용 대상으로 지정하는 똑똑한 연동 기법"
     }
   },
   {
     "id": 615,
-    "question": "한 회사가 Amazon Elastic Kubernetes Service(Amazon EKS)에서 고객을 대상으로 하는 \n중요한 애플리케이션을 실행하고 있습니다. 애플리케이션에는 마이크로서비스 아키텍처가 \n있습니다. 회사는 중앙 위치에서 애플리케이션의 측정항목과 로그를 수집, 집계, 요약하는 \n솔루션을 구현해야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "EKS에서 돌아가는 수많은 작은 서비스(마이크로서비스)들의 건강 상태와 로그를 한곳에서 예쁘게 요약해서 보고 싶습니다. 어떤 툴이 적당할까요?",
     "options": [
-      "기존 EKS 클러스터에서 Amazon CloudWatch 에이전트를 실행합니다. CloudWatch \n콘솔에서 지표와 로그를 봅니다.",
-      "기존 EKS 클러스터에서 AWS App Mesh 를 실행합니다. App Mesh 콘솔에서 지표와 \n로그를 확인하세요.",
-      "데이터 이벤트를 캡처하도록 AWS CloudTrail 을 구성합니다. Amazon OpenSearch \nService 를 사용하여 CloudTrail 을 쿼리합니다.",
-      "기존 EKS 클러스터에 Amazon CloudWatch Container Insights\n를 구성합니다. \nCloudWatch 콘솔에서 지표와 로그를 봅니다."
+      "모든 서버에 CloudWatch 에이전트를 수동으로 깔고 텍스트 로그 파일을 직접 훑어봅니다.",
+      "App Mesh라는 통신 관리 툴을 써서 서비스들 사이의 대화 로그를 엿듣습니다.",
+      "CloudTrail을 켜서 누가 어떤 조작을 했는지 감사 일지를 OpenSearch로 검색합니다.",
+      "EKS에 'CloudWatch Container Insights'를 활성화하여 대시보드에서 한눈에 확인합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121154-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 D입니다.\n\n컨테이너들의 건강 검진 보고서라고 할 수 있는 'Container Insights'를 켜면 됩니다. CPU 사용량, 메모리, 네트워크 성능은 물론이고 개별 서비스의 로그까지 AWS가 알아서 수집해서 알록달록한 그래프로 보여줍니다. 쿠버네티스 환경에 가장 최적화된 모니터링 방식입니다.\n\n다른 옵션인 C(CloudTrail)는 '누가 서버를 껐나?' 같은 관리 기록을 보는 용도이지, 앱 내부의 지표를 보는 용도는 아닙니다.",
+    "glossary": {
+      "CloudWatch Container Insights": "컨테이너 환경의 지표와 로그를 자동으로 수집하여 분석해주고 시각화해주는 전문 서비스",
+      "Metrics (측정항목/지표)": "CPU, 메모리 등 시스템의 상태를 숫자로 나타낸 데이터",
+      "Microservices (마이크로서비스)": "하나의 거대 서비스를 여러 개의 작은 독립된 앱으로 쪼개서 운영하는 유행하는 설계법"
+    }
   },
   {
     "id": 616,
-    "question": "한 회사가 AWS 에 최신 제품을 배포했습니다. 제품은 Network Load Balancer 뒤의 Auto \nScaling 그룹에서 실행됩니다. 회사는 제품의 객체를 Amazon S3 버킷에 저장합니다. \n이 회사는 최근 자사 시스템에 대한 악의적인 공격을 경험했습니다. 회사에는 AWS 계정의 \n악의적인 활동, 워크로드 및 S3 버킷에 대한 액세스 패턴을 지속적으로 모니터링하는 \n\n=== PAGE 568 ===\n솔루션이 필요합니다. 또한 솔루션은 의심스러운 활동을 보고하고 대시보드에 정보를 \n표시해야 합니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "누군가 우리 AWS 계정을 해킹하려고 시도하거나, S3 버킷에 수상한 방식으로 접근하는 걸 실시간으로 감시하고 싶습니다. 대시보드까지 깔끔하게 제공하는 조합은?",
     "options": [
-      "결과를 모니터링하고 AWS Config 에 보고하도록 Amazon Macie 를 구성합니다.",
-      "결과를 모니터링하고 AWS CloudTrail 에 보고하도록 Amazon Inspector 를 구성합니다.",
-      "결과를 모니터링하고 AWS Security Hub\n에 보고하도록 Amazon GuardDuty\n를 \n구성합니다.",
-      "결과를 모니터링하고 Amazon EventBridge 에 보고하도록 AWS Config 를 구성합니다."
+      "Macie 서비스를 써서 개인 정보 유출만 감시하고 Config로 보고합니다.",
+      "Inspector로 서버 보안 취약점만 체크하고 CloudTrail에 로그를 남깁니다.",
+      "GuardDuty로 악의적 활동을 24시간 감시하고, 결과를 Security Hub에서 모아 봅니다.",
+      "Config 기능을 써서 설정 바뀐 것만 체크하고 EventBridge로 알람을 줍니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121177-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAmazon GuardDuty 는 AWS 계정과 워크로드 전체에서 악의적인 활동과 무단 행동을 \n지속적으로 모니터링하는 위협 탐지 서비스입니다. GuardDuty 는 AWS CloudTrail 이벤트 \n로그, Amazon VPC 흐름 로그 및 DNS 로그와 같은 데이터 소스를 분석하여 손상된 \n인스턴스, 정찰, 포트 스캐닝 및 데이터 유출과 같은 잠재적인 위협을 식별합니다. \nGuardDuty 는 AWS 계정 및 워크로드의 보안 상태에 대한 포괄적인 보기를 제공하는 \n서비스인 AWS Security Hub 에 조사 결과를 보고할 수 있습니다. Security Hub 는 여러 AWS \n서비스 및 파트너 솔루션의 보안 경고를 집계, 구성 및 우선순위를 지정하여 대시보드에 \n표시합니다. 이 솔루션은 AWS 계정의 악의적인 활동, 워크로드 및 S3 버킷에 대한 액세스 \n패턴을 지속적으로 모니터링, 보고 및 시각화할 수 있으므로 요구 사항을 충족합니다.",
+    "explanation": "정답은 C입니다.\n\nAWS의 인공지능 보안 보안팀인 'GuardDuty'는 계정 탈취나 비정상적인 접근 패턴을 귀신같이 찾아냅니다. 여기서 찾아낸 정보들을 'Security Hub'라는 종합 관제 센터로 보내면, 알기 쉬운 대시보드 형태로 리스크를 한눈에 파악할 수 있습니다. 가장 강력한 보안 감시 듀오입니다.\n\n다른 옵션인 A(Macie)는 데이터 내용물이 '개인 정보(카드번호 등)'인지를 확인하는 용도이지, 해커의 공격 패턴을 감시하는 용도는 아닙니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간",
-      "CloudTrail": "AWS 계정에서 일어나는 모든 활동을 기록하는 감사 서비스"
+      "Amazon GuardDuty": "머신러닝과 위협 정보를 활용해 AWS 계정과 리소스에 대한 예기치 못한 활동을 찾아내는 탐정 서비스",
+      "AWS Security Hub": "여러 보안 서비스(GuardDuty, Inspector 등)의 결과를 한곳에 모아 우선순위를 정하고 통합 관리하는 관제 센터",
+      "Malicious Activity (악의적 활동)": "해킹, 데이터 도난, 이상 접속 등 시스템에 해를 끼치는 모든 행위"
     }
   },
   {
     "id": 617,
-    "question": "회사에서 온프레미스 데이터 센터를 AWS 로 마이그레이션하려고 합니다. 데이터 센터는 \nNFS 기반 파일 시스템에 데이터를 저장하는 스토리지 서버를 호스팅합니다. 스토리지 \n서버는 200GB 의 데이터를 보유합니다. 회사는 기존 서비스를 중단하지 않고 데이터를 \n마이그레이션해야 합니다. AWS\n의 여러 리소스는 NFS 프로토콜을 사용하여 데이터에 \n액세스할 수 있어야 합니다. \n이러한 요구 사항을 가장 비용 효율적으로 충족하는 단계 조합은 무엇입니까? (2 개 선택)",
+    "question": "사무실 공유 드라이브(NFS)에 있는 200GB 데이터를 AWS로 이사하려 합니다. 여러 서버가 동시에 이 데이터를 읽어야 하고, 서비스 중단 없이 옮기고 싶을 때 최고의 듀오는?",
     "options": [
-      "Lustre 파일 시스템용 Amazon FSx 를 생성합니다.",
-      "Amazon Elastic File System(Amazon EFS) 파일 시스템을 생성합니다.",
-      "데이터를 수신할 Amazon S3 버킷을 생성합니다.",
-      "운영 체제 복사 명령을 수동으로 사용하여 데이터를 AWS 대상으로 푸시합니다.",
-      "온프레미스 데이터 센터에 AWS DataSync 에이전트를 설치합니다. 온프레미스 위치와 \n\n=== PAGE 569 ===\nAWS 간에 DataSync 작업을 사용합니다."
+      "FSx for Lustre 저장소를 만들고 수동으로 복사합니다.",
+      "Amazon EFS(탄력적 파일 시스템)를 먼저 만들고 대기시킵니다.",
+      "S3 버킷을 만들고 모든 데이터를 객체 형태로 업로드합니다.",
+      "리눅스 전송 명령어(cp, scp)를 직접 쳐서 수동으로 며칠 동안 전송합니다.",
+      "사무실에 'AWS DataSync' 에이전트를 심고, EFS를 목적지로 설정해 동기화를 돌립니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121176-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n102 문제와 중복",
-    "glossary": {}
+    "answer": [1, 4],
+    "explanation": "정답은 B, E(원문 index 1, 4)입니다.\n\nNFS 방식(공유 드라이브)을 AWS에서도 그대로 쓰려면 'Amazon EFS'가 최선입니다. 여기에 'AWS DataSync'라는 전문 이사 서비스를 더하면, 사무실 데이터를 가동 중단 없이 실시간으로 AWS EFS에 복제해줍니다. 속도도 빠르고 중간에 전송이 끊겨도 알아서 다시 이어주므로 매우 든든합니다.\n\n다른 옵션인 C(S3)는 파일 방식(NFS)과 성격이 달라서 기존 앱들이 데이터를 못 읽을 수 있어 적합하지 않습니다.",
+    "glossary": {
+      "Amazon EFS": "여러 서버가 공유해서 쓸 수 있는 용량이 무제한으로 늘어나는 클라우드용 파일 저장소",
+      "AWS DataSync": "NFS, SMB 등 로컬 데이터를 AWS로 광속으로 옮겨주는 대규모 전송 전문 서비스",
+      "NFS (Network File System)": "네트워크를 통해 여러 컴퓨터가 하나의 하드디스크를 내 거처럼 같이 쓰는 표준 규격"
+    }
   },
   {
     "id": 618,
-    "question": "한 회사에서는 us-east-1 리전에 볼륨으로 마운트된 SMB 파일 공유가 있는 Amazon EC2 \n인스턴스에 Amazon FSx for Windows File Server 를 사용하려고 합니다. 회사는 계획된 \n시스템 유지 관리 또는 계획되지 않은 서비스 중단에 대해 5 분의 복구 지점 목표(RPO)를 \n가지고 있습니다. 회사는 파일 시스템을 us-west-2 리전에 복제해야 합니다. 복제된 \n데이터는 5 년 동안 어떤 사용자도 삭제해서는 안 됩니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "미국 동부의 윈도우 파일 서버(FSx)를 서부 리전에 실시간 복제해두고 싶습니다. RPO는 5분 이내여야 하고, 복제된 데이터는 법에 따라 5년간 절대 삭제 안 되게 잠가야 한다면?",
     "options": [
-      "단일 AZ 2 배포 유형을 사용하는 us-east-1 에 FSx for Windows File Server 파일 \n시스템을 생성합니다. AWS Backup 을 사용하여 백업을 us-west-2 에 복사하는 백업 규칙이 \n포함된 일일 백업 계획을 생성합니다. us-west-2 의 대상 볼트에 대해 규정 준수 모드로 \nAWS Backup Vault Lock 을 구성합니다. 최소 기간을 5 년으로 구성합니다.",
-      "다중 AZ 배포 유형이 있는 us-east-1 에 FSx for Windows File Server 파일 시스템을 \n생성합니다. AWS Backup 을 사용하여 백업을 us-west-2 에 복사하는 백업 규칙이 포함된 \n일일 백업 계획을 생성합니다. us-west-2 의 대상 볼트에 대해 거버넌스 모드에서 AWS \nBackup Vault Lock 을 구성합니다. 최소 기간을 5 년으로 구성합니다.",
-      "다중 AZ 배포 유형이 있는 us-east-1 에 FSx for Windows File Server 파일 시스템을 \n생성합니다. AWS Backup 을 사용하여 백업을 us-west-2 에 복사하는 백업 규칙이 포함된 \n일일 백업 계획을 생성합니다. us-west-2 의 대상 볼트에 대해 규정 준수 모드로 AWS \nBackup Vault Lock 을 구성합니다. 최소 기간을 5 년으로 구성합니다.",
-      "단일 AZ 2 배포 유형이 있는 us-east-1 에 FSx for Windows File Server 파일 시스템을 \n생성합니다. AWS Backup 을 사용하여 백업을 us-west-2 에 복사하는 백업 규칙이 포함된 \n일일 백업 계획을 생성합니다. us-west-2 의 대상 볼트에 대해 거버넌스 모드에서 AWS \nBackup Vault Lock 을 구성합니다. 최소 기간을 5 년으로 구성합니다."
+      "단일 영역(Single AZ) FSx를 쓰고 AWS Backup으로 매일 복사합니다. 금고 잠금(Vault Lock)은 일반 모드로 합니다.",
+      "다중 영역(Multi-AZ) FSx를 선택하고 일일 백업을 돌립니다. 금고는 관리자도 못 건드리는 '거버넌스' 모드로 잠급니다.",
+      "다중 영역(Multi-AZ) FSx를 기본으로 하고 AWS Backup을 통해 서부 리전으로 실시간 복사한 뒤, '규정 준수(Compliance)' 모드로 Vault Lock을 5년 겁니다.",
+      "단일 영역 FSx를 쓰되 5년 보존 정책만 걸고 서부 리전으로 천천히 복사합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121219-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n안정성을 위해 'Multi-AZ'를 쓰는 게 기본이며, 중요한 데이터 삭제 방지는 'Vault Lock - Compliance(규정 준수) 모드'가 최강입니다. 이 모드로 5년을 설정하면 AWS 직원이나 사장님이 와도 5년 전엔 절대 데이터를 지울 수 없습니다. RPO 5분 조건은 AWS Backup의 주기적인 리전 복사 기능으로 충족 가능합니다.\n\n다른 옵션인 B(거버넌스 모드)는 적절한 권한을 가진 관리자는 삭제할 수 있어 '절대 삭제 금지'라는 강력한 요건에는 규정 준수 모드(C)가 더 어울립니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Amazon FSx for Windows File Server": "윈도우 서버에서 쓰는 공유 드라이브를 AWS에서 그대로 쓰게 해주는 서비스",
+      "AWS Backup Vault Lock": "백업된 금고를 잠가서 보존 기간이 끝나기 전까지는 누구도 삭제나 수정을 못 하게 막는 기술",
+      "Compliance Mode (규정 준수 모드)": "잠금 설정을 한 번 하면 그 누구(심지어 루트 계정)도 취소하거나 삭제할 수 없는 강력한 보안 옵션"
     }
   },
   {
     "id": 619,
-    "question": "=== PAGE 570 ===\n솔루션 아키텍트는 표준 보안 제어를 유지하면서 AWS Organizations 를 통해 개발자에게 \n개별 AWS 계정을 제공하려는 회사를 위한 보안 솔루션을 설계하고 있습니다. 개별 \n개발자는 자신의 계정에 대해 AWS 계정 루트 사용자 수준 액세스 권한을 가지게 되므로 \n솔루션 설계자는 새 개발자 계정에 적용되는 필수 AWS CloudTrail 구성이 수정되지 \n않았는지 확인하려고 합니다. \n이러한 요구사항을 충족하는 작업은 무엇인가요?",
+    "question": "개발자들에게 개인 AWS 계정을 줬는데, 이 친구들이 감시 카메라(CloudTrail)를 몰래 끄거나 설정을 바꿀까 봐 걱정됩니다. 관리자 권한을 줘도 이건 못 건드리게 하려면?",
     "options": [
-      "CloudTrail 변경을 금지하는 IAM 정책을 생성합니다. 루트 사용자에게 연결합니다.",
-      "조직 추적 옵션이 활성화된 개발자 계정 내에서 CloudTrail 에 새 추적을 생성합니다.",
-      "CloudTrail 변경을 금지하는 서비스 제어 정책(SCP)을 생성하고 이를 개발자 계정에 \n연결합니다.",
-      "마스터 계정의 Amazon 리소스 이름(ARN)에서만 변경을 허용하는 정책 조건을 \n사용하여 CloudTrail 에 대한 서비스 연결 역할을 생성합니다."
+      "각 계정의 루트(Root) 아이디에 'CloudTrail 금지' IAM 정책을 부착합니다.",
+      "계정 하나하나 들어가서 '조직 추적' 옵션을 켜달라고 개발자들에게 간곡히 부탁합니다.",
+      "서비스 제어 정책(SCP)을 만들어 'CloudTrail 조작 금지' 규칙을 모든 개발자 계정에 강제로 적용합니다.",
+      "서비스 연결 역할(SLR)을 만들어서 마스터 계정 주인만 수정 가능하게 막습니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121220-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\nAWS Organizations의 최강 무기인 'SCP'는 계정의 주인(Root 사용자)조차도 거부할 수 없는 절대적인 규칙입니다. SCP로 특정 서비스(CloudTrail 등)의 설정을 못 바꾸게 못 박아버리면, 개발자가 아무리 높은 권한을 가졌어도 감시 카메라를 끌 수 없어 보안이 철저히 유지됩니다.\n\n다른 옵션인 A는 루트 사용자 본인이 본인 정책을 떼어버릴 수 있어 완벽한 방패가 되지 못합니다.",
     "glossary": {
-      "CloudTrail": "AWS 계정에서 일어나는 모든 활동을 기록하는 감사 서비스"
+      "Service Control Policy (SCP)": "조직 내의 계정들이 할 수 있는 행동을 제한하는 가장 강력한 중앙 집권적 보안 정책",
+      "CloudTrail": "AWS에서 누가 언제 무엇을 했는지 모든 행동을 녹화하는 블랙박스나 CCTV 같은 역할",
+      "Root User (루트 사용자)": "계정의 모든 권한을 가진 절대자이지만, SCP 앞에서는 속수무책임"
     }
   },
   {
     "id": 620,
-    "question": "한 회사가 AWS 클라우드에 비즈니스에 중요한 애플리케이션을 배포할 계획입니다. \n애플리케이션에는 일관되고 지연 시간이 짧은 성능을 갖춘 내구성 있는 스토리지가 \n필요합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 어떤 유형의 스토리지를 권장해야 \n합니까?",
+    "question": "우리 비즈니스의 핵심 서버에는 아주 튼튼하면서도 로딩 속도가 한결같이 빠른 저장 장치가 필요합니다. 지연 시간(Latency)이 거의 없는 최고의 SSD 볼륨은?",
     "options": [
-      "인스턴스 스토어 볼륨",
-      "Memcached 클러스터용 Amazon ElastiCache",
-      "프로비저닝된 IOPS SSD Amazon Elastic Block Store(Amazon EBS) 볼륨",
-      "처리량 최적화 HDD Amazon Elastic Block Store(Amazon EBS) 볼륨"
+      "임시 저장은 빠르지만 끄면 날아가는 '인스턴스 스토어'를 메인으로 씁니다.",
+      "메모리 캐시 서비스인 ElastiCache를 하드디스크 대용으로 사용합니다.",
+      "원하는 속도를 돈 주고 예약해서 쓰는 '프로비저닝된 IOPS SSD(io2/io1)' 볼륨을 선택합니다.",
+      "용량은 크고 싸지만 속도 편차가 큰 HDD(Throughput Optimized) 방식을 고수합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121221-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n성능의 일관성이 가장 중요하다면 '프로비저닝된 IOPS SSD'가 정답입니다. 이 녀석은 \"초당 만 번의 클릭(IOPS) 속도를 항상 유지해줘!\"라고 돈을 더 내고 약속받는 서비스라, 트래픽이 몰려도 속도가 떨어지지 않고 한결같은 쾌적함을 보장합니다.\n\n다른 옵션인 A는 서버를 끄면 데이터가 증발해버리므로 '내구성 있는 저장소'라는 조건에 탈락입니다.",
+    "glossary": {
+      "Provisioned IOPS SSD": "입출력 속도(IOPS)를 미리 예약하여 성능을 100% 보장받는 최고급 기업용 SSD 볼륨",
+      "Latency (지연 시간)": "데이터가 오가는 데 걸리는 미세한 대기 시간. 낮을수록 빠릿빠릿함",
+      "Durability (내구성)": "데이터가 망가지지 않고 오래 보존되는 신뢰도를 뜻함"
+    }
   },
   {
     "id": 621,
-    "question": "온라인 사진 공유 회사는 us-west-1 지역에 있는 Amazon S3 버킷에 사진을 저장합니다. \n회사는 us-east-1 지역에 모든 새 사진의 사본을 저장해야 합니다. \n최소한의 운영 노력으로 이 요구 사항을 충족할 수 있는 솔루션은 무엇입니까? \n\n=== PAGE 571 ===",
+    "question": "미국 서부(us-west-1)에 사진을 올리면, 자동으로 동부(us-east-1) 리전에 복사본이 생기게 하고 싶습니다. 사람 손 안 타고 세팅하는 가장 쉬운 방법은?",
     "options": [
-      "us-east-1 에 두 번째 S3 버킷을 생성합니다. S3 교차 리전 복제를 사용하여 기존 S3 \n버킷의 사진을 두 번째 S3 버킷으로 복사합니다.",
-      "기존 S3 버킷의 CORS(교차 원본 리소스 공유) 구성을 생성합니다. CORS 규칙의 \nAllowedOrigin 요소에 us-east-1 을 지정합니다.",
-      "여러 가용 영역에 걸쳐 us-east-1 에 두 번째 S3 버킷을 생성합니다. S3 수명 주기 \n규칙을 생성하여 두 번째 S3 버킷에 사진을 저장합니다.",
-      "us-east-1 에 두 번째 S3 버킷을 생성합니다. 객체 생성 및 업데이트 이벤트에 대한 S3 \n이벤트 알림을 구성하여 AWS Lambda 함수를 호출하여 기존 S3 버킷의 사진을 두 번째 \nS3 버킷으로 복사합니다."
+      "S3의 '교차 리전 복제(CRR)' 기능을 켜서 새 사진이 올라올 때마다 알아서 복사하게 합니다.",
+      "CORS(교차 출처) 설정을 통해 동부 지역 사용자가 서부 데이터를 직접 읽게 합니다.",
+      "S3 수명 주기 규칙을 만들어 0일 뒤에 동부 리전으로 강제 이사를 시킵니다.",
+      "람다(Lambda) 함수를 하나 짜서 사진이 올라올 때마다 동부로 복사하라는 코드를 심습니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121222-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\nS3에는 '복제(Replication)'라는 아주 편한 기능이 있습니다. 한 번만 설정해두면 AWS가 뒤에서 실시간으로 새 파일을 다른 리전으로 옮겨줍니다. 코딩 한 줄 없이 리전 간 백업을 구현할 수 있는 가장 표준적이고 쉬운 방법입니다.\n\n다른 옵션인 D도 가능은 하지만, 람다를 직접 관리해야 하므로 '최소 운영 노력'이라는 조건에서 S3 순정 기능(A)에 밀립니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "Cross-Region Replication (CRR)": "서로 다른 지리적 리전에 있는 S3 버킷 사이에 데이터를 자동으로 동기화하는 기능",
+      "S3 (Simple Storage Service)": "AWS에서 제공하는 사용한 만큼만 돈 내는 무제한 파일 창고",
+      "Region (리전)": "지리적으로 멀리 떨어진 데이터 센터 군락 (예: 서울, 도쿄, 버지니아 등)"
     }
   },
   {
     "id": 622,
-    "question": "한 회사에서 구독자를 위한 새로운 웹 애플리케이션을 만들고 있습니다. 애플리케이션은 \n정적 단일 페이지와 영구 데이터베이스 계층으로 구성됩니다. 아침에 4\n시간 동안 \n애플리케이션의 사용자는 수백만 명에 달하지만 나머지 시간에는 애플리케이션의 사용자가 \n수천 명에 불과합니다. 회사의 데이터 설계자는 스키마를 빠르게 발전시킬 수 있는 기능을 \n요청했습니다. \n이러한 요구 사항을 충족하고 가장 뛰어난 확장성을 제공하는 솔루션은 무엇입니까? (2 개 \n선택)",
+    "question": "아침엔 수백만 명이 몰리고 나머지 시간엔 조용한 웹 앱을 만드려 합니다. 데이터 구조(스키마)도 수시로 바뀔 것 같은데, 확장성 갑인 2가지 조합은?",
     "options": [
-      "Amazon DynamoDB\n를 데이터베이스 솔루션으로 배포합니다. 온디맨드 용량을 \n프로비저닝합니다.",
-      "Amazon Aurora 를 데이터베이스 솔루션으로 배포합니다. 서버리스 DB 엔진 모드를 \n선택합니다.",
-      "Amazon DynamoDB 를 데이터베이스 솔루션으로 배포합니다. DynamoDB Auto Scaling 이 \n활성화되어 있는지 확인합니다.",
-      "정적 콘텐츠를 Amazon S3 버킷에 배포합니다. S3 버킷을 원본으로 사용하여 Amazon \nCloudFront 배포를 프로비저닝합니다.",
-      "Auto Scaling 그룹의 Amazon EC2 인스턴스 전체에 정적 콘텐츠용 웹 서버를 배포합니다. \nAmazon Elastic File System(Amazon EFS) 볼륨의 콘텐츠를 주기적으로 새로 고치도록 \n인스턴스를 구성합니다."
+      "DynamoDB를 쓰고 '온디맨드' 모드로 설정해 트래픽 변화에 무한 대응합니다.",
+      "Aurora DB를 쓰고 서버리스 모드로 동작시켜서 비용을 아낍니다.",
+      "기존처럼 DynamoDB를 쓰되, 사람이 예상 트래픽을 미리 입력하는 '오토 스케일링'을 씁니다.",
+      "정적 페이지(이미지 등)는 S3에 담고, 전 세계 배달망인 CloudFront로 쏴줍니다.",
+      "웹 서버 수십 대를 띄우고 공유 드라이브(EFS)에 파일을 넣어 동기화합니다."
     ],
-    "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121223-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "answer": [0, 3],
+    "explanation": "정답은 A, D(원문 index 0, 3)입니다.\n\n'수백만 명 접속 vs 한산함' + '유연한 데이터 구조'라는 키워드에는 DynamoDB 온디맨드(A)가 찰떡궁합입니다. 서버 사양 고민 없이 쓰는 만큼만 돈 내면 되고 구조 변경도 자유롭습니다. 여기에 정적 파일은 S3+CloudFront(D) 조합으로 처리하면 전 세계 어디서든 수백만 명이 동시에 접속해도 끄떡없는 초강력 웹 앱이 탄생합니다.\n\n다른 옵션인 B도 좋지만, NoSQL인 DynamoDB가 스키마 변경이 잦은 환경에서는 더 유연하고 확장성이 뛰어납니다.",
+    "glossary": {
+      "DynamoDB On-demand": "서버 용량을 미리 정하지 않고, 들어오는 요청 횟수만큼만 돈을 내는 무한 확장 NoSQL DB",
+      "CloudFront": "이미지나 정적 파일을 전 세계 곳곳의 Edge 서버에 복사해두고 가장 가까운 곳에서 빠르게 쏴주는 서비스",
+      "Schema-less (유연한 구조)": "정해진 틀 없이 데이터 항목을 수시로 맘껏 추가하거나 뺄 수 있는 데이터베이스의 특징"
+    }
   },
   {
     "id": 623,
-    "question": "회사는 Amazon API Gateway 를 사용하여 타사 서비스 공급자가 액세스하는 REST API 를 \n관리합니다. 회사는 SQL 주입 및 크로스 사이트 스크립팅 공격으로부터 REST API 를 \n보호해야 합니다. \n이러한 요구 사항을 충족하는 가장 운영 효율적인 솔루션은 무엇입니까?",
+    "question": "API Gateway로 만든 우리 REST API가 SQL 인젝션이나 해킹 공격을 받지 않게 방패를 치고 싶습니다. 가장 빠르고 정확한 운영 방법은?",
     "options": [
-      "AWS Shield 를 구성합니다.",
-      "AWS WAF 를 구성합니다.",
-      "Amazon CloudFront 배포를 사용하여 API 게이트웨이를 설정합니다. CloudFront 에서 \nAWS Shield 를 구성합니다.",
-      "Amazon CloudFront 배포로 API 게이트웨이를 설정합니다. CloudFront 에서 AWS WAF 를 \n구성합니다."
+      "DDoS 방어 전용인 AWS Shield를 켭니다.",
+      "똑똑한 웹 전용 방화벽인 'AWS WAF'를 설정하여 해킹 패턴을 차단합니다.",
+      "CloudFront 앞에 Shield를 깔고 모든 트래픽을 검사하게 합니다.",
+      "CloudFront 뒤에 WAF를 두고 그 뒤에 다시 API Gateway를 엮는 복잡한 구조를 짭니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/121172-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 B입니다.\n\nSQL 인젝션이나 크로스 사이트 스크립팅(XSS) 같은 애플리케이션 계층의 '지능형 해킹'을 막는 데는 AWS WAF가 정답입니다. API Gateway와 WAF는 단 몇 번의 클릭으로 서로 연결할 수 있어 운영이 매우 간편하고 보안 효과도 뛰어납니다.\n\n다른 옵션인 A(Shield)는 대규모 트래픽으로 서버를 마비시키는 DDoS 공격을 막는 것이 주 임무라, 교묘한 SQL 인젝션 수법을 막기엔 부족합니다.",
+    "glossary": {
+      "AWS WAF": "웹 사이트의 주소나 내용을 분석해 나쁜 의도의 메시지가 섞여 있는지 감시하고 막아주는 필터",
+      "SQL Injection": "로그인 창 같은 입력 칸에 특수한 DB 명령어를 넣어 서버를 속이고 정보를 빼가는 대표적인 해킹 수법",
+      "REST API": "웹 서비스끼리 대화하기 위해 사용하는 표준화된 통신 약속"
+    }
   },
   {
     "id": 624,
-    "question": "회사에서는 사용자에게 AWS 리소스에 대한 액세스 권한을 제공하려고 합니다. 이 회사에는 \n1,500\n명의 사용자가 있으며 회사 네트워크의 Active Directory 사용자 그룹을 통해 \n온프레미스 리소스에 대한 액세스를 관리합니다. 그러나 회사는 사용자가 리소스에 \n액세스하기 위해 다른 ID 를 유지해야 하는 것을 원하지 않습니다. 솔루션 아키텍트는 \n온프레미스 리소스에 대한 액세스를 유지하면서 AWS 리소스에 대한 사용자 액세스를 \n관리해야 합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "회사 직원 1,500명이 쓰는 윈도우 ID(Active Directory)를 그대로 써서 AWS 리소스에 접속하게 하고 싶습니다. 아이디를 새로 안 만들고 싶은데 어떤 기술이 필요할까요?",
     "options": [
-      "회사의 각 사용자에 대해 IAM 사용자를 생성합니다. 각 사용자에게 적절한 정책을 \n연결합니다.",
-      "Active Directory 사용자 풀과 함께 Amazon Cognito 를 사용하십시오. 적절한 정책이 \n연결된 역할을 생성합니다.",
-      "적절한 정책이 연결된 교차 계정 역할을 정의합니다. 역할을 Active Directory 그룹에 \n매핑합니다.",
-      "SAML(Security Assertion Markup Language) 2 0 기반 페더레이션을 구성합니다. 적절한 \n정책이 연결된 역할을 생성합니다. 역할을 Active Directory 그룹에 매핑합니다."
+      "어쩔 수 없이 1,500명의 IAM 아이디를 하나씩 일일이 다 만듭니다.",
+      "Amazon Cognito를 AD와 억지로 엮어서 복잡한 로그인 앱을 따로 개발합니다.",
+      "AD 그룹명을 AWS 역할(Role)과 매핑하는 교차 계정 기술을 도입합니다.",
+      "SAML 2.0이라는 국제 표준 연동 방식을 사용하여 회사의 AD 그룹과 AWS 역할(Role)을 연결(Mapping)합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/125336-exam-aws-certified-sol",
-    "glossary": {}
+    "explanation": "정답은 D입니다.\n\n'SAML 2.0 연동'은 기업용 통합 로그인(SSO)의 표준입니다. 회사의 로그인 서버(AD)에서 본인 확인이 끝나면, AWS가 그 정보를 믿고 해당 직원에게 알맞은 권한(Role)을 잠시 빌려주는 방식입니다. 덕분에 직원은 원래 쓰던 ID로 로그인하면 되고, 관리자는 1,500개의 아이디를 따로 관리할 필요가 없어집니다.\n\n다른 옵션인 A는 퇴사자 관리 등이 전혀 안 되어 보안과 운영 면에서 최악의 선택입니다.",
+    "glossary": {
+      "SAML 2.0 (Security Assertion Markup Language)": "서로 다른 시스템 간에 로그인 인증 정보를 안전하게 주고받기 위한 국제 표준 규격",
+      "Federation (페더레이션/연합)": "한 서비스의 집 주인 증명을 다른 서비스에서도 그대로 인정해주는 '신뢰' 기반의 로그인 연동 기술",
+      "Active Directory": "회사 내의 모든 서버와 사용자 아이디를 한곳에서 관리하는 윈도우용 주소록/관리 대장"
+    }
   },
   {
     "id": 625,
-    "question": "한 회사가 여러 Application Load Balancer 뒤에 웹사이트를 호스팅하고 있습니다. 회사는 \n전 세계적으로 콘텐츠에 대해 다양한 배포 권한을 가지고 있습니다. 솔루션 설계자는 배포 \n권한을 위반하지 않고 사용자에게 올바른 콘텐츠가 제공되도록 해야 합니다. \n솔루션 설계자는 이러한 요구 사항을 충족하기 위해 어떤 구성을 선택해야 합니까?",
+    "question": "전 세계적으로 콘텐츠마다 판권(배포 권한)이 다릅니다. 한국 손님에겐 한국 영화를, 미국 손님에겐 미국 영화가 나가게 주소를 분기해주려면 어떤 정책이 필요할까요?",
     "options": [
-      "AWS WAF 로 Amazon CloudFront 를 구성합니다.",
-      "AWS WAF 로 Application Load Balancer 구성",
-      "지리적 위치 정책으로 Amazon Route 53 구성",
-      "지리 근접 라우팅 정책으로 Amazon Route 53 구성"
+      "WAF 방화벽으로 외국인 IP를 다 차단한 뒤 한국어 페이지만 보여줍니다.",
+      "로드 밸런서(ALB) 설정에서 국가 코드를 분석해 직접 라우팅 규칙을 짭니다.",
+      "Route 53에서 '지리적 위치(Geolocation)' 라우팅 정책을 사용해 대륙/국가별로 다른 서버 주소를 알려줍니다.",
+      "Route 53에서 '지리 근접(Geoproximity)' 라우팅을 써서 편차 기반으로 분산시킵니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/125337-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n판권 문제는 '어느 나라에서 접속했느냐'가 핵심입니다. Route 53의 지리적 위치 라우팅을 쓰면, 접속자의 국가를 파악해 \"한국 손님은 한국 전용 서버 주소로 가세요\"라고 친절하게 안내해줄 수 있습니다. 판권 준수는 물론이고 현지 최적화된 콘텐츠 제공에도 아주 효과적입니다.\n\n다른 옵션인 D(지리 근접)는 물리적 거리뿐만 아니라 '가중치'를 섞어 트래픽 범위를 조절하는 데 쓰이는 더 복잡한 기술이라, 단순 국가별 분기인 Geolocation(C)이 문제의 의도에 더 정확히 부합합니다.",
+    "glossary": {
+      "Geolocation Routing (지리적 위치 라우팅)": "접속자의 국가나 대륙 정보를 보고 가장 알맞은 서버 주소를 알려주는 DNS 규칙",
+      "Amazon Route 53": "도메인 이름을 IP로 매칭해주며, 지능적인 라우팅으로 전 세계 트래픽을 지휘하는 교통 관제소",
+      "Distribution Rights (배포 권한/판권)": "특정 지역에서만 콘텐츠를 보여줄 수 있는 법적인 권리"
+    }
   }
 ];

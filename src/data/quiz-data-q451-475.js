@@ -1,388 +1,432 @@
 export const quizData = [
   {
     "id": 451,
-    "question": "회사에서 애플리케이션과 데이터베이스를 AWS 클라우드로 마이그레이션하고 있습니다. 이 \n회사는 Amazon Elastic Container Service(Amazon ECS), AWS Direct Connect 및 Amazon \nRDS 를 사용합니다. \n회사의 운영 팀에서 어떤 활동을 관리합니까? (3 개 선택)",
+    "question": "애플리케이션과 DB를 AWS로 마이그레이션하면서 ECS, Direct Connect, RDS를 도입했습니다. 여기서 AWS가 대신 해주지 않고 '우리 운영팀'이 직접 챙겨야 하는 업무 3가지는?",
     "options": [
-      "Amazon RDS 인프라 계층, 운영 체제 및 플랫폼 관리",
-      "Amazon RDS DB 인스턴스 생성 및 예약된 유지 관리 기간 구성",
-      "모니터링, 패치 관리, 로그 관리 및 호스트 침입 탐지를 위한 Amazon ECS 의 추가 \n\n=== PAGE 450 ===\n소프트웨어 구성 요소 구성",
-      "Amazon RDS 의 모든 마이너 및 메이저 데이터베이스 버전에 대한 패치 설치",
-      "데이터 센터에서 Amazon RDS 인프라의 물리적 보안 보장",
-      "Direct Connect 를 통해 이동하는 데이터의 암호화"
+      "RDS 인프라 계층, 운영 체제 및 하드웨어 플랫폼 관리",
+      "RDS DB 인스턴스를 생성하고 유지 관리 시간(Maintenance Window) 설정",
+      "ECS 보안을 위해 호스트 침입 탐지나 로그 관리용 소프트웨어를 추가로 설치 및 구성",
+      "RDS에서 돌아가는 모든 DB 엔진의 마이너/메이저 버전 패치 설치 작업",
+      "AWS 데이터 센터의 물리적 보안 시설 관리 및 감시",
+      "Direct Connect 전용선을 통해 전송되는 실제 데이터의 암호화 처리"
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109408-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "answer": [1, 2, 5],
+    "explanation": "정답은 B, C, F입니다.\n\nAWS 공동 책임 모델에 따라 AWS는 '클라우드 자체의 보안(물리 시설, 하드웨어)'을 책임지고, 고객은 '클라우드 내에서의 보안(데이터, 설정)'을 책임집니다. 하드웨어나 OS 관리는 AWS가 해주지만, 어떤 DB를 띄울지(B), 내 서비스에 필요한 보안 소프트웨어를 깔지(C), 그리고 전용선을 타고 흐르는 소중한 데이터를 암호화할지(F)는 전적으로 우리 운영팀의 몫입니다.\n\n다른 옵션인 A, D, E는 AWS가 관리해주는 영역이므로 고객이 직접 할 필요가 없거나 할 수 없는 일들입니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "Direct Connect": "전용선을 이용해 사내망과 AWS를 직접 연결하는 기술"
+      "Shared Responsibility Model (공동 책임 모델)": "AWS와 고객이 보안 및 관리에 대해 책임을 나누는 기본 원칙",
+      "Amazon ECS (Elastic Container Service)": "컨테이너화된 애플리케이션을 쉽게 실행하고 관리하게 해주는 도구",
+      "Direct Connect": "인터넷이 아닌 전용선을 통해 사내망과 AWS를 직접 연결하는 고속 통로"
     }
   },
   {
     "id": 452,
-    "question": "회사는 Amazon EC2 인스턴스에서 Java 기반 작업을 실행합니다. 작업은 매시간 실행되며 \n실행하는 데 10\n초가 걸립니다. 작업은 예약된 간격으로 실행되며 1GB\n의 메모리를 \n사용합니다. 작업이 사용 가능한 최대 CPU 를 사용하는 짧은 순간을 제외하고 인스턴스의 \nCPU 사용률은 낮습니다. 회사는 작업 실행 비용을 최적화하려고 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "매시간 정각에 딱 10초만 실행되는 Java 작업이 있습니다. 대부분의 시간에는 놀고 있고, 작업할 때만 잠깐 CPU를 세게 쓰는데 메모리는 1GB가 꼭 필요합니다. 비용을 가장 아끼는 방법은?",
     "options": [
-      "AWS App2Container(A2C)를 사용하여 작업을 컨테이너화합니다. 0.5 vCPU(가상 CPU) 및 \n1GB 메모리를 사용하여 AWS Fargate 에서 Amazon Elastic Container Service(Amazon ECS) \n작업으로 작업을 실행합니다.",
-      "메모리가 1GB 인 AWS Lambda 함수에 코드를 복사합니다. Amazon EventBridge 예약 \n규칙을 생성하여 매시간 코드를 실행합니다.",
-      "AWS App2Container(A2C)를 사용하여 작업을 컨테이너화합니다. 기존 Amazon Machine \nImage(AMI)에 컨테이너를 설치합니다. 태스크가 완료되면 스케줄이 컨테이너를 중지하는지 \n확인하십시오.",
-      "작업 완료 시 EC2 인스턴스를 중지하고 다음 작업이 시작될 때 EC2 인스턴스를 다시 \n시작하도록 기존 일정을 구성합니다."
+      "AWS App2Container로 작업물을 컨테이너로 만든 뒤, Fargate에서 최소 사양으로 24시간 띄워둡니다.",
+      "메모리를 1GB로 설정한 Lambda 함수에 코드를 넣고, EventBridge(CloudWatch Events) 예약 규칙으로 매시간 호출합니다.",
+      "EC2 인스턴스에 컨테이너를 설치하고, 작업이 없을 때는 수동으로 컨테이너 프로세스만 죽여둡니다.",
+      "작업이 끝날 때마다 EC2 서버를 아예 끄고(Stop), 한 시간 뒤에 다시 켜는(Start) 자동화 스크립트를 짭니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109521-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\n1시간에 딱 10초만 일하는 작업은 서버를 켜두는 것 자체가 낭비입니다. Lambda는 코드가 실행되는 '밀리초' 단위로만 요금을 내기 때문에 이런 간헐적 작업에 축복과도 같은 서비스입니다. 넉넉하게 메모리 1GB를 할당하고 EventBridge로 매시간 쿡 찔러주기만 하면, 남은 59분 50초 동안의 비용은 0원이 됩니다.\n\n다른 옵션인 D처럼 서버를 껐다 켰다 하는 건 부팅 시간도 걸리고 관리가 매우 번거로우며, 초 단위 과금인 Lambda보다 비쌉니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "AWS Lambda": "서버 관리 없이 코드만 실행하며, 실행 시간만큼만 비용을 내는 서버리스 컴퓨팅 서비스",
+      "Amazon EventBridge": "시스템 간의 이벤트를 연결하거나 정해진 시간에 작업을 실행하게 돕는 서비스",
+      "Compute Savings": "불필요한 자원 낭비를 줄여 클라우드 이용 요금을 최적화하는 과정"
     }
   },
   {
     "id": 453,
-    "question": "회사에서 Amazon EC2 데이터 및 여러 Amazon S3 버킷에 대한 백업 전략을 구현하려고 \n합니다. 규정 요구 사항으로 인해 회사는 특정 기간 동안 백업 파일을 보존해야 합니다. \n회사는 보유기간 동안 파일을 변조해서는 안됩니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "EC2 데이터와 S3 버킷 백업을 보관해야 하는데, 규정상 일정 기간 동안은 누구도 백업을 수정하거나 지워서는 안 됩니다. '박제' 수준의 강력한 백업 보호를 구현하려면?",
     "options": [
-      "AWS Backup 을 사용하여 거버넌스 모드에서 볼트 잠금이 있는 백업 볼트를 생성합니다. \n\n=== PAGE 451 ===\n필요한 백업 계획을 생성합니다.",
-      "Amazon Data Lifecycle Manager 를 사용하여 필요한 자동 스냅샷 정책을 생성합니다.",
-      "Amazon S3 파일 게이트웨이를 사용하여 백업을 생성합니다. 적절한 S3 수명 주기 \n관리를 구성합니다.",
-      "AWS Backup 을 사용하여 규정 준수 모드에서 볼트 잠금이 있는 백업 볼트를 생성합니다. \n필요한 백업 계획을 생성합니다."
+      "AWS Backup을 사용해 '거버넌스 모드'로 볼트 잠금(Vault Lock)을 설정합니다.",
+      "Data Lifecycle Manager를 써서 매일 자동으로 스냅샷만 찍어둡니다.",
+      "S3 파일 게이트웨이에 백업하고 수명 주기 정책으로 삭제를 막습니다.",
+      "AWS Backup을 사용해 '규정 준수(Compliance) 모드'로 볼트 잠금을 설정합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109410-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAWS Backup 은 컴퓨팅, 스토리지 및 데이터베이스 전반에서 AWS 서비스의 데이터 보호를 \n중앙 집중화하고 자동화할 수 있는 완전 관리형 서비스입니다. AWS Backup Vault Lock 은 \n백업 볼트에 대한 보안 및 제어를 강화하는 데 도움이 되는 백업 볼트의 선택적 기능입니다. \n규정 준수 모드에서 잠금이 활성화되고 유예 시간이 끝나면 고객, 계정/데이터 소유자 또는 \nAWS 가 볼트 구성을 변경하거나 삭제할 수 없습니다. 이렇게 하면 보존 기간이 만료되고 \n규정 요구 사항을 충족할 때까지 백업을 사용할 수 있습니다. \n \n참조: \n\ndocs.aws.amazon.com/aws-backup/latest/devguide/vaultlock.html",
+    "explanation": "정답은 D입니다.\n\n데이터 변조 방지(WORM)를 위한 끝판왕은 AWS Backup의 '규정 준수 모드 볼트 잠금'입니다. 이 모드를 활성화하면 보존 기간이 끝나기 전에는 루트 사용자나 AWS 직원조차도 백업을 지울 수 없습니다. 거버넌스 모드는 특정 권한이 있으면 해제가 가능하지만, 규정 준수 모드는 법적 요구 사항을 충족하기 위한 불멸의 자물쇠를 채우는 것입니다.\n\n다른 옵션들은 삭제 권한이 있는 관리자가 마음만 먹으면 지울 수 있는 구조라 '변조 불가' 조건을 완벽히 만족하기 어렵습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "AWS Backup Vault Lock": "백업 파일이 들어있는 금고(Vault)를 잠가서 삭제나 수정을 원천 차단하는 기능",
+      "Compliance Mode (규정 준수 모드)": "관리자조차 잠금을 해제할 수 없는 가장 강력한 불변성(Immutability) 옵션",
+      "WORM (Write Once Read Many)": "한 번 기록하면 읽기만 가능하고 수정/삭제는 불가능한 데이터 저장 방식"
     }
   },
   {
     "id": 454,
-    "question": "회사는 여러 AWS 리전 및 계정에 걸쳐 리소스를 보유하고 있습니다. 새로 고용된 솔루션 \n설계자는 이전 직원이 리소스 인벤토리에 대한 세부 정보를 제공하지 않은 것을 \n발견했습니다. 솔루션 설계자는 모든 계정에서 다양한 워크로드의 관계 세부 정보를 \n구축하고 매핑해야 합니다. \n운영상 가장 효율적인 방식으로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "전임자가 인벤토리 정리를 안 하고 퇴사해서, 현재 수많은 계정과 리전에 어떤 리소스들이 있고 서로 어떻게 연결되어 있는지 막막합니다. 자동으로 관계도를 그려주는 도구는?",
     "options": [
-      "AWS Systems Manager Inventory\n를 사용하여 상세 보기 보고서에서 맵 보기를 \n생성합니다.",
-      "AWS Step Functions\n를 사용하여 워크로드 세부 정보를 수집합니다. 워크로드의 \n아키텍처 다이어그램을 수동으로 작성합니다.",
-      "Workload Discovery on AWS 를 사용하여 워크로드의 아키텍처 다이어그램을 생성합니다.",
-      "AWS X-Ray 를 사용하여 워크로드 세부 정보를 봅니다. 관계를 사용하여 아키텍처 \n다이어그램을 구축합니다."
+      "Systems Manager Inventory를 켜서 모든 리스트를 엑셀 형식으로 뽑아 봅니다.",
+      "Step Functions를 써서 리소스를 수집하는 프로그램을 짜고 다이어그램은 직접 그립니다.",
+      "Workload Discovery on AWS(구 AWS Perspective)를 사용하여 자동으로 아키텍처 다이어그램을 생성합니다.",
+      "AWS X-Ray 서비스를 켜서 네트워크 흐름을 감시하고 그걸 토대로 그림을 그립니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109433-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nWorkload Discovery on AWS(이전에는 AWS Perspective\n라고 함)는 AWS 클라우드 \n워크로드를 시각화하는 도구입니다. 계정과 리전 전체에서 AWS 리소스의 인벤토리를 \n유지하고 이들 간의 관계를 매핑하고 웹 UI 에 표시합니다. 또한 AWS 비용 및 사용 보고서 \n쿼리, 리소스 검색, 아키텍처 다이어그램 저장 및 내보내기 등을 수행할 수 있습니다. \n솔루션은 AWS\n에서 Workload Discovery\n를 사용하여 최소한의 운영 노력으로 모든 \n계정에서 다양한 워크로드의 관계 세부 정보를 구축하고 매핑할 수 있습니다. \n1. AWS Systems Manager Inventory 를 사용하여 상세 보기 보고서에서 지도 보기를 \n생성합니다. AWS Systems Manager Inventory\n는 관리형 인스턴스에서 메타데이터를 \n수집하여 중앙 Amazon S3 버킷에 저장하는 기능이므로 이 솔루션은 모든 계정에서 다양한 \n워크로드의 관계 세부 정보를 구축하고 매핑해야 하는 요구 사항을 충족하지 않습니다. \n워크로드의 맵 보기 또는 아키텍처 다이어그램을 제공하지 않습니다. \n2. AWS Step Functions 를 사용하여 워크로드 세부 정보를 수집합니다. 워크로드의 아키텍처 \n다이어그램을 \n수동으로 \n구축합니다. \n이 \n솔루션은 \n워크로드 \n세부 \n정보 \n수집을 \n오케스트레이션하고 아키텍처 다이어그램을 수동으로 구축하기 위해 상태 시스템을 생성 및 \n관리해야 하므로 최소한의 운영 노력 요구 사항을 충족하지 않습니다. \n3. AWS X-Ray 를 사용하여 워크로드 세부 정보 보기 관계가 있는 아키텍처 다이어그램을 \n구축합니다. 이 솔루션은 워크로드 세부 정보를 수집하고 아키텍처 다이어그램을 수동으로 \n구축하기 위해 X-Ray SDK 로 애플리케이션을 구성해야 하므로 최소한의 운영 노력 요구 \n사항을 충족하지 않습니다. \n \n참조: \n\naws.amazon.com/solutions/implementations/workload-discovery-on-aws/",
+    "explanation": "정답은 C입니다.\n\n복잡하게 얽힌 클라우드 자원을 한눈에 보고 싶을 때 쓰는 전용 도구가 'Workload Discovery on AWS'입니다. 계정과 리전을 싹 훑어서 서버, DB, 네트워크가 어떻게 연결되어 있는지 실시간으로 멋진 그림(다이어그램)을 그려줍니다. 운영자가 일일이 조사해서 그릴 필요가 없으니 운영 효율이 최고입니다.\n\n다른 옵션인 A(Inventory)는 단순 목록만 보여줄 뿐 관계를 그려주지 않고, B와 D는 수작업 노력이 너무 많이 들어 '운영상 효율적'이지 않습니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "Workload Discovery on AWS": "AWS 리소스를 시각화하고 아키텍처 관계도를 자동으로 생성해주는 도구",
+      "Inventory (인벤토리)": "보유하고 있는 자산이나 리소스의 상세 목록",
+      "Architecture Diagram": "시스템의 구성 요소들이 어떻게 연결되어 동작하는지 보여주는 설계도"
     }
   },
   {
     "id": 455,
-    "question": "회사에서 AWS Organizations 를 사용합니다. 회사는 다른 예산으로 일부 AWS 계정을 \n운영하려고 합니다. 회사는 특정 기간 동안 할당된 예산 임계값에 도달하면 알림을 받고 \nAWS 계정에 추가 리소스 프로비저닝을 자동으로 방지하려고 합니다. \n이러한 요구 사항을 충족하는 솔루션 조합은 무엇입니까? (3 개 선택)",
+    "question": "계정별 예산을 관리하면서, 돈을 다 쓰면 알림만 주는 게 아니라 '더 이상의 리소스 생성'을 아예 막아버리고 싶습니다. 이 자동화 시스템을 구축하는 방법 3가지는?",
     "options": [
-      "AWS 예산을 사용하여 예산을 생성합니다. 필요한 AWS 계정의 비용 및 사용 보고서 \n섹션에서 예산 금액을 설정합니다.",
-      "AWS 예산을 사용하여 예산을 생성합니다. 필요한 AWS 계정의 결제 대시보드에서 예산 \n\n=== PAGE 453 ===\n금액을 설정합니다.",
-      "필요한 권한으로 예산 작업을 실행하기 위해 AWS 예산에 대한 IAM 사용자를 \n생성합니다.",
-      "필요한 권한으로 예산 작업을 실행하기 위해 AWS 예산에 대한 IAM 역할을 생성합니다.",
-      "각 계정이 예산 임계값을 충족할 때 회사에 알리는 경고를 추가합니다. 추가 리소스의 \n프로비저닝을 방지하기 위해 적절한 구성 규칙으로 생성된 IAM 자격 증명을 선택하는 예산 \n작업을 추가합니다.",
-      "각 계정이 예산 임계값을 충족할 때 회사에 알리는 경고를 추가합니다. 추가 리소스의 \n프로비저닝을 방지하기 위해 적절한 SCP(서비스 제어 정책)로 생성된 IAM 자격 증명을 \n선택하는 예산 작업을 추가합니다."
+      "AWS 예산(Budgets)을 만들 때 비용 보고서 섹션에서 한도액을 설정합니다.",
+      "결제 대시보드에서 각 계정별로 AWS 예산을 생성하고 한도 금액을 넣습니다.",
+      "예약 구매 등 예산 대신 결제 업무를 처리할 전용 IAM 사용자를 만듭니다.",
+      "예산 임계값이 넘었을 때 실제 차단 작업을 수행할 수 있는 권한을 가진 IAM 역할을 만듭니다.",
+      "임계값 도달 시 구성(Config) 규칙을 발동시켜 새 자원 생성을 가로막는 예산 작업을 추가합니다.",
+      "임계값 도달 시 해당 계정에 '생성 금지' SCP(서비스 제어 정책)를 걸어버리는 예산 작업을 추가합니다."
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109522-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "answer": [1, 3, 5],
+    "explanation": "정답은 B, D, F입니다.\n\n단순히 돈이 나가는 걸 보는 게 아니라 '강제 차단'까지 하려면 'AWS Budgets Actions' 기능을 써야 합니다. 예산을 설정(B)하고, 그 예산이 넘었을 때 출동할 IAM 역할(D)에게 권한을 줍니다. 그리고 그 역할이 Organizations의 SCP를 해당 계정에 탁 붙여서(F) 추가적인 서버나 DB 생성을 원천 봉쇄하게 만드는 구조입니다.\n\n다른 옵션인 A는 예산 설정 위치가 틀렸고, E는 구성 규칙만으로는 실시간 생성을 막기보다 사후 탐지에 가깝습니다.",
+    "glossary": {
+      "AWS Budgets Actions": "예산 한도에 가까워지거나 넘었을 때 특정 조치(정책 변경, 서버 중지 등)를 자동으로 취하는 기능",
+      "SCP (Service Control Policy)": "조직 내 계정의 권한을 중앙에서 강력하게 제한하는 가드레일 정책",
+      "Threshold (임계값)": "작동을 시작하게 만드는 기준점(예: 예산의 80% 사용 등)"
+    }
   },
   {
     "id": 456,
-    "question": "한 회사가 한 AWS 리전의 Amazon EC2 인스턴스에서 애플리케이션을 실행합니다. 회사는 \nEC2 인스턴스를 두 번째 리전에 백업하려고 합니다. 또한 회사는 두 번째 리전에서 EC2 \n리소스를 프로비저닝하고 하나의 AWS 계정에서 중앙에서 EC2 인스턴스를 관리하기를 \n원합니다. \n이러한 요구 사항을 가장 비용 효율적으로 충족하는 솔루션은 무엇입니까?",
+    "question": "메인 지역의 EC2 서버들을 다른 지역(리전)으로 백업해두고 싶습니다. 중앙에서 한꺼번에 관리하면서 가장 알뜰하게 백업을 유지하는 방법은?",
     "options": [
-      "두 번째 지역에 비슷한 수의 EC2 인스턴스가 있는 재해 복구(DR) 계획을 만듭니다. \n데이터 복제를 구성합니다.",
-      "EC2 인스턴스의 특정 시점 Amazon Elastic Block Store(Amazon EBS) 스냅샷을 \n생성합니다. 주기적으로 스냅샷을 두 번째 리전에 복사합니다.",
-      "AWS Backup 을 사용하여 백업 계획을 생성합니다. EC2 인스턴스의 두 번째 리전에 대한 \n교차 리전 백업을 구성합니다.",
-      "두 번째 리전에 비슷한 수의 EC2 인스턴스를 배포합니다. AWS DataSync 를 사용하여 \n원본 리전에서 두 번째 리전으로 데이터를 전송합니다."
+      "평소에 다른 리전에도 똑같은 서버들을 다 켜두고 실시간으로 데이터를 복제합니다.",
+      "EBS 스냅샷을 매번 수동으로 찍어서 다른 리전으로 일일이 복사해서 보관합니다.",
+      "AWS Backup 백업 계획을 만들고 '교차 리전 복제(Cross-region copy)' 설정을 활성화합니다.",
+      "DataSync를 써서 서버 통째로 데이터를 다른 리전의 빈 서버로 실시간 전송합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109523-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n중앙 집중 관리와 자동화를 한 번에 해결해주는 도구는 AWS Backup입니다. 백업 계획(Backup Plan) 하나만 잘 짜두면 알아서 스냅샷을 찍고, 전 세계 어디든 원하는 리전으로 복사본을 보내줍니다. 서버를 미리 켜둘 필요가 없으니 저장 비용만 내면 되어 매우 효율적입니다.\n\n다른 옵션인 A와 D는 서버를 계속 켜두거나 전송용 자원을 써야 해서 비용이 많이 들고, B는 사람이 직접 해야 하므로 실수의 위험이 큽니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "AWS Backup": "다양한 AWS 서비스의 백업을 한곳에서 통합 관리하고 자동화하는 서비스",
+      "Cross-region Backup": "재해 복구(DR)를 위해 데이터를 원래 리전이 아닌 머나먼 다른 리전에 저장하는 것",
+      "Cost-effective (비용 효율적)": "성능은 유지하면서 지출을 최소화하는 방식"
     }
   },
   {
     "id": 457,
-    "question": "AWS 를 사용하는 회사는 제품 제조업체에 데이터를 전송하는 애플리케이션을 구축하고 \n\n=== PAGE 454 ===\n있습니다. 회사에는 자체 ID 공급자(IdP)가 있습니다. 회사는 사용자가 애플리케이션을 \n사용하여 데이터를 전송하는 동안 IdP 가 애플리케이션 사용자를 인증하기를 원합니다. \n회사는 AS2(Applicability Statement 2) 프로토콜을 사용해야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "외부 제조사와 데이터를 주고받아야 하는데, 반드시 AS2 프로토콜을 써야 하고 로그인은 우리 사내 시스템(IdP)을 쓰고 싶습니다. 가장 적절한 통로 서비스는?",
     "options": [
-      "AWS DataSync 를 사용하여 데이터를 전송하십시오. IdP 인증을 위한 AWS Lambda \n함수를 생성합니다.",
-      "Amazon AppFlow 흐름을 사용하여 데이터를 전송합니다. IdP 인증을 위한 Amazon \nElastic Container Service(Amazon ECS) 작업을 생성합니다.",
-      "AWS Transfer Family 를 사용하여 데이터를 전송합니다. IdP 인증을 위한 AWS Lambda \n함수를 생성합니다.",
-      "AWS Storage Gateway 를 사용하여 데이터를 전송합니다. IdP 인증을 위한 Amazon \nCognito 자격 증명 풀을 생성합니다."
+      "DataSync를 선택하고, 사내 로그인을 위한 람다 함수를 직접 짭니다.",
+      "Amazon AppFlow를 통해 데이터를 가져오고 ECS로 사내 인증을 처리합니다.",
+      "AWS Transfer Family를 사용해 AS2 엔드포인트를 만들고, Lambda를 연동해 사내 인증을 수행합니다.",
+      "Storage Gateway를 설치하고 Cognito 자격 증명 풀로 외부 제조사를 초대합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109524-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\nAS2(Applicability Statement 2) 같은 특수 전송 프로토콜은 AWS Transfer Family가 전문입니다. SFTP, FTPS는 물론 AS2 전송까지 완벽히 지원하며, 백엔드에는 S3나 EFS를 연결할 수 있죠. 특히 사내 로그인 시스템과 연동할 때는 커스텀 ID 공급자(Custom IdP) 옵션을 통해 Lambda 함수로 인증 로직을 연결해주면 완벽한 보안 게이트웨이가 완성됩니다.\n\n다른 옵션들은 AS2 프로토콜을 지원하지 않거나 파일 전송에 최적화된 도구가 아닙니다.",
+    "glossary": {
+      "AWS Transfer Family": "SFTP, FTPS, FTP, AS2 프로토콜을 사용하여 S3/EFS와 안전하게 파일 주고받기를 지원하는 서비스",
+      "AS2": "B2B 거래에서 데이터를 안전하게 주고받기 위해 상용되는 비즈니스 데이터 전송 규약",
+      "IdP (Identity Provider)": "사용자의 신원을 확인하고 로그인 인증을 대신해주는 시스템"
+    }
   },
   {
     "id": 458,
-    "question": "솔루션 설계자는 현금 회수 서비스를 위해 Amazon API Gateway 에서 RESTAPI 를 설계하고 \n있습니다. 응용 프로그램에는 컴퓨팅 리소스를 위해 1GB 의 메모리와 2GB 의 스토리지가 \n필요합니다. 애플리케이션은 데이터가 관계형 형식이어야 합니다. \n최소한의 관리 노력으로 이러한 요구 사항을 충족하는 추가 AWS 서비스 조합은 \n무엇입니까? (2 개 선택)",
+    "question": "현금 회수 앱을 만드는데, 계산을 위해 1GB 메모리와 2GB 저장 공간이 필요하고 데이터는 꼭 관계형 DB에 담아야 합니다. 운영이 가장 편한 조합 2가지는?",
     "options": [
       "Amazon EC2",
       "AWS Lambda",
       "Amazon RDS",
       "Amazon DynamoDB",
-      "Amazon Elastic Kubernetes Services (Amazon EKS)"
+      "Amazon EKS (Elastic Kubernetes Service)"
     ],
-    "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109435-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "answer": [1, 2],
+    "explanation": "정답은 B와 C입니다.\n\n가장 손이 안 가는(최소 관리 노력) 컴퓨팅은 서버 관리 없는 Lambda(B)입니다. Lambda는 최근 저장 공간 옵션(최대 10GB)도 늘어나서 2GB 정도는 거뿐합니다. 그리고 관계형 데이터를 다루는 데 최고의 관리형 서비스는 단연 RDS(C)입니다. 이 두 조합이면 개발자는 코드에만 집중하고 인프라 관리는 AWS에게 다 맡길 수 있습니다.\n\n다른 옵션인 A(EC2)와 E(EKS)는 서버 패치부터 복잡한 환경 설정까지 운영자가 할 일이 너무 많습니다.",
+    "glossary": {
+      "Relational Data (관계형 데이터)": "행과 열의 테이블 구조로 이루어져 데이터 간의 관계를 정의하는 방식(예: 주문-고객 연결)",
+      "Serverless (서버리스)": "사용자가 서버 사양을 정하거나 관리할 필요 없이 서비스 단위로 기능을 사용하는 방식",
+      "Managed Service (관리형 서비스)": "설치, 패치, 백업 등 귀찮은 관리 작업을 AWS가 대신 해주는 서비스"
+    }
   },
   {
     "id": 459,
-    "question": "회사는 AWS Organizations 를 사용하여 여러 AWS 계정 내에서 워크로드를 실행합니다. \n태깅 정책은 회사에서 태그를 생성할 때 부서 태그를 AWS 리소스에 추가합니다. \n\n=== PAGE 455 ===\n회계 팀은 Amazon EC2 소비에 대한 지출을 결정해야 합니다. 회계팀은 AWS 계정과 \n관계없이 비용을 담당하는 부서를 결정해야 합니다. 회계 팀은 조직 내 모든 AWS 계정에 \n대해 AWS Cost Explorer 에 액세스할 수 있으며 Cost Explorer 의 모든 보고서에 액세스해야 \n합니다. \n운영상 가장 효율적인 방식으로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "전체 계정의 EC2 사용량이 부서(Department)별로 얼마나 나왔는지 보고서를 뽑고 싶습니다. 각 리소스에는 이미 부서 태그가 붙어 있을 때, 가장 효율적인 보고 방식은?",
     "options": [
-      "조직 관리 계정 청구 콘솔에서 부서라는 사용자 정의 비용 할당 태그를 활성화합니다. \n비용 탐색기에서 태그 이름별로 그룹화하여 하나의 비용 보고서를 생성하고 EC2 별로 \n필터링합니다.",
-      "Organizations 마스터 계정 결제 콘솔에서 부서라는 AWS 정의 비용 할당 태그를 \n활성화합니다. 비용 탐색기에서 태그 이름별로 그룹화하여 하나의 비용 보고서를 생성하고 \nEC2 별로 필터링합니다.",
-      "조직 회원 계정 청구 콘솔에서 부서라는 사용자 정의 비용 할당 태그를 활성화합니다. \n비용 탐색기에서 태그 이름별로 그룹화하여 하나의 비용 보고서를 생성하고 EC2 별로 \n필터링합니다.",
-      "Organizations 회원 계정 결제 콘솔에서 부서라는 AWS 정의 비용 할당 태그를 \n활성화합니다. 비용 탐색기에서 태그 이름별로 그룹화하여 하나의 비용 보고서를 생성하고 \nEC2 별로 필터링합니다."
+      "조직 마스터 계정의 결제 콘솔에서 '부서'라는 '사용자 정의 비용 할당 태그'를 활성화하고, Cost Explorer에서 이 태그로 묶어서 봅니다.",
+      "마스터 계정에서 '부서'를 'AWS 정의 태그'로 활성화한 뒤, Cost Explorer 보고서를 필터링합니다.",
+      "각 계정별로 각자 '부서' 태그를 활성화하고 보고서를 따로 뽑아 엑셀로 합칩니다.",
+      "마스터 계정 회원 계정 모두에서 태그를 활성화하되, 비용 보고서는 각자 보게 설정합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109440-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\n태그가 달려 있다고 해서 비용 보고서에 바로 나오는 건 아닙니다. 마스터(관리) 계정에서 \"이 태그를 비용 계산용으로 쓸 거야!\"라고 '비용 할당 태그(Cost Allocation Tag)'로 활성화해줘야 합니다. 특히 우리가 직접 붙인 태그는 '사용자 정의 태그'이므로 이를 활성화하면, 전 계정의 EC2 비용을 '부서' 이름별로 예쁘게 그룹화된 보고서로 바로 볼 수 있습니다.\n\n다른 옵션인 B는 우리가 만든 태그에는 해당하지 않고, C는 사람이 고생하는 비효율적인 방식입니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "Cost Allocation Tags (비용 할당 태그)": "리소스 태그를 비용 보고서(Cost Explorer)의 필터나 그룹화 기준으로 사용할 수 있게 등록하는 것",
+      "AWS Cost Explorer": "AWS 비용 사용량을 시각적으로 분석하고 미래 비용을 예측해주는 대시보드 도구",
+      "Organization Management Account": "여러 계정을 묶어 통합 결제와 보안을 관리하는 대장 계정"
     }
   },
   {
     "id": 460,
-    "question": "회사는 SaaS(Software as a Service) 애플리케이션 Salesforce 계정과 Amazon S3 간에 \n데이터를 안전하게 교환하려고 합니다. 회사는 AWS Key Management Service(AWS KMS) \n고객 관리형 키(CMK)를 사용하여 저장된 데이터를 암호화해야 합니다. 또한 회사는 전송 \n중인 데이터를 암호화해야 합니다. 회사에서 Salesforce 계정에 대한 API 액세스를 \n활성화했습니다.",
+    "question": "Salesforce(SaaS)에 든 고객 데이터를 S3로 안전하게 옮기고 싶습니다. 저장 시 우리만의 열쇠(KMS CMK)로 암호화해야 하고, 최소한의 코딩으로 끝내고 싶은데 추천 도구는?",
     "options": [
-      "Salesforce 에서 Amazon S3 로 안전하게 데이터를 전송하는 AWS Lambda 함수를 \n생성합니다.",
-      "AWS Step Functions 워크플로를 생성합니다. Salesforce 에서 Amazon S3 로 안전하게 \n데이터를 전송하는 작업을 정의합니다.",
-      "Amazon AppFlow 흐름을 생성하여 Salesforce 에서 Amazon S3 로 데이터를 안전하게 \n전송합니다.",
-      "Salesforce 용 사용자 지정 커넥터를 만들어 Salesforce 에서 Amazon S3 로 데이터를 \n안전하게 전송합니다. \n\n=== PAGE 456 ==="
+      "연결 코드를 직접 짠 복잡한 Lambda 함수를 만들어 전송을 시도합니다.",
+      "Step Functions 워크플로를 설계하고 Salesforce API 연결 코드를 하나씩 작성합니다.",
+      "Amazon AppFlow를 사용해 클릭 몇 번으로 흐름을 만들고 KMS 암호화 설정을 켭니다.",
+      "Salesforce 전용 커넥터를 SDK로 개발해서 두 시스템을 무리하게 연결합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109525-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAmazon AppFlow 는 사용자가 SaaS 애플리케이션과 AWS 서비스 간에 안전하게 데이터를 \n전송할 수 있도록 하는 완전관리형 통합 서비스입니다. Salesforce 를 소스로, Amazon S3 를 \n대상으로 지원합니다. 또한 AWS KMS CMK\n를 사용하여 유휴 데이터 암호화 및 \nSSL/TLS1 을 사용하여 전송 중인 데이터 암호화를 지원합니다. Amazon AppFlow 를 \n사용하면 솔루션이 최소한의 개발 노력으로 요구 사항을 충족할 수 있습니다. \n1. 데이터를 Salesforce 에서 Amazon S3 로 안전하게 전송하는 AWS Lambda 함수를 \n생성합니다. 이 솔루션은 Salesforce 및 Amazon S3 API 와 상호 작용하고 인증, 암호화, \n오류 처리 및 모니터링을 처리하기 위한 사용자 지정 코드 작성을 포함하므로 최소한의 \n개발 노력 요구 사항을 충족하지 않습니다. \n2. AWS Step Functions 워크플로 생성 Salesforce 에서 Amazon S3 로 데이터를 안전하게 \n전송하는 작업을 정의합니다. 이 솔루션은 데이터 전송 작업을 오케스트레이션하기 위한 \n상태 시스템 정의를 생성하고 실제 데이터 전송을 수행하기 위해 Lambda 함수 또는 기타 \n서비스를 호출하기 때문에 최소한의 개발 노력 요구 사항을 충족하지 않습니다. \n3. Salesforce 용 사용자 지정 커넥터를 생성하여 Salesforce 에서 Amazon S3 로 데이터를 \n안전하게 전송합니다. 이 솔루션은 Amazon AppFlow 사용자 지정 커넥터 SDK 를 사용하여 \nSalesforce 용 사용자 지정 커넥터를 구축하고 배포하므로 추가 구성 및 관리가 필요하므로 \n최소한의 개발 노력 요구 사항을 충족하지 않습니다. \n \n참조: \naws.amazon.com/appflow/",
+    "explanation": "정답은 C입니다.\n\n외부 SaaS 앱(Salesforce, Slack, Google Analytics 등)과 AWS를 잇는 고속도로는 Amazon AppFlow입니다. 코딩 한 줄 없이 마우스 클릭만으로 데이터를 가져올 수 있고, 전송 중 암호화와 S3 저장 시 KMS 암호화까지 완벽하게 지원합니다. '최소한의 개발 노력'이라는 단어가 나오면 무조건 AppFlow를 떠올리세요.\n\n다른 옵션들은 서버를 관리하거나 복잡한 코드를 직접 짜야 하므로 배보다 배꼽이 더 큰 상황이 됩니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스",
-      "KMS": "데이터 암호화에 사용되는 키를 생성하고 관리하는 보안 서비스"
+      "Amazon AppFlow": "SaaS 애플리케이션과 AWS 서비스 간에 코딩 없이 데이터를 안전하게 주고받는 통합 서비스",
+      "SaaS (Software as a Service)": "인터넷을 통해 제공되는 소프트웨어 서비스(예: Salesforce, Gmail)",
+      "SSL/TLS Encryption": "데이터가 네트워크를 타고 이동할 때 해커가 엿듣지 못하게 암호화하는 기술"
     }
   },
   {
     "id": 461,
-    "question": "회사가 단일 AWS 리전에서 모바일 게임 앱을 개발하고 있습니다. 앱은 Auto Scaling \n그룹의 여러 Amazon EC2 인스턴스에서 실행됩니다. 회사는 앱 데이터를 Amazon \nDynamoDB\n에 저장합니다. 앱은 사용자와 서버 간에 TCP 트래픽과 UDP 트래픽을 \n사용하여 통신합니다. 응용 프로그램은 전 세계적으로 사용됩니다. 회사는 모든 사용자에게 \n가능한 가장 낮은 대기 시간을 보장하고자 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "전 세계에서 접속하는 모바일 게임의 TCP/UDP 통신 지연을 줄이고 싶습니다. 하나의 지역(리전)에서 게임 서버가 돌아갈 때, 전 세계 사용자에게 가장 쾌적한 속도를 주는 방법은?",
     "options": [
-      "AWS Global Accelerator 를 사용하여 가속기를 생성합니다. Global Accelerator 통합을 \n사용하고 TCP 및 UDP 포트에서 수신 대기하는 가속기 엔드포인트 뒤에 Application Load \nBalancer(ALB)를 생성합니다. Auto Scaling 그룹을 업데이트하여 ALB\n에 인스턴스를 \n\n=== PAGE 457 ===\n등록합니다.",
-      "AWS Global Accelerator 를 사용하여 가속기를 생성합니다. Global Accelerator 통합을 \n사용하고 TCP 및 UDP 포트에서 수신 대기하는 가속기 엔드포인트 뒤에 NLB(Network \nLoad Balancer)를 생성합니다. Auto Scaling 그룹을 업데이트하여 NLB 에 인스턴스를 \n등록합니다.",
-      "Amazon CloudFront 콘텐츠 전송 네트워크(CDN) 엔드포인트를 생성합니다. 엔드포인트 \n뒤에 NLB(Network Load Balancer)를 생성하고 TCP 및 UDP 포트에서 수신 대기합니다. \nAuto Scaling 그룹을 업데이트하여 NLB 에 인스턴스를 등록합니다. NLB 를 오리진으로 \n사용하도록 CloudFront 를 업데이트합니다.",
-      "Amazon CloudFront 콘텐츠 전송 네트워크(CDN) 엔드포인트를 생성합니다. 엔드포인트 \n뒤에 Application Load Balancer(ALB)를 생성하고 TCP 및 UDP 포트에서 수신 대기합니다. \nAuto Scaling 그룹을 업데이트하여 ALB 에 인스턴스를 등록합니다. ALB 를 오리진으로 \n사용하도록 CloudFront 를 업데이트합니다."
+      "Global Accelerator를 연결하고, TCP/UDP를 모두 지원하는 ALB(Application Load Balancer)를 입구에 둡니다.",
+      "AWS Global Accelerator를 사용하고, 그 뒤에 TCP/UDP 포트를 여는 NLB(Network Load Balancer)를 배치합니다.",
+      "CloudFront를 입구로 쓰고 그 뒤에 NLB를 둡니다. NLB 주소를 CloudFront의 오리진으로 설정합니다.",
+      "CloudFront 뒤에 ALB를 두고, 전송 속도를 높이기 위해 모든 UDP 통신을 TCP로 강제 변환합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109446-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAWS Global Accelerator\n는 글로벌 사용자를 위해 애플리케이션의 성능과 가용성을 \n향상시키는 네트워킹 서비스입니다. AWS 글로벌 네트워크를 사용하여 사용자 트래픽을 \n성능 및 상태에 따라 최적의 엔드포인트로 라우팅합니다. 또한 애플리케이션에 대한 고정 \n진입점 역할을 하고 TCP 및 UDP 프로토콜을 모두 지원하는 고정 IP 주소를 제공합니다. \n솔루션은 AWS Global Accelerator 를 사용하여 모든 사용자에게 가능한 최저 지연 시간을 \n보장할 수 있습니다. \n1. AWS Global Accelerator 를 사용하여 가속기를 생성합니다. Global Accelerator 통합을 \n사용하고 TCP 및 UDP 포트에서 수신 대기하는 가속기 엔드포인트 뒤에 Application Load \nBalancer(ALB)를 생성합니다. Auto Scaling 그룹을 업데이트하여 ALB\n에 인스턴스를 \n등록합니다. ALB 는 UDP 프로토콜을 지원하지 않으므로 이 솔루션은 작동하지 않습니다. \n2. Amazon CloudFront 콘텐츠 전송 네트워크(CDN) 엔드포인트를 생성합니다. 엔드포인트 \n뒤에 NLB(Network Load Balancer)를 생성하고 TCP 및 UDP 포트에서 수신 대기합니다. \nAuto Scaling 그룹을 업데이트하여 NLB 에 인스턴스를 등록합니다. NLB 를 오리진으로 \n사용하도록 CloudFront\n를 업데이트합니다. CloudFront\n는 UDP 프로토콜을 지원하지 \n않으므로 이 솔루션은 작동하지 않습니다. \n3. Amazon CloudFront 콘텐츠 전송 네트워크(CDN) 엔드포인트를 생성합니다. 엔드포인트 \n뒤에 Application Load Balancer(ALB)를 생성하고 TCP 및 UDP 포트에서 수신 대기합니다. \nAuto Scaling 그룹을 업데이트하여 ALB 에 인스턴스를 등록합니다. ALB 를 오리진으로",
+    "explanation": "정답은 B입니다.\n\n게임에서 많이 쓰는 UDP 프로토콜과 글로벌 가속을 동시에 만족하는 건 'AWS Global Accelerator'와 'NLB'의 조합입니다. Global Accelerator는 전 세계 고정 IP를 제공해 지연 시간을 획기적으로 줄여주며, NLB는 L4 계층에서 TCP/UDP 트래픽을 빛의 속도로 분산해줍니다. 반면 ALB나 CloudFront는 기본적으로 HTTP나 TCP 기반이라 UDP 통신이 불가능하거나 제한적입니다.\n\n다른 옵션인 A(ALB)와 C, D(CloudFront)는 UDP 트래픽 처리에 한계가 있어 게임용으로는 부적합합니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스",
-      "CloudFront": "전 세계 사용자에게 콘텐츠를 빠르게 전달하는 CDN 서비스",
-      "ALB": "애플리케이션 계층(L7)에서 트래픽을 분산해주는 부하 분산 장치",
-      "Auto Scaling": "서버 부하에 따라 자동으로 인스턴스 수를 늘리거나 줄이는 기능"
+      "AWS Global Accelerator": "AWS의 글로벌 네트워크 인프라를 사용해 사용자 트래픽의 지연 시간을 최대 60%까지 개선하는 서비스",
+      "NLB (Network Load Balancer)": "L4 계층에서 작동하며, 초당 수백만 개의 요청을 아주 낮은 지연으로 처리하는 부하 분산 장치",
+      "UDP (User Datagram Protocol)": "신뢰성보다는 속도가 중요한 멀티플레이어 게임이나 실시간 중계에 쓰이는 통신 방식"
     }
   },
   {
     "id": 462,
-    "question": "회사에 고객 주문을 처리하는 애플리케이션이 있습니다. 회사는 주문을 Amazon Aurora \n데이터베이스에 저장하는 Amazon EC2 인스턴스에서 애플리케이션을 호스팅합니다. 때때로 \n트래픽이 높을 때 워크로드가 주문을 충분히 빠르게 처리하지 못합니다. \n가능한 한 빨리 데이터베이스에 주문을 안정적으로 기록하려면 솔루션 설계자가 무엇을 \n해야 합니까?",
+    "question": "주문이 몰릴 때마다 DB 처리가 지연되어 주문이 누락될까 걱정됩니다. 주문을 일단 '대기열'에 안전하게 받아두고, 서버가 자기 속도에 맞춰 차근차근 처리하게 만드는 구조는?",
     "options": [
-      "트래픽이 많을 때 EC2 인스턴스의 인스턴스 크기를 늘립니다. Amazon Simple \nNotification Service(Amazon SNS)에 주문을 작성합니다. SNS 주제에 데이터베이스 \n엔드포인트를 구독합니다.",
-      "Amazon Simple Queue Service(Amazon SQS) 대기열에 주문을 씁니다. Application Load \nBalancer 뒤의 Auto Scaling 그룹에서 EC2 인스턴스를 사용하여 SQS 대기열에서 읽고 \n주문을 데이터베이스로 처리합니다.",
-      "Amazon Simple Notification Service(Amazon SNS)에 주문을 작성합니다. SNS 주제에 \n데이터베이스 엔드포인트를 구독합니다. Application Load Balancer 뒤의 Auto Scaling \n그룹에서 EC2 인스턴스를 사용하여 SNS 주제에서 읽습니다.",
-      "EC2 인스턴스가 CPU 임계값 제한에 도달하면 Amazon Simple Queue Service(Amazon \nSQS) 대기열에 주문을 씁니다. Application Load Balancer 뒤의 Auto Scaling 그룹에서 EC2 \n인스턴스의 예약된 조정을 사용하여 SQS 대기열에서 읽고 데이터베이스로 주문을 \n처리합니다."
+      "서버 체급을 키우고(Scale-up), SNS 주제에 DB 주소를 바로 구독시켜 알림이 올 때마다 DB를 직접 찌르게 합니다.",
+      "Amazon SQS 대기열에 주문을 담고, Auto Scaling 그룹 내 서버들이 대기열에서 주문을 꺼내 DB에 저장하게 합니다.",
+      "SNS에 주문을 적고 서버들이 SNS를 직접 읽게 만듭니다. 서버는 로드 밸런서 뒤에서 대기합니다.",
+      "CPU 점유율이 높을 때만 SQS에 주문을 적고, 평소에는 그냥 DB에 바로 쏘는 복잡한 하이브리드 로직을 구현합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109653-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAmazon SQS 는 마이크로서비스, 분산 시스템 및 서버리스 애플리케이션을 분리하고 확장할 \n수 있는 완전관리형 메시지 대기열 서비스입니다. 애플리케이션은 SQS 대기열에 주문을 \n기록함으로써 주문 손실 없이 트래픽 급증을 처리할 수 있습니다. Auto Scaling 그룹의 EC2 \n인스턴스는 SQS 대기열에서 읽고 꾸준한 속도로 데이터베이스로 주문을 처리할 수 \n있습니다. Application Load Balancer 는 EC2 인스턴스에 부하를 분산하고 상태 확인을 \n제공할 수 있습니다. 이 솔루션은 질문의 모든 요구 사항을 충족하지만 다른 옵션은 그렇지",
+    "explanation": "정답은 B입니다.\n\n시스템 간의 충격을 완화하는 '완충지대'가 필요합니다. SQS(메시지 큐)는 주문이 1초에 수만 건이 들어와도 일단 다 받아줍니다. 그 뒤에서 서버들이 \"나는 1초에 10개씩 처리할 수 있어\"라며 자기 페이스대로 가져가면(Decoupling), 트래픽이 폭주해도 시스템이 뻗거나 주문이 유실되지 않습니다. 이것이 클라우드 아키텍처의 핵심인 '비동기 분산 처리'입니다.\n\n다른 옵션인 A(SNS직결)는 DB에 너무 큰 충격을 한꺼번에 줘서 오히려 폭발할 수 있고, D는 관리가 너무 복잡해서 추천하지 않습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)",
-      "Auto Scaling": "서버 부하에 따라 자동으로 인스턴스 수를 늘리거나 줄이는 기능",
-      "Aurora": "AWS가 구축한 클라우드 전용 고성능 관계형 데이터베이스 엔진"
+      "Amazon SQS (Simple Queue Service)": "메시지를 임시로 보관하여 시스템 간의 연결을 느슨하게(Decoupling) 만들어주는 메시지 대기열",
+      "Decoupling (결합 해제)": "구성 요소들이 서로의 상태에 상관없이 독립적으로 작동할 수 있게 분리하는 것",
+      "Asynchronous Processing (비동기 처리)": "요청이 오자마자 즉시 결과를 주지 않고, 일단 접수 후에 나중에 처리하는 방식"
     }
   },
   {
     "id": 463,
-    "question": "IoT 회사는 사용자의 수면에 대한 데이터를 수집하는 센서가 있는 매트리스를 출시하고 \n있습니다. 센서는 데이터를 Amazon S3 버킷으로 보냅니다. 센서는 각 매트리스에 대해 \n매일 밤 약 2MB 의 데이터를 수집합니다. 회사는 각 매트리스에 대한 데이터를 처리하고 \n요약해야 합니다. 결과는 가능한 한 빨리 제공되어야 합니다. 데이터 처리에는 1GB 의 \n메모리가 필요하며 30 초 이내에 완료됩니다. \n이러한 요구 사항을 가장 비용 효율적으로 충족하는 솔루션은 무엇입니까?",
+    "question": "매일 밤 매트리스 센서가 수면 데이터(2MB)를 S3로 쏩니다. 이 짧은 데이터를 분석해서 아침까지 요약 리포트를 뽑아줘야 하는데, 가장 비용이 적게 드는 엔진은?",
     "options": [
-      "Scala 작업에 AWS Glue 사용",
-      "Apache Spark 스크립트와 함께 Amazon EMR 사용",
-      "Python 스크립트와 함께 AWS Lambda 사용",
-      "PySpark 작업과 함께 AWS Glue 사용"
+      "대규모 데이터 변환 도구인 AWS Glue(Scala)를 사용하여 스케줄링합니다.",
+      "Hadoop 기반의 대형 클러스터인 Amazon EMR을 띄워 Spark 스크립트를 돌립니다.",
+      "가장 가벼운 Python 스크립트를 AWS Lambda에 올리고 파일이 오면 바로 실행합니다.",
+      "AWS Glue의 PySpark 엔진을 써서 분산 처리 로직으로 데이터를 요약합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109501-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n파일 하나당 2MB는 데이터 세계에서 아주 '귀여운' 수준입니다. 이런 작은 일을 하는 데 Glue나 EMR 같은 거대 장비를 꺼내는 건 닭 잡는 데 소 잡는 칼을 쓰는 격입니다. Lambda는 1GB 메모리 설정 시 요금이 매우 저렴하고, 30초 내외의 작업이라면 거의 공짜에 가까운 비용으로 수천 명의 데이터를 처리할 수 있습니다.\n\n다른 옵션들은 최소 비용 단위가 크거나 실행 준비(Cold Start) 시간이 길어서 이런 소규모 작업에는 비효율적입니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "Amazon S3": "데이터를 파일 형태로 무제한 저장할 수 있는 클라우드 옷장",
+      "Python": "데이터 분석과 자동화에 가장 널리 쓰이는 쉽고 강력한 프로그래밍 언어",
+      "Cost-effective Analysis": "작업의 크기에 맞는 적절한 엔진을 골라 비용을 극단적으로 아끼는 전략"
     }
   },
   {
     "id": 464,
-    "question": "회사는 PostgreSQL 단일 AZ DB 인스턴스용 Amazon RDS 에 모든 주문을 저장하는 온라인 \n쇼핑 애플리케이션을 호스팅합니다. 경영진은 단일 실패 지점을 제거하기를 원하며 솔루션 \n설계자에게 애플리케이션 코드를 변경하지 않고도 데이터베이스 다운타임을 최소화할 수 \n있는 접근 방식을 권장하도록 요청했습니다. \n어떤 솔루션이 이러한 요구 사항을 충족합니까?",
+    "question": "현재 DB가 하나의 데이터 서버(Single AZ)에서 돌아가고 있어 고장이 나면 서비스가 멈춥니다. 앱 코드는 하나도 손대지 않고, 가장 빨리 '고가용성(장애 대비)' 구조로 바꾸려면?",
     "options": [
-      "데이터베이스 인스턴스를 수정하고 다중 AZ 옵션을 지정하여 기존 데이터베이스 \n인스턴스를 다중 AZ 배포로 변환합니다.",
-      "새로운 RDS 다중 AZ 배포를 생성합니다. 현재 RDS 인스턴스의 스냅샷을 만들고 \n스냅샷으로 새 다중 AZ 배포를 복원합니다.",
-      "다른 가용 영역에서 PostgreSQL 데이터베이스의 읽기 전용 복제본을 생성합니다. \nAmazon Route 53 가중 레코드 세트를 사용하여 데이터베이스 전체에 요청을 분산합니다.",
-      "최소 그룹 크기가 2 인 Amazon EC2 Auto Scaling 그룹에 RDS for PostgreSQL \n\n=== PAGE 460 ===\n데이터베이스를 배치합니다. Amazon Route 53 가중 레코드 세트를 사용하여 인스턴스 간에 \n요청을 분산합니다."
+      "RDS 설정 메뉴에서 '수정'을 누르고 '다중 AZ 배포' 옵션을 체크해서 바로 적용합니다.",
+      "새로운 다중 AZ DB를 만들고, 현재 DB의 스냅샷을 찍어 복구한 뒤 주소를 바꿉니다.",
+      "다른 지역에 읽기 전용 복제본을 만들고 Route 53으로 접속을 이리저리 분산합니다.",
+      "Auto Scaling 그룹에 DB를 넣고 서버 주소를 DNS로 관리하는 수동 설계를 도입합니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109449-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \n기존 단일 AZ DB 인스턴스를 다중 AZ 배포로 변환하려면 AWS Management Console 에서 \nDB 인스턴스에 해당하는 \"수정\" 옵션을 사용하십시오. \n \n참고: \n\naws.amazon.com/rds/features/multi-az/",
+    "explanation": "정답은 A입니다.\n\nRDS의 마법 같은 기능 중 하나입니다. 이미 가동 중인 '싱글 리전' DB라도 설정에서 '다중 AZ'만 클릭하면, AWS가 알아서 다른 데이터 센터에 복사본(대기 서버)을 만들고 데이터를 실시간 복제해줍니다. 접속 주소(Endpoint)는 그대로 유지되므로 앱 코드를 고칠 필요도 없고, 장애 시 자동으로 보조 DB가 메인이 되어 서비스 중단을 막아줍니다.\n\n다른 옵션인 B는 불필요하게 서버를 새로 만드는 수고가 들고, C는 가용성보다는 읽기 성능 향상에 초점이 맞춰져 있습니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Multi-AZ (RDS)": "두 개의 서로 다른 데이터 센터에 DB를 동시에 운영하여, 한쪽이 고장 나도 수 초 내에 자동으로 복구하는 고가용성 옵션",
+      "Endpoint (엔드포인트)": "애플리케이션이 데이터베이스에 접속하기 위해 사용하는 주소(URL)",
+      "Zero Code Change": "인프라 구조를 바꿔도 실제 소스 코드는 수정할 필요가 없는 상태"
     }
   },
   {
     "id": 465,
-    "question": "회사에서 고객 요구를 지원하기 위해 애플리케이션을 개발하고 있습니다. 회사는 동일한 \n가용 영역 내의 여러 Amazon EC2 Nitro 기반 인스턴스에 애플리케이션을 배포하려고 \n합니다. 또한 이 회사는 더 높은 애플리케이션 가용성을 달성하기 위해 여러 EC2 Nitro \n기반 인스턴스의 여러 블록 스토리지 볼륨에 동시에 쓸 수 있는 기능을 애플리케이션에 \n제공하고자 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "여러 대의 EC2 서버가 하나의 똑같은 블록 저장소(EBS) 볼륨에 '동시에' 읽고 쓸 수 있게 설정하고 싶습니다. 이 'Multi-attach' 기능을 지원하는 고성능 볼륨 타입은?",
     "options": [
-      "Amazon Elastic Block Store(Amazon EBS) 다중 연결에 범용 SSD(gp3) EBS 볼륨 사용",
-      "Amazon Elastic Block Store(Amazon EBS) 다중 연결과 함께 처리량 최적화 HDD(st1) \nEBS 볼륨 사용",
-      "Amazon Elastic Block Store(Amazon EBS) 다중 연결과 함께 프로비저닝된 IOPS SSD(io2) \nEBS 볼륨 사용",
-      "Amazon Elastic Block Store(Amazon EBS) 다중 연결에 범용 SSD(gp2) EBS 볼륨 사용"
+      "가장 무난하고 범용적인 SSD인 gp3 볼륨",
+      "용량 대비 가격이 저렴한 HDD 타입의 st1 볼륨",
+      "고성능 IOPS가 보장되고 다중 연결을 지원하는 io2(또는 io1) 볼륨",
+      "예전 세대 표준 SSD인 gp2 볼륨"
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109655-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\nEBS 볼륨은 원래 1:1 연결이 원칙이지만, 특별히 'Provisioned IOPS SSD(io1/io2)' 타입은 하나의 볼륨을 최대 16대의 서버가 동시에 연결할 수 있는 'Multi-attach' 기능을 제공합니다. 이를 통해 클러스터형 애플리케이션이나 고가용성 시스템을 구축할 수 있습니다. 우리가 흔히 쓰는 gp2, gp3 볼륨은 이 기능을 지원하지 않습니다.\n\n다른 옵션들은 볼륨 한 개당 서버 한 대씩만 붙을 수 있는 일반적인 타사 제한이 있습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
+      "EBS Multi-attach": "하나의 EBS 볼륨을 동일한 가용 영역 내의 여러 EC2 인스턴스에 동시에 할당하는 기능",
+      "Provisioned IOPS (io2)": "사용자가 원하는 만큼의 입출력 속도(IOPS)를 미리 예약해서 보장받는 최고급 SSD 볼륨",
+      "Nitro System": "AWS가 구축한 고성능 가상화 하드웨어 시스템으로, Multi-attach 같은 최신 기능을 가능케 함"
     }
   },
   {
     "id": 466,
-    "question": "한 회사에서 단일 가용 영역과 Amazon RDS 다중 AZ DB 인스턴스에서 Amazon EC2 를 \n사용하는 상태 비저장 2\n계층 애플리케이션을 설계했습니다. 새로운 회사 경영진은 \n애플리케이션의 가용성을 높이려고 합니다. \n\n=== PAGE 461 ===\n솔루션 설계자는 이 요구 사항을 충족하기 위해 무엇을 해야 합니까?",
+    "question": "하나의 데이터 센터(가용 영역)에서만 서버가 돌아가고 있어 불안합니다. 서버가 죽어도 다른 곳에서 즉시 살아나게 하려면 어떤 아키텍처를 추가해야 할까요?",
     "options": [
-      "다중 AZ EC2 Auto Scaling 을 사용하도록 애플리케이션을 구성하고 Application Load \nBalancer 를 생성합니다.",
-      "EC2 인스턴스의 스냅샷을 찍어 다른 AWS 리전으로 보내도록 애플리케이션을 \n구성합니다.",
-      "Amazon Route 53 대기 시간 기반 라우팅을 사용하여 애플리케이션에 요청을 제공하도록 \n애플리케이션을 구성합니다.",
-      "들어오는 요청을 처리하고 다중 AZ 애플리케이션 로드 밸런서를 생성하도록 Amazon \nRoute 53 규칙을 구성합니다."
+      "서버를 'Auto Scaling 그룹'으로 묶고, 'Elastic Load Balancer(ALB)'를 앞에 세워 여러 가용 영역에 분산합니다.",
+      "서버를 통째로 찍어둔 스냅샷을 매일 다른 해외 리전으로 백업해서 보관합니다.",
+      "Route 53의 '지연 시간 라우팅' 기능을 켜서 사용자에게 가장 가까운 서버를 찾아주게 합니다.",
+      "전 세계에 분산된 CloudFront를 앞에 세우고, 서버 주소를 여러 개 등록해 둡니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109450-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n참고: \n\ndocs.aws.amazon.com/autoscaling/ec2/userguide/as-add-availability-zone.html",
+    "explanation": "정답은 A입니다.\n\n'고가용성'의 기본 공식입니다. 서버를 하나만 두지 말고, Auto Scaling 그룹에 넣어두면 서버가 고장 났을 때 자동으로 옆 동네(다른 가용 영역)에 새 서버를 띄워줍니다. 그리고 입구에 로드 밸런서(ALB)를 두면 사용자는 어느 데이터 센터의 서버가 일하고 있는지 신경 쓸 필요 없이 늘 일관된 주소로 접속할 수 있습니다.\n\n다른 옵션인 B는 복구에 시간이 너무 많이 걸리고, C와 D는 장애 복구보다는 속도 개선에 가깝습니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
+      "Auto Scaling Group": "서버의 상태를 체크하다가 죽으면 즉시 살려내고, 바쁘면 숫자를 늘려주는 자동 관리 시스템",
+      "Application Load Balancer (ALB)": "여러 대의 서버 중 여유 있는 곳으로 손님을 안내하고, 서버가 죽으면 정상인 곳으로 발길을 돌려주는 안내원",
+      "Stateless (상태 비저장)": "서버에 중요한 정보를 직접 저장하지 않아, 서버가 언제든 교체되어도 서비스에 지장이 없는 구조"
     }
   },
   {
     "id": 467,
-    "question": "회사에서 AWS Organizations 를 사용합니다. 멤버 계정이 Compute Savings Plan 을 \n구입했습니다. 멤버 계정 내부의 워크로드 변경으로 인해 해당 계정은 더 이상 Compute \nSavings Plan 약정의 전체 혜택을 받지 못합니다. 이 회사는 구매한 컴퓨팅 성능의 50% \n미만을 사용합니다.",
+    "question": "회사가 1년짜리 '컴퓨팅 세이빙스 플랜(Compute Savings Plan)'을 샀는데, 해당 계정의 업무가 줄어 들어서 혜택을 다 못 누리고 있습니다. 남는 할인 혜택을 다른 계정의 서버들에게 나눠주려면?",
     "options": [
-      "Compute Savings Plan 을 구매한 멤버 계정의 계정 콘솔에 있는 청구 기본 설정 \n섹션에서 할인 공유를 켭니다.",
-      "회사의 조직 관리 계정에 있는 계정 콘솔의 청구 기본 설정 섹션에서 할인 공유를 \n켭니다.",
-      "다른 AWS 계정에서 Compute Savings Plan 이 있는 계정으로 추가 컴퓨팅 워크로드를 \n마이그레이션합니다.",
-      "예약 인스턴스 마켓플레이스에서 초과된 Savings Plan 약정을 판매합니다."
+      "할인을 산 계정의 청구 설정에서 '할인 공유(Discount Sharing)' 옵션을 직접 켭니다.",
+      "전체 조직 관리(마스터) 계정의 청구 설정에서 '할인 공유' 기능을 활성화합니다.",
+      "남는 혜택이 아까우니 다른 계정의 서버들을 이 계정으로 꾸역꾸역 이사시킵니다.",
+      "남은 약정 기간을 '예약 인스턴스 마켓플레이스'에 내다 팔아 현금화합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109485-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 B입니다.\n\nOrganizations로 묶인 계정들은 기본적으로 예약 할인(RI)이나 세이빙스 플랜 혜택을 서로 나눠 가질 수 있습니다. 단, 이 권한은 조직의 대장인 '마스터 계정'이 제어합니다. 마스터 계정의 결제 설정에서 할인 공유를 승인하면, A 계정이 남긴 혜택을 바쁜 B 계정이 가져다 쓸 수 있어 조직 전체의 비용을 최적화할 수 있습니다.\n\n다른 옵션인 D는 예약 인스턴스(RI)에만 해당하며 세이빙스 플랜은 판매가 불가능합니다.",
+    "glossary": {
+      "Compute Savings Plan": "1년 또는 3년 약정을 통해 EC2, Fargate, Lambda 요금을 대폭 할인받는 요금제",
+      "Discount Sharing": "조직 내 계정들 사이에서 남는 할인 혜택을 서로 양도하여 돈을 아끼는 시스템",
+      "AWS Organizations": "여러 계정을 묶어 통합 결제와 보안 정책을 편리하게 관리하는 서비스"
+    }
   },
   {
     "id": 468,
-    "question": "회사에서 고객을 위한 검색 카탈로그를 제공할 마이크로서비스 애플리케이션을 개발하고 \n\n=== PAGE 462 ===\n있습니다. 회사는 REST API 를 사용하여 애플리케이션의 프런트엔드를 사용자에게 제시해야 \n합니다. REST API 는 회사가 프라이빗 VPC 서브넷의 컨테이너에서 호스팅하는 백엔드 \n서비스에 액세스해야 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "검색 서비스(마이크로서비스)를 만들었는데, 외부 사용자는 REST API로 접속해야 하고 실제 서버는 프라이빗(VPC 내부)망의 컨테이너에 있습니다. 이 둘을 가장 안전하게 잇는 방법은?",
     "options": [
-      "Amazon API Gateway 를 사용하여 WebSocket API 를 설계합니다. 프라이빗 서브넷의 \nAmazon Elastic Container Service(Amazon ECS)에서 애플리케이션을 호스팅합니다. \nAmazon ECS 에 액세스하기 위해 API Gateway 용 프라이빗 VPC 링크를 생성합니다.",
-      "Amazon API Gateway 를 사용하여 REST API 를 설계합니다. 프라이빗 서브넷의 Amazon \nElastic Container Service(Amazon ECS)에서 애플리케이션을 호스팅합니다. Amazon ECS 에 \n액세스하기 위해 API Gateway 용 프라이빗 VPC 링크를 생성합니다.",
-      "Amazon API Gateway 를 사용하여 WebSocket API 를 설계합니다. 프라이빗 서브넷의 \nAmazon Elastic Container Service(Amazon ECS)에서 애플리케이션을 호스팅합니다. \nAmazon ECS 에 액세스하기 위해 API Gateway 에 대한 보안 그룹을 생성합니다.",
-      "Amazon API Gateway 를 사용하여 REST API 를 설계합니다. 프라이빗 서브넷의 Amazon \nElastic Container Service(Amazon ECS)에서 애플리케이션을 호스팅합니다. Amazon ECS 에 \n액세스하기 위해 API Gateway 에 대한 보안 그룹을 생성합니다."
+      "WebSocket API를 만들고, API Gateway에서 프라이빗 VPC 링크를 통해 ECS 컨테이너에 연결합니다.",
+      "REST API를 설계하고, API Gateway에서 'VPC Link'를 생성하여 프라이빗 망의 ECS에 안전하게 요청을 전달합니다.",
+      "WebSocket API 뒤에 보안 그룹을 아주 촘촘하게 설정해서 외부의 접속을 직접 받아냅니다.",
+      "REST API를 만들고, 모든 컨테이너가 공인 IP를 갖게 해서 외부에서 직접 찌르게 합니다."
     ],
     "answer": 1,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109451-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 B입니다.\n\n프라이빗 서브넷(안전한 내부망)에 숨겨진 서버에 외부의 API 요청을 전달할 때는 'VPC Link'가 필수입니다. API Gateway가 전달자(Proxy) 역할을 수행하며, 'VPC Link'라는 전용 통로를 통해 내부망의 로드 밸런서나 ECS 서비스에 데이터를 넘겨줍니다. 사용자는 REST API라는 편한 문으로 들어오고, 서버는 안전하게 방벽 뒤에 숨어있을 수 있죠.\n\n다른 옵션인 A와 C는 실시간 채팅용인 WebSocket을 제안하고 있어 일반적인 검색 서비스 요청에는 맞지 않습니다.",
     "glossary": {
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "Amazon API Gateway": "개발자가 API를 쉽게 생성, 게시, 관리 및 보호할 수 있게 해주는 완전 관리형 서비스",
+      "VPC Link": "API Gateway가 소비자(인터넷)로부터 받은 요청을 VPC 내부의 프라이빗 리소스에 안전하게 전달하기 위해 사용하는 통로",
+      "Microservices (마이크로서비스)": "거대한 앱을 여러 개의 작은 독립적인 기능 단위로 쪼개서 운영하는 방식"
     }
   },
   {
     "id": 469,
-    "question": "회사는 수집된 원시 데이터를 Amazon S3 버킷에 저장합니다. 이 데이터는 회사 고객을 \n대신하여 여러 유형의 분석에 사용됩니다. 요청된 분석 유형에 따라 S3 객체에 대한 \n액세스 패턴이 결정됩니다. \n회사는 접속 패턴을 예측하거나 통제할 수 없습니다. 회사는 S3 비용을 줄이고자 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "S3에 원본 데이터를 쌓고 있는데, 어떤 고객이 언제 얼마나 파일을 찾을지 도무지 예측이 안 됩니다. 관리의 수고는 줄이면서도 비용은 알아서 아껴주는 똑똑한 저장 옵션은?",
     "options": [
-      "S3 복제를 사용하여 자주 액세스하지 않는 개체를 S3 Standard-Infrequent Access(S3 \nStandard-IA)로 전환합니다.",
-      "S3 수명 주기 규칙을 사용하여 객체를 S3 Standard 에서 Standard-Infrequent Access 로 \n전환(S3 Standard-IA)",
-      "S3 수명 주기 규칙을 사용하여 객체를 S3 Standard 에서 S3 Intelligent-Tiering 으로 전환",
-      "S3 Inventory 를 사용하여 S3 Standard 에서 S3 Intelligent-Tiering 으로 액세스하지 않은 \n객체를 식별하고 전환"
+      "자주 안 쓸 것 같은 파일을 눈치껏 골라 S3 Standard-IA로 일일이 복제합니다.",
+      "수명 주기 규칙을 써서 생성 후 30일이 지나면 무조건 IA 등급으로 보냅니다.",
+      "S3 Intelligent-Tiering으로 등급을 전환하여, 사용 패턴에 따라 자동으로 비용을 최적화하게 합니다.",
+      "S3 Inventory라는 보고서 서비스를 켜서 접속이 없는 파일을 매달 출력해서 체크합니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109452-exam-aws-certified-sol",
+    "explanation": "정답은 C입니다.\n\n이름 그대로 인공지능급 센스를 가진 'Intelligent-Tiering'이 정답입니다. 이 옵션을 켜두면 S3가 파일 하나하나의 사용 패턴을 지켜보다가, 한 달 동안 아무도 안 본 파일은 자동으로 저렴한 창고로 옮기고, 다시 누군가 찾으면 즉시 원래 자리로 복귀시킵니다. 사용자가 예측할 수 없는 상황에서 운영 오버헤드 없이 돈을 아끼는 최고의 방법입니다.\n\n다른 옵션인 B는 예측 불가능한 상황에서 갑자기 필요해진 파일을 꺼낼 때 추가 비용이 발생할 수 있어 위험합니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
+      "S3 Intelligent-Tiering": "데이터 사용 패턴 변화에 따라 비용이 다른 두 개의 액세스 계층 사이로 객체를 자동 이동시키는 스토리지 클래스",
+      "Access Pattern (액세스 패턴)": "데이터가 얼마나 자주, 언제 읽히는지에 대한 규칙성",
+      "Operational Overhead (운영 오버헤드)": "시스템을 직접 관리하고 유지 보수하느라 쏟게 되는 시간과 노력 비용"
     }
   },
   {
     "id": 470,
-    "question": "한 회사에 IPv6 주소를 사용하여 Amazon EC2 인스턴스에서 호스팅되는 애플리케이션이 \n있습니다. 애플리케이션은 인터넷을 사용하여 다른 외부 애플리케이션과의 통신을 시작해야 \n합니다. 그러나 회사의 보안 정책에 따르면 외부 서비스는 EC2 인스턴스에 대한 연결을 \n시작할 수 없습니다. \n솔루션 설계자는 이 문제를 해결하기 위해 무엇을 권장해야 합니까?",
+    "question": "IPv6 주소를 쓰는 EC2 서버가 인터넷의 외부 서비스에 접속은 해야 하지만, 거꾸로 외부에서 우리 서버로 먼저 말을 거는(접속하는) 건 철저히 막고 싶습니다. 어떤 장치가 필요할까요?",
     "options": [
-      "NAT 게이트웨이를 생성하고 이를 서브넷 라우팅 테이블의 대상으로 만듭니다.",
-      "인터넷 게이트웨이를 만들고 이를 서브넷의 라우팅 테이블 대상으로 만듭니다.",
-      "가상 프라이빗 게이트웨이를 만들고 이를 서브넷의 라우팅 테이블 대상으로 만듭니다.",
-      "외부 전용 인터넷 게이트웨이를 만들고 이를 서브넷 라우팅 테이블의 대상으로 \n만듭니다."
+      "NAT 게이트웨이를 하나 사서 라우팅 테이블에 등록합니다.",
+      "인터넷 게이트웨이(IGW)를 만들어서 모든 대문을 활짝 열어줍니다.",
+      "가상 프라이빗 게이트웨이(VPG)를 통해 사내 망으로 우회해서 인터넷을 씁니다.",
+      "Egress-only 인터넷 게이트웨이(출구 전용 게이트웨이)를 만들어 라우팅 테이블에 연결합니다."
     ],
     "answer": 3,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109334-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \n외부 전용 인터넷 게이트웨이는 VPC 의 인스턴스에서 인터넷으로 IPv6 을 통한 아웃바운드 \n통신을 허용하고 인터넷이 인스턴스와의 IPv6 연결을 시작하지 못하도록 하는 VPC 구성 \n요소입니다. 이것은 회사의 보안 정책 및 요구 사항을 충족합니다. 외부 전용 인터넷 \n게이트웨이를 사용하려면 IPv6 인터넷 트래픽(::/0)을 외부 전용 인터넷 게이트웨이로 \n라우팅하는 경로를 서브넷의 라우팅 테이블에 추가해야 합니다. \n참조 URL: \n1 \ndocs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html \n2 \ndev.to/aws-builders/what-is-an-egress-only-internet-gateways-in-aws-7gp \n3 \ndocs.aws.amazon.com/vpc/latest/userguide/route-table-options.html",
+    "explanation": "정답은 D입니다.\n\nIPv4 환경에서의 'NAT Gateway' 역할을 IPv6에서 수행하는 것이 바로 'Egress-only Internet Gateway'입니다. 말 그대로 'Egress(나가는 것)만' 허용하겠다는 뜻이죠. 우리 서버가 업데이트를 위해 외부 주소로 편지를 보낼 수는 있지만, 밖에서 우리 집 주소를 알고 먼저 초인종을 누르는 것은 물리적으로 차단되는 완벽한 일방통행 보안 장치입니다.\n\n다른 옵션인 A(NAT Gateway)는 IPv4 전용이며, B는 밖에서도 들어올 수 있는 양방향 통로라 보안 규정에 어긋납니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "Egress-only Internet Gateway": "VPC 내의 리소스가 인터넷에 IPv6 연결을 시작할 수 있게 하되, 인터넷에서의 원치 않는 외부 연결은 차단하는 보안 구성 요소",
+      "IPv6": "기존 주소가 부족해 만들어진 차세대 인터넷 주소 체계",
+      "Outbound (아웃바운드)": "내부망에서 외부 인터넷 세상으로 나가는 트래픽"
     }
   },
   {
     "id": 471,
-    "question": "회사에서 VPC 의 컨테이너에서 실행되는 애플리케이션을 만들고 있습니다. 애플리케이션은 \n\n=== PAGE 465 ===\nAmazon S3 버킷에 데이터를 저장하고 액세스합니다. 개발 단계에서 애플리케이션은 매일 \nAmazon S3 에 1TB 의 데이터를 저장하고 액세스합니다. 회사는 비용을 최소화하고 가능한 \n한 트래픽이 인터넷을 통과하지 못하도록 막고자 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "매일 1TB의 데이터를 S3에 쌓는 컨테이너 앱이 있습니다. 비용도 아끼고 싶고, 보안상 데이터가 공용 인터넷 망을 타는 것도 꼴 보기 싫을 때 적용할 가장 깔끔한 네트워크 옵션은?",
     "options": [
-      "S3 버킷에 대해 S3 Intelligent-Tiering 을 활성화합니다.",
-      "S3 버킷에 대해 S3 Transfer Acceleration 을 활성화합니다.",
-      "Amazon S3 용 게이트웨이 VPC 엔드포인트를 생성합니다. 이 엔드포인트를 VPC 의 모든 \n라우팅 테이블과 연결합니다.",
-      "VPC 에서 Amazon S3 에 대한 인터페이스 엔드포인트를 생성합니다. 이 엔드포인트를 \nVPC 의 모든 라우팅 테이블과 연결합니다."
+      "S3 Intelligent-Tiering을 켜서 저장소 요금을 아끼는 데 집중합니다.",
+      "S3 Transfer Acceleration의 고속도로 기능을 써서 전송 속도만 높입니다.",
+      "S3용 게이트웨이 VPC 엔드포인트를 생성하고 라우팅 테이블에 등록합니다.",
+      "S3용 인터페이스 엔드포인트(PrivateLink)를 생성하여 유료 전용선을 뚫습니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109453-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \nAmazon S3\n용 게이트웨이 VPC 엔드포인트는 인터넷 게이트웨이나 NAT 디바이스가 \n필요하지 않은 VPC 와 Amazon S3 간의 프라이빗 연결을 가능하게 합니다. 이렇게 하면 \n비용이 최소화되고 트래픽이 인터넷을 통과하는 것을 방지할 수 있습니다. 게이트웨이 VPC \n엔드포인트는 트래픽을 비공개로 Amazon S31 로 라우팅하기 위해 접두사 목록을 VPC \n라우팅 테이블의 라우팅 대상으로 사용합니다. 엔드포인트를 VPC 의 모든 라우팅 테이블과 \n연결하면 모든 서브넷이 엔드포인트를 통해 Amazon S3 에 액세스할 수 있습니다. \n \n옵션 A 는 S3 Intelligent-Tiering 이 변화하는 액세스 패턴을 기반으로 두 액세스 계층 간에 \n객체를 자동으로 이동하여 스토리지 비용을 최적화하는 스토리지 클래스이기 때문에 \n올바르지 않습니다. VPC 와 Amazon S3 간의 네트워크 트래픽에는 영향을 미치지 않습니다. \n \n옵션 B 는 올바르지 않습니다. S3 Transfer Acceleration 은 클라이언트와 S3 버킷 간에 \n장거리에서 파일을 빠르고 쉽고 안전하게 전송할 수 있는 기능이기 때문입니다. 트래픽이 \n인터넷을 통과하는 것을 막지는 않습니다. \n \n옵션 D 는 Amazon S3 용 인터페이스 VPC 엔드포인트는 각 서브넷에 프라이빗 IP 주소가 \n있는 탄력적 네트워크 인터페이스(ENI)가 필요한 AWS PrivateLink 에 의해 구동되기 때문에 \n올바르지 않습니다. 이것은 솔루션에 복잡성과 비용을 추가합니다. 또한 인터페이스 VPC \n엔드포인트는 Amazon S3 에 대한 교차 리전 액세스를 지원하지 않습니다. \n참조 URL: \n\ndocs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+    "explanation": "정답은 C입니다.\n\nVPC 내부의 서버가 S3를 집 앞 골목길(내부망)처럼 쓰게 해주는 기술이 'VPC 엔드포인트'입니다. 특히 S3와 DynamoDB용으로 제공되는 '게이트웨이' 방식은 무료이며, 인터넷 게이트웨이나 NAT을 거치지 않아 데이터 전송 비용(Data Transfer)이 전혀 발생하지 않습니다. 보안과 가성비라는 두 마리 토끼를 잡는 표준 설계입니다.\n\n다른 옵션인 D(인터페이스 엔드포인트)는 거의 모든 상황에서 유료이므로 '비용 최소화' 목적에는 무료인 게이트웨이 방식이 앞섭니다.",
     "glossary": {
-      "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)",
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "Gateway VPC Endpoint": "VPC와 S3/DynamoDB 사이를 AWS 내부망으로 직접 연결해주는 무료 전용 통로",
+      "Public Internet (공용 인터넷)": "누구나 접근 가능한 외부 망으로, 데이터를 주고받을 때 요금이 발생함",
+      "Routing Table (라우팅 테이블)": "네트워크 트래픽이 길을 잃지 않게 목적지에 맞는 출구를 알려주는 안내판"
     }
   },
   {
     "id": 472,
-    "question": "회사에 Amazon DynamoDB 기반 데이터 저장소가 있는 모바일 채팅 애플리케이션이 \n있습니다. 사용자는 가능한 한 짧은 대기 시간으로 새 메시지를 읽기를 원합니다. 솔루션 \n설계자는 최소한의 애플리케이션 변경이 필요한 최적의 솔루션을 설계해야 합니다. \n솔루션 설계자는 어떤 방법을 선택해야 합니까?",
+    "question": "채팅 앱을 만드는데, 메시지를 읽을 때 지연 시간(Latency)이 거의 없어야 사용자가 좋아할 것 같습니다. 기존 앱 코드는 거의 안 바꾸면서 DynamoDB의 속도를 10배 이상 높이는 비법은?",
     "options": [
-      "새 메시지 테이블에 대해 Amazon DynamoDB Accelerator(DAX)를 구성합니다. DAX \n끝점을 사용하도록 코드를 업데이트합니다.",
-      "증가된 읽기 로드를 처리하기 위해 DynamoDB 읽기 복제본을 추가합니다. 읽기 전용 \n복제본의 읽기 엔드포인트를 가리키도록 애플리케이션을 업데이트합니다.",
-      "DynamoDB 의 새 메시지 테이블에 대한 읽기 용량 단위 수를 두 배로 늘립니다. 기존 \nDynamoDB 엔드포인트를 계속 사용합니다.",
-      "Redis 캐시용 Amazon ElastiCache 를 애플리케이션 스택에 추가합니다. DynamoDB 대신 \nRedis 캐시 엔드포인트를 가리키도록 애플리케이션을 업데이트합니다."
+      "DynamoDB 앞에 DAX(DynamoDB Accelerator) 캐시 클러스터를 두고, 엔드포인트 주소만 바꿉니다.",
+      "DB를 여러 대 복제한 읽기 전용 복제본(Read Replica)을 추가하고 트래픽을 나눕니다.",
+      "읽기 용량(RCU)을 지금보다 2배로 팍팍 늘려서 돈으로 해결합니다.",
+      "Redis 엔진인 ElastiCache를 서버 옆에 설치하고 데이터를 매번 동기화하는 코드를 새로 짭니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109454-exam-aws-certified-sol\nutions-architect-associate-saa-c03/ \n \n \n\naws.amazon.com/premiumsupport/knowledge-center/dynamodb-high-latency/ \nAmazon DynamoDB Accelerator(DAX)는 DynamoDB 를 위한 완전 관리형 인 메모리 캐시로, \nDynamoDB 테이블의 성능을 최대 10 배까지 향상시키고 모든 규모에서 마이크로초 수준의 \n응답 시간을 제공합니다. DynamoDB API 작업과 호환되며 use1 에 대한 최소한의 코드 \n변경이 필요합니다. 새 메시지 테이블에 대해 DAX 를 구성함으로써 솔루션은 최소한의 \n애플리케이션 변경으로 새 메시지를 읽는 대기 시간을 줄일 수 있습니다. \n1. 증가된 읽기 로드를 처리하기 위해 DynamoDB 읽기 replicas 를 추가합니다. 읽기 전용 \n복제본의 읽기 엔드포인트를 가리키도록 애플리케이션을 업데이트합니다. DynamoDB 는 \n읽기 전용 복제본을 기능으로 지원하지 않으므로 이 솔루션은 작동하지 않습니다. 읽기 \n전용 복제본은 DynamoDB 가 아닌 Amazon RDS 에서 사용할 수 있습니다. \n2. DynamoDB 의 새 메시지 테이블에 대한 읽기 용량 단위 수를 두 배로 늘립니다. 기존",
+    "explanation": "정답은 A입니다.\n\nDynamoDB 전용 터보 엔진이 바로 DAX입니다. DAX는 DynamoDB API를 그대로 이해하는 똑똑한 메모리 캐시라서, 개발자는 주소(Endpoint)만 DAX로 살짝 바꿔주면 별도의 캐시 동기화 로직을 짤 필요 없이 마이크로초 단위의 빛의 속도를 경험할 수 있습니다.\n\n다른 옵션인 B는 DynamoDB에는 없는 기능(RDS 전용)이고, D는 캐시를 관리하고 데이터를 일치시키는 복잡한 코드를 직접 써야 해서 '최소한의 변경' 조건에서 탈락입니다.",
     "glossary": {
-      "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스",
-      "DynamoDB": "매우 빠른 성능과 무한 확장을 제공하는 NoSQL 데이터베이스"
+      "Amazon DAX (DynamoDB Accelerator)": "DynamoDB를 위한 완전 관리형 인메모리 캐시로, 읽기 속도를 밀리초에서 마이크로초로 단축함",
+      "Latency (지연 시간)": "사용자가 어떤 행동을 했을 때 결과가 화면에 나타날 때까지 걸리는 버벅임 시간",
+      "In-memory Cache (인메모리 캐시)": "데이터를 메모리에 미리 복사해두어 디스크 DB에 매번 물어볼 필요 없이 빠르게 응답하는 기술"
     }
   },
   {
     "id": 473,
-    "question": "회사는 Application Load Balancer(ALB) 뒤에 있는 Amazon EC2 인스턴스에서 웹 사이트를 \n호스팅합니다. 웹 사이트는 정적 콘텐츠를 제공합니다. 웹 사이트 트래픽이 증가하고 \n있으며 회사는 잠재적인 비용 증가에 대해 우려하고 있습니다.",
+    "question": "쇼핑몰 웹 사이트의 정적 이미지 요청이 너무 많아져 네트워크 전송 비용이 크게 늘고 있습니다. 비용을 줄이면서 전 세계 사용자에게 이미지를 빠르게 배달할 서비스는?",
     "options": [
-      "Amazon CloudFront 배포를 생성하여 엣지 로케이션에서 상태 파일을 캐싱합니다.",
-      "Amazon ElastiCache 클러스터를 생성합니다. ALB 를 ElastiCache 클러스터에 연결하여 \n캐싱된 파일을 제공합니다.",
-      "AWS WAF 웹 ACL 을 생성하고 ALB 와 연결합니다. 웹 ACL 에 규칙을 추가하여 정적 \n파일을 캐시합니다.",
-      "대체 AWS 리전에서 두 번째 ALB\n를 생성합니다. 사용자 트래픽을 가장 가까운 \n리전으로 라우팅하여 데이터 전송 비용을 최소화합니다."
+      "Amazon CloudFront를 도입하여 전 세계 엣지 로케이션에 파일을 캐싱합니다.",
+      "ElastiCache 클러스터를 만들고 로드 밸런서(ALB)와 억지로 연결해 파일을 서빙합니다.",
+      "AWS WAF 웹 방화벽을 켜고 이미지 파일만 골라 차단하는 규칙을 만듭니다.",
+      "다른 국가(리전)에 똑같은 로드 밸런서를 하나 더 만들어서 트래픽을 리전별로 쪼갭니다."
     ],
     "answer": 0,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109455-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 A입니다.\n\n정적 파일(이미지, 영상) 비용을 줄이는 공식은 '사용자 근처에서 해결하기'입니다. CloudFront(CDN)를 쓰면 이미지가 전 세계 엣지 서버에 복제됩니다. 사용자는 멀리 리전까지 올 필요 없이 바로 옆 동네에서 이미지를 받아가므로, 서버 부하는 물론 비싼 리전간 데이터 전송 요금까지 극적으로 아낄 수 있습니다.\n\n다른 옵션인 B는 파일 전송용이 아닌 데이터 캐싱용이고, D는 관리 비용만 두 배로 늘어나는 악수가 됩니다.",
     "glossary": {
-      "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스",
-      "ALB": "애플리케이션 계층(L7)에서 트래픽을 분산해주는 부하 분산 장치"
+      "Amazon CloudFront": "전 세계Edge 로케이션에 콘텐츠를 복제해두고 전송 속도를 높이는 캐시 서비스(CDN)",
+      "Edge Location (엣지 로케이션)": "사용자 근처에 배치된 AWS의 소규모 데이터 센터 거점으로, 전송 통로 역할을 함",
+      "Data Transfer Cost (데이터 전송 비용)": "AWS 리전에서 인터넷 세상으로 데이터가 나갈 때 발생하는 요금"
     }
   },
   {
     "id": 474,
-    "question": "회사는 다른 리전의 워크로드와 격리된 워크로드를 지원하고 실행하기 위해 AWS 리전에 \n여러 VPC 를 보유하고 있습니다. 최근 애플리케이션 시작 요구 사항으로 인해 회사의 \nVPC 는 모든 지역의 다른 모든 VPC 와 통신해야 합니다. \n최소한의 관리 노력으로 이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "여러 지역(리전)에 흩어진 수많은 우리 회사 VPC들이 서로 자유롭게 통신해야 합니다. 거미줄처럼 복잡하게 얽힌 연결들을 최소한의 수고로 한곳에서 관리하고 싶다면?",
     "options": [
-      "VPC 피어링을 사용하여 단일 리전에서 VPC 통신을 관리합니다. 리전 간 VPC 피어링을 \n사용하여 VPC 통신을 관리합니다.",
-      "모든 지역에서 AWS Direct Connect 게이트웨이를 사용하여 여러 지역에서 VPC 를 \n\n=== PAGE 468 ===\n연결하고 VPC 통신을 관리합니다.",
-      "AWS Transit Gateway 를 사용하여 단일 지역에서 VPC 통신을 관리하고 지역 간 Transit \nGateway 피어링을 사용하여 VPC 통신을 관리합니다.",
-      "모든 지역에서 AWS PrivateLink 를 사용하여 여러 지역에서 VPC 를 연결하고 VPC \n통신을 관리합니다."
+      "모든 VPC끼리 일대일로 'VPC 피어링'을 맺어 수천 개의 연결 고리를 만듭니다.",
+      "Direct Connect 게이트웨이를 써서 전용선 타는 기분으로 모든 망을 우회 연결합니다.",
+      "AWS Transit Gateway를 리전마다 두고, 리전 간에는 Transit Gateway 피어링으로 거대하게 한데 묶습니다.",
+      "PrivateLink를 계좌 수만큼 뚫어서 각 서비스에 하나하나 프라이빗 통로를 만듭니다."
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109659-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
+    "explanation": "정답은 C입니다.\n\n네트워크의 중앙 허브 역할을 하는 것이 'Transit Gateway'입니다. 리전 내의 수많은 VPC를 이 허브(Transit Gateway)에 꽃기만 하면 그들끼리 알아서 통신이 됩니다. 또한 다른 리전의 허브와도 '피어링'으로 대화할 수 있어, 전 세계의 우리 망을 거대한 하나의 가상 네트워크로 관리할 수 있습니다. 피어링(A)을 일대일로 맺는 것보다 관리가 수만 배 편해집니다.\n\n다른 옵션인 A는 연결 개수가 선형적으로 늘어나 관리가 불가능해지고, D는 관리가 너무 깐깐하고 설정이 어렵습니다.",
     "glossary": {
-      "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
+      "AWS Transit Gateway": "수천 개의 VPC와 온프레미스 네트워크를 중앙에서 하나의 허브로 연결해주는 클라우드 라우터",
+      "Network Hub (허브)": "여러 장치가 한곳에 모여 서로 데이터를 주고받게 해주는 중앙 장치",
+      "Scalability (확장성)": "연결할 VPC가 10개에서 1,000개로 늘어나도 관리 체계가 무너지지 않고 버티는 능력"
     }
   },
   {
     "id": 475,
-    "question": "회사에서 Amazon Elastic Container Service(Amazon ECS)를 사용할 컨테이너화된 \n애플리케이션을 설계하고 있습니다. 애플리케이션은 내구성이 뛰어나고 RPO(복구 지점 \n목표)가 8\n시간인 다른 AWS 리전에 데이터를 복구할 수 있는 공유 파일 시스템에 \n액세스해야 합니다. 파일 시스템은 리전 내의 각 가용 영역에 탑재 대상을 제공해야 \n합니다. \n솔루션 설계자는 AWS Backup 을 사용하여 다른 리전에 대한 복제를 관리하려고 합니다. \n이러한 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "question": "컨테이너 앱(ECS)에서 쓸 '공유 파일 시스템'이 필요합니다. 튼튼해야 하고 장애 시 8시간 내의 데이터로 다른 지역에서 복구할 수 있어야 합니다. 가용 영역마다 접속 통로도 있어야 할 때 추천하는 엔진은?",
     "options": [
-      "다중 AZ 배포가 있는 Windows 파일 서버용 Amazon FSx",
-      "다중 AZ 배포가 있는 NetApp ONTAP 용 Amazon FSx",
-      "표준 스토리지 클래스가 있는 Amazon Elastic File System(Amazon EFS)",
-      "OpenZFS 용 Amazon FSx"
+      "다중 AZ 설정이 된 Windows 서버용 Amazon FSx",
+      "NetApp ONTAP 기술을 사용하는 전문 스토리지 Amazon FSx",
+      "표준 스토리지 클래스를 사용하는 Amazon EFS (Elastic File System)",
+      "OpenZFS 기반의 고성능 파일 서버 Amazon FSx"
     ],
     "answer": 2,
-    "explanation": "www.examtopics.com/discussions/amazon/view/109456-exam-aws-certified-sol\nutions-architect-associate-saa-c03/",
-    "glossary": {}
+    "explanation": "정답은 C입니다.\n\n컨테이너와 찰떡궁합인 '공유 파일 이름표'는 AWS EFS입니다. EFS는 가용 영역마다 접속 통로(Mount Target)를 만들어주어 리전 전체에서 편리하게 파일을 공유할 수 있고, 'AWS Backup' 서비스와 연동하면 다른 리전으로의 복제 관리도 매우 쉽습니다. 특히 ECS 서비스에서 기본적으로 지원하는 공유 스토리지라 설정이 가장 간단합니다.\n\n다른 옵션인 FSx 시리즈들은 특정 운영체제(Windows 등)나 특수 목적용이라 범용적인 컨테이너 앱 공유 저장소로는 EFS가 가성비와 가용성 면에서 앞섭니다.",
+    "glossary": {
+      "Amazon EFS (Elastic File System)": "수천 개의 서버나 컨테이너가 동시에 접속해 파일을 공유할 수 있는 무한 확장 파일 저장소",
+      "RPO (Recovery Point Objective, 복구 지점 목표)": "사고 발생 시 최대 몇 시간 전의 데이터까지 되돌려야 하는가에 대한 시간 기준",
+      "Mount Target (탑재 대상)": "VPC 내의 각 가용 영역에서 파일 시스템에 접속하기 위해 마련된 전용 대문(IP)"
+    }
   }
 ];
