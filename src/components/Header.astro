@@ -73,15 +73,20 @@ import HeaderLink from './HeaderLink.astro';
 		}
 	};
 
-	// Initial check
-	supabase.auth.getSession().then(({ data: { session } }) => {
-		updateAuthUI(session);
-	});
+	// Only attempt auth logic if supabase is available
+	if (supabase) {
+		// Initial check
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			updateAuthUI(session);
+		});
 
-	// Listen for auth changes
-	supabase.auth.onAuthStateChange((_event, session) => {
-		updateAuthUI(session);
-	});
+		// Listen for auth changes
+		supabase.auth.onAuthStateChange((_event, session) => {
+			updateAuthUI(session);
+		});
+	} else {
+		console.warn('Header: Supabase not initialized. Auth features disabled.');
+	}
 </script>
 
 <style>
