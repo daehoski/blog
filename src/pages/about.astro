@@ -7,27 +7,113 @@ import Layout from '../layouts/BlogPost.astro';
 	description="이 프로젝트에 대한 소개입니다."
 	pubDate={new Date('March 19 2024')}
 >
-	<p>
-		<strong>AWS SAA C03 덤프 마스터</strong>는 AWS Certified Solutions Architect - Associate 자격증을 준비하는 한국인 수험생들을 위해 만들어진 인터랙티브 학습 플랫폼입니다.
-	</p>
+	<style>
+		.about-content {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 4rem 1.5rem 8rem;
+		}
+		.about-section {
+			margin-bottom: 6rem;
+		}
+		.about-section h2 {
+			font-size: 2.2rem;
+			font-weight: 800;
+			letter-spacing: -0.04em;
+			margin-bottom: 2rem;
+			color: #1d1d1f;
+			text-align: center;
+		}
+		.about-section p {
+			font-size: 1.25rem;
+			line-height: 1.8;
+			color: #424245;
+			font-weight: 400;
+			text-align: justify;
+			word-break: keep-all;
+			margin-bottom: 2.5rem;
+		}
+		.highlight-text {
+			font-size: 1.6rem;
+			font-weight: 700;
+			color: #1d1d1f;
+			line-height: 1.5;
+			margin-bottom: 4rem;
+			text-align: center;
+			letter-spacing: -0.03em;
+		}
+		.feature-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 4rem;
+			margin-top: 4rem;
+		}
+		.feature-item h4 {
+			font-size: 1.1rem;
+			font-weight: 700;
+			margin-bottom: 0.75rem;
+			color: #1d1d1f;
+		}
+		.feature-item p {
+			font-size: 1rem;
+			line-height: 1.6;
+			color: #86868b;
+			text-align: left;
+		}
+		@media (max-width: 720px) {
+			.feature-grid {
+				grid-template-columns: 1fr;
+				gap: 2rem;
+			}
+			.about-section h2 {
+				font-size: 1.8rem;
+			}
+			.about-section p {
+				font-size: 1.1rem;
+			}
+			.highlight-text {
+				font-size: 1.3rem;
+			}
+		}
+	</style>
 
-	<h3>🎯 프로젝트의 목표</h3>
-	<p>
-		시중에 떠도는 수많은 덤프 문제들을 단순히 읽는 것을 넘어, 직접 풀어보고 실시간으로 피드백을 받으며 학습 효율을 극대화하는 것이 이 프로젝트의 가장 큰 목표입니다. 
-		정적 블로그의 한계를 넘어 실제 시험장과 유사한 UX를 제공하고자 노력했습니다.
-	</p>
+	<div class="about-content">
+		<section class="about-section">
+			<p class="highlight-text">
+				AWS SAA-C03 덤프 마스터는 단순히 자격증 취득을 넘어,<br/>
+				클라우드 아키텍처를 이해하는 가장 우아한 방법을 제시합니다.
+			</p>
+			
+			<h2>프로젝트의 본질</h2>
+			<p>
+				수많은 덤프 문제들 속에서 우리는 본질을 찾고자 했습니다. 단순히 정답을 외우는 것이 아니라, 왜 그 서비스가 정답이 되어야 하는지, 실제 현업에서는 어떤 논리로 아키텍처가 설계되는지에 집중했습니다. 정적 블로그의 가벼움과 애플리케이션의 인터랙티브함을 결합하여 수험생들에게 최상의 학습 경험을 제공합니다.
+			</p>
+		</section>
 
-	<h3>✨ 주요 기능</h3>
-	<ul>
-		<li><strong>725문제 엄선 수록</strong>: 최신 SAA-C03 덤프 전 문항을 체계적으로 분류하여 수록했습니다.</li>
-		<li><strong>인터랙티브 채점 엔진</strong>: 문제를 풀자마자 정답 여부와 상세 해설을 즉시 확인할 수 있습니다.</li>
-		<li><strong>AI 기반 용어 사전</strong>: 어려운 AWS 서비스 용어를 한 문장으로 즉시 요약하여 학습 시간을 단축해 줍니다.</li>
-		<li><strong>개인 최적화 오답 노트</strong>: 제출 후 내가 틀린 문제만 모아보며 약점을 빠르게 보완할 수 있습니다.</li>
-	</ul>
+		<section class="about-section">
+			<h2>학습 경험의 재정의</h2>
+			<div class="feature-grid">
+				<div class="feature-item">
+					<h4>725개의 정밀한 정제</h4>
+					<p>방대한 덤프 데이터를 체계적으로 분류하고 모든 해설을 표준화된 구조로 재작성했습니다. 명확한 논리 구조는 학습 시간을 절반으로 줄여줍니다.</p>
+				</div>
+				<div class="feature-item">
+					<h4>맥락 기반의 지식 전달</h4>
+					<p>지능형 용어 사전을 통해 문제 풀이 흐름을 끊지 않고도 핵심 개념을 습득할 수 있습니다. 지식은 암기가 아닌 연결을 통해 완성됩니다.</p>
+				</div>
+				<div class="feature-item">
+					<h4>순수 기술의 미학</h4>
+					<p>별도의 무거운 프레임워크 없이 순수 자바스크립트 엔진과 최적화된 CSS로 구현되었습니다. 가장 빠른 반응성이 가장 훌륭한 사용자 경험을 만듭니다.</p>
+				</div>
+				<div class="feature-item">
+					<h4>비주얼 미니멀리즘</h4>
+					<p>오직 텍스트와 논리에만 집중할 수 있도록 시각적 노이즈를 걷어냈습니다. 고급스러운 타이포그래피와 여백의 미는 학습의 몰입도를 높입니다.</p>
+				</div>
+			</div>
+		</section>
 
-	<h3>🚀 지속적인 업데이트</h3>
-	<p>
-		AWS의 서비스는 끊임없이 진화합니다. 본 포털 또한 최신 시험 경향과 새로운 서비스 업데이트를 반영하여 지속적으로 데이터를 갱신하고 기능을 개선해 나갈 예정입니다. 
-		여러분의 성공적인 자격증 취득을 응원합니다!
-	</p>
+		<footer style="text-align: center; border-top: 1px solid #f5f5f7; padding-top: 4rem;">
+			<p style="font-size: 1rem; color: #86868b;">여러분의 성공적인 자격증 취득과 성장을 응원합니다.</p>
+		</footer>
+	</div>
 </Layout>

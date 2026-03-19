@@ -2,16 +2,19 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import LoginBenefitCard from '../../components/LoginBenefitCard.astro';
 import { allQuizData } from '../../data/all-quiz-data.js';
+import { quizSlugMap, quizRangeMap } from '../../lib/utils.js';
 import '../../styles/quiz.css';
 
 export function getStaticPaths() {
   return Object.keys(allQuizData).map(range => ({
-    params: { range }
+    params: { slug: quizSlugMap[range] || range }
   }));
 }
 
-const { range } = Astro.params;
+const { slug } = Astro.params;
+const range = quizRangeMap[slug] || slug;
 const quizData = allQuizData[range] || [];
 
 // 퀴즈 범위 정보를 기반으로 타이틀 동적 생성
@@ -43,8 +46,12 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 		<main>
 			<div class="quiz-container">
 				<header id="main-quiz-header" class="mobile-hidden" style="text-align: center; margin-bottom: 1.5rem;">
-					<h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">{title}</h1>
+					<h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">🎯 {title}</h1>
 					<p style="color: #666; font-size: 0.85rem;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
+                    <div id="user-greeting" class="hidden" style="margin-top: 1rem; font-size: 0.9rem; color: #1d1d1f; font-weight: 500;">
+                        안녕하세요, <span id="user-name"></span>님! 📚
+                        <button id="sign-out-btn" style="margin-left: 0.5rem; color: #86868b; background: none; border: none; cursor: pointer; text-decoration: underline; font-size: 0.8rem;">로그아웃</button>
+                    </div>
 				</header>
 
 				{quizData.length > 0 ? (
@@ -124,16 +131,19 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 							<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem;">📝 오답 노트</h3>
 							<div id="wrong-list-container"></div>
 						</div>
+
+                        <!-- Login Inducement Card at the bottom of results -->
+                        <LoginBenefitCard />
 					</div>
 				</div>
 
-				<!-- 하단 퀴즈 네비게이션 -->
+				<!-- 하단 퀴즈 네비게이션 - Hashed Slugs -->
 				<div class="quiz-nav-section" style="margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e5e7eb;">
 					<h3 style="margin-bottom: 1rem; text-align: center; font-size: 1rem; color: #374151;">🎯 다른 회차 풀어보기</h3>
 					<div class="quiz-nav-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem;">
 						{allRanges.filter(r => r.startsWith('q')).map((r) => (
 							<a 
-								href={`/quiz/${r}`} 
+								href={`/quiz/${quizSlugMap[r] || r}`} 
 								class={`quiz-nav-item ${r === range ? 'active' : ''}`}
 								style={`
 									display: block;
@@ -155,27 +165,58 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 					</div>
 				</div>
 			</div>
+            <!-- Store quizData for client-side script -->
+            <div id="quiz-data-store" data-quiz={JSON.stringify(quizData)} class="hidden"></div>
 		</main>
 		<Footer />
 
-		<script is:inline define:vars={{ quizData }}>
-			document.addEventListener('DOMContentLoaded', () => {
+		<script is:inline>
+			// Define sync helper in global scope (simplified for is:inline)
+			window.last_visited_quiz = window.location.pathname;
+			localStorage.setItem('last_visited_quiz', window.last_visited_quiz);
+		</script>
+
+		<script>
+			import { supabase } from '../../lib/supabase.js';
+			import { signOut } from '../../lib/auth-sync.js';
+
+			document.addEventListener('DOMContentLoaded', async () => {
 				const gradeButtons = document.querySelectorAll('.grade-btn');
 				const showSummaryBtn = document.getElementById('show-summary-btn');
+				const userGreeting = document.getElementById('user-greeting');
+				const userName = document.getElementById('user-name');
+				const signOutBtn = document.getElementById('sign-out-btn');
+                const quizDataStore = document.getElementById('quiz-data-store');
 				const userSelections = {};
 
-				// 개별 문제 채점
+                if (!quizDataStore) return;
+                const quizData = JSON.parse(quizDataStore.dataset.quiz || "[]");
+
+				// Check active session
+				const { data: { session } } = await supabase.auth.getSession();
+				if (session) {
+					userGreeting?.classList.remove('hidden');
+					if (userName) userName.innerText = session.user.user_metadata.full_name || session.user.email?.split('@')[0];
+					
+					signOutBtn?.addEventListener('click', async () => {
+						await signOut();
+					});
+				}
+
+				// Individual question grading
 				gradeButtons.forEach(btn => {
-					btn.addEventListener('click', () => {
-						const quizId = parseInt(btn.dataset.quizId);
+					btn.addEventListener('click', async () => {
+						const quizId = parseInt(btn.dataset.quizId || "0");
 						const quizCard = document.getElementById(`quiz-${quizId}`);
-						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer));
+						if (!quizCard) return;
+
+						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
                         
                         let selectedOptions;
                         if (isMultiple) {
-                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt(el.value));
+                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
                         } else {
-                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`);
+                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
                             selectedOptions = selected ? [parseInt(selected.value)] : [];
                         }
 
@@ -185,13 +226,13 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						}
 
 						userSelections[quizId] = selectedOptions;
-                        const correctAnswers = JSON.parse(quizCard.dataset.answer);
+                        const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
                         const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 
-						// UI 업데이트
+						// UI updates
 						const options = quizCard.querySelectorAll('.quiz-option');
 						options.forEach((opt, idx) => {
-							const input = opt.querySelector('input');
+							const input = opt.querySelector('input') as HTMLInputElement;
 							input.disabled = true;
 							opt.classList.add('disabled');
 
@@ -203,15 +244,35 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						});
 
 						btn.classList.add('hidden');
-						document.getElementById(`result-${quizId}`).classList.remove('hidden');
+						document.getElementById(`result-${quizId}`)?.classList.remove('hidden');
+
+                        // Save result
+                        const isCorrect = selectedOptions.length === correctAnswerList.length && 
+                                          selectedOptions.every(choice => correctAnswerList.includes(choice));
+
+                        if (session) {
+                            await supabase.from('wrong_answers').upsert({
+                                user_id: session.user.id,
+                                quiz_id: quizId,
+                                selected_options: selectedOptions,
+                                is_correct: isCorrect
+                            });
+                        } else if (!isCorrect) {
+                            const guestWrongAnswers = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
+                            guestWrongAnswers[quizId] = {
+                                selected: selectedOptions,
+                                date: new Date().toISOString()
+                            };
+                            localStorage.setItem('guest_wrong_answers', JSON.stringify(guestWrongAnswers));
+                        }
 					});
 				});
 
-				// 최종 결과 보기
-				showSummaryBtn.addEventListener('click', () => {
+				// Final summary
+				showSummaryBtn?.addEventListener('click', () => {
 					let correctCount = 0;
 					const wrongListContainer = document.getElementById('wrong-list-container');
-					wrongListContainer.innerHTML = '';
+					if (wrongListContainer) wrongListContainer.innerHTML = '';
 
 					quizData.forEach(quiz => {
 						const userChoices = userSelections[quiz.id] || [];
@@ -222,7 +283,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
 						if (isCorrect) {
 							correctCount++;
-						} else {
+						} else if (wrongListContainer) {
 							const wrongItem = document.createElement('div');
 							wrongItem.className = 'quiz-wrong-item';
 							
@@ -234,36 +295,40 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 							wrongItem.innerHTML = `
 								<div style="margin-bottom: 0.5rem;">
 									<span class="quiz-badge" style="background:#ef4444;">Q${quiz.id}</span>
-									<strong style="margin-left:0.5rem;">${quiz.question}</strong>
+									<strong style="margin-left:0.5rem; word-break:keep-all;">${quiz.question}</strong>
 								</div>
-								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #fff1f2; border-radius: 4px;">
+								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.6rem; background: #fff1f2; border-radius: 8px; color: #e11d48; word-break:keep-all;">
 									❌ 내 답변: ${userChoiceTexts}
 								</div>
-								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #f0fdf4; border-radius: 4px;">
+								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.6rem; background: #f0fdf4; border-radius: 8px; color: #166534; word-break:keep-all;">
 									✅ 정답: ${correctChoiceTexts}
 								</div>
-								<div style="font-size: 0.85rem; color: #666; border-top: 1px solid #eee; padding-top: 0.5rem;">
-									💡 해설: ${quiz.explanation}
+								<div style="font-size: 0.9rem; color: #3c3c43; border-top: 1px solid #f2f2f7; padding-top: 0.75rem; line-height: 1.6; word-break:keep-all;">
+									${quiz.explanation}
 								</div>
 							`;
 							wrongListContainer.appendChild(wrongItem);
 						}
 					});
 
-					document.getElementById('final-score').textContent = correctCount;
-					document.getElementById('summary-result').classList.remove('hidden');
+                    const finalScoreEl = document.getElementById('final-score');
+                    if (finalScoreEl) finalScoreEl.textContent = correctCount.toString();
+                    
+					document.getElementById('summary-result')?.classList.remove('hidden');
 					
 					const message = correctCount === quizData.length 
 						? "🎉 만점입니다! 완벽해요!" 
 						: correctCount >= quizData.length * 0.8 
 							? "👍 아주 훌륭한 성적입니다!" 
 							: `📖 ${quizData.length}문제 중 ${correctCount}문제를 맞혔습니다. 오답 노트를 확인해 보세요.`;
-					document.getElementById('score-message').textContent = message;
+					
+                    const scoreMsgEl = document.getElementById('score-message');
+                    if (scoreMsgEl) scoreMsgEl.textContent = message;
 
 					showSummaryBtn.classList.add('hidden');
 					
 					setTimeout(() => {
-						document.getElementById('summary-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+						document.getElementById('summary-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					}, 100);
 				});
 			});

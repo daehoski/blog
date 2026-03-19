@@ -12,77 +12,99 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<style>
 			main {
 				width: 100%;
-				max-width: 1200px;
+				max-width: 1100px;
 				margin: 0 auto;
-				padding: 3rem 1rem;
+				padding: 6rem 1.5rem;
+				overflow-x: hidden;
 			}
 			.hero {
 				text-align: center;
-				padding: 4rem 1rem;
-				background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-				color: white;
-				border-radius: 24px;
-				margin-bottom: 4rem;
-				box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+				padding: 3rem 0 5rem;
+				color: #1d1d1f;
+				max-width: 100%;
 			}
 			.hero h1 {
-				font-size: 3.5rem;
+				font-size: clamp(2rem, 8vw, 4.5rem);
 				margin-bottom: 1.5rem;
 				font-weight: 800;
-				letter-spacing: -0.025em;
+				line-height: 1.1;
+				letter-spacing: -0.04em;
+				word-break: keep-all;
 			}
 			.hero p {
-				font-size: 1.25rem;
-				max-width: 800px;
-				margin: 0 auto 2.5rem;
-				opacity: 0.9;
-				line-height: 1.6;
+				font-size: clamp(1.1rem, 3vw, 1.5rem);
+				max-width: 750px;
+				margin: 0 auto 3rem;
+				color: #86868b;
+				line-height: 1.5;
+				font-weight: 500;
+				word-break: keep-all;
 			}
 			.cta-button {
 				display: inline-block;
-				padding: 1rem 2.5rem;
-				background-color: #fbbf24;
-				color: #1e3a8a;
-				font-weight: 700;
-				font-size: 1.2rem;
+				padding: 1.1rem 2.8rem;
+				background-color: #1d1d1f;
+				color: white;
+				font-weight: 600;
+				font-size: 1.05rem;
 				border-radius: 9999px;
 				text-decoration: none;
-				transition: all 0.2s;
-				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 			}
 			.cta-button:hover {
-				transform: translateY(-2px);
-				background-color: #f59e0b;
-				box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+				transform: scale(1.02);
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 			}
 			.features {
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 				gap: 2rem;
-				margin-bottom: 4rem;
+				margin: 0 auto 6rem;
+				max-width: 100%;
 			}
 			.feature-card {
 				background: white;
-				padding: 2rem;
-				border-radius: 16px;
-				border: 1px solid #e5e7eb;
+				padding: 3rem 2rem;
+				border-radius: 24px;
 				box-shadow: var(--box-shadow);
-				transition: transform 0.2s;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				border: none;
 			}
 			.feature-card:hover {
-				transform: translateY(-4px);
+				transform: translateY(-8px);
+				box-shadow: var(--box-shadow-hover);
 			}
 			.feature-card h3 {
-				font-size: 1.5rem;
+				font-size: 1.35rem;
 				margin-bottom: 1rem;
-				color: #1e3a8a;
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
+				font-weight: 700;
+				color: #1d1d1f;
 			}
 			.feature-card p {
-				color: #4b5563;
+				color: #86868b;
 				line-height: 1.6;
+				font-size: 1rem;
+				font-weight: 400;
+			}
+			@media (max-width: 768px) {
+				main {
+					padding: 4rem 1.25rem;
+				}
+				.hero {
+					padding: 2rem 0 4rem;
+				}
+				.features {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+				.feature-card {
+					padding: 2rem;
+				}
+			}
+			@media (max-width: 480px) {
+				.hero h1 {
+					letter-spacing: -0.03em;
+				}
 			}
 		</style>
 	</head>
@@ -90,35 +112,35 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<Header />
 		<main>
 			<section class="hero">
-				<h1>🎯 AWS SAA C03<br/>완벽 정복 포털</h1>
+				<h1>AWS SAA-C03<br/>덤프 마스터 포털</h1>
 				<p>
-					최신 기출 덤프 725문제를 인터랙티브한 환경에서 풀어보세요.<br/>
-					상세한 해설과 스마트 용어 사전이 여러분의 합격을 돕습니다.
+					최신 기출 725문제를 가장 세련된 환경에서 경험하세요.<br/>
+					정교한 해설과 스마트 용어 사전이 합격의 길을 제시합니다.
 				</p>
-				<a href="/quiz" class="cta-button">🚀 지금 바로 덤프 시작하기</a>
+				<a href="/quiz" class="cta-button">덤프 풀기 시작하기</a>
 			</section>
 
 			<section class="features">
 				<div class="feature-card">
-					<h3>📝 725문제 전체 수록</h3>
-					<p>SAA-C03 시험의 최신 경향을 반영한 725개의 방대한 문제를 25문제씩 관리하기 쉽게 나누어 수록했습니다.</p>
+					<h3>725문항 전수 수록</h3>
+					<p>SAA-C03 시험의 최신 경향을 완벽히 반영했습니다. 25문제씩 구성된 체계적인 세트로 지치지 않고 학습할 수 있습니다.</p>
 				</div>
 				<div class="feature-card">
-					<h3>💡 스마트 용어 사전</h3>
-					<p>문제와 해설에 등장하는 복잡한 AWS 용어들을 별도의 검색 없이 즉시 확인할 수 있도록 자동 요약 박스를 제공합니다.</p>
+					<h3>지능형 용어 사전</h3>
+					<p>복잡한 AWS 서비스 용어들을 문맥에 맞춰 즉시 설명합니다. 별도의 검색 없이도 깊이 있는 이해가 가능해집니다.</p>
 				</div>
 				<div class="feature-card">
-					<h3>📔 실시간 오답 노트</h3>
-					<p>틀린 문제는 즉시 기록되어 나중에 모아볼 수 있어 취약한 부분을 집중적으로 보완할 수 있습니다.</p>
+					<h3>인터랙티브 분석</h3>
+					<p>제출 즉시 정오답을 확인하고 상세한 해설을 읽어보세요. 데이터 기반의 오답 노트를 통해 취약점을 완벽히 보완합니다.</p>
 				</div>
 				<div class="feature-card">
-					<h3>⚡ 순수 JS 엔진</h3>
-					<p>별도의 라이브러리 없이 순수 자바스크립트로 구현되어 로딩이 빠르고 쾌적한 학습 환경을 제공합니다.</p>
+					<h3>미니멀리즘 엔진</h3>
+					<p>오직 학습에만 집중할 수 있도록 불필요한 노이즈를 제거했습니다. 빠른 로딩과 쾌적한 UX로 학습 효율을 극대화합니다.</p>
 				</div>
 			</section>
 
-			<section style="text-align: center; color: #6b7280; padding: 2rem 0;">
-				<p>본 포털은 AWS Certified Solutions Architect - Associate 자격증 취득을 돕기 위해 최적화되었습니다.</p>
+			<section style="text-align: center; color: #86868b; padding: 4rem 0; font-size: 0.9rem; font-weight: 500;">
+				<p>AWS Certified Solutions Architect - Associate 자격 취득을 위한 최적의 파트너입니다.</p>
 			</section>
 		</main>
 		<Footer />

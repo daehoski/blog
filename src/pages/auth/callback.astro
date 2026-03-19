@@ -1,0 +1,62 @@
+---
+// src/pages/auth/callback.astro
+import BaseHead from '../../components/BaseHead.astro';
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead title="인증 중..." description="로그인 처리 중입니다." />
+  </head>
+  <body>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 1rem; font-family: 'Pretendard Variable', sans-serif;">
+      <div class="loader"></div>
+      <p style="color: #1d1d1f; font-weight: 500;">로그인 정보를 확인하고 있습니다...</p>
+      <p style="color: #86868b; font-size: 0.9rem;">잠시만 기다려 주세요.</p>
+    </div>
+
+    <script>
+      import { supabase } from '../../lib/supabase.js';
+      import { syncGuestData } from '../../lib/auth-sync.js';
+
+      const handleAuthCallback = async () => {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Auth callback error:', error.message);
+          window.location.href = '/quiz?error=auth_failed';
+          return;
+        }
+
+        if (session) {
+          // Sync guest data before redirecting
+          await syncGuestData(session.user.id);
+          
+          // Redirect back to the last visited quiz or the quiz list
+          const lastVisited = localStorage.getItem('last_visited_quiz') || '/quiz';
+          window.location.href = lastVisited;
+        } else {
+          window.location.href = '/quiz';
+        }
+      };
+
+      handleAuthCallback();
+    </script>
+
+    <style>
+      .loader {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #0071e3;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </body>
+</html>

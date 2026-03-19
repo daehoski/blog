@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { allQuizData } from '../../data/all-quiz-data.js';
+import { quizSlugMap } from '../../lib/utils.js';
 
 // 전체 퀴즈 목록 (네비게이션용) - 숫자 순서로 정렬
 const allRanges = Object.keys(allQuizData).sort((a, b) => {
@@ -26,78 +27,110 @@ const getDisplayRange = (r) => {
 		<BaseHead title={`AWS SAA C03 덤프 전체 목록 | ${SITE_TITLE}`} description="AWS SAA-C03 덤프 문제 전체 목록입니다. 원하는 회차를 선택해 풀어보세요." />
 		<style>
 			main {
-				width: 960px;
-                max-width: calc(100% - 2rem);
-                margin: auto;
-                padding: 3em 1em;
+				width: 100%;
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+				overflow-x: hidden;
 			}
 			.quiz-list-container {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-				gap: 1.5rem;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 2rem;
 				margin-top: 2rem;
+				max-width: 100%;
 			}
 			.quiz-card {
 				background: white;
-				padding: 1.5rem;
-				border-radius: 12px;
+				padding: 3rem 2rem;
+				border-radius: 24px;
 				box-shadow: var(--box-shadow);
 				text-decoration: none;
 				color: inherit;
-				transition: transform 0.2s, box-shadow 0.2s;
-				border: 1px solid #e5e7eb;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				border: none;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
 			}
 			.quiz-card:hover {
-				transform: translateY(-4px);
-				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-				border-color: #2563eb;
+				transform: translateY(-8px);
+				box-shadow: var(--box-shadow-hover);
 			}
 			.quiz-card h3 {
-				margin: 0 0 0.5rem 0;
-				font-size: 1.25rem;
-				color: #1f2937;
+				margin: 0 0 0.75rem 0;
+				font-size: 1.35rem;
+				color: #1d1d1f;
+				font-weight: 700;
+				letter-spacing: -0.03em;
+				word-break: keep-all;
 			}
 			.quiz-card p {
 				margin: 0;
-				font-size: 0.9rem;
-				color: #6b7280;
+				font-size: 0.95rem;
+				color: #86868b;
+				line-height: 1.5;
+				font-weight: 400;
+				word-break: keep-all;
 			}
-            .quiz-badge {
-                display: inline-block;
-                padding: 0.25rem 0.75rem;
-                background: #ebf5ff;
-                color: #2563eb;
-                border-radius: 9999px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                margin-bottom: 1rem;
-                align-self: flex-start;
-            }
+			.quiz-badge {
+				display: inline-block;
+				padding: 0.35rem 0.9rem;
+				background: #f5f5f7;
+				color: #1d1d1f;
+				border-radius: 9999px;
+				font-size: 0.75rem;
+				font-weight: 600;
+				margin-bottom: 1.25rem;
+				align-self: flex-start;
+				letter-spacing: 0.02em;
+			}
+			.quiz-link-text {
+				margin-top: 2rem;
+				font-weight: 600;
+				color: #1d1d1f;
+				font-size: 0.9rem;
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				transition: gap 0.2s;
+			}
+			.quiz-card:hover .quiz-link-text {
+				gap: 0.6rem;
+			}
+			@media (max-width: 768px) {
+				main {
+					padding: 3rem 1.25rem;
+				}
+				.quiz-list-container {
+					grid-template-columns: 1fr;
+					gap: 1.25rem;
+				}
+				.quiz-card {
+					padding: 2rem 1.5rem;
+				}
+			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section style="text-align: center; margin-bottom: 3rem;">
-				<h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🎯 AWS SAA C03 덤프</h1>
-				<p style="color: #666; font-size: 1.1rem;">
-					총 725문제의 방대한 덤프를 25문제씩 나누어 구성했습니다.<br/>
-					차근차근 풀어보며 실력을 쌓아보세요!
+			<section style="text-align: center; margin-bottom: 5rem;">
+				<h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; color: #1d1d1f; font-weight: 800; letter-spacing: -0.04em;">AWS SAA-C03 덤프</h1>
+				<p style="color: #86868b; font-size: 1.2rem; line-height: 1.6; font-weight: 500; max-width: 600px; margin: 0 auto;">
+					총 725개 문항을 25문제씩 관리하기 쉽게 구성했습니다. 가장 직관적인 환경에서 학습을 시작하세요.
 				</p>
 			</section>
 
 			<div class="quiz-list-container">
 				{allRanges.map((range) => (
-					<a href={`/quiz/${range}`} class="quiz-card">
+					<a href={`/quiz/${quizSlugMap[range] || range}`} class="quiz-card">
                         <div>
                             <span class="quiz-badge">SAA-C03</span>
 						    <h3>{getDisplayRange(range)}</h3>
 						    <p>{allQuizData[range].length}개의 문제가 포함되어 있습니다.</p>
                         </div>
-                        <div style="margin-top: 1.5rem; font-weight: 600; color: #2563eb; font-size: 0.9rem;">
+                        <div class="quiz-link-text">
                             문제 풀러 가기 →
                         </div>
 					</a>
