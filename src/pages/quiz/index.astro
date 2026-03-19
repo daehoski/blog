@@ -1,0 +1,109 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { allQuizData } from '../../data/all-quiz-data.js';
+
+// 전체 퀴즈 목록 (네비게이션용) - 숫자 순서로 정렬
+const allRanges = Object.keys(allQuizData).sort((a, b) => {
+  const getStart = (s) => parseInt(s.replace('q', '').split('-')[0]);
+  return getStart(a) - getStart(b);
+});
+
+const getDisplayRange = (r) => {
+  const parts = r.replace('q', '').split('-');
+  if (parts.length === 2) {
+    return `${parseInt(parts[0])}~${parseInt(parts[1])}번`;
+  }
+  return r;
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`AWS SAA C03 덤프 전체 목록 | ${SITE_TITLE}`} description="AWS SAA-C03 덤프 문제 전체 목록입니다. 원하는 회차를 선택해 풀어보세요." />
+		<style>
+			main {
+				width: 960px;
+                max-width: calc(100% - 2rem);
+                margin: auto;
+                padding: 3em 1em;
+			}
+			.quiz-list-container {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 1.5rem;
+				margin-top: 2rem;
+			}
+			.quiz-card {
+				background: white;
+				padding: 1.5rem;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+				text-decoration: none;
+				color: inherit;
+				transition: transform 0.2s, box-shadow 0.2s;
+				border: 1px solid #e5e7eb;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+			}
+			.quiz-card:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+				border-color: #2563eb;
+			}
+			.quiz-card h3 {
+				margin: 0 0 0.5rem 0;
+				font-size: 1.25rem;
+				color: #1f2937;
+			}
+			.quiz-card p {
+				margin: 0;
+				font-size: 0.9rem;
+				color: #6b7280;
+			}
+            .quiz-badge {
+                display: inline-block;
+                padding: 0.25rem 0.75rem;
+                background: #ebf5ff;
+                color: #2563eb;
+                border-radius: 9999px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                align-self: flex-start;
+            }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section style="text-align: center; margin-bottom: 3rem;">
+				<h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🎯 AWS SAA C03 덤프</h1>
+				<p style="color: #666; font-size: 1.1rem;">
+					총 725문제의 방대한 덤프를 25문제씩 나누어 구성했습니다.<br/>
+					차근차근 풀어보며 실력을 쌓아보세요!
+				</p>
+			</section>
+
+			<div class="quiz-list-container">
+				{allRanges.map((range) => (
+					<a href={`/quiz/${range}`} class="quiz-card">
+                        <div>
+                            <span class="quiz-badge">SAA-C03</span>
+						    <h3>{getDisplayRange(range)}</h3>
+						    <p>{allQuizData[range].length}개의 문제가 포함되어 있습니다.</p>
+                        </div>
+                        <div style="margin-top: 1.5rem; font-weight: 600; color: #2563eb; font-size: 0.9rem;">
+                            문제 풀러 가기 →
+                        </div>
+					</a>
+				))}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

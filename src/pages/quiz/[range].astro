@@ -6,26 +6,31 @@ import { allQuizData } from '../../data/all-quiz-data.js';
 import '../../styles/quiz.css';
 
 export function getStaticPaths() {
-  return [
-    { params: { range: 'q01-25' } },
-    { params: { range: 'q26-50' } },
-    { params: { range: 'q51-75' } },
-    { params: { range: 'q76-100' } },
-  ];
+  return Object.keys(allQuizData).map(range => ({
+    params: { range }
+  }));
 }
 
 const { range } = Astro.params;
 const quizData = allQuizData[range] || [];
 
-const titles = {
-  'q01-25': "AWS SAA C03 덤프 (1~25번)",
-  'q26-50': "AWS SAA C03 덤프 (26~50번)",
-  'q51-75': "AWS SAA C03 덤프 (51~75번)",
-  'q76-100': "AWS SAA C03 덤프 (76~100번)",
+// 퀴즈 범위 정보를 기반으로 타이틀 동적 생성
+const getDisplayRange = (r) => {
+  const parts = r.replace('q', '').split('-');
+  if (parts.length === 2) {
+    return `${parseInt(parts[0])}~${parseInt(parts[1])}번`;
+  }
+  return r;
 };
 
-const title = titles[range] || "AWS SAA C03 덤프";
-const description = "AWS SAA-C03 덤프 문제를 인터랙티브하게 풀어보고 오답 노트를 확인하세요.";
+const title = `AWS SAA C03 덤프 (${getDisplayRange(range)})`;
+const description = `AWS SAA-C03 덤프 문제 ${getDisplayRange(range)}를 인터랙티브하게 풀어보고 오답 노트를 확인하세요.`;
+
+// 전체 퀴즈 목록 (네비게이션용) - 숫자 순서로 정렬
+const allRanges = Object.keys(allQuizData).sort((a, b) => {
+  const getStart = (s) => parseInt(s.replace('q', '').split('-')[0]);
+  return getStart(a) - getStart(b);
+});
 ---
 
 <!doctype html>
@@ -40,12 +45,6 @@ const description = "AWS SAA-C03 덤프 문제를 인터랙티브하게 풀어�
 				<header style="text-align: center; margin-bottom: 3rem;">
 					<h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯 {title}</h1>
 					<p style="color: #666;">실제 기출문제를 풀고 실력을 점검해 보세요.</p>
-                    <nav class="quiz-nav-links" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
-                        <a href="/quiz/q01-25" class={range === 'q01-25' ? 'active' : ''}>1-25</a>
-                        <a href="/quiz/q26-50" class={range === 'q26-50' ? 'active' : ''}>26-50</a>
-                        <a href="/quiz/q51-75" class={range === 'q51-75' ? 'active' : ''}>51-75</a>
-                        <a href="/quiz/q76-100" class={range === 'q76-100' ? 'active' : ''}>76-100</a>
-                    </nav>
 				</header>
 
 				{quizData.length > 0 ? (
@@ -123,6 +122,34 @@ const description = "AWS SAA-C03 덤프 문제를 인터랙티브하게 풀어�
 							<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem;">📝 오답 노트</h3>
 							<div id="wrong-list-container"></div>
 						</div>
+					</div>
+				</div>
+
+				<!-- 하단 퀴즈 네비게이션 -->
+				<div class="quiz-nav-section" style="margin-top: 4rem; padding-top: 2rem; border-top: 2px solid #e5e7eb;">
+					<h3 style="margin-bottom: 1.5rem; text-align: center; color: #374151;">🎯 다른 회차 풀어보기</h3>
+					<div class="quiz-nav-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem;">
+						{allRanges.filter(r => r.startsWith('q')).map((r) => (
+							<a 
+								href={`/quiz/${r}`} 
+								class={`quiz-nav-item ${r === range ? 'active' : ''}`}
+								style={`
+									display: block;
+									padding: 0.75rem;
+									text-align: center;
+									background: ${r === range ? '#2563eb' : 'white'};
+									color: ${r === range ? 'white' : '#4b5563'};
+									border: 1px solid ${r === range ? '#2563eb' : '#e5e7eb'};
+									border-radius: 8px;
+									text-decoration: none;
+									font-size: 0.9rem;
+									font-weight: 500;
+									transition: all 0.2s;
+								`}
+							>
+								{getDisplayRange(r)}
+							</a>
+						))}
 					</div>
 				</div>
 			</div>
