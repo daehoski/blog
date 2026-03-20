@@ -68,6 +68,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                     data-answer={JSON.stringify(quiz.answer)} 
                                     data-explanations={JSON.stringify(quiz.explanations || {})}
                                     data-category={quiz.domain || "기본"}
+                                    data-legacy-explanation={quiz.explanation}
                                 >
                                     <div class="quiz-question-header">
                                         <span class="quiz-badge">Q{quiz.id}</span>
@@ -242,27 +243,34 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						const quizCard = document.getElementById(`quiz-${quizId}`);
                         if (!quizCard) return;
 
-						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
-                        
-                        let selectedOptions;
-                        if (isMultiple) {
-                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
-                        } else {
-                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
-                            selectedOptions = selected ? [parseInt(selected.value)] : [];
+                        let correctAnswerList = [];
+                        let selectedOptions = [];
+                        let explanations = {};
+
+                        try {
+						    const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
+                            
+                            if (isMultiple) {
+                                selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
+                            } else {
+                                const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
+                                selectedOptions = selected ? [parseInt(selected.value)] : [];
+                            }
+
+						    if (selectedOptions.length === 0) {
+							    alert("답을 선택해 주세요!");
+							    return;
+						    }
+
+						    userSelections[quizId] = selectedOptions;
+                            const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
+                            correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+                            explanations = JSON.parse(quizCard.dataset.explanations || '{}');
+                        } catch (e) {
+                            console.error('Data parsing error:', e);
                         }
 
-						if (selectedOptions.length === 0) {
-							alert("답을 선택해 주세요!");
-							return;
-						}
-
-						userSelections[quizId] = selectedOptions;
-                        const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
-                        const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
-                        const explanations = JSON.parse(quizCard.dataset.explanations || '{}');
-
-						// UI 업데이트
+						// UI 업데이트 (항상 실행되어야 함)
 						const options = quizCard.querySelectorAll('.quiz-option');
 						options.forEach((opt) => {
 							const input = opt.querySelector('input') as HTMLInputElement;
@@ -317,13 +325,34 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						const resultArea = document.getElementById(`result-${quizId}`);
                         if (resultArea) resultArea.classList.remove('hidden');
 
-                        // Upsert Progress
+                        // --- Supabase Interaction (Isolated in try-catch) ---
                         if (userId) {
-                            await supabase.from('user_progress').upsert({
-                                user_id: userId,
-                                last_quiz_id: quizId,
-                                updated_at: new Date().toISOString()
-                            });
+                            // 1. Progress Upsert
+                            try {
+                                await supabase.from('user_progress').upsert({
+                                    user_id: userId,
+                                    last_quiz_id: quizId,
+                                    updated_at: new Date().toISOString()
+                                });
+                            } catch (e) {
+                                console.error('User progress save error:', e);
+                            }
+
+                            // 2. Wrong Answer Tracking
+                            try {
+                                const isCorrect = selectedOptions.length === correctAnswerList.length && 
+                                                  selectedOptions.every(val => correctAnswerList.includes(val));
+                                
+                                // Note: We use quiz_id as found in mypage.astro
+                                await supabase.from('wrong_answers').insert({
+                                    user_id: userId,
+                                    quiz_id: quizId,
+                                    selected_options: selectedOptions,
+                                    is_correct: isCorrect
+                                });
+                            } catch (e) {
+                                console.error('Wrong answer save error:', e);
+                            }
                         }
 					});
 				});
