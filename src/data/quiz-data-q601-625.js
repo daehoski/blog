@@ -230,7 +230,8 @@ export const quizData = [
       "앱 서버들 앞에 'Application Load Balancer(ALB)'를 두고, 보안 그룹을 통해 웹 서버 그룹만 입장을 허용합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 다중 계층(Multi-tier) 앱 보안의 정석은 '보안 그룹(Security Group) 체이닝'입니다. 로드 밸런서(ALB)를 입구에 두고, 보안 그룹 설정에서 "웹 서버 보안 그룹에 속한 녀석들의 80번 포트 요청만 받아줄게"라고 설정하면 됩니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules",
+    "explanation": "정답은 D입니다. 다중 계층(Multi-tier) 앱 보안의 정석은 '보안 그룹(Security Group) 체이닝'입니다. 로드 밸런서(ALB)를 입구에 두고, 보안 그룹 설정에서 '웹 서버 보안 그룹에 속한 녀석들의 80번 포트 요청만 받아줄게'라고 설정하면 됩니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules",
+
     "glossary": {
       "Security Group (보안 그룹)": "서버의 가상 방화벽으로, 어떤 주소나 어떤 그룹에서 오는 트래픽을 허용할지 결정함",
       "Application Load Balancer (ALB)": "여러 대의 앱 서버에 골고루 트래픽을 나눠주는 똑똑한 안내 데스크",
@@ -333,7 +334,8 @@ export const quizData = [
       "용량은 크고 싸지만 속도 편차가 큰 HDD(Throughput Optimized) 방식을 고수합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 성능의 일관성이 가장 중요하다면 '프로비저닝된 IOPS SSD'가 정답입니다. 이 녀석은 "초당 만 번의 클릭(IOPS) 속도를 항상 유지해줘!"라고 돈을 더 내고 약속받는 서비스라 한결같은 쾌적함을 보장합니다.\n\nhttps://aws.amazon.com/ebs/provisioned-iops/",
+    "explanation": "정답은 C입니다. 성능의 일관성이 가장 중요하다면 '프로비저닝된 IOPS SSD'가 정답입니다. 이 녀석은 '초당 만 번의 클릭(IOPS) 속도를 항상 유지해줘!'라고 돈을 더 내고 약속받는 서비스라 한결같은 쾌적함을 보장합니다.\n\nhttps://aws.amazon.com/ebs/provisioned-iops/",
+
     "glossary": {
       "Provisioned IOPS SSD": "입출력 속도(IOPS)를 미리 예약하여 성능을 100% 보장받는 최고급 기업용 SSD 볼륨",
       "Latency (지연 시간)": "데이터가 오가는 데 걸리는 미세한 대기 시간. 낮을수록 빠릿빠릿함",
@@ -419,7 +421,8 @@ export const quizData = [
       "Route 53에서 '지리 근접(Geoproximity)' 라우팅을 써서 편차 기반으로 분산시킵니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 판권 문제는 '어느 나라에서 접속했느냐'가 핵심입니다. Route 53의 지리적 위치 라우팅을 쓰면, 접속자의 국가를 파악해 "한국 손님은 한국 전용 서버 주소로 가세요"라고 친절하게 안내해줄 수 있습니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geolocation.html",
+    "explanation": "정답은 C입니다. 판권 문제는 '어느 나라에서 접속했느냐'가 핵심입니다. Route 53의 지리적 위치 라우팅을 쓰면, 접속자의 국가를 파악해 '한국 손님은 한국 전용 서버 주소로 가세요'라고 친절하게 안내해줄 수 있습니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geolocation.html",
+
     "glossary": {
       "Geolocation Routing (지리적 위치 라우팅)": "접속자의 국가나 대륙 정보를 보고 가장 알맞은 서버 주소를 알려주는 DNS 규칙",
       "Amazon Route 53": "도메인 이름을 IP로 매칭해주며, 지능적인 라우팅으로 전 세계 트래픽을 지휘하는 교통 관제소",

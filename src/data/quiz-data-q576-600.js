@@ -162,7 +162,8 @@ export const quizData = [
       "장애 조치 지역에서 '용량 예약(Capacity Reservations)'을 구매합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. '용량 예약'은 "나중에 쓸 테니 내 자리 미리 비워줘!"라고 AWS와 약속하는 것입니다. 재난 상황에서 전 세계 트래픽이 몰려 서버가 부족할 때도 나만은 당당하게 자리를 확보할 수 있는 확실한 보험입니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html",
+    "explanation": "정답은 D입니다. '용량 예약'은 '나중에 쓸 테니 내 자리 미리 비워줘!'라고 AWS와 약속하는 것입니다. 재난 상황에서 전 세계 트래픽이 몰려 서버가 부족할 때도 나만은 당당하게 자리를 확보할 수 있는 확실한 보험입니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html",
+
     "glossary": {
       "On-Demand Capacity Reservation": "특정 가용 영역에서 일정 기간 동안 EC2 용량을 미리 확보(장소 예약)하는 서비스",
       "DR (Disaster Recovery)": "지진, 화재 등으로 서비스가 중단되었을 때 복구하기 위한 비상 계획",

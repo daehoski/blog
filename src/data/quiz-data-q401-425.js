@@ -301,7 +301,8 @@ export const quizData = [
       "개발 계정의 모든 팀원에게 운영 계정에 로그인할 수 있는 보조 아이디를 하나씩 더 만듭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 계정이 다른 두 서비스가 대화할 때는 '교차 계정 역할(Cross-account Role)'이 정답입니다. 운영 계정이 "어이, 개발 계정에서 온 애들 중에 이 '역할'을 맡겠다는 애들은 믿고 파일 보여줄게"라고 설정(신뢰 정책)하는 것이죠. 이렇게 하면 개별 아이디를 수만 개 만들 필요도 없고, 필요한 순간에만 잠시 권한을 빌려 쓰는 형태라 가장 보안이 튼튼합니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html",
+    "explanation": "정답은 B입니다. 계정이 다른 두 서비스가 대화할 때는 '교차 계정 역할(Cross-account Role)'이 정답입니다. 운영 계정이 '어이, 개발 계정에서 온 애들 중에 이 '역할'을 맡겠다는 애들은 믿고 파일 보여줄게'라고 설정(신뢰 정책)하는 것이죠. 이렇게 하면 개별 아이디를 수만 개 만들 필요도 없고, 필요한 순간에만 잠시 권한을 빌려 쓰는 형태라 가장 보안이 튼튼합니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html",
+
     "glossary": {
       "Cross-account Access (교차 계정 액세스)": "한 AWS 계정에 있는 리소스를 다른 계정에 있는 사용자가 안전하게 이용하게 하는 기술",
       "Trust Policy (신뢰 정책)": "이 역할을 누가(어떤 계정이나 서비스가) 대신 수행할 수 있는지 정의하는 보안 문서",
@@ -319,7 +320,8 @@ export const quizData = [
       "조직 관리 계정의 '결제 설정'에서 암호화 안 된 자원은 돈을 안 주겠다고 설정합니다."
     ],
     "answer": [0, 2],
-    "explanation": "정답은 A와 C입니다. 보안은 '기본 설정'과 '강력한 금지'가 만나야 완성됩니다. 먼저 EC2 설정에서 '새로 만드는 건 다 암호화해'라는 자동 스위치(A)를 켜두면 대부분의 실수를 막을 수 있습니다. 하지만 영리한(?) 누군가가 이를 우회할 수 있으니, Organizations 마스터키인 SCP(C)를 이용해 "암호화 안 된 건 아예 세상에 태어날 수 없어!"라고 시스템 레벨에서 거부 규칙을 박아버리면 완벽합니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html",
+    "explanation": "정답은 A와 C입니다. 보안은 '기본 설정'과 '강력한 금지'가 만나야 완성됩니다. 먼저 EC2 설정에서 '새로 만드는 건 다 암호화해'라는 자동 스위치(A)를 켜두면 대부분의 실수를 막을 수 있습니다. 하지만 영리한(?) 누군가가 이를 우회할 수 있으니, Organizations 마스터키인 SCP(C)를 이용해 '암호화 안 된 건 아예 세상에 태어날 수 없어!'라고 시스템 레벨에서 거부 규칙을 박아버리면 완벽합니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html",
+
     "glossary": {
       "EBS Encryption by Default": "별도로 설정하지 않아도 계정 내에서 생성되는 모든 EBS 볼륨을 자동으로 암호화하는 기능",
       "SCP (Service Control Policy)": "강력한 보안 가드레일로, 하위 계정의 사용자들이 절대 넘지 못할 선을 정하는 마스터 정책",
@@ -370,7 +372,8 @@ export const quizData = [
       "SQS 대기열에 일감을 쌓고, ECS(Fargate)가 이를 가져가게 하며 대기열 양에 따라 자동 확장을 겁니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 모델이 무거워서 람다(Lambda)로 켰다 켰다 하면 초기 예열(로딩) 시간 때문에 사용자가 지칩니다. 이럴 땐 컨테이너(ECS)가 미리 준비하고 있다가 일감을 처리하는 게 나은데, 서버를 24시간 켜둘 순 없으니 SQS 대기열을 지켜보다가 "일감이 많아지면 컨테이너 수를 늘리고, 없으면 0으로 줄여!"라고 자동 확장(Auto Scaling)을 거는 방식이 최고입니다. 가성비와 성능을 모두 챙긴 똑똑한 설계입니다.\n\nhttps://aws.amazon.com/fargate/",
+    "explanation": "정답은 D입니다. 모델이 무거워서 람다(Lambda)로 켰다 켰다 하면 초기 예열(로딩) 시간 때문에 사용자가 지칩니다. 이럴 땐 컨테이너(ECS)가 미리 준비하고 있다가 일감을 처리하는 게 나은데, 서버를 24시간 켜둘 순 없으니 SQS 대기열을 지켜보다가 '일감이 많아지면 컨테이너 수를 늘리고, 없으면 0으로 줄여!'라고 자동 확장(Auto Scaling)을 거는 방식이 최고입니다. 가성비와 성능을 모두 챙긴 똑똑한 설계입니다.\n\nhttps://aws.amazon.com/fargate/",
+
     "glossary": {
       "Amazon ECS (Elastic Container Service)": "컨테이너 앱을 효율적으로 배포하고 관리해주는 지휘자 서비스",
       "Fargate (파게이트)": "서버를 직접 관리하지 않고 컨테이너만 던져주면 알아서 실행해주는 서버리스 연산 엔진",

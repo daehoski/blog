@@ -43,7 +43,8 @@ export const quizData = [
       "SNS(알림 서비스) 정책을 통해 모든 메시지를 협력사로 강제 전송합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 대기열(SQS)이라는 물건 자체에 "옆 동네(협력사 계정) 사람들도 이거 쓸 수 있어"라고 이름표를 붙여주는 것이 'SQS 액세스 정책'입니다. 협력사 직원이 본인들 아이디로 로그인한 채 우리 대기열에 접근할 수 있어 관리가 매우 편합니다.\n\nhttps://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html",
+    "explanation": "정답은 C입니다. 대기열(SQS)이라는 물건 자체에 '옆 동네(협력사 계정) 사람들도 이거 쓸 수 있어'라고 이름표를 붙여주는 것이 'SQS 액세스 정책'입니다. 협력사 직원이 본인들 아이디로 로그인한 채 우리 대기열에 접근할 수 있어 관리가 매우 편합니다.\n\nhttps://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html",
+
     "glossary": {
       "SQS Access Policy": "메시지 대기열(SQS)에 붙이는 출입 허가증. 특정 사용자나 계정의 접근을 허용할 때 씁니다.",
       "Resource-based Policy (리소스 기반 정책)": "아이디(IAM User)가 아닌 리소스(SQS, S3 등) 쪽에 붙여서 누가 쓸 수 있는지 정하는 정책",
@@ -179,7 +180,8 @@ export const quizData = [
       "동영상 분석 전용인 Rekognition Video를 사진 낱장에 각각 적용합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 'Amazon Rekognition'은 AWS가 이미 수조 장의 사진을 보여주며 훈련시킨 완성형 AI 서비스입니다. 학습이나 모델 개발 없이 API로 "이 사진 좀 봐줘"라고 부탁만 하면 부적절한 내용을 귀신같이 찾아줍니다.\n\nhttps://aws.amazon.com/rekognition/",
+    "explanation": "정답은 B입니다. 'Amazon Rekognition'은 AWS가 이미 수조 장의 사진을 보여주며 훈련시킨 완성형 AI 서비스입니다. 학습이나 모델 개발 없이 API로 '이 사진 좀 봐줘'라고 부탁만 하면 부적절한 내용을 귀신같이 찾아줍니다.\n\nhttps://aws.amazon.com/rekognition/",
+
     "glossary": {
       "Amazon Rekognition": "이미지와 비디오 속의 사물, 사람, 텍스트, 부적절한 콘텐츠를 대신 찾아주는 인공지능 서비스",
       "Content Moderation (콘텐츠 관리)": "사용자가 올린 내용 중 정책에 어긋나는 나쁜 것들을 가려내는 작업",
@@ -230,7 +232,8 @@ export const quizData = [
       "전 세계 누구나 보는 퍼블릭 호스팅 영역에 회사 서버 주소를 다 공개합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. AWS 내부에서 물어본 주소를 사내(온프레미스) DNS 서버로 물어보러 가야 하므로 '아웃바운드 엔드포인트'가 필요합니다. 여기에 "office.local로 끝나는 건 회사 본사로 물어봐"라는 규칙을 걸어두면 우아하게 연결됩니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html",
+    "explanation": "정답은 A입니다. AWS 내부에서 물어본 주소를 사내(온프레미스) DNS 서버로 물어보러 가야 하므로 '아웃바운드 엔드포인트'가 필요합니다. 여기에 'office.local로 끝나는 건 회사 본사로 물어봐'라는 규칙을 걸어두면 우아하게 연결됩니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html",
+
     "glossary": {
       "Route 53 Resolver": "AWS와 사내망 사이에서 DNS(주소 찾기)를 중계해주는 교통 경찰관",
       "Outbound Endpoint (아웃바운드 엔드포인트)": "AWS 내부에서 물어본 주소를 사내망 DNS 서버로 대신 전달해주는 게이트웨이",

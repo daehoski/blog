@@ -129,7 +129,8 @@ export const quizData = [
       "CloudWatch 로그를 분석해서 태그 변경 신호가 오면 보안팀에 이메일을 보냅니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 여러 계정을 관리하는 Organizations 환경에서 '절대 넘지 말아야 할 선'을 정하는 마스터키는 SCP입니다. SCP를 통해 "부여된 특정 관리자 외에는 누구도 태그를 수정할 수 없다"라고 박아버리면, 개별 계정의 관리자라 할지라도 이 철벽 정책을 뚫을 수 없습니다. 사후 약방문식의 알람(A, B, D)보다 훨씬 확실한 예방책입니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+    "explanation": "정답은 C입니다. 여러 계정을 관리하는 Organizations 환경에서 '절대 넘지 말아야 할 선'을 정하는 마스터키는 SCP입니다. SCP를 통해 '부여된 특정 관리자 외에는 누구도 태그를 수정할 수 없다'라고 박아버리면, 개별 계정의 관리자라 할지라도 이 철벽 정책을 뚫을 수 없습니다. 사후 약방문식의 알람(A, B, D)보다 훨씬 확실한 예방책입니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+
     "glossary": {
       "SCP (Service Control Policy)": "조직 내의 모든 계정에 대해 어떤 행동을 허용할지 중앙에서 통제하는 강력한 가드레일 정책",
       "AWS Organizations": "여러 AWS 계정을 그룹화하여 통합 결제와 보안 정책을 편리하게 관리하는 서비스",
@@ -197,7 +198,8 @@ export const quizData = [
       "GuardDuty를 켜서 위험 신호를 감지하고, 비정상 트래픽 감지 시 전 계정의 네트워크를 잠시 차단합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 범인이 IP 주소를 바꿔가며 공격해도 '너무 자주 들어온다'는 특징은 숨길 수 없습니다. WAF의 속도 기반(Rate-based) 규칙은 "어떤 손님이든 5분 동안 2,000번 넘게 호출하면 차단해!"라고 규칙을 정해두면 알아서 범인을 걸러줍니다. 쾌적한 쇼핑몰을 유지하면서 공격자만 쏙쏙 골라내는 가장 세련된 방패입니다.\n\nhttps://aws.amazon.com/waf/",
+    "explanation": "정답은 B입니다. 범인이 IP 주소를 바꿔가며 공격해도 '너무 자주 들어온다'는 특징은 숨길 수 없습니다. WAF의 속도 기반(Rate-based) 규칙은 '어떤 손님이든 5분 동안 2,000번 넘게 호출하면 차단해!'라고 규칙을 정해두면 알아서 범인을 걸러줍니다. 쾌적한 쇼핑몰을 유지하면서 공격자만 쏙쏙 골라내는 가장 세련된 방패입니다.\n\nhttps://aws.amazon.com/waf/",
+
     "glossary": {
       "AWS WAF (Web Application Firewall)": "웹 사이트의 입구에서 악성 요청이나 해킹 시도를 필터링해주는 웹 방화벽 서비스",
       "Rate-based Rule (속도 기반 규칙)": "특정 시간 동안 요청을 너무 많이 보내는 사용자를 자동으로 차단하는 똑똑한 보안 규칙",
@@ -214,7 +216,8 @@ export const quizData = [
       "DB의 '암호화된 스냅샷'을 만들고, 감사팀 계정 번호를 지정해 스냅샷과 KMS 암호 키 권한을 공유합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 클라우드에서 데이터를 건네줄 때는 '물리적 전달'이 아니라 '권한 부여'를 이용합니다. DB를 통째로 복사한 스냅샷을 만든 뒤, 운영팀 계정에서 감사팀 계정 번호로 "이 스냅샷 보게 해줄게"라고 권한을 넘기는 것이죠. 단, 암호화된 스냅샷은 암호를 푸는 키(KMS) 권한도 함께 줘야 감사팀 리전에서 정상적으로 복원할 수 있습니다. 이것이 계정 간 데이터 이동의 정석입니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ShareSnapshot.html",
+    "explanation": "정답은 D입니다. 클라우드에서 데이터를 건네줄 때는 '물리적 전달'이 아니라 '권한 부여'를 이용합니다. DB를 통째로 복사한 스냅샷을 만든 뒤, 운영팀 계정에서 감사팀 계정 번호로 '이 스냅샷 보게 해줄게'라고 권한을 넘기는 것이죠. 단, 암호화된 스냅샷은 암호를 푸는 키(KMS) 권한도 함께 줘야 감사팀 리전에서 정상적으로 복원할 수 있습니다. 이것이 계정 간 데이터 이동의 정석입니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ShareSnapshot.html",
+
     "glossary": {
       "DB Snapshot (DB 스냅샷)": "데이터베이스의 특정 시점 상태를 통째로 찍어둔 사진(백업본)",
       "Cross-account Sharing (계정 간 공유)": "서로 다른 AWS 계정끼리 리소스나 데이터 접근 권한을 안전하게 주고받는 기술",
@@ -283,7 +286,8 @@ export const quizData = [
       "AWS Lake Formation의 '태그 기반 권한 제어(TBAC)'를 이용해 계정 간에 한꺼번에 권한을 쏩니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 데이터 양이 페타바이트(PB)급에 달한다면 '복사(A)'는 돈 낭비입니다. 'Lake Formation'은 데이터 레이크 전용 보안 사령부입니다. 여기서 데이터마다 '비밀', '공개' 같은 태그를 붙여두고 "데이터 과학 팀에겐 '공개' 태그 데이터만 보여줘!"라고 설정하면, 여러 계정을 넘나들며 권한 관리가 한 번에 끝납니다. 운영 수고가 가장 적고 세련된 방식입니다.\n\nhttps://aws.amazon.com/lake-formation/",
+    "explanation": "정답은 D입니다. 데이터 양이 페타바이트(PB)급에 달한다면 '복사(A)'는 돈 낭비입니다. 'Lake Formation'은 데이터 레이크 전용 보안 사령부입니다. 여기서 데이터마다 '비밀', '공개' 같은 태그를 붙여두고 '데이터 과학 팀에겐 '공개' 태그 데이터만 보여줘!'라고 설정하면, 여러 계정을 넘나들며 권한 관리가 한 번에 끝납니다. 운영 수고가 가장 적고 세련된 방식입니다.\n\nhttps://aws.amazon.com/lake-formation/",
+
     "glossary": {
       "AWS Lake Formation": "데이터 레이크를 구성하고 보안, 권한 관리를 중앙에서 통제하는 통합 대시보드",
       "Tag-based Access Control (TBAC)": "개별 주소 대신 '태그'라는 속성값을 기준으로 권한을 부여하는 스마트한 보안 기법",

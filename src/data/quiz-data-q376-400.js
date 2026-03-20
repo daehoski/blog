@@ -297,7 +297,8 @@ export const quizData = [
       "Amazon Connect를 써서 전화가 올 때마다 직접 스캔하고 에지 서버에서 가려줍니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. '음성을 텍스트로(Speech-to-Text)' 만들어주는 전문가가 바로 Amazon Transcribe입니다. 이 서비스에는 'Redaction(가리기)' 기능이 있어서, "안녕하세요, 제 전화번호는 010-1234..."라는 말을 듣는 즉시 텍스트에서 번호를 [PII]로 가려줄 수 있습니다. 람다로 수동 코딩할 필요 없이 클릭 설정만으로 인공지능이 알아서 해부해주니 운영 오버헤드가 가장 적습니다.\n\nhttps://aws.amazon.com/transcribe/",
+    "explanation": "정답은 C입니다. '음성을 텍스트로(Speech-to-Text)' 만들어주는 전문가가 바로 Amazon Transcribe입니다. 이 서비스에는 'Redaction(가리기)' 기능이 있어서, '안녕하세요, 제 전화번호는 010-1234...'라는 말을 듣는 즉시 텍스트에서 번호를 [PII]로 가려줄 수 있습니다. 람다로 수동 코딩할 필요 없이 클릭 설정만으로 인공지능이 알아서 해부해주니 운영 오버헤드가 가장 적습니다.\n\nhttps://aws.amazon.com/transcribe/",
+
     "glossary": {
       "Amazon Transcribe": "음성 파일을 인공지능이 듣고 정확한 텍스트 문장으로 받아쓰기 해주는 서비스",
       "PII (Personally Identifiable Information)": "이름, 주소, 주민번호 등 개인을 특정할 수 있는 민감한 개인 정보",
@@ -331,7 +332,8 @@ export const quizData = [
       "리소스의 구성 변경 이력을 타임라인으로 보여주는 AWS Config"
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. AWS 계정 안에서 벌어지는 모든 '누가(Who)' 관련 기록은 CloudTrail이 쥐고 있습니다. "누가 저번 주 화요일 오후 3시에 보안 그룹 문을 열었어?"라는 질문에 정확히 그 직원의 이름을 알려주는 감사관 역할을 합니다. 보안 그룹 변경뿐만 아니라 서버 생성, 삭제 등 모든 API 요청 내역이 여기에 고스란히 남습니다.\n\nhttps://aws.amazon.com/cloudtrail/",
+    "explanation": "정답은 C입니다. AWS 계정 안에서 벌어지는 모든 '누가(Who)' 관련 기록은 CloudTrail이 쥐고 있습니다. '누가 저번 주 화요일 오후 3시에 보안 그룹 문을 열었어?'라는 질문에 정확히 그 직원의 이름을 알려주는 감사관 역할을 합니다. 보안 그룹 변경뿐만 아니라 서버 생성, 삭제 등 모든 API 요청 내역이 여기에 고스란히 남습니다.\n\nhttps://aws.amazon.com/cloudtrail/",
+
     "glossary": {
       "AWS CloudTrail": "AWS 계정에서 발생하는 모든 모든 API 호출 내역을 기록하는 블랙박스 같은 감사 서비스",
       "IAM User": "AWS 서비스를 이용하는 개별 직원들의 디지털 아이디",
@@ -399,7 +401,8 @@ export const quizData = [
       "에지 서버에서 Lambda@Edge를 돌려 비상식적으로 자주 오는 IP 주소를 코드로 골라 차단합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 무차별적으로 쏟아붓는 요청 폭탄(Flood)을 막는 명사수는 WAF의 'Rate-based Rule'입니다. "동일인이 5분 동안 2,000번 넘게 호출하면 넌 범인이니 차단해!"라고 규칙만 정해두면 WAF가 알아서 실시간으로 나쁜 놈들을 걸러줍니다. 클릭 몇 번으로 끝나니 개발자가 직접 차단 로직을 짤 필요가 전혀 없습니다.\n\nhttps://aws.amazon.com/waf/",
+    "explanation": "정답은 B입니다. 무차별적으로 쏟아붓는 요청 폭탄(Flood)을 막는 명사수는 WAF의 'Rate-based Rule'입니다. '동일인이 5분 동안 2,000번 넘게 호출하면 넌 범인이니 차단해!'라고 규칙만 정해두면 WAF가 알아서 실시간으로 나쁜 놈들을 걸러줍니다. 클릭 몇 번으로 끝나니 개발자가 직접 차단 로직을 짤 필요가 전혀 없습니다.\n\nhttps://aws.amazon.com/waf/",
+
     "glossary": {
       "AWS WAF (Web Application Firewall)": "악의적인 웹 요청이나 해킹 시도를 문 앞에서 필터링해주는 웹 방화벽 서비스",
       "HTTP Flood": "정정당당한 듯 보이지만 엄청난 횟수의 웹 요청으로 서버를 마비시키는 대표적인 공격 기법",
