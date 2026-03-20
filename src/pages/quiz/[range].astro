@@ -348,10 +348,23 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                     user_id: currentUserId,
                                     question_id: String(quizId)
                                 };
-                                console.log("Insert Payload (wrong_answers):", wrongAnswerPayload);
-                                await supabase.from('wrong_answers').insert(wrongAnswerPayload);
+                                console.log("Attempting Insert - Payload:", wrongAnswerPayload);
+                                
+                                const { data, error } = await supabase.from('wrong_answers').insert(wrongAnswerPayload);
+                                
+                                if (error) {
+                                    console.error('Supabase 403/Forbidden Diagnostic:', {
+                                        message: error.message,
+                                        details: error.details,
+                                        hint: error.hint,
+                                        code: error.code,
+                                        status: error.status
+                                    });
+                                } else {
+                                    console.log('Wrong answer saved successfully.');
+                                }
                             } catch (e) {
-                                console.error('Wrong answer save error:', e);
+                                console.error('Unexpected JS error during insert:', e);
                             }
                         }
 					});
