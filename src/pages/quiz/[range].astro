@@ -326,11 +326,14 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                         if (resultArea) resultArea.classList.remove('hidden');
 
                         // --- Supabase Interaction (Isolated in try-catch) ---
-                        if (userId) {
+                        const { data: { session: freshSession } } = await supabase.auth.getSession();
+                        if (freshSession) {
+                            const currentUserId = freshSession.user.id;
+                            
                             // 1. Progress Upsert
                             try {
                                 await supabase.from('user_progress').upsert({
-                                    user_id: userId,
+                                    user_id: currentUserId,
                                     last_quiz_id: quizId,
                                     updated_at: new Date().toISOString()
                                 });
@@ -340,9 +343,8 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
                             // 2. Wrong Answer Tracking
                             try {
-                                // Only send user_id and question_id (as String) to match schema
                                 await supabase.from('wrong_answers').insert({
-                                    user_id: userId,
+                                    user_id: currentUserId,
                                     question_id: String(quizId)
                                 });
                             } catch (e) {

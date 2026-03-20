@@ -314,11 +314,11 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                         const isCorrect = selectedOptions.length === correctAnswerList.length && 
                                           selectedOptions.every(choice => correctAnswerList.includes(choice));
 
-                        if (supabase && (await supabase.auth.getSession()).data.session) {
-							const { data: { session } } = await supabase.auth.getSession();
+                        const { data: { session: freshSession } } = await supabase.auth.getSession();
+                        if (freshSession) {
                             try {
                                 await supabase.from('wrong_answers').insert({
-                                    user_id: session.user.id,
+                                    user_id: freshSession.user.id,
                                     question_id: String(quizId)
                                 });
                             } catch (e) {
