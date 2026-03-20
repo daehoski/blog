@@ -160,6 +160,7 @@ const getDisplayRange = (r) => {
 		<Footer />
         <script>
             import { supabase } from '../../lib/supabase.js';
+            import { quizSlugMap } from '../../lib/utils.js';
 
             document.addEventListener('DOMContentLoaded', async () => {
                 const { data: { session } } = await supabase.auth.getSession();
@@ -168,7 +169,7 @@ const getDisplayRange = (r) => {
                         .from('user_progress')
                         .select('last_quiz_id')
                         .eq('user_id', session.user.id)
-                        .single();
+                        .maybeSingle();
                     
                     if (data && data.last_quiz_id) {
                         const lastId = data.last_quiz_id;
@@ -177,14 +178,14 @@ const getDisplayRange = (r) => {
                         const quizIdSpan = document.getElementById('resume-quiz-id');
                         
                         // Find range
-                        let rangeKey = '';
                         const start = Math.floor((lastId - 1) / 25) * 25 + 1;
                         const end = start + 24;
-                        rangeKey = `q${start}-${end}`;
+                        const rangeKey = `q${start}-${end}`;
+                        const slug = quizSlugMap[rangeKey] || rangeKey;
                         
                         if (container && resumeBtn && quizIdSpan) {
                             quizIdSpan.textContent = lastId;
-                            resumeBtn.href = `/quiz/${rangeKey}#quiz-${lastId}`;
+                            (resumeBtn as HTMLAnchorElement).href = `/quiz/${slug}/#quiz-${lastId}`;
                             container.classList.remove('hidden');
                         }
                     }
