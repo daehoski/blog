@@ -209,8 +209,8 @@ import '../styles/quiz.css'; // Reuse some quiz card styles
                 }
 
                 // 3. Calculate Progress
-                // count unique quiz_id's solved
-                const attemptedIds = new Set(wrongAnswers.map(r => r.quiz_id));
+                // count unique question_id's solved
+                const attemptedIds = new Set(wrongAnswers.map(r => r.question_id));
                 const totalAttempted = attemptedIds.size;
                 const totalProgress = Math.round((totalAttempted / 725) * 100);
                 
@@ -243,15 +243,15 @@ import '../styles/quiz.css'; // Reuse some quiz card styles
                     const uniqueFails = [];
                     const seen = new Set();
                     for (const r of wrongAnswers) {
-                        if (!seen.has(r.quiz_id)) {
+                        if (!seen.has(r.question_id)) {
                             uniqueFails.push(r);
-                            seen.add(r.quiz_id);
+                            seen.add(r.question_id);
                         }
                         if (uniqueFails.length >= 10) break;
                     }
 
                     uniqueFails.forEach(record => {
-                        const quiz = flatQuizzes[record.quiz_id];
+                        const quiz = flatQuizzes[parseInt(record.question_id)];
                         if (quiz) {
                             const item = document.createElement('div');
                             item.className = 'wrong-item';
@@ -272,7 +272,7 @@ import '../styles/quiz.css'; // Reuse some quiz card styles
                     // 6. Analyze Weakness (Keywords Extraction)
                     // We look at ALL wrong answers to find the pattern
                     wrongAnswers.forEach(record => {
-                        const quiz = flatQuizzes[record.quiz_id];
+                        const quiz = flatQuizzes[parseInt(record.question_id)];
                         if (quiz) {
                             const text = quiz.question.toUpperCase();
                             ["VPC", "S3", "EC2", "IAM", "RDS", "LAMBDA", "DYNAMODB", "ROUTE 53", "ELB", "ASG", "KINESIS", "CLOUDFRONT", "CLOUD FORMATION"].forEach(k => {

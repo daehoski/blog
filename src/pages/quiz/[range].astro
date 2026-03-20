@@ -340,15 +340,10 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
                             // 2. Wrong Answer Tracking
                             try {
-                                const isCorrect = selectedOptions.length === correctAnswerList.length && 
-                                                  selectedOptions.every(val => correctAnswerList.includes(val));
-                                
-                                // Note: We use quiz_id as found in mypage.astro
+                                // Only send user_id and question_id (as String) to match schema
                                 await supabase.from('wrong_answers').insert({
                                     user_id: userId,
-                                    quiz_id: quizId,
-                                    selected_options: selectedOptions,
-                                    is_correct: isCorrect
+                                    question_id: String(quizId)
                                 });
                             } catch (e) {
                                 console.error('Wrong answer save error:', e);
