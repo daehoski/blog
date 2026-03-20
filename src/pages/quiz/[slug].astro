@@ -66,7 +66,15 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                     <div id="quiz-wrapper">
                         <form id="quiz-form">
                             {quizData.map((quiz, index) => (
-                                <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)}>
+                                <article 
+                                    class="quiz-card" 
+                                    id={`quiz-${quiz.id}`} 
+                                    data-quiz-id={quiz.id}
+                                    data-answer={JSON.stringify(quiz.answer)}
+                                    data-explanations={JSON.stringify(quiz.explanations || {})}
+                                    data-category={quiz.domain || "기본"}
+                                    data-legacy-explanation={quiz.explanation}
+                                >
                                     <div class="quiz-question-header">
                                         <span class="quiz-badge">Q{quiz.id}</span>
                                         <h2 class="quiz-question-text">{quiz.question}</h2>
@@ -95,7 +103,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                             <div class="quiz-explanation-title">
                                                 <span>📖 해설</span>
                                             </div>
-                                            <p class="explanation-text">{quiz.explanation}</p>
+                                            <div id={`explanation-content-${quiz.id}`} class="explanation-text"></div>
                                         </div>
 
                                         {quiz.glossary && Object.keys(quiz.glossary).length > 0 && (
@@ -274,24 +282,32 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						const quizCard = document.getElementById(`quiz-${quizId}`);
 						if (!quizCard) return;
 
-						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
-                        
-                        let selectedOptions;
-                        if (isMultiple) {
-                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
-                        } else {
-                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
-                            selectedOptions = selected ? [parseInt(selected.value)] : [];
+                        let correctAnswerList = [];
+                        let selectedOptions = [];
+                        let explanations = {};
+
+                        try {
+						    const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
+                            
+                            if (isMultiple) {
+                                selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
+                            } else {
+                                const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
+                                selectedOptions = selected ? [parseInt(selected.value)] : [];
+                            }
+
+						    if (selectedOptions.length === 0) {
+							    alert("답을 선택해 주세요!");
+							    return;
+						    }
+
+						    userSelections[quizId] = selectedOptions;
+                            const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
+                            correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+                            explanations = JSON.parse(quizCard.dataset.explanations || '{}');
+                        } catch (e) {
+                            console.error('Data parsing error ([slug]):', e);
                         }
-
-						if (selectedOptions.length === 0) {
-							alert("답을 선택해 주세요!");
-							return;
-						}
-
-						userSelections[quizId] = selectedOptions;
-                        const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
-                        const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 
 						// UI updates
 						const options = quizCard.querySelectorAll('.quiz-option');
@@ -307,13 +323,47 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 							}
 						});
 
+                        // Explanations Display
+                        const expContainer = document.getElementById(`explanation-content-${quizId}`);
+                        if (expContainer) {
+                            expContainer.innerHTML = '';
+                            
+                            // User's wrong choices explanations
+                            selectedOptions.forEach(idx => {
+                                if (!correctAnswerList.includes(idx) && explanations[idx]) {
+                                    const p = document.createElement('p');
+                                    p.className = 'exp-wrong';
+                                    p.style.color = '#ef4444';
+                                    p.style.fontSize = '0.9rem';
+                                    p.style.marginBottom = '0.5rem';
+                                    p.innerHTML = `<strong>❌ 선택 오답 (${String.fromCharCode(65 + idx)}):</strong> ${explanations[idx]}`;
+                                    expContainer.appendChild(p);
+                                }
+                            });
+
+                            // Correct answers explanations
+                            correctAnswerList.forEach(idx => {
+                                if (explanations[idx]) {
+                                    const p = document.createElement('p');
+                                    p.className = 'exp-correct';
+                                    p.style.color = '#10b981';
+                                    p.style.fontSize = '0.9rem';
+                                    p.style.marginBottom = '0.5rem';
+                                    p.innerHTML = `<strong>✅ 정답 (${String.fromCharCode(65 + idx)}):</strong> ${explanations[idx]}`;
+                                    expContainer.appendChild(p);
+                                }
+                            });
+
+                            // Fallback to legacy explanation if empty
+                            if (expContainer.innerHTML === '' && quizCard.dataset.legacyExplanation) {
+                                expContainer.innerHTML = `<p>${quizCard.dataset.legacyExplanation}</p>`;
+                            }
+                        }
+
 						btn.classList.add('hidden');
 						document.getElementById(`result-${quizId}`)?.classList.remove('hidden');
 
-                        // Save result
-                        const isCorrect = selectedOptions.length === correctAnswerList.length && 
-                                          selectedOptions.every(choice => correctAnswerList.includes(choice));
-
+                        // Save result (Supabase)
                         const { data: { session: freshSession } } = await supabase.auth.getSession();
                         if (freshSession && freshSession.user) {
                             try {
@@ -339,13 +389,19 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                             } catch (e) {
                                 console.error('Unexpected JS error during insert:', e);
                             }
-                        } else if (!isCorrect) {
-                            const guestWrongAnswers = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
-                            guestWrongAnswers[quizId] = {
-                                selected: selectedOptions,
-                                date: new Date().toISOString()
-                            };
-                            localStorage.setItem('guest_wrong_answers', JSON.stringify(guestWrongAnswers));
+                        } else {
+                            // Guest mode local save if incorrect
+                            const isCorrect = selectedOptions.length === correctAnswerList.length && 
+                                              selectedOptions.every(choice => correctAnswerList.includes(choice));
+                            
+                            if (!isCorrect) {
+                                const guestWrongAnswers = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
+                                guestWrongAnswers[quizId] = {
+                                    selected: selectedOptions,
+                                    date: new Date().toISOString()
+                                };
+                                localStorage.setItem('guest_wrong_answers', JSON.stringify(guestWrongAnswers));
+                            }
                         }
 					});
 				});
@@ -374,6 +430,9 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                 : "미선택";
 							const correctChoiceTexts = correctAnswers.map(idx => quiz.options[idx]).join(', ');
 
+                            // For summary, use a simplified explanation (legacy if available, otherwise just general)
+                            const summaryExp = quiz.explanation || (quiz.explanations ? Object.values(quiz.explanations).join('<br>') : "");
+
 							wrongItem.innerHTML = `
 								<div style="margin-bottom: 0.5rem;">
 									<span class="quiz-badge" style="background:#ef4444;">Q${quiz.id}</span>
@@ -386,7 +445,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 									✅ 정답: ${correctChoiceTexts}
 								</div>
 								<div style="font-size: 0.9rem; color: #3c3c43; border-top: 1px solid #f2f2f7; padding-top: 0.75rem; line-height: 1.6; word-break:keep-all;">
-									${quiz.explanation}
+									${summaryExp}
 								</div>
 							`;
 							wrongListContainer.appendChild(wrongItem);
