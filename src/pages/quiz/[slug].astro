@@ -315,12 +315,14 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                           selectedOptions.every(choice => correctAnswerList.includes(choice));
 
                         const { data: { session: freshSession } } = await supabase.auth.getSession();
-                        if (freshSession) {
+                        if (freshSession && freshSession.user) {
                             try {
-                                await supabase.from('wrong_answers').insert({
+                                const payload = {
                                     user_id: freshSession.user.id,
                                     question_id: String(quizId)
-                                });
+                                };
+                                console.log("Insert Payload (wrong_answers):", payload);
+                                await supabase.from('wrong_answers').insert(payload);
                             } catch (e) {
                                 console.error('Wrong answer save error:', e);
                             }

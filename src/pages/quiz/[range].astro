@@ -327,26 +327,29 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
                         // --- Supabase Interaction (Isolated in try-catch) ---
                         const { data: { session: freshSession } } = await supabase.auth.getSession();
-                        if (freshSession) {
+                        if (freshSession && freshSession.user) {
                             const currentUserId = freshSession.user.id;
                             
                             // 1. Progress Upsert
                             try {
-                                await supabase.from('user_progress').upsert({
+                                const progressPayload = {
                                     user_id: currentUserId,
                                     last_quiz_id: quizId,
                                     updated_at: new Date().toISOString()
-                                });
+                                };
+                                await supabase.from('user_progress').upsert(progressPayload);
                             } catch (e) {
                                 console.error('User progress save error:', e);
                             }
 
                             // 2. Wrong Answer Tracking
                             try {
-                                await supabase.from('wrong_answers').insert({
+                                const wrongAnswerPayload = {
                                     user_id: currentUserId,
                                     question_id: String(quizId)
-                                });
+                                };
+                                console.log("Insert Payload (wrong_answers):", wrongAnswerPayload);
+                                await supabase.from('wrong_answers').insert(wrongAnswerPayload);
                             } catch (e) {
                                 console.error('Wrong answer save error:', e);
                             }
