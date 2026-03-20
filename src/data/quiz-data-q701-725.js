@@ -9,7 +9,7 @@ export const quizData = [
       "인스턴스 스토어 볼륨을 사용해서 로컬 속도를 극대화합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n여러 가용 영역에 있는 여러 EC2 인스턴스가 동시에 같은 파일을 열어보고 수정해야 할 때는 'Amazon EFS'가 정답입니다. EFS는 파일 시스템 수준의 공유 저장소라 별도의 복사 과정 없이 모든 서버가 하나의 대형 하드디스크를 공유하는 것처럼 쓸 수 있습니다.\n\n다른 옵션인 B(EBS 스냅샷)는 각 인스턴스가 독립적인 복사본을 가지게 되므로, 한 서버에서 수정한 내용이 다른 서버에 실시간으로 반영되지 않습니다.",
+    "explanation": "정답은 C입니다. 여러 가용 영역에 있는 여러 EC2 인스턴스가 동시에 같은 파일을 열어보고 수정해야 할 때는 'Amazon EFS'가 정답입니다. EFS는 파일 시스템 수준의 공유 저장소라 별도의 복사 과정 없이 모든 서버가 하나의 대형 하드디스크를 공유하는 것처럼 쓸 수 있습니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS (Elastic File System)": "여러 개의 EC2 인스턴스가 네트워크를 통해 동시에 연결해 사용할 수 있는 공유 폴더 서비스",
       "Availability Zone (AZ)": "물리적으로 격리된 데이터 센터 군락. 하나가 재난으로 멈춰도 다른 곳은 멀쩡하도록 설계됨",
@@ -26,7 +26,7 @@ export const quizData = [
       "서브넷 간에 모든 문을 열고 VPC 피어링으로 연결합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n보안 그룹(Security Group)은 기본적으로 '모든 문이 닫혀 있음' 상태입니다. 따라서 우리가 원하는 특정 대상(프라이빗 EC2의 보안 그룹)에게만 '열쇠(허용 규칙)'를 주면 됩니다. 이렇게 하면 허용되지 않은 퍼블릭 서브넷 등은 자동으로 입구 컷을 당하게 됩니다.\n\n다른 옵션인 B는 틀린 설명입니다. 보안 그룹은 '거부(Deny)' 규칙을 지원하지 않고 오직 '허용(Allow)' 규칙만 만들 수 있습니다. 거부 규칙이 필요할 때는 네트워크 ACL을 써야 합니다.",
+    "explanation": "정답은 C입니다. 보안 그룹(Security Group)은 기본적으로 '모든 문이 닫혀 있음' 상태입니다. 따라서 프라이빗 EC2의 보안 그룹에게만 '허용 규칙'을 주면 됩니다. 이렇게 하면 허용되지 않은 퍼블릭 서브넷 등은 자동으로 차단됩니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html",
     "glossary": {
       "Security Group (보안 그룹)": "서버 단위로 적용되는 가상 방화벽. 허용(Allow) 규칙만 설정할 수 있는 것이 특징입니다.",
       "Stateful (상태 기록)": "나가는 신호가 허용되면 들어오는 답장도 자동으로 허용해주는 보안 그룹의 작동 방식",
@@ -45,7 +45,7 @@ export const quizData = [
       "장애 상황을 대비해 ECS 클러스터 등에 여유 인스턴스 사양(Capacity)을 넉넉히 잡아둡니다."
     ],
     "answer": [0, 2, 5],
-    "explanation": "정답은 A, C, F입니다.\n\nOutposts는 우리 회사 건물 안에 AWS 장비를 가져다 놓는 것입니다. 따라서 하드웨어가 돌아갈 '전기'와 '인터넷 선(A)', 건물에 아무나 못 들어오게 막는 '물리 보안(C)'은 고객의 몫입니다. 또한 장비 장애 시 서버가 자동으로 옆으로 옮겨가도록 '여유 자원(Capacity, F)'을 미리 확보해두는 것도 운영팀이 할 일입니다.\n\n다른 옵션인 B(하이퍼바이저), D(부품 수리), E(물리 유지보수)는 하드웨어 전문가인 AWS가 책임지고 관리해주는 영역입니다.",
+    "explanation": "정답은 A, C, F입니다. Outposts는 고객 건물 안에 AWS 장비를 설치하는 것입니다. 따라서 전기와 인터넷 선(A), 물리 보안(C)은 고객의 몫입니다. 또한 장애 대비를 위해 여유 자원(Capacity, F)을 미리 확보해두는 것도 운영팀이 할 일입니다.\n\nhttps://aws.amazon.com/outposts/",
     "glossary": {
       "AWS Outposts": "AWS의 서버 랙을 고객의 온프레미스 데이터 센터에 그대로 설치해 동일한 환경을 제공하는 서비스",
       "Shared Responsibility Model": "클라우드 제공자와 고객이 보안과 관리 책임을 나누어 갖는 보안의 대원칙",
@@ -63,7 +63,7 @@ export const quizData = [
       "서버가 죽으면 다시 켜주는 CloudWatch 경보를 수만 개 만듭니다."
     ],
     "answer": [1, 3],
-    "explanation": "정답은 B, D입니다.\n\n전송 계층(L4) 통신이 핵심이므로 초고속 처리가 가능한 'Network Load Balancer(NLB)'를 써야 합니다. 여기에 서버 한 대가 죽어도 다른 영역에서 즉시 새 서버를 띄워주는 'Auto Scaling 그룹'을 연동하면, 중단 없는 고가용성 시스템을 가성비 있게 완성할 수 있습니다.\n\n다른 옵션인 A(Route 53)는 로드 밸런서만큼 정교하고 빠른 트래픽 분산과 상태 확인(Health Check) 복구를 수행하기엔 부족합니다.",
+    "explanation": "정답은 B와 D입니다. 전송 계층(L4) 통신이 핵심이므로 초고속 처리가 가능한 'Network Load Balancer(NLB)'를 써야 합니다. 여기에 서버 장애 시 자동으로 새 서버를 띄워주는 'Auto Scaling 그룹'을 연동하면 고가용성 시스템이 완성됩니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/network-load-balancer/",
     "glossary": {
       "Network Load Balancer (NLB)": "IP와 포트 번호(L4)만 보고 미친 듯이 빠른 속도로 트래픽을 나눠주는 로드 밸런서",
       "High Availability (고가용성)": "시스템이 장애를 견디고 365일 쉬지 않고 돌아가는 능력",
@@ -80,7 +80,7 @@ export const quizData = [
       "모든 리소스의 사용량 지표를 CloudWatch 대시보드로 매일 봅니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'비용 이상 탐지'는 AWS가 똑똑한 AI(머신러닝)를 써서 \"어? 평소보다 돈이 갑자기 많이 나가는데?\"라고 먼저 말을 걸어주는 기능입니다. 단순히 한도를 넘었을 때 알려주는 Budget보다 정교하며, 우리가 놓치기 쉬운 비정상적인 지출 패턴을 즉시 잡아내 줍니다.\n\n다른 옵션인 A(Budgets)는 우리가 미리 정한 금액을 넘어야 연락이 오므로, 정해진 금액 안에서 발생하는 비정상적인 패턴은 잡아내기 어렵습니다.",
+    "explanation": "정답은 B입니다. '비용 이상 탐지'는 AWS가 똑똑한 AI(머신러닝)를 써서 비정상적인 지출 발생 시 먼저 알려주는 서비스입니다. 단순히 한도를 넘었을 때 알려주는 Budget보다 정교하게 예외적인 지출 패턴을 잡아내 줍니다.\n\nhttps://aws.amazon.com/aws-cost-management/aws-cost-anomaly-detection/",
     "glossary": {
       "AWS Cost Anomaly Detection": "과거 비용 데이터를 학습해 예상치 못한 지출이 발생하면 즉시 알려주는 돈 지키는 AI 서비스",
       "Stakeholder (이해관계자)": "비용 문제에 책임이 있거나 관심을 가져야 하는 회사 내부 담당자",
@@ -97,7 +97,7 @@ export const quizData = [
       "자주 안 쓰는 데이터에 특화된 'S3 Standard-IA'를 쓰고 정적 웹사이트 호스팅을 연동합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'1년에 한두 번'이라는 키워드는 가끔 쓰는 데이터(Infrequent Access)를 위한 'S3 Standard-IA' 등급이 딱이라는 신호입니다. 저장 비용이 훨씬 저렴할 뿐만 아니라, 요청 시 즉시 파일을 꺼낼 수 있어 성능도 합격입니다. 서버 없이 S3만으로 웹사이트를 돌리면 관리비도 0에 가까워집니다.\n\n다른 옵션인 C(Standard)는 언제든 꺼냈기엔 좋지만, 매달 내는 저장 공간 사용료가 IA 등급보다 비싸서 가성비 면에서 밀립니다.",
+    "explanation": "정답은 D입니다. '1년에 한두 번' 조시는 데이터는 'S3 Standard-IA' 등급이 딱입니다. 저장 비용이 저렴하면서도 요청 시 즉시 파일을 꺼낼 수 있어 성능도 합격입니다. 서버 없이 S3만으로 웹사이트를 돌리면 관리비도 0에 가깝습니다.\n\nhttps://aws.amazon.com/s3/storage-classes/infrequent-access/",
     "glossary": {
       "S3 Standard-IA (Infrequent Access)": "자주 열어보지는 않지만, 막상 필요할 때는 초고속으로 꺼내야 하는 데이터에 최적화된 저렴한 저장 등급",
       "Static Website Hosting": "복잡한 프로그램 없이 사진과 글자로만 된 웹 주소를 S3가 직접 서비스해주는 편리한 기능",
@@ -114,7 +114,7 @@ export const quizData = [
       "누구나 볼 수 있게 잠시 문(Public Access)을 열었다가 작업 끝나면 닫습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'미리 서명된 URL'은 특정 파일에만 1시간이나 10분 동안만 쓸 수 있는 '일회성 비밀번호'를 붙인 것과 같습니다. 이 주소를 받은 사람만 딱 정해진 시간 동안 파일을 내려받을 수 있어 보안 모범 사례에 가장 부합합니다.\n\n다른 옵션인 D(공개 개방)는 단 1초라도 전 세계 해커들에게 설계도를 노출하는 꼴이 되므로 실무에서는 절대 해서는 안 될 위험한 행동입니다.",
+    "explanation": "정답은 B입니다. 트래픽이 들쭉날쭉할 때는 사양을 자동으로 조절해주는 'Aurora Serverless v2'가 명약입니다. 부하가 몰리면 눈 깜짝할 새 성능을 높여주고 조용해지면 다시 낮춰주므로 성능과 비용 두 마리 토끼를 다 잡을 수 있습니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Pre-signed URL": "S3 객체에 대해 한시적으로 접근 권한을 부여하는 암호화된 특수 주소",
       "CloudFormation Template": "AWS 인프라 전체를 코드로 정의한 설계도 파일",
@@ -131,7 +131,7 @@ export const quizData = [
       "코딩 전용인 Athena 노트북을 써서 복잡한 프로그램을 개발합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nS3에 쌓인 텍스트 로그 파일들을 별도의 데이터 이동 없이 마치 엑셀이나 DB 테이블처럼 조작할 수 있는 마법 같은 도구가 'Athena'입니다. SQL 언어만 조금 알면 수천억 건의 로그 중에서도 \"A 직원이 어제 삭제한 파일\" 같은 걸 단 몇 초 만에 찾을 수 있습니다.\n\n다른 옵션인 B(Neptune)는 친구 관계 같은 복잡한 연결망(Graph)을 분석하는 툴이라 단순 로그 검색에는 맞지 않습니다.",
+    "explanation": "정답은 B입니다. 파일 전송 분야의 1등 공신은 'DataSync'입니다. 에이전트만 깔아두면 사내 NFS 서버의 데이터를 S3로 실시간 전송해주며, 설정이 매우 간편하고 비용도 합리적인 '최소 운영' 모델입니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "Amazon Athena": "S3에 저장된 대용량 데이터를 표준 SQL 문으로 직접 쿼리해 분석할 수 있는 서버리스 서비스",
       "CloudTrail": "내 AWS 계정에서 '누가, 언제, 어떤 명령'을 내렸는지 낱낱이 기록해주는 감시 카메라/블랙박스 서비스",
@@ -148,7 +148,7 @@ export const quizData = [
       "오토 스케일링 그룹에 DB를 넣어서 여러 대로 늘려 봅니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n보고서는 데이터 읽기 작업이 핵심입니다. 대장 DB(Primary)는 원래 하던 주문/결제 처리를 하게 두고, 똑같은 데이터 사본을 가진 조수 DB(Read Replica)를 하나 만들어서 보고서용 조회를 거기서 처리하면 대장의 부담을 100% 덜어줄 수 있습니다.\n\n다른 옵션인 C(사양 업)는 비용이 계속 비싸질 뿐만 아니라, 결국 한계에 도달하게 되므로 '읽기 부하 분산'이 훨씬 똑똑한 해결책입니다.",
+    "explanation": "정답은 C입니다. 'Shield Advanced' 멤버가 되면 AWS 최고의 보안 전문가들(DRT)이 24시간 밀착 케어를 해줍니다. 또한 DDoS 공격으로 인해 늘어난 로드 밸런서 비용도 보상해주므로 대규모 서비스에 필수적입니다.\n\nhttps://aws.amazon.com/shield/",
     "glossary": {
       "Read Replica (읽기 전용 복제본)": "대장 DB의 데이터를 실시간으로 복제하는 조수 DB. 조회 성능을 확장할 때 씁니다.",
       "SQL Server (MSSQL)": "마이크로소프트에서 만든 기업용 관계형 데이터베이스 엔진",
@@ -165,7 +165,7 @@ export const quizData = [
       "S3 관리자 권한을 일단 다 주고, 나중에 문제가 생기면 뺏습니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 안전한 방법은 필요한 것만 허용하는 '최소 권한의 원칙'입니다. 'arn:aws:s3:::AdminTools'와 'arn:aws:s3:::AdminTools/*' 이 두 가지 리소스에 대해 쓰기/읽기 권한을 명시적으로 주면, 언급되지 않은 다른 버킷은 기본적으로 아무도 못 보게 막히게 됩니다.\n\n다른 옵션인 D(일단 다 주기)는 보안상 가장 위험한 대처입니다. 신입 사원이 실수로 전용 파일을 삭제하기라도 하면 돌이킬 수 없는 피해를 입게 됩니다.",
+    "explanation": "정답은 C입니다. 수백 대의 노드가 동시에 달려드는 HPC(슈퍼컴퓨팅) 작업에는 'Lustre' 파일 시스템이 표준입니다. S3와 실시간으로 연동되어 데이터를 가져오고 결과를 쏴주기 때문에 전문가들이 선호하는 솔루션입니다.\n\nhttps://aws.amazon.com/fsx/lustre/",
     "glossary": {
       "IAM Policy (Identity and Access Management Policy)": "누가 어떤 권한을 가지는지 JSON 형식의 문서로 정의한 규칙",
       "Resource ARN": "AWS 자원의 고유한 이름표(주소). S3 버킷이나 특정 파일을 지칭할 때 씁니다.",
@@ -182,7 +182,7 @@ export const quizData = [
       "각 지점에 서버를 띄워 EBS 하드에 담고, 하드 사본(Snapshot)을 매일 전송합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n장거리 인터넷은 거리가 멀수록 속도가 뚝 떨어집니다. 'Transfer Acceleration'은 전 세계 AWS 고속도로 입구를 통해 데이터를 받으므로 속도가 압도적으로 빠릅니다. 여기에 큰 파일을 조각내서 병렬로 쏘는 '멀티파트 업로드'를 더하면 가속도가 배가 됩니다.\n\n다른 옵션인 C(Snowball)는 데이터 전송에는 강력하지만, '매일' 500GB씩 발생하는 데이터를 처리하기 위해 매일 택배를 주고받기엔 운영상 불가능에 가깝습니다.",
+    "explanation": "정답은 A입니다. 'Global Accelerator'는 전 세계 고정된 2개의 전용 IP 주소를 줍니다. 인터넷 정체를 피하고 서버 리전에 장애가 나도 즉시 다른 리전으로 손님을 옮겨주어 주소 캐싱 문제까지 말끔히 해결합니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "S3 Transfer Acceleration": "전 세계 곳곳의 인접 거점을 통해 S3 업로드 속도를 획기적으로 높여주는 전용 통로 서비스",
       "Multipart Upload (멀티파트 업로드)": "하나의 거대한 파일을 여러 조각으로 나누어 동시에(병렬로) 업로드하는 기법",
@@ -199,7 +199,7 @@ export const quizData = [
       "비싼 SSD 하드를 각 서버에 달고 네트워크 전용선으로 데이터를 수동 복사합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n서버를 옆자리에 바짝 붙여 앉히는 것이 '클러스터 배치 그룹'입니다. 네트워크 지연 시간을 최소로 줄여주죠. 여기에 하나의 EBS(io1/io2) 하드디스크를 최대 16대 서버가 동시에 꽂아 쓰는 'Multi-Attach' 기능을 더하면 완벽한 HPC 환경이 완성됩니다.\n\n다른 옵션인 B(EFS)는 파일 시스템 방식이라 공유는 편하지만, 성능(IOPS) 면에서 하드디스크 직결 방식인 EBS Multi-Attach(A)를 따라오기 어렵습니다.",
+    "explanation": "정답은 B입니다. 'RDS Proxy'는 숙련된 지배인과 같습니다. 수천 개의 호출이 쏟아져도 미리 뚫어놓은 DB 통로를 재활용(Pooling)해서 효율적으로 나눠줍니다. DB 부하를 막고 처리 속도도 높여주는 필수 도구입니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Cluster Placement Group": "동일한 가용 영역 내에서 인스턴스들을 물리적으로 가깝게 배치하여 네트워크 성능을 극대화하는 설정",
       "HPC (High Performance Computing)": "슈퍼컴퓨터처럼 복잡한 과학 계산이나 대규모 연산을 빠르게 처리하는 기술",
@@ -216,7 +216,7 @@ export const quizData = [
       "DB 연결 통로를 관리하고 재사용하는 'RDS Proxy'를 중간에 세웁니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n람다는 '일회용' 함수라 실행될 때마다 DB 문(Connection)을 열고 닫습니다. 분당 800번이나 문을 열어젖히니 DB 본체는 한가해도 '문(연결 개수)' 자체가 부족해 사고가 나는 겁니다. 'RDS Proxy'는 이 문을 미리 열어두고 람다들이 돌려 쓰게 해주므로 연결 오류가 즉시 해결됩니다.\n\n다른 옵션인 A(사양 증가)는 본체가 아닌 '통로' 부족 문제라 사양을 키워도 근본적인 해결책이 되지 못하고 비용만 많이 듭니다.",
+    "explanation": "정답은 B입니다. 'Amazon Rekognition'은 AWS가 이미 수조 장의 사진으로 훈련시킨 완성형 AI 서비스입니다. 학습이나 모델 개발 없이 API로 부탁만 하면 부적절한 노출이나 폭력적인 내용을 귀신같이 찾아줍니다.\n\nhttps://aws.amazon.com/rekognition/",
     "glossary": {
       "Amazon RDS Proxy": "DB 연결을 미리 맺어두고 여러 요청이 이를 나눠 쓰게 하여 DB 부담과 연결 오류를 줄여주는 서비스",
       "Connection Timeout (연결 시간 초과)": "서버에 접속하려고 기다리다가 너무 오래 걸려서 포기하고 에러를 내뱉는 현상",
@@ -233,7 +233,7 @@ export const quizData = [
       "최소 수량 2대는 약정 인스턴스로, 나머지 3대는 온디맨드로 쓰며 DB는 예약 구매합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n항상 떠 있어야 하는 최소 2대는 미리 약정해서 할인받는 'Reserved' 또는 'Savings Plan'이 제일 쌉니다. 가끔 늘어나는 3대는 그때그때 빌려 쓰는 온디맨드가 제격이며, 1년 내내 24시간 켜둘 DB는 'Reserved Instance'로 사두는 것이 정답입니다.\n\n다른 옵션인 C는 '주말엔 DB를 끈다'고 했는데, 앱이 항상 사용 가능해야 한다는 조건에 어긋납니다. 또한 스팟 인스턴스(C)는 AWS가 필요할 때 언제든 뺏어갈 수 있어 안정적인 서비스에는 적합하지 않습니다.",
+    "explanation": "정답은 C입니다. DynamoDB에서 무조건 방금 쓴 따끈따끈한 데이터가 필요하다면 '강력한 일관된 읽기(Strongly Consistent)' 모드를 켜야 합니다. 그러면 찰나의 순간에도 옛날 데이터가 나오는 일을 완벽히 방지합니다.\n\nhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html",
     "glossary": {
       "EC2 Instance Savings Plans": "일정량의 컴퓨팅 사용을 1~3년 약정하고 큰 폭의 할인을 받는 요금제",
       "Reserved DB Instance": "DB 서버를 미리 약정 구매하여 온디맨드보다 훨씬 저렴하게 이용하는 방식",
@@ -250,7 +250,7 @@ export const quizData = [
       "전 세계 곳곳에 문서를 캐싱해주는 CDN 서비스 'Amazon CloudFront'를 연동합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nCloudFront(CDN)를 쓰면 두 마리 토끼를 잡습니다. 사용자 근처 서버에 문서를 복사해두니 응답 속도가 '밀리초' 단위로 빨라지고, S3에서 나가는 데이터 전송료(Data Transfer Out)가 할인되거나 없어질 수 있어 전체 비용이 확 줄어듭니다.\n\n다른 옵션인 C(가속화)는 '업로드' 속도를 높이는 데는 좋지만, 다수의 사용자가 문서를 '내려받는' 속도와 비용 절감에는 CloudFront(D)가 훨씬 우월합니다.",
+    "explanation": "정답은 C입니다. 'Glue DataBrew'는 데이터 전용 시각적 가공 도구입니다. 엑셀처럼 생긴 화면에서 클릭 몇 번으로 데이터를 정제할 수 있고, 이 과정을 레시피로 저장해 공유할 수도 있어 코딩 실력 없이도 전문적인 처리가 가능합니다.\n\nhttps://aws.amazon.com/glue/databrew/",
     "glossary": {
       "Amazon CloudFront": "전 세계 곳곳의 서버에 콘텐츠를 임시 저장(캐싱)하여 사용자에게 광속으로 배달해주는 CDN 서비스",
       "CDN (Content Delivery Network)": "콘텐츠 배달망. 서버와 사용자 사이의 거리를 좁혀 속도를 높이는 것이 목적",
@@ -267,7 +267,7 @@ export const quizData = [
       "네트워크 드라이브인 EFS를 쓰고 리눅스 권한 설정을 빡빡하게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'가끔 쓰지만 즉시 나와야 함'의 교과서적인 정답은 'S3 Standard-IA'입니다. 여기에 실수로 지우는 대참사를 막기 위해 파일의 과거 상태를 기억하는 '버전 관리'와, 지울 때마다 핸드폰 인증을 요구하는 'MFA 삭제'를 조합하면 완벽한 철통 보안 저장소가 됩니다.\n\n다른 옵션인 A(Glacier)는 가격은 제일 싸지만 데이터를 꺼낼 때 최소 몇 분에서 몇 시간을 기다려야 하므로 '즉시 사용'이라는 조건에 탈락입니다.",
+    "explanation": "정답은 A입니다. AWS 내부에서 물어본 주소를 사내(온프레미스) DNS 서버로 전달해야 하므로 '아웃바운드 엔드포인트'가 필요합니다. 규칙을 설정해 특정 도메인은 회사 본사로 물어보게 하면 하이브리드 연결이 완성됩니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html",
     "glossary": {
       "S3 Versioning (버전 관리)": "파일이 수정되거나 삭제되어도 과거의 모든 상태를 다 보관해주는 타임머신 기능",
       "MFA Delete (다요소 인증 삭제)": "파일을 삭제할 때 OTP 같은 인증 번호를 추가로 입력하게 하여 중요한 데이터 손실을 막는 기능",
@@ -285,7 +285,7 @@ export const quizData = [
       "텍스트(CSV) 파일을 읽기 전용 압축 형식인 'Apache Parquet'로 변환합니다."
     ],
     "answer": [1, 4],
-    "explanation": "정답은 B, E입니다.\n\nAthena는 읽은 데이터 양만큼 돈을 받고 성능이 결정됩니다. '파티셔닝(B)'을 통해 딱 필요한 날짜 폴더만 뒤지게 하고, 'Parquet 형식(E)'으로 변환해서 필요한 열만 쏙쏙 뽑아 읽게(Columnar) 만들면 속도는 빛의 속도로 빨라지고 요금은 바닥으로 떨어집니다.\n\n다른 옵션인 C(거대 파일 하나)는 데이터를 병렬로 나눠서 읽는 클라우드의 장점을 하나도 못 쓰게 만드므로 성능이 최악이 됩니다.",
+    "explanation": "정답은 B입니다. EFS는 클라우드판 공유 폴더입니다. 수백 명의 컨테이너가 동시에 파일을 읽고 써도 끄떡없고 설치도 간편합니다. EKS Fargate 환경에서 파일을 영구 보관하고 공유할 때 가장 추천되는 저장소입니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Partitioning (파티셔닝)": "방대한 데이터를 날짜, 부서 등 특정 기준에 따라 폴더별로 쪼개어 검색 속도를 높이는 기법",
       "Apache Parquet": "데이터를 열(Column) 단위로 저장하는 똑똑한 파일 형식. 필요한 정보만 골라 읽을 수 있어 Athena 같은 툴에 최적입니다.",
@@ -302,7 +302,7 @@ export const quizData = [
       "파트너사 전용 사용자 그룹을 우리 계정에 수백 개 만들어 둡니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'교차 계정 역할'은 상대방의 신분증(자기 계정 아이디)을 그대로 믿어준 채, 우리 집 드라이브만 잠시 쓸 수 있게 '임시 출입증'을 주는 방식입니다. 운영 수고가 거의 없고, 상대방이 퇴사하면 그쪽 계정에서 처리하면 되니 보안 관리도 훨씬 깔끔합니다.\n\n다른 옵션인 D는 상대방 직원이 바뀔 때마다 우리 쪽에서도 일일이 사원 이름을 등록해야 하므로 관리 오버헤드가 너무 큽니다.",
+    "explanation": "정답은 C입니다. 웹은 퍼블릭 EC2에, 핵심 로직(앱)과 DB는 프라이빗에 숨기는 3계층 구조가 정석입니다. RDS MySQL을 쓰면 기존 설계를 유지하면서도 과거 시점 복구(PITR) 기능까지 안전하게 챙길 수 있습니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Cross-account IAM Role": "서로 다른 AWS 계정끼리 신뢰 관계를 맺고 자원을 안전하게 공유하는 보안 기술",
       "Principal (보안 주체)": "권한을 부여받는 대상(사람, 서비스, 계정 등)을 부르는 말",
@@ -319,7 +319,7 @@ export const quizData = [
       "필요할 때 알아서 늘어나는 'Aurora MySQL'을 쓰고 감사 로그와 자동 백업(PITR) 기능을 활용합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n사용량이 들쭉날쭉할 때는 지가 알아서 사양을 조절하는 'Aurora Auto Scaling'이 최고입니다. 또한 Aurora는 기본적으로 과거 어떤 시점으로든 되돌리는 기능(PITR)이 강력해서 5시간 미만의 RPO 요구사항을 식은 죽 먹기로 해결하며, 감사 로그 보관도 체크박스 하나로 끝납니다.\n\n다른 옵션인 A(DynamoDB)는 기록 보관(Streams) 기간이 기본 24시간 뿐이라 7일간의 감사 기록을 직접 보관하기에는 별도의 추가 코딩이 필요해 운영 오버헤드가 큽니다.",
+    "explanation": "정답은 B입니다. 'S3 Transfer Acceleration'은 전 세계 곳곳의 엣지 로케이션을 타고 파일을 S3까지 배달해줍니다. 먼 나라 사용자도 평소보다 훨씬 빠르게 대용량 파일을 올릴 수 있어 사용자 경험이 획기적으로 좋아집니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
     "glossary": {
       "Amazon Aurora MySQL": "상황에 따라 DB 사양을 자동으로 조절하며, 고성능과 쉬운 복구를 지원하는 AWS의 간판 데이터베이스 엔진",
       "RPO (Recovery Point Objective)": "복구 시점 목표. 사고 시 최대 얼마큼의 데이터 손실(시간)을 감수할 수 있는지를 나타냄",
@@ -336,7 +336,7 @@ export const quizData = [
       "달력에 미리 시간을 정해두는 '예약 조정' 기능을 24시간 켜둡니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n이미 알고 있는 이벤트(광고 날짜 등)가 있을 때는 '예측 조정'이나 '예약 조정'이 좋지만, '갑자기 증가하는 트래픽'에 대응하는 기본은 '동적 조정(Dynamic Scaling)'입니다. CPU 사용량 등이 올라가면 바로 서버를 투입하므로 성능을 가장 확실하게 보장하며, 필요 없을 땐 서버를 빼서 돈도 아껴줍니다.\n\n다른 옵션인 A(수동 조정)는 반응 속도가 너무 느려 손님이 다 떠난 뒤에야 서버가 늘어날 우려가 큽니다.",
+    "explanation": "정답은 B입니다. 매일 사내 NFS 서버의 데이터를 백업하려면 'DataSync'가 최고입니다. 설정이 매우 간편하고 바뀐 부분만 골라 전송하는 기능이 뛰어나 가성비와 운영 편의성을 모두 만족시킵니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "Dynamic Scaling (동적 조정)": "실시간 부하(CPU, 메모리 등)를 보고 서버 숫자를 자동으로 조절하는 방식",
       "Maintain Performance (성능 유지)": "사용자가 많아져도 속도가 느려지지 않게 방어하는 것",
@@ -353,7 +353,7 @@ export const quizData = [
       "포기하고 1년치 예약 DB 인스턴스를 사서 돈의 힘으로 밀어붙입니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n람다는 요청 한 번에 연결 하나를 맺으려 하므로, 수천 명의 사용자가 오면 DB 입구가 꽉 막혀버립니다. 'RDS Proxy'는 숙련된 매니저처럼 연결 통로(Pool)를 소수만 열어두고 람다들에게 번갈아 쓰게 하므로, DB를 바꾸거나 코드를 고칠 필요 없이 즉시 문제가 해결됩니다.\n\n다른 옵션인 B(사양 증가)는 근본적인 통로 관리 문제가 아니기에 결국 같은 한계에 도달하게 되고 비용만 눈덩이처럼 불어납니다.",
+    "explanation": "정답은 B입니다. 'RDS Proxy'는 DB 통로(Connection)를 재활용해서 사양 증설 없이도 훨씬 많은 손님을 안정적으로 받을 수 있게 해줍니다. 람다 함수가 폭주할 때 발생하는 DB 연결 부족 문제를 해결하는 최적의 비결입니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Amazon RDS Proxy": "DB 연결을 효율적으로 재사용하게 관리하여 서버리스 앱의 확장성을 돕는 도구",
       "Connection Pool (연결 풀)": "매번 새 통로를 뚫지 않고 이미 열린 통로를 돌려 쓰는 효율적인 관리 기법",
@@ -370,7 +370,7 @@ export const quizData = [
       "인터넷에서 돈 주고 산 인증서를 직접 파일로 업로드해서 씁니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nCloudFront와 무료 인증서(ACM)의 궁합은 정해져 있습니다. 무조건 '버지니아 북부(us-east-1)' 지역의 ACM에서 발급받은 공인 인증서만 인식됩니다. 이 인증서는 AWS 서비스 내에서 쓰면 무료이므로, 추가 비용 없이 전문적이고 안전한 사이트를 만들 수 있습니다.\n\n다른 옵션인 A(사설 인증서)는 회사 내부용이라 일반 사용자들이 웹사이트에 올 때 '경고 창'이 뜨게 되므로 일반적인 웹 배포에는 부적합합니다.",
+    "explanation": "정답은 A입니다. 실시간 데이터 수집에는 'Kinesis'가 정답입니다. Data Streams가 데이터를 빨아들이고, Firehose라는 트럭이 이를 S3 창고로 배달해주는 구조는 대규모 실시간 수집 시스템의 정석입니다.\n\nhttps://aws.amazon.com/kinesis/",
     "glossary": {
       "AWS Certificate Manager (ACM)": "SSL/TLS 인증서를 무료로 발급해주고 만료 전에 자동 갱신까지 다 해주는 보안 비서",
       "SSL/TLS Certificate (보안 인증서)": "웹사이트 주소 옆에 자물쇠를 띄워주고 데이터를 암호화해주는 디지털 신분증",
@@ -387,7 +387,7 @@ export const quizData = [
       "서버가 부족할까 봐 미리 자리를 찜해두는 '용량 예약'을 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n네트워크 속도는 '물리적 거리'에 비례합니다. '클러스터 배치 그룹'은 AWS 데이터 센터 안에서 가장 속도가 빠른 통로로 연결된 가까운 구역에 서버들을 옹기종기 모아줍니다. HPC처럼 서버끼리 대화를 많이 해야 하는 작업엔 이보다 더 중요한 설정은 없습니다.\n\n다른 옵션인 B(전용 인스턴스)는 보안이나 규정 준수에는 좋지만, 네트워크 속도 자체를 획기적으로 빠르게 해주는 마법의 도구는 아닙니다.",
+    "explanation": "정답은 A입니다. Aurora는 클라우드 환경에 최적화된 고성능 DB입니다. RDS MySQL보다 5배 빠르고 복제 지연도 거의 없어, 코드를 거의 안 고치고도 성능을 획기적으로 올릴 수 있는 최고의 선택지입니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Cluster Placement Group": "가용 영역 내에서 인스턴스 간 네트워크 지연 시간을 최소화하고 처리량을 높여주는 논리적인 그룹 설정",
       "Throughput (처리량)": "한 번에 얼마나 많은 양의 데이터를 쏟아부을 수 있는지를 나타내는 지표",
@@ -404,7 +404,7 @@ export const quizData = [
       "람다 함수의 메모리 용량을 무작정 키워 봅니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n람다는 평소엔 쉬다가 손님이 오면 엔진을 켭니다(Cold Start). 이게 아침 첫 손님에겐 응답 지연으로 느껴지죠. '프로비저닝된 동시성'은 아침 9시(업무 시작) 전에 미리 엔진 10개를 따끈하게 데워두라는 명령어입니다. 이렇게 하면 첫 손님도 기다림 없이 즉시 화면을 볼 수 있습니다.\n\n다른 옵션인 D(메모리 증가)는 시동이 걸린 '후'의 속도는 높여주지만, 아예 처음 시동을 거는 '지연 시간' 자체를 없애주지는 못합니다.",
+    "explanation": "정답은 A입니다. 최신 MSK는 자체 '퍼블릭 액세스'를 지원합니다. 공용 서브넷 공간을 만들고 옵션만 켜주면 되며, Mutual TLS를 켜면 상호 인증을 통해 완벽한 보안 속에 외부와 소통할 수 있습니다.\n\nhttps://docs.aws.amazon.com/msk/latest/developerguide/public-access.html",
     "glossary": {
       "Provisioned Concurrency (프로비저닝된 동시성)": "람다 함수 인스턴스를 미리 초기화하여 지연 없이 즉각 응답할 수 있게 준비시키는 기능",
       "Cold Start (콜드 스타트)": "오랫동안 안 쓰던 서버리스 함수가 처음 호출될 때 초기화하느라 시간이 걸리는 현상",
@@ -421,7 +421,7 @@ export const quizData = [
       "부하에 따라 늘어나는 오토 스케일링 기능만 켜둡니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n한 가용 영역(AZ)이 통째로 정전이 나도 옆 동네 가용 영역에 있는 조수(Replica)가 즉시 대장으로 승격(Failover)되려면 '다중 AZ' 설정이 필수입니다. 여기에 데이터를 여러 덩어리로 나눠 담는 '샤딩'까지 더하면 성능과 안정성이라는 두 마리 토끼를 완벽하게 잡을 수 있습니다.\n\n다른 옵션인 B(AOF)는 데이터 보존에는 좋지만, 장비 장애 시 자동으로 옆 영역에서 서비스를 이어가게 해주는 '고가용성' 시스템을 대체할 수는 없습니다.",
+    "explanation": "정답은 B입니다. 'AWS Health API'는 시스템 전체의 장애 정보를 알려주는 일기 예보와 같습니다. 내 서버가 있는 리전의 상태를 코드로 확인할 수 있어 배포 전 시스템 점검용으로 가장 좋습니다.\n\nhttps://aws.amazon.com/premiumsupport/technology/aws-health-api/",
     "glossary": {
       "Multi-AZ Redis Replication Group": "여러 가용 영역에 걸쳐 데이터 복제본을 유지하고 자동 장애 조치를 지원하는 Redis 구성 방식",
       "Sharding (샤딩)": "거대한 데이터를 여러 개의 작은 조각(Shard)으로 나눠 여러 서버에 분산 저장하는 기술",

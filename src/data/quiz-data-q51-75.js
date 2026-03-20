@@ -11,7 +11,7 @@ export const quizData = [
     ],
     "answer": 1,
     "answer2": 3,
-    "explanation": "정답은 B와 D입니다. 매일 아침 정해진 시간에 데이터를 추출하여 보고서를 작성하고 싶다면, EventBridge의 예약 기능을 통해 람다 함수를 깨우는 방식이 가장 깔끔합니다.\n\n람다가 데이터를 모아 예쁜 HTML 양식으로 가공하면, 이를 대량 메일 발송에 특화된 서비스인 Amazon SES를 통해 각 담당자에게 배달하게 됩니다. 이 조합은 서버를 24시간 켜둘 필요가 없어 비용 효율적이며 관리도 매우 간편합니다.",
+    "explanation": "정답은 B와 D입니다. 정해진 시간에 데이터를 추출하여 보고서를 작성하고 메일을 보내고 싶을 때는 EventBridge 스케줄러를 통해 Lambda를 실행하고 SES로 메일을 발송하는 조합이 가장 깔끔합니다.\n\nhttps://aws.amazon.com/ses/",
     "glossary": {
       "EventBridge (CloudWatch Events)": "특정 시간이나 상태 변화에 따라 이벤트를 발생시켜 다른 서비스를 실행하는 스케줄러",
       "Amazon SES": "대량의 이메일 발송 및 수신을 위한 확장 가능한 클라우드 기반 서비스"
@@ -27,7 +27,7 @@ export const quizData = [
       "다중 \nAZ \nAuto \nScaling \n그룹의 \nAmazon \nEC2 \n인스턴스로 \n애플리케이션을 \n마이그레이션합니다. 스토리지에 Amazon Elastic Block Store(Amazon EBS)를 사용합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 수 테라바이트급의 방대한 데이터를 '표준 폴더 구조'로 관리하면서 용량 걱정 없이 쓰고 싶다면 Amazon EFS가 정답입니다.\n\nEFS는 여러 대의 서버가 동시에 연결할 수 있는 공유 창고 같은 역할을 하며, 데이터가 늘어나는 만큼 알아서 공간을 넓혀주기 때문에 관리자가 일일이 디스크 용량을 증설하는 수고를 덜어줍니다. 또한 여러 가용 영역에 데이터가 복제되어 안정성도 매우 높습니다.",
+    "explanation": "정답은 C입니다. 수 테라바이트의 방대한 데이터를 '표준 파일 구조'로 관리하면서 용량 걱정 없이 쓰고 싶다면 Amazon EFS가 정답입니다. 자동으로 확장되며 높은 가용성을 제공합니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "EFS": "여러 인스턴스가 동시에 연결해서 사용할 수 있고 용량이 자동으로 확장되는 탄력적 파일 스토리지",
       "Multi-AZ": "중단 없는 서비스를 위해 여러 가용 영역에 자원을 배치해두는 고가용성 설계"
@@ -43,7 +43,7 @@ export const quizData = [
       "S3 수명 주기 정책을 사용하여 1\n년 후 레코드를 S3 Standard\n에서 S3 One \nZone-Infrequent Access(S3 One Zone-IA)로 전환합니다. 10 년 동안 거버넌스 모드에서 S3 \nObject Lock 을 사용합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 최고 권한자인 루트 사용자조차도 10년 동안 절대로 데이터를 지울 수 없게 잠그는 하드웨어 수준의 보안이 바로 Object Lock의 규정 준수 모드입니다.\n\n여기에 수명 주기 정책을 곁들여 1년 뒤에는 비용이 가장 저렴한 Deep Archive라는 창고로 옮겨두면, 법적 의무는 완벽히 지키면서도 창고 유지 비용은 극적으로 낮출 수 있는 가장 현명한 설계가 됩니다.",
+    "explanation": "정답은 C입니다. 최고 권한자조차 데이터를 지울 수 없게 법규를 준수하여 보관하려면 S3 Object Lock의 규정 준수 모드가 필수입니다. 여기에 Deep Archive를 곁들이면 비용까지 완벽히 잡습니다.\n\nhttps://aws.amazon.com/s3/features/object-lock/",
     "glossary": {
       "Object Lock (Compliance Mode)": "한번 저장된 데이터를 정해진 기간 동안 루트 사용자를 포함한 그 누구도 수정/삭제할 수 없게 잠그는 기능",
       "S3 Glacier Deep Archive": "자주 읽지 않는 데이터를 최저 비용으로 수십 년간 보관할 수 있는 아카이브 스토리지"
@@ -59,7 +59,7 @@ export const quizData = [
       "다중 AZ 구성을 사용하여 파일 공유 환경을 Amazon Elastic File System(Amazon \nEFS)으로 확장합니다. 모든 데이터를 Amazon EFS 로 마이그레이션합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 직원들이 쓰던 기존의 윈도우 파일 탐색기 환경을 그대로 유지하면서 고장 나지 않는 튼튼한 저장소를 만들고 싶다면 FSx for Windows File Server가 제격입니다.\n\n별도로 서버 두 대를 띄워 복제 설정을 할 필요 없이, AWS가 알아서 여러 구역에 데이터를 복사해두고 문제가 생기면 즉시 대기 중인 장비로 연결해주므로 관리자는 더 이상 밤잠을 설치지 않아도 됩니다.",
+    "explanation": "정답은 C입니다. 윈도우 파일 탐색기 환경을 그대로 유지하면서 고장 나지 않는 튼튼한 공유 저장소를 만들고 싶다면 FSx for Windows File Server가 현명한 파트너입니다.\n\nhttps://aws.amazon.com/fsx/windows/",
     "glossary": {
       "FSx for Windows File Server": "Windows 표준 환경을 완벽하게 지원하며 자동 백업과 복제 기능을 갖춘 완전 관리형 파일 시스템",
       "High Availability (고가용성)": "장애 발생 시에도 서비스 중단 없이 계속 운영될 수 있도록 보장하는 시스템 성질"
@@ -75,7 +75,7 @@ export const quizData = [
       "퍼블릭 서브넷과 프라이빗 서브넷 사이에 새로운 피어링 연결을 생성합니다. 프라이빗 \n서브넷과 데이터베이스 서브넷 간에 다른 피어링 연결을 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 데이터베이스에는 아무나 들어오지 못하게 문을 걸어잠가야 합니다. 오직 '특정 자격'을 갖춘 서버들만 통과시키고 싶을 때는 보안 그룹이라는 방화벽을 사용합니다.\n\nDB의 문지기(보안 그룹)에게 '프라이빗 구역에 있는 서버들의 신원'을 확인하고 들여보내라는 명확한 규칙을 부여하면, 외부 인터넷이나 다른 구역의 엉뚱한 접속 시도를 원천 봉쇄할 수 있습니다.",
+    "explanation": "정답은 C입니다. 데이터베이스 보호의 기본은 보안 그룹입니다. 프라이빗 구역에 있는 서버들의 보안 그룹 ID를 DB 측 문지기로 등록하면, 인가되지 않은 다른 구역의 접속을 철저히 막을 수 있습니다.\n\nhttps://aws.amazon.com/vpc/",
     "glossary": {
       "Security Group (보안 그룹)": "인스턴스 단위로 인바운드 및 아웃바운드 트래픽을 제어하는 가상 방화벽",
       "RDS": "관계형 데이터베이스를 편리하게 운영하기 위해 AWS에서 제공하는 서비스"
@@ -91,7 +91,7 @@ export const quizData = [
       "리전 API 게이트웨이 엔드포인트를 생성합니다. API Gateway 엔드포인트를 회사의 \n도메인 이름과 연결합니다. 회사의 도메인 이름과 연결된 공인 인증서를 us-east-1 리전의 \nAWS Certificate Manager(ACM)로 가져옵니다. API Gateway API 에 인증서를 연결합니다. \n회사의 도메인 이름으로 Route 53 DNS 레코드를 생성합니다. A 레코드가 회사의 도메인 \n이름을 가리키도록 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 복잡한 API 주소 대신 회사의 예쁜 도메인 이름을 붙여주고 싶다면, API 게이트웨이에서 사용자 지정 도메인 설정을 해줘야 합니다.\n\n이때 보안 연동(HTTPS)을 위해 해당 리전의 인증서 관리자인 ACM에 디지털 도장을 등록하고, 이를 API 입구에 걸어둔 뒤 마지막으로 전화번호부(Route 53)에 이 주소를 알려주면 전 세계 어디서든 안전하게 우리 API를 호출할 수 있게 됩니다.",
+    "explanation": "정답은 C입니다. API 게이트웨이에 우리 회사의 도메인 이름을 붙이려면 해당 리전의 ACM에서 인증서를 등록하고 사용자 지정 도메인 설정을 마친 뒤 Route 53에서 안내해줘야 합니다.\n\nhttps://aws.amazon.com/api-gateway/",
     "glossary": {
       "API Gateway": "모든 규모의 API를 생성, 게시, 관리 및 보호할 수 있게 해주는 완전 관리형 서비스",
       "ACM (AWS Certificate Manager)": "SSL/TLS 인증서를 발급하고 관리하는 보안 서비스"
@@ -107,7 +107,7 @@ export const quizData = [
       "AWS Fargate 를 사용하여 사용자 지정 기계 학습 모델을 배포하여 부적절한 콘텐츠를 \n감지합니다. 신뢰도가 낮은 예측에 레이블을 지정하려면 정답을 사용합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 수많은 이미지를 사람의 눈으로 일일이 검사하는 건 불가능에 가깝습니다. 하지만 인공지능인 Amazon Rekognition을 쓰면 기계가 알아서 유해한 요소를 콕 잡아냅니다.\n\n기계가 판단하기 애매한 부분은 실제 사람에게 검토 요청(A2I)을 보내는 똑똑한 워크플로까지 갖추고 있어, 개발자가 복잡한 알고리즘을 짤 필요 없이 서비스의 청정함을 유지할 수 있습니다.",
+    "explanation": "정답은 B입니다. 수많은 이미지에서 유해한 요소를 찾아내는 건 인공지능인 Amazon Rekognition이 제일 잘합니다. 애매한 부분은 사람에게 검토를 맡기는 워크플로(A2I)까지 갖출 수 있습니다.\n\nhttps://aws.amazon.com/rekognition/",
     "glossary": {
       "Amazon Rekognition": "기계 학습을 사용하여 이미지 및 비디오를 분석하는 AI 서비스 (객체 식별, 텍스트 추출, 이미지 중재 등 지원)",
       "Augmented AI (A2I)": "기계 학습 예측 결과에 대해 사람이 직접 검토할 수 있는 워크플로를 제공하는 기능"
@@ -123,7 +123,7 @@ export const quizData = [
       "Amazon \nElastic \nContainer \nService(Amazon \nECS)에 \n최적화된 \nAmazon \n머신 \n이미지(AMI)의 Amazon EC2 인스턴스를 사용합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 실행 환경(서버)이 잘 돌아가는지 매일 체크하는 스트레스에서 벗어나고 싶다면 Fargate라는 서버리스 엔진이 정답입니다.\n\n사용자는 '내 앱을 컨테이너에 담아 실행하라'는 명령만 내리면 되고, 실제 서버가 몇 대가 필요하고 어떻게 관리할지는 AWS가 다 알아서 해줍니다. 이를 통해 개발자는 서버 운영 대신 앱의 본질적인 기능 향상에만 온전히 집중할 수 있습니다.",
+    "explanation": "정답은 C입니다. 서버 관리의 스트레스에서 벗어나 오직 컨테이너화된 앱을 돌리는 데만 집중하고 싶다면 Fargate라는 서버리스 엔진이 정답입니다. 기반 하드웨어 운영은 AWS가 다 책임집니다.\n\nhttps://aws.amazon.com/fargate/",
     "glossary": {
       "AWS Fargate": "서버를 관리할 필요 없이 컨테이너를 실행할 수 있게 해주는 서버리스 컴퓨팅 엔진",
       "ECS (Elastic Container Service)": "AWS에서 컨테이너화된 애플리케이션을 쉽게 실행하고 확장할 수 있도록 돕는 관리 서비스"
@@ -139,7 +139,7 @@ export const quizData = [
       "Amazon Kinesis Data Streams\n에서 데이터를 수집합니다. Amazon Kinesis Data \nFirehose 를 사용하여 Amazon S3 데이터 레이크로 데이터를 전송합니다. 분석을 위해 \nAmazon Redshift 에 데이터를 로드합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 전 세계에서 쏟아지는 엄청난 양의 로그를 일일이 파일로 모으는 건 너무 느립니다. Kinesis라는 거대한 물줄기를 통해 데이터를 실시간으로 흘려보내야 합니다.\n\n이 물줄기를 Firehose가 받아 분석 창고(Redshift)로 바로 연결해주면, 하루 30테라가 넘는 빅데이터도 막힘없이 처리하고 즉시 유의미한 비즈니스 통찰력을 얻어낼 수 있습니다.",
+    "explanation": "정답은 D입니다. 전 세계에서 쏟아지는 클릭 데이터를 실시간으로 수집하고 분석하려면 Kinesis Data Streams와 Firehose, 그리고 분석 창고인 Redshift를 잇는 고속도로를 닦아야 합니다.\n\nhttps://aws.amazon.com/kinesis/",
     "glossary": {
       "Kinesis Data Firehose": "실시간 스트리밍 데이터를 캡처하여 최대로 S3나 Redshift로 로딩해주는 완전 관리형 서비스",
       "Redshift": "대규모 데이터 세트를 고속으로 분석할 수 있는 클라우드 기반 데이터 웨어하우스"
@@ -155,7 +155,7 @@ export const quizData = [
       "ALB 를 SNI(서버 이름 표시)를 사용하도록 구성된 Network Load Balancer 로 교체합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 보안이 취약한 옛날 방식(HTTP)으로 들어오는 사람들을 안전한 보안 연결(HTTPS)로 자동 안내해주고 싶다면 로드 밸런서에게 리디렉션 규칙을 주면 됩니다.\n\n로드 밸런서가 현관문에서 '여기는 보안이 강화된 문으로만 들어오세요'라고 친절하게 경로를 틀어주기 때문에, 사용자는 불편함 없이 가장 안전한 상태로 우리 웹사이트를 이용하게 됩니다.",
+    "explanation": "정답은 C입니다. 보안이 취약한 HTTP 손님을 안전한 HTTPS로 안내하고 싶다면 로드 밸런서(ALB)에게 리디렉션 규칙을 주면 됩니다. 사용자는 자연스럽게 가장 안전한 통로로 들어오게 됩니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/application-load-balancer/",
     "glossary": {
       "ALB Listener (리스너)": "설정한 프로토콜 및 포트를 사용하여 연결 요청을 확인하는 ALB의 구성 요소",
       "HTTP Redirect": "클라이언트가 특정 페이지에 접근했을 때 다른 URL로 자동 이동시키는 기술"
@@ -171,7 +171,7 @@ export const quizData = [
       "데이터베이스 자격 증명을 AWS Systems Manager Parameter Store\n에 암호화된 \n파라미터로 저장합니다. 암호화된 매개변수에 대해 자동 회전을 켭니다. EC2 역할에 필요한 \n권한을 연결하여 암호화된 파라미터에 대한 액세스 권한을 부여합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 소스 코드에 비밀번호를 적어두는 건 현관문 앞에 열쇠를 두는 것만큼 위험합니다. 금고 대여소인 Secrets Manager를 빌려 비밀번호를 보관하세요.\n\n이 금고 대여소는 시간이 지나면 알아서 비밀번호를 새 걸로 바꿔주는 자동 순환 기능까지 있어, 보안 사고를 원천적으로 방지하면서도 개발자가 비밀번호 관리에 신경 쓸 일을 없게 해줍니다.",
+    "explanation": "정답은 C입니다. 소스 코드에 비밀번호를 적어두면 언제든 사고가 날 수 있습니다. Secrets Manager라는 튼튼한 금고에 암호를 맡기고, 60일마다 알아서 자물쇠를 바꾸게 설정하는 것이 보안의 기본입니다.\n\nhttps://aws.amazon.com/secrets-manager/",
     "glossary": {
       "Secrets Manager": "데이터베이스 자격 증명, API 키 등의 암호를 안전하게 저장하고 자동 교체해주는 서비스",
       "Credential Rotation": "보안을 위해 주기적으로 암호 정보를 바꾸는 작업"
@@ -187,7 +187,7 @@ export const quizData = [
       "AWS Certificate Manager(ACM)를 사용하여 SSL/TLS 인증서를 가져옵니다. 인증서를 \nALB 에 적용합니다. Amazon EventBridge(Amazon CloudWatch Events)를 사용하여 인증서가 \n만료될 때 알림을 보냅니다. 인증서를 수동으로 교체합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. AWS가 직접 관리해주는 인증서가 아니라 밖에서 사 온 인증서는 AWS가 대신 갱신해주고 싶어도 권한이 없습니다.\n\n이럴 땐 ACM이라는 문서함에 인증서를 잘 넣어두고 쓰되, 유통기한이 다 되어간다는 알람을 받으면 새 인증서를 사 와서 수동으로 바꿔줘야 합니다. 내 집 비밀번호를 직접 관리하는 것처럼 주관적인 보안 관리가 필요한 영역입니다.",
+    "explanation": "정답은 D입니다. 밖에서 직접 사 온 인증서는 AWS가 멋대로 갱신할 수 없습니다. ACM 문서함에 잘 모셔두고 쓰되, 수명 종료 30일 전 알람을 받으면 새 인증서를 사 와서 수동으로 바꿔줘야 합니다.\n\nhttps://aws.amazon.com/certificate-manager/",
     "glossary": {
       "SSL/TLS Certificate": "웹사이트의 데이터를 암호화하고 서버의 신원을 증명하는 디지털 인증서",
       "ACM Certificate Import": "외부에서 구매하거나 발급받은 인증서를 AWS 서비스에서 사용하기 위해 등록하는 과정"
@@ -203,7 +203,7 @@ export const quizData = [
       "Amazon EC2 인스턴스, Amazon Elastic File System(Amazon EFS) 스토리지 \n및 Auto Scaling 그룹이 포함된 AWS Elastic Beanstalk 애플리케이션에 업로드합니다. EC2 \n인스턴스의 프로그램을 사용하여 파일을 .jpg 형식으로 변환합니다. .pdf 파일과 .jpg \n파일을 EBS 스토어에 저장합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 문서가 업로드되는 즉시 '그걸 잡아내서 그림으로 바꿔라'라는 자동화 명령을 람다 함수에 내려보세요. S3는 무제한 창고라 용량 걱정이 없고, 람다는 딱 변환하는 그 찰나의 순간에만 일하고 사라집니다.\n\n이 방식은 사용자가 1명이든 100만 명이든 똑같이 유연하게 대응하며, 서버를 한 대라도 덜 띄웠을 때 아끼는 비용은 회사 운영에 큰 힘이 됩니다.",
+    "explanation": "정답은 A입니다. 파일이 업로드되는 즉시 자동으로 일을 시키고 싶다면 S3 이벤트를 트리거로 삼아 Lambda 요정을 깨우세요. 사용한 시간만큼만 돈이 나가니 가성비가 최고입니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "S3 Event Notification": "버킷에 객체가 생성되는 등의 이벤트가 발생했을 때 Lambda 등을 실행시키는 기능",
       "Serverless (서버리스)": "사용자가 직접 서버를 관리하지 않고 코드 실행 시간만큼만 비용을 지불하는 모델"
@@ -219,7 +219,7 @@ export const quizData = [
       "AWS 에서 Windows 파일 서버용 Amazon FSx 를 배포 및 구성합니다. 온프레미스에 \nAmazon FSx 파일 게이트웨이를 배포하고 구성합니다. 온프레미스 파일 데이터를 FSx 파일 \n게이트웨이로 이동합니다. AWS 의 Windows 파일 서버용 FSx 를 사용하도록 클라우드 \n워크로드를 구성합니다. FSx 파일 게이트웨이를 사용하도록 온프레미스 워크로드를 \n구성합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 하이브리드 클라우드 환경에서 '로컬 파일 시스템의 속도'와 '클라우드의 방대한 용량'을 다 잡고 싶다면 FSx 파일 게이트웨이가 환상적인 가교 역할을 해줍니다.\n\n특히 윈도우 파일 시스템(SMB)을 고집하는 환경이라면, 익숙한 사용법을 그대로 유지하면서도 뒤쪽에서는 클라우드와 실시간으로 동기화되니 사용자들은 인프라가 바뀌었는지조차 모를 정도로 매끄러운 이전을 경험하게 됩니다.",
+    "explanation": "정답은 D입니다. 윈도우 환경을 유지하면서 클라우드로 매끄럽게 넘어가려면 FSx 파일 게이트웨이가 제격입니다. 로컬 속도와 클라우드 용량을 동시에 누리는 하이브리드 생활의 시작입니다.\n\nhttps://aws.amazon.com/storagegateway/",
     "glossary": {
       "FSx File Gateway": "온프레미스에서 FSx 데이터에 저지연으로 접근할 수 있도록 도와주는 하이브리드 클라우드 도구",
       "Site-to-Site VPN": "온프레미스 네트워크와 AWS VPC를 인터넷 상의 암호화된 터널로 연결하는 기술"
@@ -235,7 +235,7 @@ export const quizData = [
       "Amazon \nRekognition\n을 \n사용하여 \n보고서에서 \n텍스트를 \n추출합니다. \nAmazon \nComprehend Medical 을 사용하여 추출된 텍스트에서 PHI 를 식별합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 병원 차트의 복잡한 표와 글씨를 정교하게 읽어내는 Textract라는 눈과, 그 안에서 환자의 개인정보만 똑똑하게 가려내는 Comprehend Medical이라는 뇌를 연결하는 전략입니다.\n\n이 두 서비스를 함께 쓰면 의료진이 매일 지루하고 힘든 데이터 분류 작업에 시간을 뺏기지 않고 정작 중요한 환자 진료에 더 많은 시간을 쏟을 수 있게 됩니다.",
+    "explanation": "정답은 C입니다. 복잡한 병원 서류를 읽어내는 Textract라는 눈과, 그 안에서 환자의 개인정보만 콕 집어내는 Comprehend Medical이라는 뇌를 연결하여 의료 데이터 보안을 자동화하세요.\n\nhttps://aws.amazon.com/comprehend/medical/",
     "glossary": {
       "Amazon Textract": "문서나 이미지에서 텍스트, 손글씨 및 표 데이터를 추출하는 OCR 기반 AI 서비스",
       "Amazon Comprehend Medical": "의료 텍스트에서 진단명, 투약 기록 등의 정보를 머신러닝으로 추출하는 서비스"
@@ -251,7 +251,7 @@ export const quizData = [
       "객체 생성 후 30 일 동안 S3 Standard 에서 S3 Standard-Infrequent Access(S3 \nStandard-IA)로 파일을 이동하는 S3 버킷 수명 주기 정책을 생성합니다. 객체 생성 4 년 후 \n파일을 S3 Glacier 로 이동합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 30일 지나면 가끔 보긴 하겠지만 '보고 싶을 때 바로 나와야 하는' 중요 데이터라면 Standard-IA 계층이 정답입니다.\n\n비용을 더 아끼겠다고 Glacier로 보내면 자료를 꺼낼 때 한참을 기다려야 하고, One Zone 계층을 쓰면 만약의 재해 때 자료를 통째로 잃을 수 있습니다. 중요도와 접근성을 고려할 때 Standard-IA가 가장 균형 잡힌 안식처입니다.",
+    "explanation": "정답은 C입니다. 30일이 지나면 가끔 보긴 하겠지만 '보고 싶을 때 바로 나와야 하는' 중요 데이터라면 S3 Standard-IA 계층이 가장 균형 잡힌 가성비 안식처입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/",
     "glossary": {
       "S3 Standard-IA": "자주 액세스하지 않지만 필요할 때 즉시 읽어야 하는 데이터에 적합한 가성비 스토리지",
       "Durability (내구성)": "데이터가 유실되지 않고 안전하게 보관되는 성질. S3는 99.999999999%를 보장함"
@@ -267,7 +267,7 @@ export const quizData = [
       "ChangeMessageVisibility API 호출을 사용하여 가시성 시간 초과를 늘립니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 서버 한 대가 일을 다 마치기도 전에 대기열에서 메시지가 다시 '나 여기 있어' 하고 나타나면 다른 서버가 또 가져가게 됩니다.\n\n이럴 땐 '가시성 시간 초과'라는 기능을 통해, 누군가 메시지를 집어 가면 충분한 시간 동안 다른 사람 눈에 안 보이게 꽁꽁 숨겨두어야 합니다. 그러면 중복 처리로 인한 데이터 오염을 깔끔하게 막을 수 있습니다.",
+    "explanation": "정답은 D입니다. 한 일꾼이 일을 마칠 때까지 대기열에서 그 일을 잠시 가려두는 '가시성 시간 초과' 시간을 넉넉히 잡으세요. 그러면 같은 일이 중복으로 처리되는 불상사를 막을 수 있습니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "Visibility Timeout (가시성 시간 초과)": "메시지가 수신된 후 다른 소비자가 다시 볼 수 없도록 숨겨지는 기간",
       "SQS (Simple Queue Service)": "분산된 애플리케이션 계층 간에 메시지를 주고받아 시스템을 하나로 묶어주는 서비스"
@@ -283,7 +283,7 @@ export const quizData = [
       "리전에 대한 AWS Direct Connect 연결을 프로비저닝합니다. AWS CLI 에서 Direct \nConnect 장애 조치 속성을 사용하여 기본 Direct Connect 연결이 실패할 경우 백업 연결을 \n자동으로 생성합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 평소에는 비싸더라도 전용선(Direct Connect)을 깔아 시원시원하게 데이터를 주고받고, 만약 전용선에 문제가 생기면 임시로 인터넷 길(VPN)을 이용해 우회하는 전략입니다.\n\n비상용으로 전용선을 하나 더 깔면 돈이 너무 많이 드니, 조금 느리더라도 저렴한 VPN을 비상로로 챙겨두는 것이 가장 가성비 좋고 현명한 하이브리드 설계라 할 수 있습니다.",
+    "explanation": "정답은 A입니다. 평소에는 전용선(Direct Connect)으로 시원하게 소통하고, 비상시에는 조금 느리더라도 저렴한 VPN을 백업 길로 챙겨두는 것이 가장 현명한 하이브리드 설계입니다.\n\nhttps://aws.amazon.com/directconnect/",
     "glossary": {
       "Direct Connect": "전용망을 사용하여 일관된 품질을 보장하는 네트워크 연결 서비스",
       "Failover (장애 조치)": "시스템 일부가 고장 났을 때 자동으로 예비 장치나 우회 경로로 전환하여 서비스 불능을 막는 기법"
@@ -299,7 +299,7 @@ export const quizData = [
       "여러 AWS 리전을 사용하도록 Auto Scaling 그룹을 구성합니다. 애플리케이션의 \n데이터를 Amazon S3 에 씁니다. S3 이벤트 알림을 사용하여 AWS Lambda 함수를 시작하여 \n데이터베이스에 데이터를 씁니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. '고장 나도 멈추지 않는 시스템'을 만들고 싶다면 계란을 여러 바구니(가용 영역)에 나눠 담아야 합니다. 웹 서버도 나누고, DB도 다중 AZ로 설정해두면 한쪽 바구니가 깨져도 다른 쪽에서 즉시 역할을 넘겨받습니다.\n\n특히 RDS 프록시까지 곁들이면 장애가 터졌을 때 연결을 갈아타는 그 찰나의 순간도 사용자가 느끼지 못할 정도로 매끄러운 고가용성을 유지할 수 있게 됩니다.",
+    "explanation": "정답은 B입니다. 고장 나도 멈추지 않는 DB를 위해 다중 AZ 설정을 하세요. 여기에 RDS 프록시를 곁들이면 장애가 터져서 주인이 바뀌는 찰나의 순간에도 앱은 끊김 없이 계속 작동합니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Amazon Aurora": "클라우드 시대를 위해 재설계된 고성능, 고가용성 MySQL 및 PostgreSQL 호환 데이터베이스",
       "RDS Proxy": "데이터베이스 연결을 관리하고 고가용성 전환 시 애플리케이션이 끊김 없이 작동하도록 돕는 중계 도구"
@@ -315,7 +315,7 @@ export const quizData = [
       "NLB 에 대한 UnhealthyHostCount 지표를 모니터링하는 Amazon Cloud Watch 경보를 \n생성합니다. 경보가 ALARM 상태일 때 비정상 인스턴스를 교체하도록 Auto Scaling 작업을 \n구성합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. NLB는 단순히 서버가 켜져 있는지(L4)만 확인하기 때문에, 서버 안의 서비스가 먹통이 된 것까진 모릅니다. 반면 ALB(L7)는 앱이 실제 잘 돌아가는지(HTTP) 꼼꼼하게 살핍니다.\n\n똑똑한 관절형 로드 밸런서인 ALB로 갈아타서 앱 상태를 정밀하게 체크하면, 앱이 죽은 인스턴스만 쏙 골라내어 새것으로 바꾸라고 Auto Scaling에 시킬 수 있어 훨씬 튼튼한 서비스 유지가 가능합니다.",
+    "explanation": "정답은 C입니다. NLB(L4)는 서버가 켜져 있는지만 보지만, ALB(L7)는 실제 앱이 살아있는지 꼼꼼히 살핍니다. 똑똑한 ALB로 갈아타서 앱 상태를 정밀 체크하고 아픈 인스턴스를 즉시 치료하세요.\n\nhttps://aws.amazon.com/elasticloadbalancing/",
     "glossary": {
       "Health Check (상태 확인)": "로드 밸런서가 뒤쪽 서버가 정상적으로 응답하는지 주기적으로 핑을 보내고 확인하는 기능",
       "NLB vs ALB": "NLB는 속도가 빠르지만 단순하고, ALB는 똑똑하게 앱 내부 상황(HTTP)까지 살필 수 있음"
@@ -331,7 +331,7 @@ export const quizData = [
       "DynamoDB 테이블에 대한 Amazon Elastic Block Store(Amazon EBS) 스냅샷을 \n15 분마다 예약합니다. RPO 복구의 경우 EBS 스냅샷을 사용하여 DynamoDB 테이블을 \n복원합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 실수로 데이터를 지웠을 때 '아, 10분 전으로 돌아가고 싶다'라는 소원을 들어주는 기능이 지정 시간 복구(PITR)입니다.\n\n이 기능은 초 단위 정밀도로 과거의 어떤 시점이라도 새 테이블로 뚝딱 살려내 주기 때문에, 15분 이내의 유실 방지라는 엄격한 약속을 지켜내기에 가장 믿음직하고 빠른 방법입니다.",
+    "explanation": "정답은 B입니다. 실수로 데이터를 지워도 '10분 전으로 돌아가고 싶다'는 소원을 들어주는 기능이 PITR입니다. 초 단위 정밀도로 과거의 어느 시점으로든 소중한 데이터를 되돌려줍니다.\n\nhttps://aws.amazon.com/dynamodb/",
     "glossary": {
       "PITR (Point-In-Time Recovery)": "최근 35일 내의 어느 시점으로든 데이터를 즉시 복구할 수 있게 해주는 기능",
       "RPO / RTO": "RPO는 손실을 감수할 수 있는 데이터 시간 범위, RTO는 고장 후 정상복구까지 걸리는 시간"
@@ -347,7 +347,7 @@ export const quizData = [
       "S3 VPC 게이트웨이 엔드포인트를 VPC 에 배포하고 S3 버킷에 대한 액세스를 허용하는 \n엔드포인트 정책을 연결합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 같은 리전 안에서도 굳이 인터넷 망을 타고 S3에 가는 건 택시를 타고 골목길을 도는 것처럼 비효율적이고 비쌉니다.\n\nVPC 안에 S3로 가는 무료 직통 엘리베이터(게이트웨이 엔드포인트)를 설치해보세요. 인터넷을 타지 않고 AWS 내부망으로만 소통하기 때문에 데이터가 아무리 넘쳐나도 전송료 걱정 없이 쾌적하게 사진을 주물럭거릴 수 있습니다.",
+    "explanation": "정답은 D입니다. 같은 리전 안에서 S3로 갈 때는 굳이 비싼 인터넷 통행료를 낼 필요가 없습니다. VPC 안에 S3로 가는 무료 직통 엘리베이터(엔드포인트)를 설치해서 데이터 전송료를 아끼세요.\n\nhttps://aws.amazon.com/vpc/endpoints/",
     "glossary": {
       "VPC Gateway Endpoint": "VPC 외부의 S3나 DynamoDB에 인터넷 없이 직접 연결하는 전용 통로 (비용 무료)",
       "Data Transfer Fee": "AWS 리소스 간 혹은 외부로 데이터를 보낼 때 발생하는 통신 비용"
@@ -365,7 +365,7 @@ export const quizData = [
     ],
     "answer": 2,
     "answer2": 3,
-    "explanation": "정답은 C와 D입니다. 길 입구(배스천)에는 오직 우리 회사 소속임을 증명하는 고정된 외부 주소만 통과시키세요(C). 그리고 진짜 중요한 내부 서버는 '입구를 통과해 온 사람들(배스천의 내부 주소)'에게만 문을 열어주세요(D).\n\n이렇게 이중으로 주소 필터링을 걸면, 지나가던 해커가 내부 서버에 침입해보려 해도 입구부터 막히고, 설령 입구를 보더라도 내부로 가는 문은 아예 보이지 않는 철통 보안이 완성됩니다.",
+    "explanation": "정답은 C와 D입니다. 길 입구(배스천)에는 오직 우리 공인 IP만 받게 하고(C), 내부 서버는 '그 입구를 통과해 온 사람들(내부 IP)'에게만 문을 열어주는(D) 이중 잠금 방식이 가장 안전합니다.\n\nhttps://aws.amazon.com/vpc/",
     "glossary": {
       "Bastion Host (배스천 호스트)": "외부 인터넷에서 직접 접근이 불가능한 프라이빗 서브넷 서버에 접속하기 위해 징검다리 역할을 하는 보안 서버",
       "Private IP": "VPC 내부망 안에서만 통용되는 내부 주소"
@@ -383,7 +383,7 @@ export const quizData = [
     ],
     "answer": 0,
     "answer2": 2,
-    "explanation": "정답은 A와 C입니다. 웹 사이트 대문은 누구나 들어올 수 있게 활짝 열어두되(443 포트), 집안 깊숙한 현금 상자(DB)는 오직 집에서 일하는 사람(웹 서버 보안 그룹)만 만질 수 있게 해야 합니다.\n\n특히 데이터베이스 보안 그룹 설정 시 IP 주소가 아닌 '웹 서버 보안 그룹의 ID'를 지정하면, 웹 서버가 몇 대가 되든 늘어나든 줄어들든 상관없이 그들로부터 오는 정당한 요청만 찰떡같이 구분해 받아들일 수 있습니다.",
+    "explanation": "정답은 A와 C입니다. 대문은 누구나 들어올 수 있게 443 포트를 활짝 열되(A), 창고(DB)는 오직 집에서 일하는 사람(웹 서버 보안 그룹)만 만질 수 있게 특정해서 허용하는 것이 보안의 정석입니다.\n\nhttps://aws.amazon.com/vpc/",
     "glossary": {
       "Security Group Rule": "특정 IP 대역뿐만 아니라 다른 보안 그룹의 ID를 '소스'로 지정하여 권한을 제어할 수 있는 보안 규칙",
       "Port 443": "보안 웹 통신(HTTPS)의 표준 포트 번호"
@@ -399,7 +399,7 @@ export const quizData = [
       "Amazon Simple Queue Service(Amazon SQS)를 사용하여 Auto Scaling 그룹의 Amazon \nEC2 에 실행되는 애플리케이션 서버 간의 메시징을 처리합니다. Amazon CloudWatch 를 \n사용하여 SQS 대기열 길이를 모니터링하고 통신 오류가 감지되면 확장합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 일이 몰려서 시스템이 비명을 지르다 자료를 놓치는 건 결합이 너무 빡빡해서 생기는 병입니다. 중간에 SQS라는 임시 보관함을 하나 두어 완충 지대를 만드세요.\n\n그리고 그 일을 처리할 엔진으로 필요한 만큼만 나타나 일하는 람다 요정을 배치하면, 갑자기 손님이 몰려도 예약 대기표(SQS)를 끊고 차례로 처리해내기 때문에 트랜잭션 유실 없는 튼튼하고 세련된 앱이 완성됩니다.",
+    "explanation": "정답은 A입니다. 일이 몰려서 자료를 놓친다면 시스템이 너무 빡빡하게 붙어있기 때문입니다. 중간에 SQS라는 대기표 발행기를 두고 Lambda 요정이 차례차례 처리하게 하면 유실 걱정이 사라집니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "Decoupling (결합 해제)": "구성 요소들이 서로의 상태를 몰라도 독립적으로 작동할 수 있게 중간에 대기열 등을 넣어 분리하는 설계",
       "Serverless Modernization": "기존 서버 기반 앱을 Lambda 같은 서버리스 기술로 바꿔 관리 부담을 획기적으로 줄이는 과정"

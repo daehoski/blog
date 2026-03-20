@@ -11,7 +11,7 @@ export const quizData = [
       "Direct Connect 전용선을 통해 전송되는 실제 데이터의 암호화 처리"
     ],
     "answer": [1, 2, 5],
-    "explanation": "정답은 B, C, F입니다.\n\nAWS 공동 책임 모델에 따라 AWS는 '클라우드 자체의 보안(물리 시설, 하드웨어)'을 책임지고, 고객은 '클라우드 내에서의 보안(데이터, 설정)'을 책임집니다. 하드웨어나 OS 관리는 AWS가 해주지만, 어떤 DB를 띄울지(B), 내 서비스에 필요한 보안 소프트웨어를 깔지(C), 그리고 전용선을 타고 흐르는 소중한 데이터를 암호화할지(F)는 전적으로 우리 운영팀의 몫입니다.\n\n다른 옵션인 A, D, E는 AWS가 관리해주는 영역이므로 고객이 직접 할 필요가 없거나 할 수 없는 일들입니다.",
+    "explanation": "정답은 B, C, F입니다. AWS 공동 책임 모델에 따라 AWS는 '클라우드 자체의 보안(물리 시설, 하드웨어)'을 책임지고, 고객은 '클라우드 내에서의 보안(데이터, 설정)'을 책임집니다. 하드웨어나 OS 관리는 AWS가 해주지만, 어떤 DB를 띄울지(B), 내 서비스에 필요한 보안 소프트웨어를 깔지(C), 그리고 전용선을 타고 흐르는 데이터를 암호화할지(F)는 전적으로 운영팀의 몫입니다.\n\nhttps://aws.amazon.com/compliance/shared-responsibility-model/",
     "glossary": {
       "Shared Responsibility Model (공동 책임 모델)": "AWS와 고객이 보안 및 관리에 대해 책임을 나누는 기본 원칙",
       "Amazon ECS (Elastic Container Service)": "컨테이너화된 애플리케이션을 쉽게 실행하고 관리하게 해주는 도구",
@@ -28,7 +28,7 @@ export const quizData = [
       "작업이 끝날 때마다 EC2 서버를 아예 끄고(Stop), 한 시간 뒤에 다시 켜는(Start) 자동화 스크립트를 짭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n1시간에 딱 10초만 일하는 작업은 서버를 켜두는 것 자체가 낭비입니다. Lambda는 코드가 실행되는 '밀리초' 단위로만 요금을 내기 때문에 이런 간헐적 작업에 축복과도 같은 서비스입니다. 넉넉하게 메모리 1GB를 할당하고 EventBridge로 매시간 쿡 찔러주기만 하면, 남은 59분 50초 동안의 비용은 0원이 됩니다.\n\n다른 옵션인 D처럼 서버를 껐다 켰다 하는 건 부팅 시간도 걸리고 관리가 매우 번거로우며, 초 단위 과금인 Lambda보다 비쌉니다.",
+    "explanation": "정답은 B입니다. 1시간에 딱 10초만 일하는 작업은 서버를 켜두는 것 자체가 낭비입니다. Lambda는 코드가 실행되는 '밀리초' 단위로만 요금을 내기 때문에 이런 간헐적 작업에 최고입니다. 넉넉하게 메모리 1GB를 할당하고 EventBridge로 매시간 쿡 찔러주기만 하면, 남은 시간 동안의 요금은 0원이 됩니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "AWS Lambda": "서버 관리 없이 코드만 실행하며, 실행 시간만큼만 비용을 내는 서버리스 컴퓨팅 서비스",
       "Amazon EventBridge": "시스템 간의 이벤트를 연결하거나 정해진 시간에 작업을 실행하게 돕는 서비스",
@@ -45,7 +45,7 @@ export const quizData = [
       "AWS Backup을 사용해 '규정 준수(Compliance) 모드'로 볼트 잠금을 설정합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n데이터 변조 방지(WORM)를 위한 끝판왕은 AWS Backup의 '규정 준수 모드 볼트 잠금'입니다. 이 모드를 활성화하면 보존 기간이 끝나기 전에는 루트 사용자나 AWS 직원조차도 백업을 지울 수 없습니다. 거버넌스 모드는 특정 권한이 있으면 해제가 가능하지만, 규정 준수 모드는 법적 요구 사항을 충족하기 위한 불멸의 자물쇠를 채우는 것입니다.\n\n다른 옵션들은 삭제 권한이 있는 관리자가 마음만 먹으면 지울 수 있는 구조라 '변조 불가' 조건을 완벽히 만족하기 어렵습니다.",
+    "explanation": "정답은 D입니다. 데이터 변조 방지(WORM)를 위한 끝판왕은 AWS Backup의 '규정 준수 모드 볼트 잠금'입니다. 이 모드를 활성화하면 보존 기간이 끝나기 전에는 루트 사용자나 AWS 직원조차도 백업을 지울 수 없습니다. 법적 요구 사항을 충족하기 위한 불멸의 자물쇠를 채우는 것입니다.\n\nhttps://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html",
     "glossary": {
       "AWS Backup Vault Lock": "백업 파일이 들어있는 금고(Vault)를 잠가서 삭제나 수정을 원천 차단하는 기능",
       "Compliance Mode (규정 준수 모드)": "관리자조차 잠금을 해제할 수 없는 가장 강력한 불변성(Immutability) 옵션",
@@ -62,7 +62,7 @@ export const quizData = [
       "AWS X-Ray 서비스를 켜서 네트워크 흐름을 감시하고 그걸 토대로 그림을 그립니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n복잡하게 얽힌 클라우드 자원을 한눈에 보고 싶을 때 쓰는 전용 도구가 'Workload Discovery on AWS'입니다. 계정과 리전을 싹 훑어서 서버, DB, 네트워크가 어떻게 연결되어 있는지 실시간으로 멋진 그림(다이어그램)을 그려줍니다. 운영자가 일일이 조사해서 그릴 필요가 없으니 운영 효율이 최고입니다.\n\n다른 옵션인 A(Inventory)는 단순 목록만 보여줄 뿐 관계를 그려주지 않고, B와 D는 수작업 노력이 너무 많이 들어 '운영상 효율적'이지 않습니다.",
+    "explanation": "정답은 C입니다. 복잡하게 얽힌 클라우드 자원을 한눈에 보고 싶을 때 쓰는 전용 도구가 'Workload Discovery on AWS'입니다. 계정과 리전을 싹 훑어서 서버, DB, 네트워크가 어떻게 연결되어 있는지 실시간으로 멋진 그림(다이어그램)을 그려줍니다.\n\nhttps://aws.amazon.com/solutions/implementations/workload-discovery-on-aws/",
     "glossary": {
       "Workload Discovery on AWS": "AWS 리소스를 시각화하고 아키텍처 관계도를 자동으로 생성해주는 도구",
       "Inventory (인벤토리)": "보유하고 있는 자산이나 리소스의 상세 목록",
@@ -81,7 +81,7 @@ export const quizData = [
       "임계값 도달 시 해당 계정에 '생성 금지' SCP(서비스 제어 정책)를 걸어버리는 예산 작업을 추가합니다."
     ],
     "answer": [1, 3, 5],
-    "explanation": "정답은 B, D, F입니다.\n\n단순히 돈이 나가는 걸 보는 게 아니라 '강제 차단'까지 하려면 'AWS Budgets Actions' 기능을 써야 합니다. 예산을 설정(B)하고, 그 예산이 넘었을 때 출동할 IAM 역할(D)에게 권한을 줍니다. 그리고 그 역할이 Organizations의 SCP를 해당 계정에 탁 붙여서(F) 추가적인 서버나 DB 생성을 원천 봉쇄하게 만드는 구조입니다.\n\n다른 옵션인 A는 예산 설정 위치가 틀렸고, E는 구성 규칙만으로는 실시간 생성을 막기보다 사후 탐지에 가깝습니다.",
+    "explanation": "정답은 B, D, F입니다. 단순히 돈이 나가는 걸 보는 게 아니라 '강제 차단'까지 하려면 'AWS Budgets Actions' 기능을 써야 합니다. 예산을 설정(B)하고, 그 예산이 넘었을 때 출동할 IAM 역할(D)에게 권한을 줍니다. 그리고 그 역할이 Organizations의 SCP를 해당 계정에 탁 붙여서(F) 추가 자원 생성을 원천 봉쇄하게 만드는 구조입니다.\n\nhttps://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html",
     "glossary": {
       "AWS Budgets Actions": "예산 한도에 가까워지거나 넘었을 때 특정 조치(정책 변경, 서버 중지 등)를 자동으로 취하는 기능",
       "SCP (Service Control Policy)": "조직 내 계정의 권한을 중앙에서 강력하게 제한하는 가드레일 정책",
@@ -98,7 +98,7 @@ export const quizData = [
       "DataSync를 써서 서버 통째로 데이터를 다른 리전의 빈 서버로 실시간 전송합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n중앙 집중 관리와 자동화를 한 번에 해결해주는 도구는 AWS Backup입니다. 백업 계획(Backup Plan) 하나만 잘 짜두면 알아서 스냅샷을 찍고, 전 세계 어디든 원하는 리전으로 복사본을 보내줍니다. 서버를 미리 켜둘 필요가 없으니 저장 비용만 내면 되어 매우 효율적입니다.\n\n다른 옵션인 A와 D는 서버를 계속 켜두거나 전송용 자원을 써야 해서 비용이 많이 들고, B는 사람이 직접 해야 하므로 실수의 위험이 큽니다.",
+    "explanation": "정답은 C입니다. 중앙 집중 관리와 자동화를 한 번에 해결해주는 도구는 AWS Backup입니다. 백업 계획 하나만 잘 짜두면 알아서 스냅샷을 찍고, 전 세계 어디든 원하는 리전으로 복사본을 보내줍니다. 서버를 미리 켜둘 필요가 없어 매우 효율적입니다.\n\nhttps://aws.amazon.com/backup/",
     "glossary": {
       "AWS Backup": "다양한 AWS 서비스의 백업을 한곳에서 통합 관리하고 자동화하는 서비스",
       "Cross-region Backup": "재해 복구(DR)를 위해 데이터를 원래 리전이 아닌 머나먼 다른 리전에 저장하는 것",
@@ -115,7 +115,7 @@ export const quizData = [
       "Storage Gateway를 설치하고 Cognito 자격 증명 풀로 외부 제조사를 초대합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nAS2(Applicability Statement 2) 같은 특수 전송 프로토콜은 AWS Transfer Family가 전문입니다. SFTP, FTPS는 물론 AS2 전송까지 완벽히 지원하며, 백엔드에는 S3나 EFS를 연결할 수 있죠. 특히 사내 로그인 시스템과 연동할 때는 커스텀 ID 공급자(Custom IdP) 옵션을 통해 Lambda 함수로 인증 로직을 연결해주면 완벽한 보안 게이트웨이가 완성됩니다.\n\n다른 옵션들은 AS2 프로토콜을 지원하지 않거나 파일 전송에 최적화된 도구가 아닙니다.",
+    "explanation": "정답은 C입니다. AS2 같은 특수 전송 프로토콜은 AWS Transfer Family가 전문입니다. SFTP, FTPS는 물론 AS2 전송까지 완벽히 지원하며, 사내 로그인 시스템과 연동할 때는 커스텀 ID 공급자 옵션을 통해 Lambda 함수로 인증 로직을 연결해주면 완벽한 보안 게이트웨이가 완성됩니다.\n\nhttps://aws.amazon.com/aws-transfer-family/",
     "glossary": {
       "AWS Transfer Family": "SFTP, FTPS, FTP, AS2 프로토콜을 사용하여 S3/EFS와 안전하게 파일 주고받기를 지원하는 서비스",
       "AS2": "B2B 거래에서 데이터를 안전하게 주고받기 위해 상용되는 비즈니스 데이터 전송 규약",
@@ -133,7 +133,7 @@ export const quizData = [
       "Amazon EKS (Elastic Kubernetes Service)"
     ],
     "answer": [1, 2],
-    "explanation": "정답은 B와 C입니다.\n\n가장 손이 안 가는(최소 관리 노력) 컴퓨팅은 서버 관리 없는 Lambda(B)입니다. Lambda는 최근 저장 공간 옵션(최대 10GB)도 늘어나서 2GB 정도는 거뿐합니다. 그리고 관계형 데이터를 다루는 데 최고의 관리형 서비스는 단연 RDS(C)입니다. 이 두 조합이면 개발자는 코드에만 집중하고 인프라 관리는 AWS에게 다 맡길 수 있습니다.\n\n다른 옵션인 A(EC2)와 E(EKS)는 서버 패치부터 복잡한 환경 설정까지 운영자가 할 일이 너무 많습니다.",
+    "explanation": "정답은 B와 C입니다. 가장 손이 안 가는 컴퓨팅은 서버 관리 없는 Lambda(B)입니다. Lambda는 최근 저장 공간 옵션도 늘어나서 충분히 활용 가능합니다. 그리고 관계형 데이터를 다루는 데 최고의 관리형 서비스는 단연 RDS(C)입니다. 이 두 조합이면 인프라 관리를 AWS에게 다 맡길 수 있습니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Relational Data (관계형 데이터)": "행과 열의 테이블 구조로 이루어져 데이터 간의 관계를 정의하는 방식(예: 주문-고객 연결)",
       "Serverless (서버리스)": "사용자가 서버 사양을 정하거나 관리할 필요 없이 서비스 단위로 기능을 사용하는 방식",
@@ -150,7 +150,7 @@ export const quizData = [
       "마스터 계정 회원 계정 모두에서 태그를 활성화하되, 비용 보고서는 각자 보게 설정합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n태그가 달려 있다고 해서 비용 보고서에 바로 나오는 건 아닙니다. 마스터(관리) 계정에서 \"이 태그를 비용 계산용으로 쓸 거야!\"라고 '비용 할당 태그(Cost Allocation Tag)'로 활성화해줘야 합니다. 특히 우리가 직접 붙인 태그는 '사용자 정의 태그'이므로 이를 활성화하면, 전 계정의 EC2 비용을 '부서' 이름별로 예쁘게 그룹화된 보고서로 바로 볼 수 있습니다.\n\n다른 옵션인 B는 우리가 만든 태그에는 해당하지 않고, C는 사람이 고생하는 비효율적인 방식입니다.",
+    "explanation": "정답은 A입니다. 태그가 달려 있다고 해서 비용 보고서에 바로 나오는 건 아닙니다. 마스터 계정에서 '비용 할당 태그'로 활성화해줘야 합니다. 직접 붙인 태그는 '사용자 정의 태그'이므로 이를 활성화하면, 전 계정의 비용을 해당 태그별로 그룹화해서 볼 수 있습니다.\n\nhttps://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html",
     "glossary": {
       "Cost Allocation Tags (비용 할당 태그)": "리소스 태그를 비용 보고서(Cost Explorer)의 필터나 그룹화 기준으로 사용할 수 있게 등록하는 것",
       "AWS Cost Explorer": "AWS 비용 사용량을 시각적으로 분석하고 미래 비용을 예측해주는 대시보드 도구",
@@ -167,7 +167,7 @@ export const quizData = [
       "Salesforce 전용 커넥터를 SDK로 개발해서 두 시스템을 무리하게 연결합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n외부 SaaS 앱(Salesforce, Slack, Google Analytics 등)과 AWS를 잇는 고속도로는 Amazon AppFlow입니다. 코딩 한 줄 없이 마우스 클릭만으로 데이터를 가져올 수 있고, 전송 중 암호화와 S3 저장 시 KMS 암호화까지 완벽하게 지원합니다. '최소한의 개발 노력'이라는 단어가 나오면 무조건 AppFlow를 떠올리세요.\n\n다른 옵션들은 서버를 관리하거나 복잡한 코드를 직접 짜야 하므로 배보다 배꼽이 더 큰 상황이 됩니다.",
+    "explanation": "정답은 C입니다. 외부 SaaS 앱(Salesforce 등)과 AWS를 잇는 고속도로는 Amazon AppFlow입니다. 코딩 한 줄 없이 클릭만으로 데이터를 가져올 수 있고, 전송 중 암호화와 S3 저장 시 KMS 암호화까지 완벽하게 지원합니다.\n\nhttps://aws.amazon.com/appflow/",
     "glossary": {
       "Amazon AppFlow": "SaaS 애플리케이션과 AWS 서비스 간에 코딩 없이 데이터를 안전하게 주고받는 통합 서비스",
       "SaaS (Software as a Service)": "인터넷을 통해 제공되는 소프트웨어 서비스(예: Salesforce, Gmail)",
@@ -184,7 +184,7 @@ export const quizData = [
       "CloudFront 뒤에 ALB를 두고, 전송 속도를 높이기 위해 모든 UDP 통신을 TCP로 강제 변환합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n게임에서 많이 쓰는 UDP 프로토콜과 글로벌 가속을 동시에 만족하는 건 'AWS Global Accelerator'와 'NLB'의 조합입니다. Global Accelerator는 전 세계 고정 IP를 제공해 지연 시간을 획기적으로 줄여주며, NLB는 L4 계층에서 TCP/UDP 트래픽을 빛의 속도로 분산해줍니다. 반면 ALB나 CloudFront는 기본적으로 HTTP나 TCP 기반이라 UDP 통신이 불가능하거나 제한적입니다.\n\n다른 옵션인 A(ALB)와 C, D(CloudFront)는 UDP 트래픽 처리에 한계가 있어 게임용으로는 부적합합니다.",
+    "explanation": "정답은 B입니다. 게임에서 많이 쓰는 UDP 프로토콜과 글로벌 가속을 동시에 만족하는 건 'AWS Global Accelerator'와 'NLB'의 조합입니다. Global Accelerator는 전 세계 고정 IP를 제공해 지연 시간을 줄여주며, NLB는 L4 계층에서 UDP 트래픽을 빛의 속도로 분산해줍니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "AWS Global Accelerator": "AWS의 글로벌 네트워크 인프라를 사용해 사용자 트래픽의 지연 시간을 최대 60%까지 개선하는 서비스",
       "NLB (Network Load Balancer)": "L4 계층에서 작동하며, 초당 수백만 개의 요청을 아주 낮은 지연으로 처리하는 부하 분산 장치",
@@ -201,7 +201,7 @@ export const quizData = [
       "CPU 점유율이 높을 때만 SQS에 주문을 적고, 평소에는 그냥 DB에 바로 쏘는 복잡한 하이브리드 로직을 구현합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n시스템 간의 충격을 완화하는 '완충지대'가 필요합니다. SQS(메시지 큐)는 주문이 1초에 수만 건이 들어와도 일단 다 받아줍니다. 그 뒤에서 서버들이 \"나는 1초에 10개씩 처리할 수 있어\"라며 자기 페이스대로 가져가면(Decoupling), 트래픽이 폭주해도 시스템이 뻗거나 주문이 유실되지 않습니다. 이것이 클라우드 아키텍처의 핵심인 '비동기 분산 처리'입니다.\n\n다른 옵션인 A(SNS직결)는 DB에 너무 큰 충격을 한꺼번에 줘서 오히려 폭발할 수 있고, D는 관리가 너무 복잡해서 추천하지 않습니다.",
+    "explanation": "정답은 B입니다. 시스템 간의 충격을 완화하는 '완충지대'가 필요합니다. SQS는 주문이 폭주해도 일단 다 받아줍니다. 그 뒤에서 서버들이 자기 페이스대로 가져가면(Decoupling), 트래픽이 폭주해도 시스템이 뻗거나 주문이 유실되지 않습니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "Amazon SQS (Simple Queue Service)": "메시지를 임시로 보관하여 시스템 간의 연결을 느슨하게(Decoupling) 만들어주는 메시지 대기열",
       "Decoupling (결합 해제)": "구성 요소들이 서로의 상태에 상관없이 독립적으로 작동할 수 있게 분리하는 것",
@@ -218,7 +218,7 @@ export const quizData = [
       "AWS Glue의 PySpark 엔진을 써서 분산 처리 로직으로 데이터를 요약합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n파일 하나당 2MB는 데이터 세계에서 아주 '귀여운' 수준입니다. 이런 작은 일을 하는 데 Glue나 EMR 같은 거대 장비를 꺼내는 건 닭 잡는 데 소 잡는 칼을 쓰는 격입니다. Lambda는 1GB 메모리 설정 시 요금이 매우 저렴하고, 30초 내외의 작업이라면 거의 공짜에 가까운 비용으로 수천 명의 데이터를 처리할 수 있습니다.\n\n다른 옵션들은 최소 비용 단위가 크거나 실행 준비(Cold Start) 시간이 길어서 이런 소규모 작업에는 비효율적입니다.",
+    "explanation": "정답은 C입니다. 작은 파일을 처리하는 데 Glue나 EMR 같은 거대 장비를 꺼내는 건 비효율적입니다. Lambda는 소규모 텍스트 파일 변환 작업에 가장 저렴하고 빠른 해결책입니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "Amazon S3": "데이터를 파일 형태로 무제한 저장할 수 있는 클라우드 옷장",
       "Python": "데이터 분석과 자동화에 가장 널리 쓰이는 쉽고 강력한 프로그래밍 언어",
@@ -235,7 +235,7 @@ export const quizData = [
       "Auto Scaling 그룹에 DB를 넣고 서버 주소를 DNS로 관리하는 수동 설계를 도입합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nRDS의 마법 같은 기능 중 하나입니다. 이미 가동 중인 '싱글 리전' DB라도 설정에서 '다중 AZ'만 클릭하면, AWS가 알아서 다른 데이터 센터에 복사본(대기 서버)을 만들고 데이터를 실시간 복제해줍니다. 접속 주소(Endpoint)는 그대로 유지되므로 앱 코드를 고칠 필요도 없고, 장애 시 자동으로 보조 DB가 메인이 되어 서비스 중단을 막아줍니다.\n\n다른 옵션인 B는 불필요하게 서버를 새로 만드는 수고가 들고, C는 가용성보다는 읽기 성능 향상에 초점이 맞춰져 있습니다.",
+    "explanation": "정답은 A입니다. RDS의 마법 같은 기능입니다. 이미 가동 중인 DB라도 설정에서 '다중 AZ'만 클릭하면, AWS가 알아서 다른 데이터 센터에 대기 서버를 만들고 데이터를 실시간 복제해줍니다. 접속 주소는 그대로 유지되므로 앱 코드를 고칠 필요도 없습니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Multi-AZ (RDS)": "두 개의 서로 다른 데이터 센터에 DB를 동시에 운영하여, 한쪽이 고장 나도 수 초 내에 자동으로 복구하는 고가용성 옵션",
       "Endpoint (엔드포인트)": "애플리케이션이 데이터베이스에 접속하기 위해 사용하는 주소(URL)",
@@ -252,7 +252,7 @@ export const quizData = [
       "예전 세대 표준 SSD인 gp2 볼륨"
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nEBS 볼륨은 원래 1:1 연결이 원칙이지만, 특별히 'Provisioned IOPS SSD(io1/io2)' 타입은 하나의 볼륨을 최대 16대의 서버가 동시에 연결할 수 있는 'Multi-attach' 기능을 제공합니다. 이를 통해 클러스터형 애플리케이션이나 고가용성 시스템을 구축할 수 있습니다. 우리가 흔히 쓰는 gp2, gp3 볼륨은 이 기능을 지원하지 않습니다.\n\n다른 옵션들은 볼륨 한 개당 서버 한 대씩만 붙을 수 있는 일반적인 타사 제한이 있습니다.",
+    "explanation": "정답은 C입니다. EBS 볼륨은 원래 1:1 연결이 원칙이지만, io1/io2 타입은 하나의 볼륨을 최대 16대의 서버가 동시에 연결할 수 있는 'Multi-attach' 기능을 제공합니다. 이를 통해 클러스터형 애플리케이션을 구축할 수 있습니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html",
     "glossary": {
       "EBS Multi-attach": "하나의 EBS 볼륨을 동일한 가용 영역 내의 여러 EC2 인스턴스에 동시에 할당하는 기능",
       "Provisioned IOPS (io2)": "사용자가 원하는 만큼의 입출력 속도(IOPS)를 미리 예약해서 보장받는 최고급 SSD 볼륨",
@@ -269,7 +269,7 @@ export const quizData = [
       "전 세계에 분산된 CloudFront를 앞에 세우고, 서버 주소를 여러 개 등록해 둡니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'고가용성'의 기본 공식입니다. 서버를 하나만 두지 말고, Auto Scaling 그룹에 넣어두면 서버가 고장 났을 때 자동으로 옆 동네(다른 가용 영역)에 새 서버를 띄워줍니다. 그리고 입구에 로드 밸런서(ALB)를 두면 사용자는 어느 데이터 센터의 서버가 일하고 있는지 신경 쓸 필요 없이 늘 일관된 주소로 접속할 수 있습니다.\n\n다른 옵션인 B는 복구에 시간이 너무 많이 걸리고, C와 D는 장애 복구보다는 속도 개선에 가깝습니다.",
+    "explanation": "정답은 A입니다. 고가용성의 기본 공식입니다. 서버를 Auto Scaling 그룹에 넣어두면 고장 났을 때 자동으로 다른 AZ에 새 서버를 띄워줍니다. 그리고 입구에 로드 밸런서(ALB)를 두면 사용자는 끊김 없이 서비스에 접속할 수 있습니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/",
     "glossary": {
       "Auto Scaling Group": "서버의 상태를 체크하다가 죽으면 즉시 살려내고, 바쁘면 숫자를 늘려주는 자동 관리 시스템",
       "Application Load Balancer (ALB)": "여러 대의 서버 중 여유 있는 곳으로 손님을 안내하고, 서버가 죽으면 정상인 곳으로 발길을 돌려주는 안내원",
@@ -286,7 +286,7 @@ export const quizData = [
       "남은 약정 기간을 '예약 인스턴스 마켓플레이스'에 내다 팔아 현금화합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nOrganizations로 묶인 계정들은 기본적으로 예약 할인(RI)이나 세이빙스 플랜 혜택을 서로 나눠 가질 수 있습니다. 단, 이 권한은 조직의 대장인 '마스터 계정'이 제어합니다. 마스터 계정의 결제 설정에서 할인 공유를 승인하면, A 계정이 남긴 혜택을 바쁜 B 계정이 가져다 쓸 수 있어 조직 전체의 비용을 최적화할 수 있습니다.\n\n다른 옵션인 D는 예약 인스턴스(RI)에만 해당하며 세이빙스 플랜은 판매가 불가능합니다.",
+    "explanation": "정답은 B입니다. Organizations로 묶인 계정들은 기본적으로 예약 할인을 서로 나눠 가질 수 있습니다. 마스터 계정의 결제 설정에서 할인 공유를 승인하면, 조직 전체의 비용을 최적화할 수 있습니다.\n\nhttps://docs.aws.amazon.com/savingsplans/latest/userguide/sharing.html",
     "glossary": {
       "Compute Savings Plan": "1년 또는 3년 약정을 통해 EC2, Fargate, Lambda 요금을 대폭 할인받는 요금제",
       "Discount Sharing": "조직 내 계정들 사이에서 남는 할인 혜택을 서로 양도하여 돈을 아끼는 시스템",
@@ -303,7 +303,7 @@ export const quizData = [
       "REST API를 만들고, 모든 컨테이너가 공인 IP를 갖게 해서 외부에서 직접 찌르게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n프라이빗 서브넷(안전한 내부망)에 숨겨진 서버에 외부의 API 요청을 전달할 때는 'VPC Link'가 필수입니다. API Gateway가 전달자(Proxy) 역할을 수행하며, 'VPC Link'라는 전용 통로를 통해 내부망의 로드 밸런서나 ECS 서비스에 데이터를 넘겨줍니다. 사용자는 REST API라는 편한 문으로 들어오고, 서버는 안전하게 방벽 뒤에 숨어있을 수 있죠.\n\n다른 옵션인 A와 C는 실시간 채팅용인 WebSocket을 제안하고 있어 일반적인 검색 서비스 요청에는 맞지 않습니다.",
+    "explanation": "정답은 B입니다. 프라이빗 서브넷에 숨겨진 서버에 외부 API 요청을 전달할 때는 'VPC Link'가 필수입니다. API Gateway가 전달자 역할을 수행하며, 엔드포인트를 통해 내부 리소스에 안전하게 요청을 전달합니다.\n\nhttps://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html",
     "glossary": {
       "Amazon API Gateway": "개발자가 API를 쉽게 생성, 게시, 관리 및 보호할 수 있게 해주는 완전 관리형 서비스",
       "VPC Link": "API Gateway가 소비자(인터넷)로부터 받은 요청을 VPC 내부의 프라이빗 리소스에 안전하게 전달하기 위해 사용하는 통로",
@@ -320,7 +320,7 @@ export const quizData = [
       "S3 Inventory라는 보고서 서비스를 켜서 접속이 없는 파일을 매달 출력해서 체크합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n이름 그대로 인공지능급 센스를 가진 'Intelligent-Tiering'이 정답입니다. 이 옵션을 켜두면 S3가 파일 하나하나의 사용 패턴을 지켜보다가, 한 달 동안 아무도 안 본 파일은 자동으로 저렴한 창고로 옮기고, 다시 누군가 찾으면 즉시 원래 자리로 복귀시킵니다. 사용자가 예측할 수 없는 상황에서 운영 오버헤드 없이 돈을 아끼는 최고의 방법입니다.\n\n다른 옵션인 B는 예측 불가능한 상황에서 갑자기 필요해진 파일을 꺼낼 때 추가 비용이 발생할 수 있어 위험합니다.",
+    "explanation": "정답은 C입니다. 인공지능급 센서를 가진 'Intelligent-Tiering'이 정답입니다. 파일 사용 패턴을 지켜보다가, 안 보는 파일은 저렴한 칸으로, 다시 찾는 파일은 빠른 칸으로 알아서 옮겨줍니다. 운영 오버헤드 없이 돈을 아끼는 최고의 방법입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/intelligent-tiering/",
     "glossary": {
       "S3 Intelligent-Tiering": "데이터 사용 패턴 변화에 따라 비용이 다른 두 개의 액세스 계층 사이로 객체를 자동 이동시키는 스토리지 클래스",
       "Access Pattern (액세스 패턴)": "데이터가 얼마나 자주, 언제 읽히는지에 대한 규칙성",
@@ -337,7 +337,7 @@ export const quizData = [
       "Egress-only 인터넷 게이트웨이(출구 전용 게이트웨이)를 만들어 라우팅 테이블에 연결합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nIPv4 환경에서의 'NAT Gateway' 역할을 IPv6에서 수행하는 것이 바로 'Egress-only Internet Gateway'입니다. 말 그대로 'Egress(나가는 것)만' 허용하겠다는 뜻이죠. 우리 서버가 업데이트를 위해 외부 주소로 편지를 보낼 수는 있지만, 밖에서 우리 집 주소를 알고 먼저 초인종을 누르는 것은 물리적으로 차단되는 완벽한 일방통행 보안 장치입니다.\n\n다른 옵션인 A(NAT Gateway)는 IPv4 전용이며, B는 밖에서도 들어올 수 있는 양방향 통로라 보안 규정에 어긋납니다.",
+    "explanation": "정답은 D입니다. IPv4의 NAT Gateway 역할을 IPv6에서 수행하는 것이 바로 'Egress-only IGW'입니다. 우리 서버가 밖으로 나가는 건 허용하지만, 밖에서 우리 서버로 먼저 들어오는 건 철저히 차단하는 일방통행 보안 장치입니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html",
     "glossary": {
       "Egress-only Internet Gateway": "VPC 내의 리소스가 인터넷에 IPv6 연결을 시작할 수 있게 하되, 인터넷에서의 원치 않는 외부 연결은 차단하는 보안 구성 요소",
       "IPv6": "기존 주소가 부족해 만들어진 차세대 인터넷 주소 체계",
@@ -354,7 +354,7 @@ export const quizData = [
       "S3용 인터페이스 엔드포인트(PrivateLink)를 생성하여 유료 전용선을 뚫습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nVPC 내부의 서버가 S3를 집 앞 골목길(내부망)처럼 쓰게 해주는 기술이 'VPC 엔드포인트'입니다. 특히 S3와 DynamoDB용으로 제공되는 '게이트웨이' 방식은 무료이며, 인터넷 게이트웨이나 NAT을 거치지 않아 데이터 전송 비용(Data Transfer)이 전혀 발생하지 않습니다. 보안과 가성비라는 두 마리 토끼를 잡는 표준 설계입니다.\n\n다른 옵션인 D(인터페이스 엔드포인트)는 거의 모든 상황에서 유료이므로 '비용 최소화' 목적에는 무료인 게이트웨이 방식이 앞섭니다.",
+    "explanation": "정답은 C입니다. VPC 내부 서버가 S3를 내부망처럼 쓰게 해주는 기술입니다. 특히 '게이트웨이' 방식은 무료이며, 인터넷 망을 거치지 않아 데이터 전송 요금이 발생하지 않습니다. 보안과 가성비를 모두 잡는 표준 설계입니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
     "glossary": {
       "Gateway VPC Endpoint": "VPC와 S3/DynamoDB 사이를 AWS 내부망으로 직접 연결해주는 무료 전용 통로",
       "Public Internet (공용 인터넷)": "누구나 접근 가능한 외부 망으로, 데이터를 주고받을 때 요금이 발생함",
@@ -371,7 +371,7 @@ export const quizData = [
       "Redis 엔진인 ElastiCache를 서버 옆에 설치하고 데이터를 매번 동기화하는 코드를 새로 짭니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nDynamoDB 전용 터보 엔진이 바로 DAX입니다. DAX는 DynamoDB API를 그대로 이해하는 똑똑한 메모리 캐시라서, 개발자는 주소(Endpoint)만 DAX로 살짝 바꿔주면 별도의 캐시 동기화 로직을 짤 필요 없이 마이크로초 단위의 빛의 속도를 경험할 수 있습니다.\n\n다른 옵션인 B는 DynamoDB에는 없는 기능(RDS 전용)이고, D는 캐시를 관리하고 데이터를 일치시키는 복잡한 코드를 직접 써야 해서 '최소한의 변경' 조건에서 탈락입니다.",
+    "explanation": "정답은 A입니다. DynamoDB 전용 터보 엔진이 바로 DAX입니다. 똑똑한 인메모리 캐시라서, 개발자는 주소만 바꿔주면 별도의 캐시 로직 없이도 마이크로초 단위의 빛의 속도를 경험할 수 있습니다.\n\nhttps://aws.amazon.com/dynamodb/dax/",
     "glossary": {
       "Amazon DAX (DynamoDB Accelerator)": "DynamoDB를 위한 완전 관리형 인메모리 캐시로, 읽기 속도를 밀리초에서 마이크로초로 단축함",
       "Latency (지연 시간)": "사용자가 어떤 행동을 했을 때 결과가 화면에 나타날 때까지 걸리는 버벅임 시간",
@@ -388,7 +388,7 @@ export const quizData = [
       "다른 국가(리전)에 똑같은 로드 밸런서를 하나 더 만들어서 트래픽을 리전별로 쪼갭니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n정적 파일(이미지, 영상) 비용을 줄이는 공식은 '사용자 근처에서 해결하기'입니다. CloudFront(CDN)를 쓰면 이미지가 전 세계 엣지 서버에 복제됩니다. 사용자는 멀리 리전까지 올 필요 없이 바로 옆 동네에서 이미지를 받아가므로, 서버 부하는 물론 비싼 리전간 데이터 전송 요금까지 극적으로 아낄 수 있습니다.\n\n다른 옵션인 B는 파일 전송용이 아닌 데이터 캐싱용이고, D는 관리 비용만 두 배로 늘어나는 악수가 됩니다.",
+    "explanation": "정답은 A입니다. 이미지를 전 세계 엣지 서버에 복제해두는 CloudFront(CDN)를 쓰면 사용자는 리전까지 올 필요 없이 가까운 곳에서 이미지를 받아갑니다. 서버 부하와 데이터 전송 요금을 극적으로 아낄 수 있습니다.\n\nhttps://aws.amazon.com/cloudfront/",
     "glossary": {
       "Amazon CloudFront": "전 세계Edge 로케이션에 콘텐츠를 복제해두고 전송 속도를 높이는 캐시 서비스(CDN)",
       "Edge Location (엣지 로케이션)": "사용자 근처에 배치된 AWS의 소규모 데이터 센터 거점으로, 전송 통로 역할을 함",
@@ -405,7 +405,7 @@ export const quizData = [
       "PrivateLink를 계좌 수만큼 뚫어서 각 서비스에 하나하나 프라이빗 통로를 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n네트워크의 중앙 허브 역할을 하는 것이 'Transit Gateway'입니다. 리전 내의 수많은 VPC를 이 허브(Transit Gateway)에 꽃기만 하면 그들끼리 알아서 통신이 됩니다. 또한 다른 리전의 허브와도 '피어링'으로 대화할 수 있어, 전 세계의 우리 망을 거대한 하나의 가상 네트워크로 관리할 수 있습니다. 피어링(A)을 일대일로 맺는 것보다 관리가 수만 배 편해집니다.\n\n다른 옵션인 A는 연결 개수가 선형적으로 늘어나 관리가 불가능해지고, D는 관리가 너무 깐깐하고 설정이 어렵습니다.",
+    "explanation": "정답은 C입니다. 네트워크 중앙 허브 역할을 하는 Transit Gateway가 주인공입니다. 수많은 VPC를 이 허브에 꽂기만 하면 그들끼리 자유롭게 통신이 가능해지며 관리도 훨씬 편해집니다.\n\nhttps://aws.amazon.com/transit-gateway/",
     "glossary": {
       "AWS Transit Gateway": "수천 개의 VPC와 온프레미스 네트워크를 중앙에서 하나의 허브로 연결해주는 클라우드 라우터",
       "Network Hub (허브)": "여러 장치가 한곳에 모여 서로 데이터를 주고받게 해주는 중앙 장치",
@@ -422,7 +422,7 @@ export const quizData = [
       "OpenZFS 기반의 고성능 파일 서버 Amazon FSx"
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n컨테이너와 찰떡궁합인 '공유 파일 이름표'는 AWS EFS입니다. EFS는 가용 영역마다 접속 통로(Mount Target)를 만들어주어 리전 전체에서 편리하게 파일을 공유할 수 있고, 'AWS Backup' 서비스와 연동하면 다른 리전으로의 복제 관리도 매우 쉽습니다. 특히 ECS 서비스에서 기본적으로 지원하는 공유 스토리지라 설정이 가장 간단합니다.\n\n다른 옵션인 FSx 시리즈들은 특정 운영체제(Windows 등)나 특수 목적용이라 범용적인 컨테이너 앱 공유 저장소로는 EFS가 가성비와 가용성 면에서 앞섭니다.",
+    "explanation": "정답은 C입니다. 컨테이너와 찰떡궁합인 공유 저장소는 EFS입니다. 가용 영역마다 접속 통로(Mount Target)를 만들어주어 리전 전체에서 편리하게 파일을 공유할 수 있고, 백업 연동도 매우 쉽습니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS (Elastic File System)": "수천 개의 서버나 컨테이너가 동시에 접속해 파일을 공유할 수 있는 무한 확장 파일 저장소",
       "RPO (Recovery Point Objective, 복구 지점 목표)": "사고 발생 시 최대 몇 시간 전의 데이터까지 되돌려야 하는가에 대한 시간 기준",

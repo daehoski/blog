@@ -9,7 +9,7 @@ export const quizData = [
       "전 세계 Edge 로케이션을 활용하는 '엣지 최적화(Edge-optimized)' 엔드포인트"
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n사용자가 전 세계에 흩어져 있을 때는 AWS의 글로벌 전송망인 CloudFront를 활용하는 것이 베스트입니다. '엣지 최적화' 엔드포인트를 선택하면 사용자 트래픽이 가장 가까운 Edge 서버로 들어가서 AWS 전용망을 타고 빠르게 전달되므로 지연 시간을 획기적으로 줄일 수 있습니다.\n\n다른 옵션인 B(지역 엔드포인트)는 특정 지역 사용자에게는 빠르지만, 멀리 떨어진 사용자에게는 일반 인터넷망을 타게 되어 속도가 느려집니다.",
+    "explanation": "정답은 D입니다. 사용자가 전 세계에 흩어져 있을 때는 '엣지 최적화' 엔드포인트가 정답입니다. CloudFront의 가속망을 타고 트래픽이 빛의 속도로 전달되므로 어느 나라에서든 쾌적한 접속이 가능해집니다.\n\nhttps://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-endpoint-types.html",
     "glossary": {
       "Edge-optimized Endpoint": "CloudFront의 에지 로케이션을 거쳐 전 세계 사용자에게 가장 빠른 경로로 API를 제공하는 방식",
       "Regional Endpoint": "특정 리전에 인프라가 집중된 사용자를 위해 설계된 엔드포인트 유형",
@@ -26,7 +26,7 @@ export const quizData = [
       "ACM을 사용하되, 담당자 메일로 확인 번호를 받는 '이메일 검증' 방식을 씁니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n인증서 자동 관리의 정석은 'ACM + DNS 검증' 조합입니다. DNS 검증 방식을 쓰면 AWS가 해당 도메인의 주인이 맞는지 자동으로 확인하고, 만료되기 전에 알아서 갱신까지 해줍니다. 반면 이메일 검증(D)은 사람이 매번 메일을 확인하고 버튼을 눌러야 하므로 자동화에는 적합하지 않습니다.\n\n다른 옵션인 A나 B는 인증서를 직접 만들거나 갱신해주는 기능이 아닙니다.",
+    "explanation": "정답은 C입니다. 인증서 관리의 정석은 'ACM + DNS 검증' 조합입니다. 도메인 설정(레코드)을 통해 소유권을 자동 확인하고 만료 전 갱신까지 AWS가 알아서 해주므로 운영 수고가 제로가 됩니다.\n\nhttps://docs.aws.amazon.com/acm/latest/userguide/dns-validation.html",
     "glossary": {
       "AWS Certificate Manager (ACM)": "SSL/TLS 인증서를 생성, 관리 및 배포하고 자동 갱신까지 해주는 보안 서비스",
       "DNS Validation (DNS 검증)": "도메인 설정(레코드)을 통해 해당 도메인의 소유권을 확인하는 방식으로 자동 갱신에 유리함",
@@ -43,7 +43,7 @@ export const quizData = [
       "Redis용 ElastiCache를 따로 설치하고 복잡한 캐싱 코드를 직접 추가합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nDynamoDB 성능을 극한(마이크로초)까지 끌어올리는 전용 엔진은 DAX입니다. DAX는 '인메모리 캐시' 역할을 하며, 기존 앱의 코드를 거의 수정하지 않고도 읽기 성능을 10배 이상 높일 수 있어 운영 수고가 가장 적습니다.\n\n다른 옵션인 D(ElastiCache)도 빠르지만, 개발자가 캐시 데이터를 직접 관리하고 넣고 빼는 코드를 짜야 하므로 '최소 운영 오버헤드' 조건에 맞지 않습니다.",
+    "explanation": "정답은 A입니다. DynamoDB 성능을 극한(마이크로초)까지 끌어올리는 비법은 DAX입니다. 별도의 복잡한 캐싱 코드를 짤 필요 없이 '인메모리 캐시' 엔진을 더해 읽기 속도를 10배 이상 높일 수 있습니다.\n\nhttps://aws.amazon.com/dynamodb/dax/",
     "glossary": {
       "Amazon DAX": "DynamoDB의 읽기 요청을 가속화하기 위해 제작된 완전 관리형 인메모리 캐시 서비스",
       "Microsecond (마이크로초)": "100만 분의 1초. 1,000분의 1초인 밀리초보다 훨씬 빠른 시간 단위",
@@ -60,7 +60,7 @@ export const quizData = [
       "전체 선결제 예약 인스턴스(RI)를 사서 24시간 내내 돌려도 싸게 나오게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'인스턴스 스케줄러'는 정해진 시간에 EC2나 RDS를 자동으로 껐다 켰다 해주는 전문 솔루션입니다. 코딩할 필요 없이 일정만 등록하면 되므로 매우 편리합니다. 밤새 놀고 있는 서버의 전원을 내리는 것만으로도 비용을 획기적으로 줄일 수 있습니다.\n\n다른 옵션인 D는 24시간 켜져 있을 때나 유리할 뿐, 안 쓸 때 전원을 내리는 원천적인 비용 절감(A)보다 비쌀 수 있습니다.",
+    "explanation": "정답은 A입니다. 정해진 시간에 서버를 자동으로 껐다 켰다 해주는 'Instance Scheduler'가 가장 편리합니다. 밤낮과 주말 일정을 등록해두면 노는 서버의 요금을 획기적으로 줄여주는 효자 도구입니다.\n\nhttps://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/",
     "glossary": {
       "AWS Instance Scheduler": "사용자가 설정한 일정에 따라 EC2와 RDS 인스턴스를 자동으로 시작하고 중단하는 서비스",
       "Instance Stop/Start": "서버를 완전히 삭제하지 않고 전원만 잠시 꺼두어 컴퓨팅 요금을 아끼는 행위",
@@ -77,7 +77,7 @@ export const quizData = [
       "EC2 서버에 최신형 가성비 볼륨인 'EBS GP3'를 사용하여 성능과 비용을 모두 잡습니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n최신형 범용 스토리지인 EBS GP3는 이전 세대인 GP2보다 요금이 저렴할 뿐만 아니라, 용량과 상관없이 처리 속도(IOPS)를 독립적으로 높일 수 있어 가성비가 최고입니다. 리프트 앤 시프트(Lift-and-Shift) 방식으로 옮길 때 기존 환경과 가장 유사한 성능을 내면서 돈도 아낄 수 있는 탁월한 선택입니다.\n\n다른 옵션인 A나 C는 특수 목적용 파일 시스템이라 '비용 효율성' 면에서는 GP3의 가성비를 따라오기 힘듭니다.",
+    "explanation": "정답은 D입니다. 최신형 가성비 볼륨인 EBS GP3는 이전 세대보다 요금은 싸면서 성능(IOPS)을 용량과 상관없이 독립적으로 높일 수 있어 성능과 비용 두 마리 토끼를 모두 잡는 탁월한 선택입니다.\n\nhttps://aws.amazon.com/ebs/general-purpose/",
     "glossary": {
       "Amazon EBS GP3": "성능(IOPS)과 용량을 따로 조절할 수 있어 가성비가 매우 뛰어난 최신형 클라우드 하드디스크",
       "Lift and Shift": "기존 온프레미스 시스템의 구조를 바꾸지 않고 그대로 클라우드로 옮겨오는 방식",
@@ -94,7 +94,7 @@ export const quizData = [
       "최소 용량 4로 설정하고, 한쪽엔 안정적인 온디맨드 2대, 반대쪽엔 싼 스팟 인스턴스 2대를 둡니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n진정한 고가용성이란 '가용 영역(AZ) 하나가 통째로 마비되어도' 서비스가 유지되어야 함을 뜻합니다. 최소 2대가 필요하므로, 각 AZ마다 2대씩(총 4대)을 배치해두면 한쪽 AZ가 죽어도 남은 한쪽에서 2대가 계속 일할 수 있습니다. 그래서 정답은 B입니다.\n\n다른 옵션인 A는 한쪽 AZ가 죽을 경우 1대밖에 남지 않아 '최소 2대 유지' 조건을 어기게 됩니다.",
+    "explanation": "정답은 B입니다. 진정한 고가용성은 '가용 영역 하나가 마비되어도' 서비스가 유지되어야 합니다. 각 영역에 필요한 대수만큼을 똑같이 배치해두면 비상 상황에서도 중단 없는 서비스를 보장할 수 있습니다.\n\nhttps://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html",
     "glossary": {
       "AZ (Availability Zone)": "정전이나 지진 같은 재난으로부터 안전하게 격리된 독립된 데이터 센터 군락",
       "High Availability (고가용성)": "인프라의 일부가 고장 나도 전체 서비스가 중단되지 않고 계속 작동하는 능력",
@@ -111,7 +111,7 @@ export const quizData = [
       "가중치 기반(Weighted) 라우팅으로 두 곳의 트래픽을 정확히 5:5로 나눕니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n문제에서 특정 리전(미국 서부, 독일) 근처에 서버가 있다고 명시했습니다. 이럴 때는 사용자가 접속하는 위치(국가 등)를 보고 가장 가까운 서버로 보내주는 '지리적 위치 라우팅'이 가장 확실한 방법입니다. 이를 통해 전 세계 어디서 접속하든 멀리 돌아가지 않고 가까운 서버에서 빠른 서비스를 받을 수 있습니다.\n\n다른 옵션인 D는 거리와 상관없이 무작위로 절반을 멀리 보낼 수 있으므로 속도 개선에 도움이 안 됩니다.",
+    "explanation": "정답은 A입니다. 사용자가 접속하는 국가 근처의 서버로 안내해주는 '지리적 위치(Geolocation) 라우팅'이 정답입니다. 독일 손님은 독일 서버로, 미국 손님은 미국 서버로 보내 로딩 시간을 최소화해 줍니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geolocation.html",
     "glossary": {
       "Geolocation Routing": "사용자의 물리적 위치(대륙, 국가 등)를 파악해 가장 적합한 서버 주소를 알려주는 DNS 규칙",
       "Amazon Route 53": "웹 사이트 주소를 숫자 IP로 바꿔주며 똑똑한 라우팅 기능을 제공하는 AWS의 길잡이",
@@ -128,7 +128,7 @@ export const quizData = [
       "회전식 온프레미스 게이트웨이를 설치해 가상 테이프를 만들고 천천히 업로드합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n5PB 데이터를 1Gbps 인터넷으로 보내면 이론적으로도 1년 넘게 걸려 '6개월' 기한을 맞출 수 없습니다. 이럴 땐 인터넷을 안 거치고 거대한 외장 하드 장비에 데이터를 담아 택배로 보내는 'Snowball'이 정답입니다. 특히 '테이프 게이트웨이' 모드를 지원하는 장비를 쓰면 실제 테이프 데이터를 AWS에 안전하게 이식할 수 있습니다.\n\n다른 옵션인 B나 D는 빈약한 인터넷 대역폭 때문에 기한 내에 이사를 끝낼 수 없습니다.",
+    "explanation": "정답은 C입니다. 엄청난 양의 데이터를 인터넷으로 보내기엔 너무 느립니다. 이럴 땐 외장하드 장비인 Snowball Edge를 주문해 데이터를 직접 담아 택배로 보내는 것이 기한 내에 이사를 끝내는 가장 확실한 방법입니다.\n\nhttps://aws.amazon.com/snowball/",
     "glossary": {
       "AWS Snowball Edge": "인터넷이 너무 느릴 때 수십~수백 테라바이트 데이터를 물리적으로 담아서 옮겨주는 휴대용 데이터 센터 장비",
       "Petabyte (PB)": "1,000테라바이트(TB). 일반 하드디스크 수천 개 분량의 초거대 데이터 단위",
@@ -145,7 +145,7 @@ export const quizData = [
       "공유 테넌시를 써서 남들이 쓰는 하드웨어에 무작위로 섞이게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nEC2에는 서버들의 물리적 위치를 결정하는 '배치 그룹(Placement Groups)' 옵션이 있습니다. 그중 '분산(Spread)' 방식은 약속된 서버들을 서로 다른 랙(Rack)과 서로 다른 전원 장치를 쓰는 하드웨어에 뿔뿔이 흩어지게 배치합니다. 덕분에 하드웨어 한 대가 말썽을 부려도 전체 시스템이 멈추는 걸 막을 수 있습니다.\n\n다른 옵션인 C(전용 테넌시)는 우리만 쓰긴 하지만, 그 안에서 서버들이 같은 랙에 몰릴 수 있어 '격리' 목적에는 어울리지 않습니다.",
+    "explanation": "정답은 A입니다. '분산(Spread)' 배치 그룹은 서버들을 서로 다른 실제 하드웨어 랙에 뿔뿔이 흩어지게 배치합니다. 하드웨어 한 대가 고장 나도 다른 서버가 동시에 죽는 연쇄 반응을 막아주는 안전장치입니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html#placement-groups-spread",
     "glossary": {
       "Spread Placement Group": "인스턴스를 각각 다른 하드웨어 랙에 배치하여 장애의 연쇄 반응을 막는 설정",
       "Rack (랙)": "수십 대의 서버와 네트워크 장비가 꽂혀 있는 커다란 철제 선반",
@@ -162,7 +162,7 @@ export const quizData = [
       "장애 조치 지역에서 '용량 예약(Capacity Reservations)'을 구매합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'용량 예약'은 말 그대로 \"내가 나중에 쓸 테니까 이 사양 서버 자리 좀 미리 비워줘!\"라고 AWS와 약속하는 것입니다. 돈은 미리 나가기 시작하지만, 재난이 터져서 전 세계 사람들이 다른 리전으로 몰려들 때도 나만은 당당하게 내 자리에 서버를 띄울 수 있다는 확실한 보장이 생깁니다.\n\n다른 옵션인 C(예약 인스턴스)는 '할인' 혜택을 주는 것이 주 목적이지, 서버의 빈 자리를 100% 보장해주는 기능은 아닙니다.",
+    "explanation": "정답은 D입니다. '용량 예약'은 "나중에 쓸 테니 내 자리 미리 비워줘!"라고 AWS와 약속하는 것입니다. 재난 상황에서 전 세계 트래픽이 몰려 서버가 부족할 때도 나만은 당당하게 자리를 확보할 수 있는 확실한 보험입니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html",
     "glossary": {
       "On-Demand Capacity Reservation": "특정 가용 영역에서 일정 기간 동안 EC2 용량을 미리 확보(장소 예약)하는 서비스",
       "DR (Disaster Recovery)": "지진, 화재 등으로 서비스가 중단되었을 때 복구하기 위한 비상 계획",
@@ -179,7 +179,7 @@ export const quizData = [
       "R&D 계정이 새 조직에 가입 신청을 하고, 기존 마스터 계정의 권한을 새 계정에게 넘깁니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nAWS 계정은 한 번에 하나의 조직에만 속할 수 있습니다. 따라서 이사하는 법은 간단합니다. 먼저 짐을 싸서 기존 집(조직)에서 나오고(B), 새 집 관리자가 보낸 초대장(Invite)을 받아 들어가면 끝납니다. 이 과정에서 계정 안의 데이터나 설정은 그대로 유지되므로 마그레이션 수고도 거의 없습니다.\n\n다른 옵션인 A(중복 가입)는 기술적으로 불가능하며, C(데이터 복사)는 시간이 너무 오래 걸리는 막노동입니다.",
+    "explanation": "정답은 B입니다. AWS 계정은 한 번에 하나의 조직에만 속할 수 있습니다. 기존 조직에서 탈퇴(Leave)하고 새 법인 마스터 계정의 초대(Invite)를 받으면, 계정 안의 설정은 그대로 유지한 채 우아하게 이사할 수 있습니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html",
     "glossary": {
       "AWS Organizations": "여러 개의 AWS 계정을 그룹으로 묶어 결제와 권한을 통합 관리하는 서비스",
       "Master Account (관리 계정)": "조직의 전체 결제와 정책을 결정하는 대장 계정",
@@ -196,7 +196,7 @@ export const quizData = [
       "GWLB 뒤에 ECS 컨테이너를 두고 인증은 별도의 람다로 처리합니다. 데이터는 EFS 공유 저장소에 쌓습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'들쭉날쭉한 트래픽 + 인증 + 수집' 요구사항에는 API Gateway와 Kinesis Data Firehose 조합이 최고의 가성비와 안정성을 보여줍니다. API Gateway의 '람다 권한 부여' 기능을 쓰면 인증된 손님만 입장시킬 수 있고, 들어온 데이터는 Firehose가 알아서 자동으로 S3까지 안전하게 배달해줍니다.\n\n다른 옵션인 A나 D는 관리해야 할 서버(ECS)가 존재하므로 갑작스러운 트래픽 폭주에 대응하고 운영을 간소화하기엔 부족합니다.",
+    "explanation": "정답은 C입니다. '들쭉날쭉한 트래픽 + 인증 + 수집' 요구에는 API Gateway와 Kinesis Firehose 조합이 최고입니다. Firehose가 서버 없이 데이터를 S3까지 안전하게 배달해주고, 인증은 람다로 해결하는 가장 서버리스다운 구조입니다.\n\nhttps://aws.amazon.com/kinesis/data-firehose/",
     "glossary": {
       "Kinesis Data Firehose": "스트리밍 데이터를 S3, Redshift 등으로 실시간 전용망을 통해 바로 배달해주는 서비스",
       "Lambda Authorizer": "API Gateway 입구에서 람다 코드를 통해 입장객이 누구인지 확인하고 허가를 내주는 보안 장치",
@@ -213,7 +213,7 @@ export const quizData = [
       "RDS 설정에서 '교차 리전 스냅샷 복사' 기능을 켜서 24시간마다 스냅샷을 다른 리전으로 보냅니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n요구사항이 '24시간(RPO/RTO)'이라면 시스템을 24시간 켜놓을 필요가 전혀 없습니다. 대신 DB의 사진 파일인 '스냅샷'을 하루에 한 번씩 다른 리전으로 자동 복사(D)해두는 것이 가장 경제적입니다. 비상 상황이 터지면 그곳에서 스냅샷을 꺼내 새 서버를 띄우기만 하면 되므로 비용을 획기적으로 아낄 수 있습니다.\n\n다른 옵션인 A나 B는 실시간 복제를 수행하므로 비용이 스냅샷 전송보다 훨씬 비싸게 나옵니다.",
+    "explanation": "정답은 D입니다. 데이터가 하루치 유실되어도 괜찮다면 비싼 복제 서버 대신 '교차 리전 스냅샷 복사'가 정답입니다. 하루 한 번 스냅샷만 배달해두면 비상 시 그곳에서 새 서버를 띄울 수 있어 비용이 매우 저렴합니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.CrossRegion",
     "glossary": {
       "Snapshot (스냅샷)": "특정 시점의 데이터베이스 상태를 그대로 찍어놓은 사진 파일과 같은 백업본",
       "RPO (Recovery Point Objective)": "재난 시 최악의 경우 잃어버릴 수 있는 데이터의 시간적 범위",
@@ -230,7 +230,7 @@ export const quizData = [
       "관계형 DB인 Amazon RDS에 세션 정보를 하나하나 기록하도록 앱을 수정합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n세션 데이터(장바구니, 로그인 유지 등)는 빠르면서도 어느 정도 안정적인 저장소가 필요합니다. Redis용 ElastiCache는 메모리 기반이라 속도가 무척 빠르면서도, 데이터 손실을 막는 기능(복제, 샷)이 강력해 세션 저장소로 쓰기에 가장 적합한 표준 솔루션입니다.\n\n다른 옵션인 A(Memcached)는 기능이 너무 단순해 데이터가 쉽게 사라질 수 있고, D(RDS)는 세션을 기록하기엔 속도가 느리고 비용이 비쌉니다.",
+    "explanation": "정답은 B입니다. 로그인 유지 같은 세션 정보는 속도가 생명입니다. 메모리 기반 엔진인 Redis용 ElastiCache는 빛의 속도로 데이터를 주고받으면서도 안정성이 뛰어나 세션 저장소의 표준으로 쓰입니다.\n\nhttps://aws.amazon.com/elasticache/redis/",
     "glossary": {
       "Sticky Session (세션 고정)": "로드 밸런서가 한 번 접속한 사용자를 계속 같은 서버로만 안내하는 방식",
       "Session State (세션 상태)": "사용자가 로그인하고 웹 쇼핑을 하는 동안 잠시 기억해둬야 할 정보",
@@ -247,7 +247,7 @@ export const quizData = [
       "보고서가 잘 돌아갈 때까지 DB 서버의 사양(CPU/메모리)을 무조건 계속 키웁니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n주 서버는 고객들을 상대하느라 바쁩니다. 한 달에 한 번 있는 무거운 보고서 작업(읽기 전용)은 주 서버에 무리를 주지 않도록 '읽기 전용 복제본'이라는 조수를 한 명 더 고용해(A) 그 친구에게 시키는 것이 현명합니다. 주 서버는 보고서 때문에 느려질 일이 없어 고객 만족도를 유지할 수 있습니다.\n\n다른 옵션인 D는 평소에 안 쓰는 비싼 서버 요금을 꼬박꼬박 내야 하므로 가성비가 떨어집니다.",
+    "explanation": "정답은 A입니다. 무거운 보고서 작업(읽기 전용)은 주 서버에 무리를 줍니다. 똑같은 복사본인 '읽기 전용 복제본'을 조수로 고용해 그쪽으로 업무를 넘기면 주 서버는 고객 대응에만 집중할 수 있어 성능이 유지됩니다.\n\nhttps://aws.amazon.com/rds/features/read-replicas/",
     "glossary": {
       "Read Replica (읽기 전용 복제본)": "주 데이터베이스의 내용을 그대로 복제해두고, 조회(Read) 작업만 전담하는 복사본 서버",
       "Reporting Query (보고서 쿼리)": "방대한 데이터를 한꺼번에 읽고 계산하여 통계를 내는 무거운 DB 명령어",
@@ -264,7 +264,7 @@ export const quizData = [
       "API Gateway를 지휘소로 삼아 복잡한 라우팅 규칙을 직접 관리합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'어떤 주소(Path)면 어떤 서비스로 가라'는 식의 똑똑한 길찾기는 L7 로드 밸런서인 ALB의 전문 분야입니다. EKS에서는 'AWS 로드 밸런서 컨트롤러'를 통해 ALB를 아주 쉽게(코드로) 만들 수 있으며, 이를 통해 복잡한 마이크로서비스들의 입구를 하나로 통합 관리할 수 있습니다.\n\n다른 옵션인 A(NLB)는 빠르긴 하지만 주소를 보고 서비스를 나누는 지능적인 기능이 부족합니다.",
+    "explanation": "정답은 B입니다. '어떤 주소면 어떤 서비스로 가라'는 식의 똑똑한 길찾기는 L7 로드 밸런서인 ALB의 전문 분야입니다. 마이크로서비스들의 복잡한 입구를 하나로 통합 관리하기에 가장 가성비 좋은 선택입니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/application-load-balancer/",
     "glossary": {
       "Application Load Balancer (ALB)": "사용자 요청의 내용(주소, 헤더 등)을 보고 각각 다른 서버로 보내주는 똑똑한 부하 분산 장치",
       "Microservices (마이크로서비스)": "시스템을 독립적인 작은 단위들로 쪼개어 개발하고 관리하는 효율적인 설계 방식",
@@ -281,7 +281,7 @@ export const quizData = [
       "S3에 보관한 이미지를 CloudFront(CDN)로 배달하되, '지리적 제한'과 '서명된 URL(Signed URL)'을 조합해 보호합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n전 세계적인 속도 보장(CloudFront), 특정 국가 차단(Geo-restriction), 그리고 구매자에게만 일시적 권한 부여(Signed URL)라는 세 마리 토끼를 한꺼번에 잡는 정석적인 설계입니다. 보안은 완벽하게 유지하면서도 전 세계 어디서든 유료 고객이 만족하는 빠른 속도를 제공할 수 있습니다.\n\n다른 옵션인 B는 고객이 늘어날 때마다 수천, 수만 개의 아이디를 관리해야 하므로 현실적으로 불가능합니다.",
+    "explanation": "정답은 D입니다. 전 세계적인 속도 보장, 특정 국가 차단, 그리고 구매자에게만 일시적 권한 부여를 한 번에 해결하는 설계입니다. 보안과 고객 만족도 두 마리 토끼를 모두 잡는 정석적인 미디어 배전입니다.\n\nhttps://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html",
     "glossary": {
       "CloudFront Signed URL": "콘텐츠에 대한 임시 접근 권한을 URL 매개변수에 포함시켜 특정 기간 동안만 유효하게 만든 주소",
       "Geographic Restriction": "접속자의 국가 정보를 기반으로 콘텐츠 접근을 허용하거나 차단하는 보안 기술",
@@ -298,7 +298,7 @@ export const quizData = [
       "Auto Scaling 기능을 활성화하고 서버가 죽으면 새로 띄우도록 설정합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'복제 그룹(Replication Group)'을 만들고 여러 가용 영역에 분산(Multi-AZ) 배치하는 것이 고가용성의 핵심입니다. 한쪽 AZ가 무너져도 다른 AZ에 있는 복제본(Replica)이 즉시 대장(Primary) 자리를 이어받아 서비스를 유지하므로 데이터 손실이나 서비스 중단을 최소화할 수 있습니다.\n\n다른 옵션인 B(AOF)는 데이터 복구에는 좋지만, 서버가 새로 켜질 때까지의 서비스 중단(지연)을 막지는 못합니다.",
+    "explanation": "정답은 A입니다. '복제 그룹'을 여러 영역(Multi-AZ)에 분산 배치하세요. 한쪽 데이터 센터가 무너져도 다른 쪽 복제본이 즉시 대장 자리를 이어받아 서비스 중단과 데이터 유실을 완벽히 막아줍니다.\n\nhttps://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html",
     "glossary": {
       "Amazon ElastiCache for Redis": "데이터를 메모리에 불러와 처리 속도를 비약적으로 높여주는 관리형 인메모리 DB 서비스",
       "Multi-AZ Redis Replication Group": "여러 가용 영역에 걸쳐 마스터와 복제본을 두어 장애 발생 시 자동으로 전환하는 고성능 가용성 구조",
@@ -315,7 +315,7 @@ export const quizData = [
       "용량 예약(Capacity Reservation)을 통해 자리를 확보하고 필요할 때 새 서버를 켭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n전원을 끈 상태에서도 실행 중이던 메모리 내용을 보존했다가 다시 켰을 때 바로 복구하는 기술이 '최대 절전 모드(Hibernate)'입니다. 여기에 Auto Scaling의 '웜 풀' 기능을 더하면, 서버를 아예 꺼두지 않고 '준비 운동(Initial Load)'을 끝낸 상태로 미리 대기시켜놓을 수 있어 부팅 시간을 획기적으로 단축할 수 있습니다.\n\n다른 옵션인 D는 물리적 서버 자리는 확보해주지만, 그 안에서 앱이 로딩되는 시간까지 줄여주지는 못합니다.",
+    "explanation": "정답은 C입니다. 끈 상태에서도 메모리 내용을 보존하는 '최대 절전 모드'와 실행 준비가 끝난 서버 대기군인 '웜 풀'을 결합하세요. 사용자가 올 때 기다림 없는 무지각 실행 환경을 선물할 수 있습니다.\n\nhttps://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html",
     "glossary": {
       "EC2 Hibernation (최대 절전 모드)": "서버 종료 시 메모리 데이터를 하드에 담아뒀다가 다시 켤 때 그대로 불러와 로딩 시간을 없애는 기술",
       "Warm Pool": "트래픽이 오기 전 미리 부팅과 설정이 완료된 서버들을 대기시켜놓는 Auto Scaling의 예비군 저장소",
@@ -332,7 +332,7 @@ export const quizData = [
       "매일 아침 9시마다 서버를 2대씩 더 늘려두는 일정 조정 방식을 택합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n언제 터질지 모르는 돌발 상황에는 '동적 조정(Dynamic Scaling)'이 약입니다. 서버가 힘들어하기 시작하면 즉시 전산 요원(Auto Scaling)이 새 서버를 투입하고, 평온해지면 다시 회수하여 비용을 아낍니다. 예약된 일정(D)이 없는 불규칙한 환경에서는 이 방식이 가장 경제적이고 효과적입니다.\n\n다른 옵션인 B(예측 조정)는 요일별 패턴이 있을 때나 효과적이며, 랜덤한 돌발 트래픽에는 실시간 감시인 동적 조정(C)이 더 유리합니다.",
+    "explanation": "정답은 C입니다. 언제 터질지 모르는 돌발 상황에는 실시간 감시인 '동적 조정(Dynamic Scaling)'이 약입니다. 서버가 힘들어할 때만 즉시 투입하고 조용해지면 회수하니 가장 경제적이고 확실한 대응법입니다.\n\nhttps://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
     "glossary": {
       "Dynamic Scaling (동적 조정)": "실시간 부하 지표를 보고 서버 대수를 유동적으로 늘리거나 줄이는 방식",
       "Target Tracking Scaling (대상을 추구하는 조정)": "예를 들어 'CPU 사용률 50%'를 항상 유지하도록 알아서 조절하는 가장 편리한 조정 전략",
@@ -349,7 +349,7 @@ export const quizData = [
       "방대한 분석 전용인 Amazon Redshift로 DB 엔진 자체를 통째로 교체합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n예측 불가능하게 요동치는 트래픽에는 'Aurora Serverless v2'가 명약입니다. 부하가 몰리면 눈 깜짝할 새 사양(CPU/메모리)을 높여 주문을 받아내고, 폭풍이 지나가면 다시 조용히 사양을 낮춰 비용을 최소화합니다. EC2에 직접 깔아 쓰는 것보다 관리 효율과 안정성 면에서 압도적인 가성비를 보여줍니다.\n\n다른 옵션인 B는 일반적인 소프트웨어 설정만으로 하드웨어 사양을 실시간으로 늘릴 수는 없으므로 불가능한 선택입니다.",
+    "explanation": "정답은 A입니다. 요동치는 트래픽에는 'Aurora Serverless v2'가 명약입니다. 부하가 몰리면 눈 깜짝할 새 사양을 높여 주문을 받아내고, 폭풍이 지나가면 다시 사양을 낮춰 지출을 최소화해주는 지능형 DB입니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Amazon Aurora Serverless v2": "DB 부하에 따라 사양을 실시간으로 자동 조절해주는 지능형 데이터베이스 엔진",
       "Migration (마이그레이션)": "운영 중인 시스템이나 데이터를 다른 환경으로 통째로 옮기는 대공사",
@@ -366,7 +366,7 @@ export const quizData = [
       "람다 함수의 메모리를 10배로 키워서 기초 체력 자체를 강화합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n람다는 안 쓰다가 갑자기 쓰면 서버 준비 시간(Cold Start) 때문에 처음에만 느려지는 증상이 있습니다. '프로비저닝된 동시성(Provisioned Concurrency)'은 서버 몇 대를 미리 활활 타오르게 준비시켜놓는 옵션입니다. 이걸 아침 출근 시간에 맞춰 예약(B)해두면, 직원들이 로그인 버튼을 누르자마자 즉각 응답하는 쾌적한 환경을 줄 수 있습니다.\n\n다른 옵션인 D(메모리 증설)도 도움은 되지만, 근본적인 '예열 부족' 문제를 완벽히 해결해주지는 못합니다.",
+    "explanation": "정답은 B입니다. 람다의 첫 로딩 지연(Cold Start)을 해결하려면 '프로비저닝된 동시성'을 출근 시간에 맞춰 예약하세요. 미리 예열된 일꾼들이 직원들을 맞이하므로 아침 첫 업무부터 상쾌한 속도를 경험하게 됩니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html",
     "glossary": {
       "Cold Start (콜드 스타트)": "오랫동안 안 쓰던 람다 함수가 호출되었을 때, 서버를 새로 준비하고 코드를 올리느라 처음에만 느려지는 현상",
       "Provisioned Concurrency": "람다 함수 초기화 단계를 미리 완료한 채로 대기시켜 실행 지연을 없애는 유료 옵션",
@@ -385,7 +385,7 @@ export const quizData = [
       "서버 한 대 없이도 SQL만 날리면 S3 파일을 바로 읽어오는 'Amazon Athena'를 분석기로 씁니다."
     ],
     "answer": [0, 2, 5],
-    "explanation": "정답은 A, C, F입니다. (원문 index 0, 2, 5)\n\n가장 돈 안 들고 효과적인 '서버리스 데이터 분석' 구조입니다. 먼저 게이트웨이(A)를 통해 파일들을 정기적으로 S3에 담고, Glue 크롤러(C)가 \"아, 이 파일은 이런 형식의 데이터구나\"라고 정리를 해두면, 분석가는 Athena(F)를 켜서 쿼리한 만큼만 돈을 내며 SQL로 멋지게 분석 결과를 뽑아낼 수 있습니다.\n\n다른 옵션인 D나 E는 사용량과 상관없이 비싼 서버 비용이 나가므로 '비용 효율성'에서는 서버리스(Athena)에 밀립니다.",
+    "explanation": "정답은 F입니다. 서버 한 대 없이도 SQL만 날리면 S3 파일을 바로 읽어오는 Athena가 분석의 핵심입니다. 쿼리한 만큼만 돈을 내며 Glue 크롤러와 연계하면 가장 저렴하고 스마트한 데이터 레이크가 완성됩니다.\n\nhttps://aws.amazon.com/athena/",
     "glossary": {
       "Amazon Athena": "S3에 저장된 데이터를 별도의 서버 없이 표준 SQL로 즉시 쿼리할 수 있는 대화형 분석 서비스",
       "AWS Glue Crawler": "S3나 DB를 뒤져서 데이터의 구조(스키마)를 자동으로 파악하고 목록화해주는 검색 로봇",
@@ -404,7 +404,7 @@ export const quizData = [
       "앱이 뻗지 않도록 ECS 클러스터에 여유 자원을 충분히 보급하고 관리하는 일"
     ],
     "answer": [0, 2, 5],
-    "explanation": "정답은 A, C, F입니다. (원문 index 0, 2, 5)\n\nOutposts는 AWS가 하드웨어를 '렌탈'해준다고 생각하면 쉽습니다. 기계의 유지보수나 소프트웨어 관리는 AWS가 해주지만, 그 기계가 돌아갈 '집(데이터 센터)'의 전원, 네트워크(A)와 도둑이 들지 않게 지키는 보안(C)은 우리 책임입니다. 또한 그 안에서 돌리는 앱과 컨테이너(F)의 집도 관리자가 신경 써야 할 몫입니다.\n\n다른 옵션인 B, D, E는 AWS가 책임지고 관리해주는 영역입니다.",
+    "explanation": "정답은 A, C, F입니다. Outposts는 기계 대여 서비스입니다. 장비가 살 '집(데이터 센터)'의 전원과 네트워크(A), 물리적 보안(C)은 우리 몫입니다. 또한 그 안에서 돌아가는 앱의 효율적인 관리(F)도 운영팀의 책임입니다.\n\nhttps://aws.amazon.com/outposts/",
     "glossary": {
       "AWS Outposts": "AWS의 최신 서버 장비를 내 전산실에 갖다 놓고, 클라우드와 똑같이 사용하는 하이브리드 서비스",
       "Shared Responsibility Model (책임 공유 모델)": "클라우드 서비스 이용 시 AWS와 고객이 각각 어떤 보안과 관리를 맡을지 정의한 약속",
@@ -421,7 +421,7 @@ export const quizData = [
       "API Gateway와 람다를 엮어 모든 요청을 서버리스로 걸러냅니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n300만 건이라는 무지막지한 초당 요청(TPS)과 낮은 지연 시간, 그리고 무엇보다 'TCP 비표준 포트'라는 조건이 나오면 정답은 무조건 NLB입니다. NLB는 네트워크의 아주 낮은 계층에서 주소만 보고 패킷을 튕겨내듯 전달하므로 처리량이 어마어마하고 속도가 가장 빠릅니다.\n\n다른 옵션인 B(ALB)는 HTTP/HTTPS 전용이라 비표준 TCP 포트 처리나 초당 수백만 건의 고부하 처리에는 NLB보다 성능이 떨어집니다.",
+    "explanation": "정답은 A입니다. 초당 300만 건이라는 무지막지한 트래픽과 TCP 비표준 포트라는 조건이 나오면 정답은 무조건 NLB입니다. 번개처럼 패킷을 튕겨내듯 전달하므로 처리량이 어마어마하고 속도가 가장 빠릅니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/network-load-balancer/",
     "glossary": {
       "Network Load Balancer (NLB)": "초저지연과 수백만 건의 대규모 트래픽 처리에 특화된 L4(네트워크 계층) 부하 분산 장치",
       "Non-standard TCP Port": "80이나 443 같은 흔한 약속이 아닌, 기업 내에서 자체적으로 정한 특수한 통신 통로 번호",

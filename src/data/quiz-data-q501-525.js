@@ -9,7 +9,7 @@ export const quizData = [
       "API Gateway로 데이터를 받고, 람다를 통해 실시간으로 분석한 뒤 S3로 보냅니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n수집과 저장에는 Kinesis Data Firehose가 전공이고, 흐르는 데이터를 즉석에서 분석(SQL 등)하는 데는 Kinesis Data Analytics가 딱입니다. 이 둘을 연결하면 데이터가 징검다리를 건너듯 '수집 -> 분석 -> S3 저장' 과정이 매끄럽고 자동화된 흐름으로 이어집니다. 별도의 서버 관리도 필요 없어 매우 효율적입니다.\n\n다른 옵션인 A는 실시간 분석은 가능하지만 S3 저장 로직을 직접 코딩해야 하며, D는 대량의 스트리밍 데이터를 처리하기엔 가성비가 떨어집니다.",
+    "explanation": "정답은 C입니다. 수집과 저장에는 Kinesis Data Firehose가 전공이고, 흐르는 데이터를 즉석에서 분석(SQL 등)하는 데는 Kinesis Data Analytics가 딱입니다. 이 둘을 연결하면 '수집 -> 분석 -> S3 저장' 과정이 매끄럽고 자동화된 흐름으로 이어집니다. 별도의 서버 관리도 필요 없어 매우 효율적입니다.\n\nhttps://aws.amazon.com/kinesis/data-analytics/",
     "glossary": {
       "Amazon Kinesis Data Firehose": "스트리밍 데이터를 S3, Redshift 등으로 실시간 전송해주는 완전 관리형 서비스",
       "Amazon Kinesis Data Analytics": "스트리밍 데이터에 SQL 쿼리를 날려 실시간으로 지표를 뽑아낼 수 있게 해주는 도구",
@@ -27,7 +27,7 @@ export const quizData = [
       "서버 사양을 두 배로 키우고(Scale-up), Global Accelerator를 연동해 네트워크 속도를 높입니다."
     ],
     "answer": [2, 3],
-    "explanation": "정답은 C와 D입니다.\n\n성능과 복원력을 동시에 잡으려면 '공유 저장소'와 '분산 처리'가 핵심입니다. 여러 서버가 똑같은 이미지 파일을 안정적으로 읽을 수 있게 EFS(C)를 공유 하드로 사용하고, 서버가 죽어도 즉시 새 서버가 살아나도록 Auto Scaling 그룹과 로드 밸런서(D)를 구성해야 합니다. 여기에 CloudFront(D)까지 더하면 전 세계 사용자에게 빛의 속도로 이미지를 배송할 수 있습니다.\n\n다른 옵션인 A(S3 마운트)는 성능이 불안정할 수 있고, B는 메인 서버가 고장 나면 전체가 멈추는 위험(SPOF)이 있습니다.",
+    "explanation": "정답은 C와 D입니다. 성능과 복원력을 동시에 잡으려면 '공유 저장소'와 '분산 처리'가 핵심입니다. 여러 서버가 똑같은 파일을 읽을 수 있게 EFS(C)를 사용하고, 서버 장애 시 즉시 복구되도록 ASG와 ALB(D)를 구성해야 합니다. 여기에 CloudFront(D)까지 더하면 글로벌 배송 속도까지 잡을 수 있습니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS": "수천 개의 EC2 서버가 동시에 접근해 파일을 공유할 수 있는 클라우드용 공유 하드디스크",
       "Amazon CloudFront": "전 세계Edge 서버에 콘텐츠를 복사해두고 가장 가까운 곳에서 빠르게 전달하는 CDN 서비스",
@@ -44,7 +44,7 @@ export const quizData = [
       "고객 계정에 Cognito 사용자를 만들게 하고 그 계정 정보를 공유받아 접속합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n계정 간의 경계를 안전하게 넘나드는 정석은 '교차 계정 IAM 역할(Cross-Account Role)'입니다. 고객이 자신의 계정에 역할을 하나 만들고, 거기에 우리 회사 계정 ID를 '신뢰할 수 있는 주체'로 등록하면 됩니다. 우리는 필요할 때만 그 역할을 '수임(AssumeRole)'해서 일을 본 뒤 빠지면 되므로, 고객의 진짜 비밀번호를 알 필요도 없고 보안상 가장 깔끔합니다.\n\n다른 옵션들처럼 아이디나 암호를 직접 주고받는 행위는 보안 사고의 지름길이며 AWS 권장 사항에 어긋납니다.",
+    "explanation": "정답은 A입니다. 계정 간의 경계를 넘나드는 정석은 '교차 계정 IAM 역할(Cross-Account Role)'입니다. 고객이 역할을 만들고 우리 계정 ID를 '신뢰할 수 있는 주체'로 등록하면, 우리는 필요할 때만 그 역할을 빌려 입고(AssumeRole) 일을 볼 수 있어 보안상 가장 깔끔합니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html",
     "glossary": {
       "Trust Policy (신뢰 정책)": "어떤 외부 사용자나 서비스가 이 IAM 역할을 빌려 쓸 수 있는지 정의한 보안 문서",
       "Cross-account Access (교차 계정 액세스)": "하나의 AWS 계정에서 다른 AWS 계정의 자원을 안전하게 관리하거나 사용하는 것",
@@ -61,7 +61,7 @@ export const quizData = [
       "각 VPC에 VPN 게이트웨이를 설치하고 복잡한 전송(Transit) VPC 구조를 직접 설계합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n연결해야 할 VPC가 많아질수록 Transit Gateway의 진가가 드러납니다. 모든 VPC를 일일이 연결할 필요 없이 중앙 허브(Transit Gateway)에 꽃기만 하면 됩니다. 네트워크 팀은 이 허브 하나만 관리하면 되니 운영 효율이 최고이며, 계정이 수백 개여도 확장성에 전혀 문제가 없습니다.\n\n다른 옵션인 A(피어링)는 연결 개수가 많아지면 관리가 불가능해지는 '네트워크 지옥'에 빠지게 되고, B는 보안상 매우 위험합니다.",
+    "explanation": "정답은 C입니다. 연결해야 할 VPC가 많아질수록 Transit Gateway의 진가가 드러납니다. 모든 VPC를 중앙 허브에 꽂기만 하면 되므로 네트워크 팀은 이 허브 하나만 관리하면 됩니다. 확장성과 운영 효율 면에서 최고의 솔루션입니다.\n\nhttps://aws.amazon.com/transit-gateway/",
     "glossary": {
       "AWS Transit Gateway": "수천 개의 VPC와 온프레미스 네트워크를 중앙에서 하나의 허브로 연결해주는 클라우드 라우터",
       "Network Hub (허브)": "여러 장치가 한곳에 모여 서로 데이터를 주고받게 해주는 중앙 장치",
@@ -78,7 +78,7 @@ export const quizData = [
       "서버 체급을 확 키워서(Scale-up) 작업 시간을 1시간 이내로 단축시킵니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'중단되어도 상관없는 밤샘 작업'은 스팟 인스턴스를 위한 최고의 무대입니다. 스팟 인스턴스는 AWS에서 남는 서버 자원을 최대 90%까지 할인해주거든요. 물론 AWS가 필요하면 언제든 서버를 회수해갈 수 있지만, 질문에서처럼 '실패해도 다른 서버가 다시 하면 되는' 구조라면 저렴한 요금의 달콤함만 누리면 됩니다.\n\n다른 옵션인 A와 B는 24시간 내내 돌리는 서버에 적합하며, 밤에만 잠깐 쓰는 용도로는 스팟 인스턴스의 가성비를 이길 수 없습니다.",
+    "explanation": "정답은 C입니다. '중단되어도 상관없는 밤샘 작업'은 스팟 인스턴스를 위한 최고의 무대입니다. AWS에서 남는 자원을 최대 90%까지 할인해주기 때문입니다. 실패해도 다시 하면 되는 구조라면 저렴한 요금의 달콤함만 누리면 됩니다.\n\nhttps://aws.amazon.com/ec2/spot/",
     "glossary": {
       "Spot Instance (스팟 인스턴스)": "AWS의 남는 자원을 경찰 경매처럼 저렴하게 이용하되, 자원이 부족해지면 반납해야 하는 요금제",
       "Batch Job (배치 작업)": "실시간이 아니라 일정량을 모아서 한꺼번에 처리하는 일괄 작업",
@@ -95,7 +95,7 @@ export const quizData = [
       "여러 개의 리눅스용 EFS 파일 시스템을 만들고 사용자가 직접 접근하게 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n서버를 경유하는 업로드는 서버의 CPU와 네트워크를 낭비하게 만듭니다. '미리 서명된 URL'을 쓰면 앱 서버는 아주 작은 '입장권(URL)'만 발행해주고, 실제 무거운 사진 업로드는 사용자와 S3가 일대일로 알아서 처리합니다. 서버는 가벼워지고, S3는 무제한 확장이 가능하니 수백만 명이 동시에 올려도 끄떡없습니다.\n\n다른 옵션인 A는 서버가 병목 지점이 될 수 있고, D는 일반 사용자가 직접 파일 시스템에 접근하는 게 보안상 불가능합니다.",
+    "explanation": "정답은 C입니다. 서버를 경로로 쓰는 업로드는 리소스 낭비입니다. '미리 서명된 URL'을 쓰면 앱 서버는 입장권만 발행해주고, 실제 사진 업로드는 사용자와 S3가 일대일로 처리합니다. 서버 오버헤드가 사라지고 무제한 확장이 가능해집니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html",
     "glossary": {
       "S3 Pre-signed URL": "특정 시간 동안만 유효한 임시 권한이 담긴 S3 주소로, 외부 사용자가 ID 없이도 업로드/다운로드를 할 수 있게 함",
       "Scalability (확장성)": "사용자나 데이터가 늘어나도 시스템 성능을 유연하게 키워 대응할 수 있는 능력",
@@ -112,7 +112,7 @@ export const quizData = [
       "Aurora Serverless를 쓰고, 이벤트 스트림을 통해 모든 리전의 DB를 수동 동기화합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n전 세계 어디서든 똑같은 데이터를 1초 미만의 빠른 속도로 만나게 해주는 비법은 DynamoDB 글로벌 테이블입니다. 이 기능을 켜면 우리가 직접 복제 로직을 짤 필요 없이, AWS가 알아서 전 세계 리전에 데이터를 실시간으로 뿌려줍니다. 사용자는 가장 가까운 리전에서 자기 데이터를 읽고 쓸 수 있어 체감 속도가 비약적으로 향상됩니다.\n\n다른 옵션인 B는 읽기 성능은 좋지만, 업데이트(쓰기) 속도가 리전 간 거리 때문에 1초를 넘길 가능성이 높습니다.",
+    "explanation": "정답은 A입니다. 전 세계 어디서든 똑같은 데이터를 1초 미만의 속도로 만나게 해주는 비법은 DynamoDB 글로벌 테이블입니다. AWS가 전 세계 리전으로 데이터를 자동 복제해주므로 사용자는 가장 가까운 리전에서 빛의 속도로 데이터를 읽고 쓸 수 있습니다.\n\nhttps://aws.amazon.com/dynamodb/global-tables/",
     "glossary": {
       "DynamoDB Global Tables": "여러 AWS 리전에 데이터를 자동으로 실시간 복제하여 전 세계 어디서든 빠른 속도로 접근하게 돕는 기능",
       "Latency (지연 시간)": "데이터를 주고받을 때 발생하는 물리적인 시간 차이(버벅임)",
@@ -130,7 +130,7 @@ export const quizData = [
       "S3 리전 간 복제(CRR) 기능을 켜서 서버의 모든 파일 데이터를 실시간으로 옮깁니다."
     ],
     "answer": [0, 2],
-    "explanation": "정답은 B와 D입니다.\n\n(참고: 원문 옵션 1, 3 선택이 정답)\n정답은 B와 D입니다. 아, 실수했네요. 정답은 A(AMI 수명 주기 정책)와 C(AWS Backup)입니다. 두 기능 모두 \"태그가 'Production'인 서버는 매일 백업하고 옆 리전으로 보내줘!\"라는 규칙만 설정해두면 알아서 작동합니다. 수작업(B)이나 복잡한 코딩(D) 없이 AWS의 기본 자동화 기능을 쓰는 것이 운영상 가장 현명합니다.\n\n다른 옵션인 E는 파일 데이터는 옮겨주지만, 서버 자체(상태)를 복구하는 백업으로는 부족합니다.",
+    "explanation": "정답은 B와 D입니다. 중앙 집중 관리와 자동화에는 AWS Backup(B)이 제격입니다. 백업 계획 하나로 리전 간 복제까지 한 번에 끝낼 수 있습니다. 또한 AMI 수명 주기 정책(D)을 활용해 서버 이미지 관리까지 자동화하면 재해 복구 준비가 완벽해집니다.\n\nhttps://aws.amazon.com/backup/",
     "glossary": {
       "AWS Backup": "다양한 AWS 서비스의 백업을 한곳에서 통합 관리하고 리전 간 복제까지 자동화하는 서비스",
       "AMI Lifecycle Policy (DLM)": "서버 이미지(AMI)와 스냅샷의 생성, 보존, 삭제 주기를 자동으로 관리해주는 정책",
@@ -147,7 +147,7 @@ export const quizData = [
       "서버 안에서 방화벽(iptables)을 돌려 그 IP 주소들을 하나하나 막는 스크립트를 올립니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n나쁜 녀석들을 서브넷 입구에서 바로 쫓아버리는 '수문장' 역할은 네트워크 ACL(NACL)이 담당합니다. 보안 그룹은 '허용' 규칙만 가능하지만, NACL은 특정 IP를 콕 집어 '거부(Deny)'할 수 있는 강력한 기능이 있습니다. 나쁜 트래픽이 서버 근처까지 오지도 못하게 길목(서브넷)에서 쳐내는 것이 가장 효과적인 방어법입니다.\n\n다른 옵션인 A와 C(보안 그룹)는 '거부' 기능이 아예 없어서 이런 차단 용도로는 쓸 수 없습니다.",
+    "explanation": "정답은 B입니다. 나쁜 IP들을 서브넷 입구에서 쫓아버리는 수문장은 네트워크 ACL(NACL)입니다. 보안 그룹은 '허용'만 가능하지만, NACL은 특정 IP를 콕 집어 '거부(Deny)'할 수 있어 공격 트래픽 차단에 가장 효과적입니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
     "glossary": {
       "Network ACL (NACL)": "서브넷 앞단에서 트래픽을 필터링하며, '허용'과 '거부' 규칙을 모두 설정할 수 있는 보안 도구",
       "Security Group (보안 그룹)": "서버(인스턴스) 직전에서 트래픽을 막아주는 도구로, 기본적으로 '허용' 규칙만 가짐",
@@ -164,7 +164,7 @@ export const quizData = [
       "Transit Gateway를 리전마다 만들고 피어링을 맺은 뒤, 상대방 보안 그룹 ID를 직접 참조하게 짭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n(참고: 원문 정답은 index 2인 'VPC 피어링 + IP 기반 인바운드 규칙'이 맞음)\n정답은 B입니다. 두 리전의 VPC를 직접 잇는 '리전 간 VPC 피어링(Inter-Region Peering)'을 맺으세요. 그리고 유럽 서버의 'IP 주소'를 호주 DB의 보안 그룹 허용 목록에 넣어주면 됩니다. 리전이 다르면 상대방 보안 그룹 ID를 직접 알아차릴 수 없기 때문에, 확실하게 'IP 주소 대역'으로 문을 열어주는 것이 정석입니다.\n\n다른 옵션인 D는 리전 간 피어링 시 보안 그룹 ID 참조가 불가능하므로 IP 기반 설정이 여전히 필요합니다.",
+    "explanation": "정답은 B입니다. 서로 다른 리전의 VPC를 직접 잇는 '리전 간 VPC 피어링'을 맺으세요. 리전이 다르면 상대방 보안 그룹 ID를 참조할 수 없기 때문에, 상대방 서버의 'IP 주소 대역'을 우리 보안 그룹 허용 목록에 넣어주는 것이 정석입니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html",
     "glossary": {
       "Inter-Region VPC Peering": "서로 다른 리전에 있는 두 VPC를 AWS 내부망으로 안전하게 직접 연결하는 기술",
       "Security Group ID Referencing": "보안 그룹 설정 시 구체적인 IP 대신 다른 보안 그룹의 이름(ID)을 적어 그 그룹원들만 통과시키는 편리한 방식",
@@ -181,7 +181,7 @@ export const quizData = [
       "S3에서 파일을 직접 쿼리하는 'S3 Object Select' 기능을 써서 DB 자체를 없앱니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n개발 환경처럼 사용 패턴이 들쭉날쭉한 곳엔 Aurora Serverless가 제격입니다. 사람이 없거나 작업을 안 할 때는 서버가 조용히 잠들고(비용 0원!), 다시 쿼리가 들어오는 순간 빛의 속도로 깨어나서 일을 합니다. 덕분에 쥐도 새도 모르게 비용을 절반 이하로 줄일 수 있는 효자 서비스입니다.\n\n다른 옵션인 B는 사람이 직접 해야 하므로 너무 번거롭고 실수할 위험이 큽니다.",
+    "explanation": "정답은 C입니다. 개발 환경처럼 사용 패턴이 예측 불가한 곳엔 Aurora Serverless가 제격입니다. 사람이 없을 땐 서버가 잠들고(비용 0원!), 쿼리가 들어오면 즉시 깨어나 일을 하므로 비용을 극적으로 줄일 수 있습니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Aurora Serverless": "사용량에 따라 DB 용량이 자동으로 늘었다 줄었다 하며, 안 쓸 땐 아예 멈춰 비용을 아껴주는 서비스",
       "On-demand (온디맨드)": "미리 예약하지 않고 내가 필요할 때 필요한 만큼만 바로 꺼내 쓰는 방식",
@@ -198,7 +198,7 @@ export const quizData = [
       "보안 진단 도구인 Amazon Inspector를 켜서 백업 안 된 자원들을 하나하나 수동으로 고칩니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'규정 준수'와 '자동화'의 콤비 플레이입니다. AWS Config가 경찰처럼 자원들을 감시하다가 태그 없는 녀석을 발견하면 즉시 '태그 달기'라는 조치를 취하게 합니다. 그럼 미리 짜둔 백업 계획(Backup Plan)이 그 태그를 보고 알아서 백업을 시작하죠. 이렇게 하면 관리자의 손길 없이도 100% 백업 보장 시스템을 완성할 수 있습니다.\n\n다른 옵션들은 사람이 직접 개입해야 하거나 백업과는 거리가 먼 보안 도구들을 제안하고 있어 탈락입니다.",
+    "explanation": "정답은 A입니다. AWS Config가 경찰처럼 자원을 감시하다가 태그 없는 녀석을 발견하면 즉시 태그를 달게 합니다(Remediation). 그러면 미리 짜둔 백업 계획이 그 태그를 보고 알아서 백업을 시작하므로 누락 없는 시스템이 완성됩니다.\n\nhttps://docs.aws.amazon.com/config/latest/developerguide/remediation.html",
     "glossary": {
       "AWS Config": "AWS 자원들의 설정 상태를 감시하고, 정해진 규칙을 어기면 알림을 주거나 자동으로 고쳐주는 서비스",
       "Remediation (수정 조치)": "문제가 발견되었을 때 자동으로 올바른 상태로 되돌려놓는 작업",
@@ -215,7 +215,7 @@ export const quizData = [
       "메시지 대기열(SQS)에 작업량을 쌓고, ECS 컨테이너 서버들이 수시로 꺼내가서 처리하게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 클래식하면서도 강력한 서버리스 패턴입니다. S3에 파일이 들어오는 '이벤트'가 발생하면, 람다라는 작은 일꾼이 쓱 나타나 크기를 줄이고 사라집니다. 서버를 미리 켜둘 필요도 없고, 사진이 만 장 들어오면 람다 만 개가 동시에 나타나 처리하므로 확장성 걱정도 전혀 없습니다.\n\n다른 옵션인 C는 쓸데없이 서버를 켜둬서 돈이 나가고, D는 관리해야 할 컨테이너 설정이 너무 많습니다.",
+    "explanation": "정답은 A입니다. S3에 파일이 들어오는 '이벤트'가 발생하면 람다가 즉시 나타나 크기를 조절하고 사라집니다. 서버를 미리 켜둘 필요가 없고 수만 장의 사진도 동시에 처리할 수 있는 가장 서버리스다운 방식입니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/with-s3.html",
     "glossary": {
       "Event-driven (이벤트 기반)": "무언가 일어났을 때(예: 파일 업로드) 그 작업에 반응하여 프로그램이 실행되는 방식",
       "AWS Lambda": "서버 관리 없이 코드만 실행하며, 실행 시간(밀리초)만큼만 비용을 내는 컴퓨팅 서비스",
@@ -232,7 +232,7 @@ export const quizData = [
       "보안 그룹 설정에서 아웃바운드(나가는 길)를 모든 주소(0.0.0.0/0)에 대해 다 열어버립니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n인터넷을 막았으면 내부 통로를 따로 뚫어줘야 합니다. VPC 엔드포인트(PrivateLink)를 만들면, 노드들이 인터넷을 거치지 않고 VPC 안에서 바로 쿠버네티스 대장(API 서버)에게 보고할 수 있습니다. 보안은 철저히 유지하면서 시스템 내부 통신은 원활하게 만드는 고풍격 보안 설계입니다.\n\n다른 옵션인 C는 보안 규정에 어긋나고, D는 아웃바운드를 연다고 해서 인터넷 게이트웨이 없는 프라이빗 노드가 갑자기 대장을 찾을 수 있는 건 아닙니다.",
+    "explanation": "정답은 B입니다. 인터넷을 막았으면 내부 통로를 뚫어야 합니다. 인터페이스 VPC 엔드포인트를 만들면, 노드들이 인터넷 없이도 내부망(PrivateLink)을 통해 쿠버네티스 대장(제어 플레인)과 안전하게 대화할 수 있습니다.\n\nhttps://docs.aws.amazon.com/eks/latest/userguide/private-clusters.html",
     "glossary": {
       "EKS Control Plane (제어 플레인)": "쿠버네티스의 두뇌 역할로, 노드들을 관리하고 명령을 내리는 중앙 시스템",
       "Data Plane (데이터 플레인)": "실제 서비스(컨테이너)가 돌아가는 일꾼 노드들의 집합",
@@ -251,7 +251,7 @@ export const quizData = [
       "콘솔에서 클릭 몇 번으로 주 DB를 따라다니는 '보조 복제본(Standby)'을 즉시 생성합니다."
     ],
     "answer": [0, 1, 2],
-    "explanation": "정답은 A, B, C입니다.\n\nRedshift는 단순한 창고가 아닙니다. 코딩으로 데이터를 주무르는 컨테이너 앱을 위해 API 통로(A)를 열어주고, 금융권에서도 쓸 만큼 보안(B)이 철저하며, 분석할 때만 비용을 내는 서버리스 옵션(C)까지 갖췄습니다. 대규모 데이터 분석이 필요할 때 가장 먼저 고려해야 할 현대적인 데이터 창고(Data Warehouse)입니다.\n\n다른 옵션인 D는 캐시 서비스(ElastiCache 등)의 몫이며, E는 분석 전용이지 실시간 주문 결제용(OLTP)으로는 어울리지 않습니다.",
+    "explanation": "정답은 A, B, C입니다. Redshift는 단순한 창고가 아닙니다. 앱을 위한 데이터 API(A), 철저한 암호화 보안(B), 그리고 분석할 때만 비용을 내는 서버리스 옵션(C)까지 갖춘 현대적 데이터 분석의 핵심입니다.\n\nhttps://aws.amazon.com/redshift/",
     "glossary": {
       "Amazon Redshift": "방대한 양의 데이터를 빠르게 분석할 수 있도록 최적화된 클라우드 데이터 웨어하우스(DW)",
       "Data Warehouse (데이터 웨어하우스)": "의사 결정을 돕기 위해 여러 곳의 데이터를 한데 모아 분석하기 좋게 정리해둔 창고",
@@ -268,7 +268,7 @@ export const quizData = [
       "람다의 '예약된 동시성'을 설정해서 최대 실행 횟수만 꽉 묶어 관리합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n람다는 평소엔 쉬다가 요청이 오면 깨어나는데, 이때 아주 잠깐의 준비 시간(Cold Start)이 걸립니다. 하지만 '프로비저닝된 동시성(Provisioned Concurrency)'을 켜두면, 람다 일꾼들이 유료 대기실에서 손님을 기다리며 대기합니다. 덕분에 첫 손님부터 1초의 지체도 없이 즉각적인 응답이 가능해집니다.\n\n다른 옵션인 D(예약된 동시성)는 실행 횟수만 제한할 뿐, 응답 속도를 빠르게 해주는 기능은 아닙니다.",
+    "explanation": "정답은 B입니다. 람다의 준비 시간(Cold Start)을 없애려면 '프로비저닝된 동시성'이 답입니다. 일꾼들을 유료 대기실에서 미리 대기시키기 때문에, 트래픽이 몰리는 첫 요청부터 지연 시간 없이 즉각적으로 응답할 수 있습니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html",
     "glossary": {
       "Provisioned Concurrency": "람다 함수를 미리 실행 준비 상태로 활성화해두어 지연 시간(Cold Start)을 없애는 옵션",
       "Cold Start": "잠들어 있던 서버리스 함수가 처음 실행될 때 자원을 할당받느라 발생하는 아주 짧은 지연 시간",
@@ -285,7 +285,7 @@ export const quizData = [
       "Kinesis Data Firehose로 로그를 쏘고, 그걸 다시 S3로 배달하는 복잡한 스트리밍 경로를 짭니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 좋은 해결책은 늘 옵션 창에 숨어 있습니다. SSM 세션 매니저는 자체적으로 S3 연동 기능을 지원합니다. 복잡하게 로그 수집기를 깔거나 코드를 짤 필요 없이, 설정 창에서 \"이 일기장(로그)은 저 금고(S3)에 넣어줘!\"라고 체크 한 번만 하면 끝납니다. 운영상 가장 가벼운 정석입니다.\n\n다른 옵션들은 서버마다 무언가를 설치하거나 불필요한 중간 단계를 거치고 있어 비효율적입니다.",
+    "explanation": "정답은 A입니다. 가장 좋은 해결책은 기본 설정에 있습니다. SSM 세션 매니저는 자체적으로 S3 로깅 기능을 지원합니다. 복잡한 수집 프로그램을 깔 필요 없이 설정 창에서 체크 한 번만 하면 모든 접속 기록이 안전하게 보관됩니다.\n\nhttps://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html",
     "glossary": {
       "AWS Systems Manager Session Manager": "비밀번호나 SSH 키 없이도 브라우저에서 안전하게 서버 터미널에 접속하게 돕는 서비스",
       "Logging (로깅)": "시스템에서 일어나는 모든 활동이나 오류를 기록으로 남겨두는 것",
@@ -302,7 +302,7 @@ export const quizData = [
       "DB를 백업하고 더 큰 용량의 새 DB를 만든 뒤 데이터를 일일이 복원합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n데이터가 얼마나 쌓일지 일일이 감시하기 힘들다면 '스토리지 자동 확장'이 답입니다. 남은 공간이 부족해지면 RDS가 알아서 하드디스크를 늘려줍니다. 서비스 중단도 없고 관리자의 수고도 제로입니다. 단, 최대 얼마까지 늘릴지는 미리 정해둬야 예산 폭탄을 피할 수 있습니다.\n\n다른 옵션인 D는 복원하는 동안 서비스를 멈춰야 하므로 '다운타임 금지' 조건에서 탈락입니다.",
+    "explanation": "정답은 A입니다. 데이터 증가를 일일이 감시하기 힘들다면 '스토리지 자동 확장'을 켜세요. 공간이 부족해지면 RDS가 알아서 하드디스크를 늘려줍니다. 서비스 중단도 없고 운영자의 밤샘 모니터링도 필요 없는 편리한 기능입니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling",
     "glossary": {
       "RDS Storage Auto Scaling": "데이터 증가에 맞춰 데이터베이스의 저장 공간을 자동으로 추가해주는 기능",
       "Downtime (다운타임)": "시스템이 장애나 점검 때문에 정상적으로 작동하지 않는 시간",
@@ -319,7 +319,7 @@ export const quizData = [
       "AWS Config 항목을 생성해서 고객들이 규정에 잘 맞게 설치했는지 감시만 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n사내 표준이나 엄선된 솔루션을 내놓는 전용 매장이 Service Catalog입니다. 관리자가 미리 검증된 설계도(CloudFormation)를 상품으로 등록해두면, 고객(사용자)은 권한 내에서 쇼핑하듯 '배포' 버튼만 누르면 됩니다. 배포 권한 통제와 일관성 유지를 한 번에 잡는 최고의 비즈니스 도구입니다.\n\n다른 옵션인 A는 고객이 직접 코드를 만져야 하므로 지원 부담이 크고 배포가 일관되지 않을 수 있습니다.",
+    "explanation": "정답은 B입니다. 검증된 솔루션을 쇼핑몰처럼 제공하는 Service Catalog가 주인공입니다. 관리자가 설계도(CloudFormation)를 상품으로 등록해두면, 사용자는 권한 내에서 '배포' 버튼만 눌러 표준화된 환경을 스스로 구축할 수 있습니다.\n\nhttps://aws.amazon.com/servicecatalog/",
     "glossary": {
       "AWS Service Catalog": "조직 내에서 승인된 IT 서비스를 생성하고 관리하며 사용자가 직접 배포할 수 있게 돕는 포털 서비스",
       "Self-service (셀프 서비스)": "상위 관리자의 도움 없이 사용자가 스스로 필요한 자원을 골라 사용하는 방식",
@@ -336,7 +336,7 @@ export const quizData = [
       "Standard-IA 클래스에 온디맨드 모드를 결합해 극단적인 가성비 설계를 시도합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n트래픽 예측이 불가능할 땐 '온디맨드 모드'가 정답입니다. 우리가 용량을 계산할 필요도 없고, 트래픽이 몰리면 알아서 받아주고 안 쓰면 요금을 안 받습니다. 여기에 일반적인 데이터 읽기/쓰기에 최적화된 Standard 클래스를 조합하는 것이 가장 기본적이면서도 비용 효율적인 시작점입니다.\n\n다른 옵션인 Standard-IA는 저장할 데이터 양은 많은데 거의 읽지 않는 '창고'용이라, 활발한 앱 서비스에는 오히려 어울리지 않습니다.",
+    "explanation": "정답은 B입니다. 트래픽 예측이 불가능할 땐 '온디맨드 모드'가 정답입니다. 용량 계산 필요 없이 트래픽이 몰리면 받아주고 안 쓰면 돈을 안 받습니다. 여기에 일반 앱에 최적화된 Standard 클래스를 쓰는 것이 가장 경제적입니다.\n\nhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand",
     "glossary": {
       "DynamoDB On-demand Mode": "초당 요청 횟수를 미리 예약하지 않고, 실제로 발생한 요청 수만큼만 요금을 지불하는 모드",
       "Standard-IA (DynamoDB)": "자주 접근하지 않는 데이터를 저장하기 위해 저장 비용은 낮추고 읽기 비용은 높인 테이블 등급",
@@ -353,7 +353,7 @@ export const quizData = [
       "모든 DB를 ACM(인증서 관리자)과 연동하고 보안 인증서를 발급받아 복잡한 인증 절차를 밟습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n비밀번호를 주고받는 것보다 '권한을 임시로 빌리는 것'이 훨씬 안전합니다. 비즈니스 계정들이 각자의 금고(DB)에 대해 중앙 앱이 들어올 수 있도록 '신뢰 관계'를 맺어둔 IAM 역할을 만들어두면, 중앙 앱은 필요할 때만 그 역할을 빌려 입고(STS AssumeRole) 우아하게 데이터를 읽어올 수 있습니다. 매번 열쇠를 바꿀 필요도 없어 관리가 매우 편합니다.\n\n다른 옵션인 B(비밀키 저장)는 보안상 매우 위험하며, 키 유출 시 큰 사고로 이어질 수 있습니다.",
+    "explanation": "정답은 C입니다. 다른 계정의 DB를 읽을 때는 권한을 임시로 빌리는 'AssumeRole'이 정석입니다. 비즈니스 계정들이 만든 역할을 중앙 앱이 갈아입고 들어가면 비밀번호를 주고받을 필요가 없어 보안과 관리 편의성이 비약적으로 상승합니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html",
     "glossary": {
       "Cross-account IAM Role": "다른 AWS 계정에 속한 사용자나 서비스에 특정 자원을 사용할 수 있게 허용하는 보안 역할",
       "STS AssumeRole": "일시적으로 다른 계정의 역할을 맡아 보안 토큰을 발급받는 AWS의 표준 인증 방식",
@@ -371,7 +371,7 @@ export const quizData = [
       "App Mesh를 사용해 네트워크 지표를 관찰하며 사람이 직접 판단해 늘립니다."
     ],
     "answer": [1, 2],
-    "explanation": "정답은 B와 C입니다.\n\n쿠버네티스의 자동화는 2단계로 이루어야 합니다. 먼저 '포드(앱 단위)'를 늘려주는 HPA(B)가 필요하고, 그러다 포드가 너무 많아져서 서버(노드)가 꽉 차면 진짜 서버 숫자를 늘려주는 Cluster Autoscaler(C)가 출동해야 합니다. 이 콤비가 갖춰져야만 24시간 자율 주행 아키텍처가 완성됩니다.\n\n다른 옵션인 A는 너무 원시적인 방법이며, D는 부하 원인을 해결하는 게 아니라 사용자 경험을 해칠 수 있습니다.",
+    "explanation": "정답은 B와 C입니다. 쿠버네티스 자동확장은 2단계입니다. 앱(포드)을 늘려주는 HPA(B)가 필요하고, 공간이 부족해지면 진짜 서버(노드)를 늘려주는 Cluster Autoscaler(C)가 출동해야 24시간 자율 주행 아키텍처가 완성됩니다.\n\nhttps://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html",
     "glossary": {
       "HPA (Horizontal Pod Autoscaler)": "CPU나 메모리 사용량에 따라 쿠버네티스 포드(앱 실행 단위)의 개수를 자동으로 조절하는 기능",
       "Cluster Autoscaler": "실행 중인 포드들을 수용할 서버(노드) 공간이 부족할 때 실제 EC2 인스턴스를 늘려주는 도구",
@@ -388,7 +388,7 @@ export const quizData = [
       "Amazon Athena의 'Federated Query' 기능을 써서 여러 DB 테이블을 한 번에 쿼리합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n여러 곳에 흩어진 데이터를 한눈에 모아보는 '연합 쿼리(Federated Query)' 기능을 써보세요. Athena는 서버 없이 작동하며, 전용 커넥터를 통해 DynamoDB에 든 데이터를 마치 하나의 테이블처럼 SQL로 요리할 수 있게 해줍니다. 무엇보다 DB 엔진에 직접 무거운 쿼리를 날리는 게 아니므로 실제 서비스 성능에 주는 영향도 거의 없습니다.\n\n다른 옵션인 C는 데이터가 늘어날수록 람다 코드가 복잡해지고 타임아웃 오류가 날 확률이 높습니다.",
+    "explanation": "정답은 D입니다. 여러 곳에 흩어진 데이터를 한눈에 모아보는 '연합 쿼리(Federated Query)'를 써보세요. Athena는 서버 없이 작동하며 DB에 성능 영향을 주지 않고 SQL로 원하는 정보를 쏙쏙 골라낼 수 있게 해줍니다.\n\nhttps://aws.amazon.com/athena/features/federated-query/",
     "glossary": {
       "Amazon Athena Federated Query": "데이터를 한곳으로 옮기지 않고도 여러 데이터 원천(DB, 파일 등)을 한 번에 SQL로 조회하는 기술",
       "Microservices (마이크로서비스)": "거대한 앱을 여러 개의 작은 독립적인 기능 단위로 쪼개서 운영하는 방식",
@@ -405,7 +405,7 @@ export const quizData = [
       "QuickSight로 예쁜 대시보드를 만들어서 오류 그래프가 튀는 부분을 시각적으로 찾습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n방대한 텍스트 로그 파일 속에서 보물찾기를 할 때 최고의 도구는 Athena입니다. S3에 저장된 CloudTrail 로그를 Athena에 연결하면, 익숙한 SQL(예: WHERE errorCode='AccessDenied')로 수 초 만에 나쁜 로그들만 골라낼 수 있습니다. 서버를 띄울 필요도 없고 쓴 만큼만 돈을 내니 가장 경제적이고 확실한 방법입니다.\n\n다른 옵션인 D(QuickSight)는 분석보다는 '보고'용에 가까워, 구체적인 원인 행위를 찾아내기엔 Athena가 훨씬 강력합니다.",
+    "explanation": "정답은 C입니다. 방대한 텍스트 로그 파일 속에서 보물찾기할 때 최고의 도구는 Athena입니다. S3에 담긴 로그를 연결만 하면 익숙한 SQL로 수 초 만에 특정 오류만 골라낼 수 있어 원인 파악이 매우 빨라집니다.\n\nhttps://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html",
     "glossary": {
       "Amazon Athena": "S3에 담긴 대량의 파일을 서버 없이 표준 SQL(Select문 등)로 즉시 쿼리할 수 있게 해주는 서비스",
       "AWS CloudTrail": "누가 언제 어디서 우리 계정의 리소스를 건드렸는지 모든 발자취를 남기는 감사 도구",
@@ -422,7 +422,7 @@ export const quizData = [
       "AWS 예산 보고서를 만들고, 이메일(SMTP)로 날아오는 내용을 봇이 읽어서 가공하게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n비용 데이터를 우리 시스템에 녹여내고 싶다면 'Cost Explorer API'가 정답입니다. 이 API는 단순한 지출 내역뿐만 아니라, AWS의 기계 학습 모델이 계산한 '향후 12개월 예측치'까지 친절하게 알려줍니다. 프로그래밍 방식으로 데이터를 쏙쏙 가져올 수 있어 '운영 대시보드' 구축에 최적입니다.\n\n다른 옵션들처럼 사람의 손(csv 다운로드)을 거치거나 이메일을 뜯어보는 방식은 자동화 시대에 어울리지 않는 비효율적인 방식입니다.",
+    "explanation": "정답은 A입니다. 비용 데이터를 우리 시스템에 녹여내고 싶다면 'Cost Explorer API'가 정답입니다. 지출 내역뿐만 아니라 AI가 계산한 향후 12개월 예측치까지 코드로 가져올 수 있어 스마트한 대시보드 구축에 최적입니다.\n\nhttps://aws.amazon.com/aws-cost-management/aws-cost-explorer/",
     "glossary": {
       "AWS Cost Explorer API": "AWS 비용 및 사용량 정보를 프로그래밍 방식으로 분석하고 가져올 수 있게 해주는 창구",
       "Cost Forecasting (비용 예측)": "과거 사용 패턴을 분석하여 미래의 예상 지출 금액을 미리 알려주는 기능",

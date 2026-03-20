@@ -9,7 +9,7 @@ export const quizData = [
       "앱 코드 수준에서 매번 DB 계정을 수동으로 바꿔 가며 접속하게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nSQL 인젝션 같은 웹 계층 공격 전문 방패는 'AWS WAF'입니다. WAF는 나쁜 요청이 DB 문턱에도 못 오게 입구에서 걸러줍니다. 여기에 RDS의 설정 뭉치인 '파라미터 그룹'을 만져서 SSL 암호화나 보안 옵션을 켜두면 데이터베이스 본체의 방어력까지 완벽하게 갖출 수 있습니다.\n\n다른 옵션인 A(보안 그룹)는 문(IP/Port)은 잘 지키지만, 정상적인 문으로 들어오는 '독이 든 편지(나쁜 쿼리)'는 구분하지 못합니다.",
+    "explanation": "정답은 B입니다. SQL 인젝션 같은 웹 계층 공격 전문 방패는 'AWS WAF'입니다. 나쁜 요청이 DB 문턱에도 못 오게 입구에서 걸러줍니다. 여기에 RDS의 '파라미터 그룹'을 만져서 보안 옵션을 켜두면 본체의 방어력까지 완벽하게 갖출 수 있습니다.\n\nhttps://aws.amazon.com/waf/",
     "glossary": {
       "AWS WAF (Web Application Firewall)": "웹 사이트로 들어오는 요청의 내용을 검사해서 해커의 공격을 막아주는 똑똑한 방화벽",
       "Parameter Group (파라미터 그룹)": "DB의 설정값들을 모아놓은 세팅 파일. 엔진 옵션이나 보안 설정을 한꺼번에 관리할 때 씁니다.",
@@ -26,7 +26,7 @@ export const quizData = [
       "AWS DMS 서비스를 써서 현재 쓰고 있는 서버 데이터를 통째로 복사해 봅니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n이사를 가기 전 '우리 집에 짐이 얼마나 있나'를 자동으로 목록화해주는 서비스가 'Application Discovery Service'입니다. 이렇게 수집된 정보는 'Migration Hub'라는 관제소에 모여서 전체적인 마이그레이션 전략을 짜는 데 기초 자료로 쓰입니다.\n\n다른 옵션인 D(DMS)는 DB 안에 든 '데이터'를 옮기는 서비스이지, 서버의 '사양이나 구성'을 조사하는 툴은 아닙니다.",
+    "explanation": "정답은 B입니다. 이사를 가기 전 '우리 집에 짐이 얼마나 있나'를 자동으로 목록화해주는 서비스가 'Application Discovery Service'입니다. 수집된 정보는 'Migration Hub'에 모여서 전체적인 마이그레이션 전략을 짜는 기초가 됩니다.\n\nhttps://aws.amazon.com/migration-hub/",
     "glossary": {
       "AWS Application Discovery Service": "기존 전산실에 어떤 서버가 있고 얼마나 바쁜지 자동으로 조사해서 AWS 이사 계획을 도와주는 탐사 도구",
       "AWS Migration Hub": "복잡한 클라우드 마이그레이션 과정을 한곳에서 보며 관리할 수 있는 중앙 관제소",
@@ -43,7 +43,7 @@ export const quizData = [
       "SNS(알림 서비스) 정책을 통해 모든 메시지를 협력사로 강제 전송합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n대기열(SQS)이라는 물건 자체에 \"옆 동네(협력사 계정) 사람들도 이거 쓸 수 있어\"라고 이름표를 붙여주는 것이 'SQS 액세스 정책'입니다. 이렇게 하면 협력사 직원은 본인들 아이디로 로그인한 채로 우리 쪽 대기열에 접근할 수 있어 관리가 매우 편해집니다.\n\n다른 옵션인 B는 협력사 직원이 바뀔 때마다 우리 쪽에서도 아이디를 지우고 만들어야 하므로 운영 수고가 엄청나게 많아집니다.",
+    "explanation": "정답은 C입니다. 대기열(SQS)이라는 물건 자체에 "옆 동네(협력사 계정) 사람들도 이거 쓸 수 있어"라고 이름표를 붙여주는 것이 'SQS 액세스 정책'입니다. 협력사 직원이 본인들 아이디로 로그인한 채 우리 대기열에 접근할 수 있어 관리가 매우 편합니다.\n\nhttps://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-creating-custom-policies.html",
     "glossary": {
       "SQS Access Policy": "메시지 대기열(SQS)에 붙이는 출입 허가증. 특정 사용자나 계정의 접근을 허용할 때 씁니다.",
       "Resource-based Policy (리소스 기반 정책)": "아이디(IAM User)가 아닌 리소스(SQS, S3 등) 쪽에 붙여서 누가 쓸 수 있는지 정하는 정책",
@@ -60,7 +60,7 @@ export const quizData = [
       "비싼 전용선(Direct Connect)을 깔고 매번 S3에서 데이터를 실시간으로 읽어옵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'캐싱 볼륨'은 '자주 쓰는 건 우리 집(사내 서버)에, 나머지는 먼 창고(S3)에' 보관하는 기술입니다. 사내 하드 용량 부족 문제를 즉시 해결해주면서도, 자주 쓰는 파일은 내부망 속도로 빠르게 열 수 있어 가성비와 성능을 동시에 잡을 수 있습니다.\n\n다른 옵션인 C(보관 볼륨)는 모든 데이터를 일단 사내 하드에 다 담아야 하므로, 지금처럼 용량이 부족한 상황에서는 해결책이 될 수 없습니다.",
+    "explanation": "정답은 B입니다. '캐싱 볼륨'은 '자주 쓰는 건 사내 서버에, 나머지는 S3에' 보관하는 기술입니다. 사내 하드 용량 부족 문제를 즉시 해결해주면서도, 자주 쓰는 파일은 내부망 속도로 빠르게 열 수 있어 가성비와 성능을 동시에 잡을 수 있습니다.\n\nhttps://aws.amazon.com/storagegateway/",
     "glossary": {
       "AWS Storage Gateway (Cached Volumes)": "S3를 메인 저장소로 쓰되, 자주 쓰는 데이터만 로컬 서버에 캐시로 남겨 용량을 아끼는 방식",
       "Bandwidth (대역폭/통신비)": "데이터가 오가는 통로의 크기. 많이 쓸수록 돈이 나오므로 아끼는 것이 좋음",
@@ -77,7 +77,7 @@ export const quizData = [
       "용량 예약 기능을 써서 서버가 언제든 켜질 자리만 미리 확보해 둡니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'최대 절전 모드'는 컴퓨터를 완전히 끄는 게 아니라, 하던 공부(메모리 상태)를 그대로 하드에 저장하고 잠눈을 붙이는 것입니다. 여기에 미리 서버를 부팅시켜서 대기시키는 '웜 풀(Warm Pool)'을 더하면, 손님이 올 때 단 몇 초 만에 앱이 준비된 서버를 바로 투입할 수 있습니다.\n\n다른 옵션인 D는 서버의 '자리'만 예약할 뿐, 앱이 설치되고 세팅되는 속도 자체를 빠르게 해주지는 못합니다.",
+    "explanation": "정답은 C입니다. '최대 절전 모드'는 하던 공부(메모리 상태)를 그대로 하드에 저장하고 잠눈을 붙이는 것입니다. 여기에 미리 서버를 부팅시켜서 대기시키는 '웜 풀(Warm Pool)'을 더하면, 손님이 올 때 단 몇 초 만에 앱 준비를 마칠 수 있습니다.\n\nhttps://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html",
     "glossary": {
       "EC2 Hibernate (최대 절전 모드)": "서버의 메모리 상태를 EBS에 저장해두고, 다시 켤 때 부팅 과정 없이 바로 하던 작업을 이어가는 기능",
       "Warm Pool (웜 풀)": "오토 스케일링에서 서버를 미리 부팅해 '대기 상태'로 두어 확장 속도를 높이는 기술",
@@ -94,7 +94,7 @@ export const quizData = [
       "AWS가 제공하는 '루트 인증서'를 내려받아 애플리케이션 접속 시 적용(SSL/TLS)합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n이동 중인 데이터를 암호화(SSL/TLS)하려면 믿을 수 있는 기관의 '인증서'가 필요합니다. AWS는 RDS 전용 인증서를 공짜로 제공하며, 애플리케이션이 이 인증서를 들고 DB에 접속하게 설정하면 통로 전체가 암호화되어 안전해집니다.\n\n다른 옵션인 A(IAM 인증)는 '누구인지' 확인하는 도구일 뿐, 오가는 데이터를 암호화하는 통로 역할은 하지 않습니다.",
+    "explanation": "정답은 D입니다. 전송 중인 데이터를 암호화(SSL/TLS)하려면 믿을 수 있는 기관의 '인증서'가 필요합니다. AWS는 RDS 전용 인증서를 공짜로 제공하며, 애플리케이션이 이 인증서를 들고 DB에 접속하게 설정하면 통로 전체가 안전해집니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html",
     "glossary": {
       "Encryption in Transit (전송 중 암호화)": "인터넷 선을 타고 돌아다니는 데이터를 암호로 바꿔 훔쳐보기 어렵게 만드는 기술",
       "SSL/TLS (Secure Sockets Layer)": "데이터 통신 보안을 위한 표준 암호화 방식",
@@ -111,7 +111,7 @@ export const quizData = [
       "지리 정보(Geospatial) 처리가 특기인 'Redis용 ElastiCache'를 캐시로 씁니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nRedis는 메모리에서 돌아가서 엄청나게 빠를 뿐만 아니라, '근처에 있는 플레이어 찾기' 같은 위치 기반(Geospatial) 명령어를 자체적으로 지원합니다. RDS 앞에 Redis를 두고 위치 정보를 여기서 처리하게 하면, DB의 짐을 덜어주면서 게임 속도도 광속으로 올라갑니다.\n\n다른 옵션인 C(DAX)는 NoSQL인 DynamoDB에만 쓸 수 있는 기능이라 PostgreSQL에는 그림의 떡입니다.",
+    "explanation": "정답은 D입니다. Redis는 메모리에서 돌아가서 엄청나게 빠를 뿐만 아니라, '근처 플레이어 찾기' 같은 위치 기반(Geospatial) 명령어를 자체 지원합니다. RDS 앞에 Redis를 캐시로 두면 DB 짐을 덜고 게임 속도도 광속으로 올라갑니다.\n\nhttps://aws.amazon.com/elasticache/redis/",
     "glossary": {
       "Amazon ElastiCache for Redis": "메모리 기반의 초고속 저장소로, 위치 정보 처리나 랭킹 관리 등에 탁월한 성능을 보임",
       "Geospatial (공간 정보)": "위도, 경도 같은 위치 데이터를 다루는 기술",
@@ -128,7 +128,7 @@ export const quizData = [
       "회사 공용 관리자가 보안 그룹을 만질 때마다 티켓이 발행되게 설정합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nAWS에는 'Config'라는 도덕 선생님이 계십니다. 미리 만들어진 규칙(Managed Rule) 중에 SSH 개방을 감시하는 'restricted-ssh'를 활성화하기만 하면, 누군가 사고를 칠 때 즉시 잡아내고 SNS를 통해 여러분에게 문자를 쏴줍니다.\n\n다른 옵션인 A(Lambda)도 가능은 하지만, 코드를 직접 짜고 관리해야 하므로 '최소 운영 노력'이라는 조건에서 Config(B)에 밀립니다.",
+    "explanation": "정답은 B입니다. AWS에는 'Config'라는 도덕 선생님이 계십니다. 미리 만들어진 규칙 중에 SSH 개방을 감시하는 'restricted-ssh'를 활성화하기만 하면, 누군가 사고를 칠 때 즉시 잡아내고 SNS를 통해 우리에게 문자를 쏴줍니다.\n\nhttps://aws.amazon.com/config/",
     "glossary": {
       "AWS Config": "리소스가 설정된 법규대로 잘 운영되고 있는지 감시하고 기록하는 보안 감사관 서비스",
       "SNS (Simple Notification Service)": "문자, 이메일 등으로 긴급 알림을 보내주는 푸시 알림 서비스",
@@ -145,7 +145,7 @@ export const quizData = [
       "AWS Transfer for SFTP와 S3를 배포하고, 이벤트에 맞춰 서버들이 일괄 처리하게 설계합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'AWS Transfer for Family(SFTP)'는 서버를 직접 깔지 않아도 되는 관리형 서비스입니다. 들어온 파일은 무제한 창고인 S3에 바로 저장되므로, 용량 걱정도 없고 서버가 죽을 걱정도 없습니다. 가장 '클라우드다운' 고성능 조합입니다.\n\n다른 옵션인 B나 C는 리눅스 OS 패치나 SFTP 프로그램 업데이트를 직접 해야 하므로 운영 수고가 많이 듭니다.",
+    "explanation": "정답은 D입니다. 'AWS Transfer for SFTP'는 서버를 직접 깔지 않아도 되는 관리형 서비스입니다. 들어온 파일은 무제한 창고인 S3에 바로 저장되므로, 용량 걱정도 없고 서버 패치 등 귀찮은 관리 수고도 거의 없습니다.\n\nhttps://aws.amazon.com/aws-transfer-family/",
     "glossary": {
       "AWS Transfer for SFTP": "직접 서버를 관리하지 않고도 SFTP 접속 통로를 열어주는 관리형 서비스",
       "Amazon S3": "파일을 수조 개까지 담을 수 있는 안전하고 저렴한 객체 저장소",
@@ -162,7 +162,7 @@ export const quizData = [
       "여러 지역에 서버를 수동으로 띄우고 사용자가 직접 찾아가게 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n게임의 핵심인 UDP 트래픽과 초당 수백만 건의 폭주를 처리하는 데는 NLB가 제격입니다. NLB는 아주 낮은 계층(L4)에서 단순하고 빠르게 트래픽을 쏘기 때문에 지연 시간이 거의 없고, 성능도 로드 밸런서 중 가장 강력합니다.\n\n다른 옵션인 A(ALB)는 주소(/path)나 내용을 분석하는 데 시간을 쓰기 때문에, 단순하고 빠른 UDP 처리에는 적합하지 않습니다.",
+    "explanation": "정답은 C입니다. 게임의 핵심인 UDP 트래픽과 초당 수백만 건의 폭주를 처리하는 데는 NLB가 제격입니다. 아주 낮은 계층(L4)에서 단순하고 빠르게 트래픽을 처리하기 때문에 지연 시간이 거의 없고 성능도 로드 밸런서 중 최강입니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/network-load-balancer/",
     "glossary": {
       "Network Load Balancer (NLB)": "초당 수백만 건의 요청을 아주 낮은 지연 시간으로 처리하는 고성능 로드 밸런서",
       "UDP (User Datagram Protocol)": "확인 절차 없이 일단 쏘고 보는 빠른 방식의 통신 규약. 게임이나 스트리밍에 주로 쓰임",
@@ -179,7 +179,7 @@ export const quizData = [
       "동영상 분석 전용인 Rekognition Video를 사진 낱장에 각각 적용합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'Amazon Rekognition'은 AWS가 이미 수조 장의 사진을 보여주며 훈련시킨 완성형 AI 선생님입니다. 우리는 그냥 API로 \"이 사진 좀 봐줘\"라고 부탁만 하면 끝입니다. 학습이나 모델 개발이 필요 없으니 가장 빠르고 정확합니다.\n\n다른 옵션인 A(SageMaker)는 데이터 전문가가 직접 모델을 만들고 훈련시켜야 하므로 시간과 비용이 엄청나게 소모됩니다.",
+    "explanation": "정답은 B입니다. 'Amazon Rekognition'은 AWS가 이미 수조 장의 사진을 보여주며 훈련시킨 완성형 AI 서비스입니다. 학습이나 모델 개발 없이 API로 "이 사진 좀 봐줘"라고 부탁만 하면 부적절한 내용을 귀신같이 찾아줍니다.\n\nhttps://aws.amazon.com/rekognition/",
     "glossary": {
       "Amazon Rekognition": "이미지와 비디오 속의 사물, 사람, 텍스트, 부적절한 콘텐츠를 대신 찾아주는 인공지능 서비스",
       "Content Moderation (콘텐츠 관리)": "사용자가 올린 내용 중 정책에 어긋나는 나쁜 것들을 가려내는 작업",
@@ -196,7 +196,7 @@ export const quizData = [
       "최종적 일관성 모드로 요청해서 복불복 운에 맡깁니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nDynamoDB는 기본적으로 속도를 위해 '대강 최신인 거(Eventual)'를 줍니다. 하지만 무조건 방금 쓴 따끈따끈한 데이터가 필요하다면 'Strongly Consistent' 모드를 켜야 합니다. 그러면 0.0001초 전에 바뀐 내용도 정확히 읽어올 수 있습니다.\n\n다른 옵션인 D는 기본 설정값이라 지금 겪고 있는 '옛날 데이터 반환' 문제를 해결해주지 못합니다.",
+    "explanation": "정답은 C입니다. DynamoDB에서 무조건 방금 쓴 따끈따끈한 데이터가 필요하다면 '강력한 일관된 읽기(Strongly Consistent)' 모드를 켜야 합니다. 그러면 0.0001초 전에 바뀐 내용도 정확히 읽어올 수 있어 정확도를 보장합니다.\n\nhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html",
     "glossary": {
       "Strongly Consistent Read": "모든 복제본의 데이터를 확인해 무조건 가장 최신 정보를 가져오는 읽기 방식",
       "Eventual Consistency (최종적 일관성)": "잠시 기다리면 결국 똑같아지겠지만, 찰나의 순간에는 옛날 데이터가 나올 수 있는 방식",
@@ -213,7 +213,7 @@ export const quizData = [
       "Athena에서 복잡한 SQL 쿼리를 수백 줄 작성해서 정리합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'Glue DataBrew'는 데이터 전용 뽀샵(?) 툴입니다. 엑셀처럼 생긴 화면에서 클릭 몇 번으로 데이터를 예쁘게 가공할 수 있고, 이 과정을 '레시피'라는 파일로 저장해 동료들에게 나눠줄 수도 있습니다. 코딩 실력이 없어도 데이터 전문가가 될 수 있는 지름길입니다.\n\n다른 옵션인 D(Athena)는 복잡한 SQL 코드를 직접 다뤄야 하므로 사용 장벽이 높습니다.",
+    "explanation": "정답은 C입니다. 'Glue DataBrew'는 데이터 전용 시각적 가공 도구입니다. 엑셀처럼 생긴 화면에서 클릭 몇 번으로 데이터를 정제할 수 있고, 이 과정을 '레시피'로 저장해 공유할 수도 있습니다. 코딩 실력 없이도 데이터 전문가 수준의 처리가 가능합니다.\n\nhttps://aws.amazon.com/glue/databrew/",
     "glossary": {
       "AWS Glue DataBrew": "코딩 없이 시각적 인터페이스로 데이터를 정제하고 변환해주는 데이터 요리사 도구",
       "Recipe (레시피)": "DataBrew에서 수행한 데이터 변환 단계들의 묶음. 나중에 똑같이 재현하거나 공유할 때 씁니다.",
@@ -230,7 +230,7 @@ export const quizData = [
       "전 세계 누구나 보는 퍼블릭 호스팅 영역에 회사 서버 주소를 다 공개합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nAWS 안에서 물어본 주소를 사내(온프레미스) DNS 서버로 '밖으로(Outbound)' 물어보러 가야 하므로 아웃바운드 엔드포인트가 필요합니다. 여기에 \"office.local로 끝나는 건 회사 본사로 물어봐\"라는 규칙을 걸어두면 완벽하게 연결됩니다.\n\n다른 옵션인 D(퍼블릭)는 회사의 내부 서버 주소를 전 세계 해커들에게 광고하는 셈이라 매우 보안에 위험합니다.",
+    "explanation": "정답은 A입니다. AWS 내부에서 물어본 주소를 사내(온프레미스) DNS 서버로 물어보러 가야 하므로 '아웃바운드 엔드포인트'가 필요합니다. 여기에 "office.local로 끝나는 건 회사 본사로 물어봐"라는 규칙을 걸어두면 우아하게 연결됩니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html",
     "glossary": {
       "Route 53 Resolver": "AWS와 사내망 사이에서 DNS(주소 찾기)를 중계해주는 교통 경찰관",
       "Outbound Endpoint (아웃바운드 엔드포인트)": "AWS 내부에서 물어본 주소를 사내망 DNS 서버로 대신 전달해주는 게이트웨이",
@@ -247,7 +247,7 @@ export const quizData = [
       "CloudFront를 입구에 두고 WAF 규칙을 수천 개 직접 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nShield Advanced 멤버가 되면, AWS 최고의 보안 전문가들(DDoS Response Team)이 대리 운전처럼 여러분의 보안을 챙겨줍니다. 또한 DDoS로 인해 늘어난 로드 밸런서 비용도 보상해주고, 복잡한 공격을 대신 막아주니 나라나 대기업 웹 사이트엔 필수입니다.\n\n다른 옵션인 A(일반 WAF)는 기능은 좋지만 전문가의 밀착 케어나 비용 보상 같은 프리미엄 혜택은 없습니다.",
+    "explanation": "정답은 C입니다. 'Shield Advanced' 멤버가 되면 AWS 최고의 보안 전문가들(DRT)이 24시간 밀착 케어를 해줍니다. 또한 DDoS 공격으로 인해 늘어난 로드 밸런서 비용도 보상해주므로 국가 기관이나 대기업 서비스에 필수입니다.\n\nhttps://aws.amazon.com/shield/",
     "glossary": {
       "AWS Shield Advanced": "대규모 DDoS 공격으로부터 시스템을 보호하고 전문 기술 지원과 비용 보상을 제공하는 유료 보안 서비스",
       "DDoS (Distributed Denial of Service)": "수많은 컴퓨터를 동원해 한꺼번에 접속을 퍼부어 웹 사이트를 마비시키는 공격",
@@ -264,7 +264,7 @@ export const quizData = [
       "지역마다 EFS를 따로 만들고 람다(Lambda) 기능을 써서 수동으로 파일 복사를 관리합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nEFS는 클라우드판 '공유 폴더'입니다. 수백 명의 컨테이너가 동시에 달려들어 파일을 읽고 써도 끄떡없고, 설치도 매우 간편합니다. 특히 Fargate 환경에서 파일을 영구 보관하고 공유할 때는 EFS가 교과서적인 정답입니다.\n\n다른 옵션인 A(EBS)는 Fargate에 직접 붙이는 데 한계가 많고, 동시에 여러 컨테이너가 쓰기에는 제약이 너무 많아 부적합합니다.",
+    "explanation": "정답은 B입니다. EFS는 클라우드판 '공유 폴더'입니다. 수백 명의 컨테이너가 동시에 파일을 읽고 써도 끄떡없고 설치도 매우 간편합니다. 특히 EKS Fargate 환경에서 파일을 영구 보관하고 공유할 때는 EFS가 교과서적인 정답입니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS (Elastic File System)": "여러 서버가 동시에 연결할 수 있는 유연하고 튼튼한 클라우드 전용 파일 시스템",
       "AWS Fargate": "서버를 직접 관리하지 않고 컨테이너만 던져주면 알아서 돌려주는 서버리스 실행 모델",
@@ -281,7 +281,7 @@ export const quizData = [
       "모든 것을 퍼블릭 서브넷에 몽땅 때려 넣어 접속만 잘 되게 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'최소한의 변경'이 조건이므로, 기존에 쓰던 MySQL 엔진을 그대로 쓸 수 있는 'RDS MySQL'이 정답입니다. 또한 보안을 위해 입구(웹)만 문을 열어두고 핵심(앱, DB)은 숨기는 것이 기본이며, RDS는 과거 시점 복구(PITR) 기능을 기본으로 제공합니다.\n\n다른 옵션인 B(Aurora)는 성능은 좋지만 엔진 종류를 사실상 바꾸는 셈이라 '최소 변경'이라는 조건에 비춰볼 때 순수 MySQL RDS(C)가 더 정답에 가깝습니다.",
+    "explanation": "정답은 C입니다. 기존 설계를 유지하며 튼튼하게 만드는 정석은 웹은 퍼블릭 EC2, 핵심 로직(앱)과 DB는 프라이빗에 숨기는 '3계층 구조'입니다. RDS MySQL을 쓰면 엔진 변경 없이 과거 시점 복구(PITR) 기능까지 챙길 수 있습니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Amazon RDS (Relational Database Service)": "DB 설치부터 백업, 복구까지 다 해주는 관리형 데이터베이스 서비스",
       "PITR (Point-in-Time Recovery)": "백업 파일을 뒤져서 특정 날짜, 특정 시(예: 어제 오후 2시 5분)로 DB를 통째로 되돌리는 마법 같은 기술",
@@ -298,7 +298,7 @@ export const quizData = [
       "각 지역마다 S3를 따로 만들고 CloudFront 주소를 수십 개 관리합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'S3 Transfer Acceleration'은 전 세계 곳곳에 뻗어 있는 AWS의 고속도로(엣지 로케이션)를 타고 파일을 S3까지 배달해주는 서비스입니다. 먼 나라에 있는 사용자도 평소보다 훨씬 빠르게 사진을 올릴 수 있어 사용자 경험이 획기적으로 좋아집니다.\n\n다른 옵션인 D는 지역마다 S3를 관리하고 동기화해야 하므로 운영 수고가 눈덩이처럼 불어납니다.",
+    "explanation": "정답은 B입니다. 'S3 Transfer Acceleration'은 전 세계 곳곳의 고속도로(엣지 로케이션)를 타고 파일을 S3까지 배달해줍니다. 먼 나라 사용자도 평소보다 훨씬 빠르게 사진/비디오를 올릴 수 있어 서비스 만족도가 크게 올라갑니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
     "glossary": {
       "S3 Transfer Acceleration": "전 세계 사용자가 가장 가까운 AWS 전용망 입구를 통해 S3로 빠르게 파일을 업로드할 수 있게 돕는 가속 기술",
       "Edge Location (엣지 로케이션)": "사용자와 가장 가까운 곳에 위치한 AWS의 통신 거점",
@@ -315,7 +315,7 @@ export const quizData = [
       "비싼 전용선(Direct Connect)을 사내망에 직접 깔아서 강제로 전송합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n파일 동기화와 전송 분야의 1등 공신은 'DataSync'입니다. 에이전트만 깔아두면 NFS(네트워크 드라이브)를 S3에 실시간 수준으로 복사해주며, 데이터가 적을 때는 비용도 매우 저렴해 가장 이상적인 해결책입니다.\n\n다른 옵션인 D(Direct Connect)는 배보다 배꼽이 더 큰 값비싼 장비라, '소량의 데이터' 전송에는 과소비입니다.",
+    "explanation": "정답은 B입니다. 파일 전송 분야의 1등 공신은 'DataSync'입니다. 에이전트만 깔아두면 사내 NFS 서버의 데이터를 S3로 실시간 전송해주며, 설정이 매우 간편하고 비용도 합리적인 '최소 운영' 모델입니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "AWS DataSync": "S3, EFS, 사내 저장소 간의 대용량/소량 데이터를 매우 빠르고 안전하게 동기화해주는 서비스",
       "NFS (Network File System)": "네트워크 선을 통해 다른 컴퓨터의 하드디스크를 내 폴더처럼 빌려 쓰는 기술",
@@ -332,7 +332,7 @@ export const quizData = [
       "DB 성능을 대폭 늘리고 람다가 매번 새 통로를 뚫게 방치합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'RDS Proxy'는 숙련된 지배인입니다. 수천 개의 람다 호출이 쏟아져도, 미리 뚫어놓은 소수의 DB 통로를 재활용(Pooling)해서 효율적으로 나눠줍니다. 덕분에 DB는 연결 개수가 폭발하지 않아 안전하고, 람다는 더 빠르게 데이터를 처리할 수 있습니다.\n\n다른 옵션인 C(VPC 밖)는 보안상 위험할 뿐만 아니라, 프라이빗 DB에 도달할 수도 없으므로 잘못된 설계입니다.",
+    "explanation": "정답은 B입니다. 'RDS Proxy'는 숙련된 지배인과 같습니다. 수천 개의 람다 호출이 쏟아져도 미리 뚫어놓은 DB 통로를 재활용(Pooling)해서 효율적으로 나눠줍니다. DB에 과부하가 걸리는 걸 막고 람다의 처리 속도도 높여줍니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Amazon RDS Proxy": "DB 연결을 미리 맺어두고 여러 요청이 이를 나눠 쓰게 하여 DB 부담을 획기적으로 줄여주는 서비스",
       "Connection Pooling (연결 풀링)": "매번 새 연결을 만드느라 힘쓰는 대신, 이미 열려 있는 통로를 돌아가며 평화롭게 사용하는 기술",
@@ -349,7 +349,7 @@ export const quizData = [
       "비싼 전용선을 깔고 직접 업로드하는 코드를 앱에 집어넣습니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n실시간 스트리밍 데이터 수집에는 'Kinesis'가 제격입니다. 'Data Streams'가 몰아치는 데이터를 받아내면, 'Firehose'라는 전송 트럭이 이를 받아 S3 창고로 예쁘게 배달해줍니다. 코드 한 줄 거의 없이도 대규모 수집 시스템을 만들 수 있습니다.\n\n다른 옵션인 C(DataSync)는 정기적인 '파일 동기화'용이지, 실시간으로 발생하는 '이벤트성 데이터'를 빨아들이는 용도는 아닙니다.",
+    "explanation": "정답은 A입니다. 실시간 데이터 수집에는 'Kinesis'가 제격입니다. 'Data Streams'가 몰아치는 데이터를 빨아들이면, 'Firehose'라는 전송 트럭이 이를 받아 S3 창고로 예쁘게 배달해줍니다. 대규모 수집 시스템 구축에 가장 최적화되어 있습니다.\n\nhttps://aws.amazon.com/kinesis/",
     "glossary": {
       "Amazon Kinesis Data Streams": "초당 수천 건 이상의 실시간 데이터를 껌처럼 쩍쩍 받아내는 고성능 스트림 서비스",
       "Amazon Kinesis Data Firehose": "받은 데이터를 S3나 Redshift 같은 목적지로 로딩(Loading)해주는 전송 전문 도구",
@@ -366,7 +366,7 @@ export const quizData = [
       "관계를 다 끊어버리고 NoSQL인 DynamoDB로 완전히 다시 이사 갑니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nAurora는 AWS가 MySQL을 클라우드에 맞게 개조한 슈퍼카입니다. RDS MySQL보다 훨씬 빠르고 복제 지연도 거의 없습니다. 호환성이 100%라 코드를 거의 안 고치고도 이사할 수 있어 가성비와 성능 모두에서 만점짜리 정답입니다.\n\n다른 옵션인 B(Cache)도 좋지만, '복제 지연' 자체를 원론적으로 해결해주는 것은 DB 본체를 Aurora로 바꾸는 것(A)입니다.",
+    "explanation": "정답은 A입니다. Aurora는 AWS가 클라우드 환경에 맞게 MySQL을 개조한 고성능 DB입니다. RDS MySQL보다 5배 빠르고 복제 지연도 거의 없습니다. 호환성이 100%라 코드를 거의 안 고치고도 이사할 수 있는 최고의 선택입니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Amazon Aurora": "MySQL/PostgreSQL과 완벽히 호환되면서 성능은 3~5배 더 강력한 클라우드 전용 DB 엔진",
       "Replication Lag (복제 지연)": "대장 DB가 쓴 내용이 조수 DB에 반영될 때까지 걸리는 굼뜬 시간",
@@ -383,7 +383,7 @@ export const quizData = [
       "NLB 고속 로드 밸런서를 달고 인터넷과의 모든 통신을 다 받아줍니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n최신 MSK(카프카)는 복잡한 로드 밸런서 없이도 자체적으로 '퍼블릭 액세스' 기능을 지원합니다. 이미 쓰고 있는 VPC 안에 공용 서브넷(Public) 공간을 만들고 옵션만 켜주면 됩니다. 여기에 Mutual TLS(상호 인증)를 켜면 서로 명함(인증서)을 확인해야만 대화가 가능해져 완벽한 보안이 완성됩니다.\n\n다른 옵션인 C나 D는 카프카 특유의 여러 서버 통신 구조를 로드 밸런서로 다 풀기가 매우 복잡해서 운영 효율이 떨어집니다.",
+    "explanation": "정답은 A입니다. 최신 MSK(카프카)는 복잡한 로드 밸런서 없이도 자체 '퍼블릭 액세스'를 지원합니다. 이미 쓰고 있는 VPC 안에 공용 서브넷 공간을 만들고 옵션만 켜주면 됩니다. 여기에 Mutual TLS를 켜면 상호 인증을 통해 완벽 보안을 유지합니다.\n\nhttps://docs.aws.amazon.com/msk/latest/developerguide/public-access.html",
     "glossary": {
       "Amazon MSK (Managed Streaming for Apache Kafka)": "대용량 메시지 전송 툴인 카프카를 AWS가 대신 돌려주는 서비스",
       "Mutual TLS (mTLS)": "서버만 인증하는 게 아니라, 들어오는 손님(클라이언트)도 가짜가 아닌지 인증서를 서로 주고받는 강력한 보안 방식",
@@ -400,7 +400,7 @@ export const quizData = [
       "모든 메뉴를 하나하나 클릭해보는 자동화 스크립트를 직접 만듭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'AWS Health API'는 AWS 서비스 전체의 날씨(장애 유무)를 알려주는 바로미터입니다. 내 서버가 있는 지역의 EC2가 멀쩡한지, S3에 장애는 없는지 코드로 물어볼 수 있어, 배포 전 '날씨 확인용'으로 딱 좋습니다.\n\n다른 옵션인 A(Trusted Advisor)는 '돈 아끼는 법'이나 '보안 설정 미비' 등을 알려주는 컨설팅 도구에 가깝습니다.",
+    "explanation": "정답은 B입니다. 'AWS Health API'는 AWS 시스템의 실시간 장애 정보를 전해주는 일기 예보와 같습니다. 내 서버가 있는 리전의 상태를 코드로 확인할 수 있어 배포 전 시스템 멀쩡함을 자동 체크하기에 가장 좋습니다.\n\nhttps://aws.amazon.com/premiumsupport/technology/aws-health-api/",
     "glossary": {
       "AWS Health API": "AWS 리소스 및 서비스에 영향을 주는 이벤트와 장애 정보를 실시간으로 알려주는 API",
       "Personal Health Dashboard": "내가 쓰는 서비스들만 골라서 장애 여부나 점검 일정을 한눈에 보여주는 알림판",
@@ -417,7 +417,7 @@ export const quizData = [
       "람다(Lambda) 함수를 수천 개 띄워 억지로 버퍼 역할을 시킵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n손님이 갑자기 늘 때 가장 큰 문제는 DB 서버에 '통로(Connection)'가 꽉 차는 것입니다. 'RDS Proxy'는 이 통로를 미리 확보해두고 손님들끼리 돌려 쓰게(Pooling) 관리해주므로, 서버 사양을 안 높여도 훨씬 많은 손님을 안정적으로 받을 수 있습니다.\n\n다른 옵션인 C는 서버가 죽거나 프로그램이 꼬였을 때 직접 고쳐야 하므로 '운영 수고'가 매우 큽니다.",
+    "explanation": "정답은 B입니다. 손님이 갑자기 늘 때 가장 큰 문제는 DB 서버에 통로(Connection)가 부족해지는 것입니다. 'RDS Proxy'는 이 통로를 미리 확보해두고 나눠 쓰게 관리해주므로 사양 증설 없이도 안정적으로 손님을 받을 수 있습니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Amazon RDS Proxy": "DB 연결을 효율적으로 관리해 가용성과 확장성을 높여주는 관리형 프록시 비서",
       "Connection Pooling (연결 풀링)": "아이디/비번을 매번 확인하고 통로를 여는 대신, 미리 열어둔 통로를 재사용하는 속도 향상 기술",

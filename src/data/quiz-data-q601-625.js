@@ -9,7 +9,7 @@ export const quizData = [
       "pg_dump 툴을 사용하여 수동으로 백업하고 복원하는 전통적인 방식을 씁니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n사용 중인 RDS의 'Aurora 읽기 전용 복제본'을 만드는 것이 가장 똑똑한 방법입니다. AWS가 배경에서 실시간으로 데이터를 맞춰주기 때문에, 복제가 거의 다 되었을 때 버튼 하나만 눌러 복제본을 대장으로 승격(Promote)시키면 가동 중지 시간을 단 몇 분 내외로 줄일 수 있습니다.\n\n다른 옵션인 D(pg_dump)는 데이터 양이 많을 경우 백업과 복원에 긴 시간이 걸려 서비스 중단이 길어집니다.",
+    "explanation": "정답은 B입니다. 사용 중인 RDS의 'Aurora 읽기 전용 복제본'을 만드는 것이 가장 똑똑한 방법입니다. AWS가 배경에서 실시간으로 데이터를 맞춰주기 때문에, 복제가 거의 다 되었을 때 버튼 하나만 눌러 복제본을 대장으로 승격(Promote)시키면 가동 중지 시간을 단 몇 분 내외로 줄일 수 있습니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Amazon Aurora": "AWS에서 관계형 DB를 클라우드 환경에 최적화하여 5배(MySQL 대비) 이상 빠르게 만든 고성능 엔진",
       "Read Replica (읽기 전용 복제본)": "주 서버의 데이터를 실시간으로 복사해 가지고 있는 조수 서버",
@@ -26,7 +26,7 @@ export const quizData = [
       "람다(Lambda) 함수를 여럿 짜서 스냅샷 찍기와 AMI 복사를 자동화하는 코드를 유지 관리합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n수백 대의 서버를 하나하나 관리할 수는 없습니다. 'AWS Backup'이라는 전용 중앙 관리 서비스를 쓰면, 마우스 클릭 몇 번으로 전체 EC2 그룹에 대한 백업 정책(주기, 보관 기간 등)을 세울 수 있고 복구도 일괄적으로 처리할 수 있어 가장 효율적입니다.\n\n다른 옵션인 D는 초기 개발 비용과 유지보수 코드가 발생하므로 '최소한의 노력' 조건에 맞지 않습니다.",
+    "explanation": "정답은 C입니다. 수백 대의 서버를 하나하나 관리할 수는 없습니다. 'AWS Backup'이라는 전용 중앙 관리 서비스를 쓰면, 마우스 클릭 몇 번으로 전체 EC2 그룹에 대한 백업 정책(주기, 보관 기간 등)을 세울 수 있고 복구도 일괄적으로 처리할 수 있어 가장 효율적입니다.\n\nhttps://aws.amazon.com/backup/",
     "glossary": {
       "AWS Backup": "EC2, EBS, RDS 등 다양한 AWS 리소스의 백업을 한곳에서 중앙 관리하는 서비스",
       "Disaster Recovery (재해 복구)": "전산실 화재나 정전 같은 큰 사고가 터졌을 때 시스템을 원래대로 되돌리는 일",
@@ -43,7 +43,7 @@ export const quizData = [
       "여러 개의 람다(Lambda) 함수를 수동으로 동시에 호출하여 작동시킵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nStep Functions의 '분산 맵(Distributed Map)' 모드는 S3에 있는 수백만 개의 객체를 한꺼번에 훑으면서 수천 개의 람다를 동시에 실행할 수 있는 대규모 병렬 처리 기능입니다. 서버 관리 걱정 없이 엄청난 양의 데이터를 쾌속으로 처리하기에 가장 적합한 최신 솔루션입니다.\n\n다른 옵션인 A(일반 모드)는 병렬 처리에 한계(동시 실행 수 제한)가 있어 수천 개 이상의 대규모 작업에는 적합하지 않습니다.",
+    "explanation": "정답은 B입니다. Step Functions의 '분산 맵(Distributed Map)' 모드는 S3에 있는 수백만 개의 객체를 한꺼번에 훑으면서 수천 개의 람다를 동시에 실행할 수 있는 대규모 병렬 처리 기능입니다. 서버 관리 걱정 없이 엄청난 양의 데이터를 쾌속으로 처리하기에 가장 적합한 최신 솔루션입니다.\n\nhttps://docs.aws.amazon.com/step-functions/latest/dg/distributed-map.html",
     "glossary": {
       "AWS Step Functions": "여러 AWS 서비스들을 순서대로 엮어서 하나의 긴 업무 프로세스(워크플로)로 만들어주는 도구",
       "Distributed Map (분산 맵)": "수천 개의 작업을 동시에 병렬로 실행할 수 있게 해주는 Step Functions의 고성능 옵션",
@@ -60,7 +60,7 @@ export const quizData = [
       "여러 대의 'AWS Snowball Edge' 장비를 한꺼번에 주문해서 데이터를 담아 트럭으로 보냅니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n10PB 데이터를 500Mbps 인터넷망으로 보내면 단순 계산으로도 수년이 걸립니다. 이럴 땐 인터넷을 아예 포기하고 거대 외장 하드 장비인 Snowball에 데이터를 담아 물리적으로 배송하는 것이 유일한 해법입니다. 6주라는 기한 안에 10PB를 옮기려면 여러 대의 장비를 동시에 투입해야 합니다.\n\n다른 옵션인 A, B, C는 인터넷 속도라는 한계(Bottleneck) 때문에 기한 내 이사가 절대 불가능합니다.",
+    "explanation": "정답은 D입니다. 10PB 데이터를 500Mbps 인터넷망으로 보내면 단순 계산으로도 수년이 걸립니다. 이럴 땐 인터넷을 아예 포기하고 거대 외장 하드 장비인 Snowball에 데이터를 담아 물리적으로 배송하는 것이 유일한 해법입니다.\n\nhttps://aws.amazon.com/snowball/",
     "glossary": {
       "AWS Snowball Edge": "인터넷 속도가 감당 못 할 수준의 대용량 데이터를 물리적으로 담아서 옮겨주는 이동형 데이터 보관 장비",
       "Petabyte (PB)": "1,024테라바이트(TB). 일반적인 하드디스크 수천 개를 합친 엄청난 용량",
@@ -77,7 +77,7 @@ export const quizData = [
       "자주 쓰는 건 로컬에, 나머지는 클라우드에 두는 '캐시된 볼륨(Cached Volume)' 게이트웨이를 씁니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'캐시된 볼륨' 모드를 선택하면, 전체 데이터는 저렴한 S3에 보관하되 사람들이 자주 찾는 데이터만 우리 사무실 장비의 메모리(캐시)에 남겨둡니다. 덕분에 하드디스크 증설 비용은 아끼면서도 실제 체감 속도는 로컬 하드디스크를 쓰는 것처럼 빠르게 유지할 수 있습니다.\n\n다른 옵션인 C는 로컬에 전체 데이터를 다 보관해야 하므로 사무실 저장 공간(서버)을 줄이려는 목적에 맞지 않습니다.",
+    "explanation": "정답은 D입니다. '캐시된 볼륨' 모드를 선택하면, 전체 데이터는 저렴한 S3에 보관하되 사람들이 자주 찾는 데이터만 우리 사무실 장비의 메모리(캐시)에 남겨둡니다. 덕분에 하드디스크 증설 비용은 아끼면서도 실제 체감 속도는 로컬 하드디스크를 쓰는 것처럼 빠르게 유지할 수 있습니다.\n\nhttps://docs.aws.amazon.com/filegateway/latest/fileserverpace/what-is-volume-gateway.html",
     "glossary": {
       "AWS Volume Gateway": "기존 iSCSI 방식의 저장 장치를 클라우드 S3와 연결해 하이브리드 저장소로 만들어주는 서비스",
       "Cached Volume (캐시된 볼륨)": "데이터를 S3에 원본으로 두되, 자주 쓰는 것만 로컬 서버에 속도 향상을 위해 남겨두는 방식",
@@ -94,7 +94,7 @@ export const quizData = [
       "S3 Intelligent-Tiering 기능을 켜고 30일 뒤에 다시 수동으로 Standard-IA로 강제 이동시킵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'Standard-IA'는 데이터를 절대 잃어버리지 않는 내구성(여러 곳에 복제)은 standard와 똑같지만, 자주 안 찾는 대신 보관료가 훨씬 저렴한 요금제입니다. 수명 주기(Lifecycle) 설정을 통해 30일 뒤에 자동으로 옮기게 하면, 안전은 챙기면서 지갑도 지킬 수 있는 가장 합리적인 선택입니다.\n\n다른 옵션인 C(One Zone-IA)는 한 곳에만 저장하므로 사고 시 데이터 유실 위험이 있어 '내구성 극대화' 조건에 맞지 않습니다.",
+    "explanation": "정답은 B입니다. 'Standard-IA'는 데이터를 절대 잃어버리지 않는 내구성(여러 곳에 복제)은 standard와 똑같지만, 자주 안 찾는 대신 보관료가 훨씬 저렴한 요금제입니다. 수명 주기(Lifecycle) 설정을 통해 30일 뒤에 자동으로 옮기게 하면 가장 합리적인 선택입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/infrequent-access/",
     "glossary": {
       "S3 Standard-IA": "자주 접속하지 않는 데이터를 저렴하게 보관하면서도, 필요할 때 즉시 읽을 수 있는 요금 등급",
       "Lifecycle Policy (수명 주기 정책)": "시간이 흐름에 따라 파일을 더 저렴한 저장소로 옮기거나 삭제하도록 예약하는 기능",
@@ -111,7 +111,7 @@ export const quizData = [
       "전통적인 관계형 DB를 버리고 NoSQL로 유명한 DynamoDB로 모든 데이터를 강제 마이그레이션합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n데이터베이스는 '정보'를 찾는 데 특화된 녀석이지 큰 파일을 담아두는 창고가 아닙니다. 덩치 큰 파일은 무제한 창고인 S3에 넣고 DB에는 그 파일 이름만 기록해두면, DB는 가벼워져서 빨라지고 저장 비용은 획기적으로 줄어듭니다. 이것이 바로 전형적인 'DB 다이어트' 기법입니다.\n\n다른 옵션인 B는 비싼 장비 비용만 늘어날 뿐, DB가 무거운 근본적인 원인을 해결하지 못합니다.",
+    "explanation": "정답은 C입니다. 덩치 큰 문서 파일은 무제한 창고인 S3에 넣고 DB에는 그 파일 이름(주소)만 기록해두면, DB는 가벼워져서 빨라지고 저장 비용은 획기적으로 줄어듭니다. 이것이 바로 전형적인 'DB 다이어트' 기법입니다.\n\nhttps://aws.amazon.com/s3/",
     "glossary": {
       "S3 Bucket (S3 버킷)": "파일들을 담아두는 클라우드상의 가상 바구니(폴더)",
       "Metadata (메타데이터)": "데이터에 대한 데이터. 여기서는 실제 파일이 어디 있는지 알려주는 주소나 정보를 뜻함",
@@ -128,7 +128,7 @@ export const quizData = [
       "네트워크 ACL(NACL)을 사용하여 2만 개의 IP 규칙을 수동으로 하나하나 등록합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n특정 IP 주소나 국가를 막는 '입구 컷'은 AWS WAF(웹 방화벽)의 전문 분야입니다. WAF를 로드 밸런서 앞에 두면, 허락받지 않은 낯선 IP의 접근을 손쉽게 차단할 수 있습니다. 2만 개 매장 주소 목록을 관리하기에도 WAF의 IP 규칙 세트가 가장 깔끔합니다.\n\n다른 옵션인 D(NACL)는 한 서브넷당 등록 가능한 규칙 개수가 수십 개 정도로 제한되어 있어 2만 개를 감당할 수 없습니다.",
+    "explanation": "정답은 A입니다. 특정 IP 주소나 국가를 막는 '입구 컷'은 AWS WAF(웹 방화벽)의 전문 분야입니다. WAF를 로드 밸런서 앞에 두면, 허락받지 않은 낯선 IP의 접근을 손쉽게 차단할 수 있습니다. 2만 개 매장 주소 목록을 관리하기에도 WAF의 IP 규칙 세트가 가장 깔끔합니다.\n\nhttps://aws.amazon.com/waf/",
     "glossary": {
       "AWS WAF (Web Application Firewall)": "SQL 삽입이나 특정 IP 차단 등 웹 보안 위협으로부터 서버를 지켜주는 웹 전용 방화벽",
       "White List (화이트리스트)": "모두를 금지하고, 명단에 있는 안전한 사용자만 입장을 허용하는 방식",
@@ -145,7 +145,7 @@ export const quizData = [
       "SQL 명령어로 주기적으로 민감한 데이터를 삭제하는 전용 청소 봇을 운영합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nLake Formation의 강력한 기능 중 하나가 바로 '데이터 필터'입니다. 마치 엑셀에서 특정 줄이나 칸을 숨기는 것처럼, 사용자의 권한에 따라 똑같은 표 안에서도 보지 말아야 할 칸(Cell)이나 줄(Row)을 자동으로 가려줍니다. 가장 세밀하고 정확한 보안 방법입니다.\n\n다른 옵션인 C는 데이터가 바뀔 때마다 복사본을 계속 만들어야 하므로 관리가 엉망이 되고 저장 비용도 낭비됩니다.",
+    "explanation": "정답은 B입니다. Lake Formation의 강력한 기능 중 하나가 바로 '데이터 필터'입니다. 사용자의 권한에 따라 똑같은 표 안에서도 보지 말아야 할 칸(Cell)이나 줄(Row)을 자동으로 가려줍니다. 가장 세밀하고 정확한 보안 방법입니다.\n\nhttps://aws.amazon.com/lake-formation/",
     "glossary": {
       "AWS Lake Formation": "여러 곳에 흩어진 데이터를 한곳에 모아 안전하게 공유하고 분석할 수 있게 돕는 데이터 호수 관리 서비스",
       "Row-level Security (행 수준 보안)": "자신의 지역 데이터만 볼 수 있게 가로줄(행) 단위로 권한을 주는 기술",
@@ -162,7 +162,7 @@ export const quizData = [
       "NAT 게이트웨이를 겹겹이 쌓아 외부에서는 우리 정체를 모르게 세탁해서 보냅니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nS3에 인터넷 없이 접속하는 가장 싸고 확실한 방법은 '게이트웨이 VPC 엔드포인트'입니다. 여기에 사무실과 AWS를 인터넷이 아닌 물리적 전용선으로 연결하는 'Direct Connect'를 더하면, 데이터가 처음부터 끝까지 공용 인터넷 세상 구경 한 번 안 하고 안전하게 집 안 망처럼 흐르게 됩니다.\n\n다른 옵션인 D는 인터넷을 타지 말라는 조건에 정면으로 위배되는 방식(NAT은 인터넷으로 연결하는 문)입니다.",
+    "explanation": "정답은 B입니다. S3에 인터넷 없이 접속하는 가장 싸고 확실한 방법은 '게이트웨이 VPC 엔드포인트'입니다. 여기에 사무실과 AWS를 인터넷이 아닌 물리적 전용선으로 연결하는 'Direct Connect'를 더하면 보안과 속도를 모두 챙길 수 있습니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
     "glossary": {
       "Gateway VPC Endpoint": "S3나 DynamoDB를 공용 인터넷망 없이 AWS 전용망으로 바로 연결해주는 가상 통로",
       "AWS Direct Connect": "사무실 전산실과 AWS 데이터 센터를 광케이블로 직접 이어주는 클라우드 전용선",
@@ -179,7 +179,7 @@ export const quizData = [
       "앱을 컨테이너화(ECS)해서 트래픽이 올 때마다 서버 개수를 빠르게 수천 개로 복제합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n실시간으로 쏟아지는 데이터를 일단 '안전하게 담아두는 바구니'가 바로 Kinesis Data Streams입니다. 입구에서 업체들 데이터를 가차 없이 다 받아주기 때문에 업체는 503 오류를 보지 않게 됩니다. 뒷단에서는 람다가 자신의 속도에 맞춰 차근차근 데이터를 처리하면 되므로 시스템이 훨씬 안정적이고 유연해집니다.\n\n다른 옵션인 B는 업체의 전송을 강제로 끊어버리므로 진정한 '확장성' 있는 해결책이라 보기 어렵습니다.",
+    "explanation": "정답은 A입니다. 실시간으로 쏟아지는 데이터를 일단 '안전하게 담아두는 바구니'가 바로 Kinesis Data Streams입니다. 입구에서 업체들 데이터를 가차 없이 다 받아주기 때문에 업체는 503 오류를 보지 않게 됩니다.\n\nhttps://aws.amazon.com/kinesis/data-streams/",
     "glossary": {
       "Amazon Kinesis Data Streams": "수많은 소스에서 쏟아지는 거대한 데이터를 실시간으로 수집하고 보관하는 대용량 컨베이어 벨트",
       "503 Service Unavailable": "서버가 너무 바쁘거나 점검 중이라 요청을 처리할 수 없을 때 주는 오류 코드",
@@ -196,7 +196,7 @@ export const quizData = [
       "VPC 엔드포인트를 구성하여 내부 전용망을 통해 S3와 직접 악수하게 합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'VPC 엔드포인트'는 AWS 구름 안에서 전용 통로를 뚫는 것과 같습니다. 인터넷망(Public IP)을 전혀 타지 않고도 EC2와 S3가 옆방처럼 대화할 수 있게 해주므로, 기밀 데이터를 인터넷 노출 위험 없이 가장 안전하게 처리할 수 있는 정통 솔루션입니다.\n\n다른 옵션인 C(NAT 게이트웨이)는 결국 인터넷 세상으로 나가는 문이므로 '인터넷 사용 금지' 조건에 어긋납니다.",
+    "explanation": "정답은 D입니다. 'VPC 엔드포인트'는 AWS 구름 안에서 전용 통로를 뚫는 것과 같습니다. 인터넷망(Public IP)을 전혀 타지 않고도 EC2와 S3가 옆방처럼 대화할 수 있게 해주므로, 기밀 데이터를 인터넷 노출 위험 없이 가장 안전하게 처리할 수 있습니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html",
     "glossary": {
       "VPC Endpoint": "AWS 서비스들을 공용 인터넷을 거치지 않고 VPC 내부 비공개 채널로 연결하는 장치",
       "Private Subnet (프라이빗 서브넷)": "외부 인터넷에서 직접 들어올 수도 없고 나갈 수도 없는 고립된 보안 구역",
@@ -213,7 +213,7 @@ export const quizData = [
       "AWS Systems Manager Parameter Store에 저장하고 매번 불러오게 설정합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nEKS에는 'Kubernetes Secrets' 전용 암호화 기능이 내장되어 있습니다. 이 기능을 켜고 AWS의 금고 열쇠인 KMS와 연결만 해두면, 여러분이 비밀번호를 저장할 때마다 AWS가 배경에서 알아서 척척 암호화해주고 읽을 때만 풀어줍니다. 운영자가 따로 할 게 거의 없는 가장 깔끔한 방식입니다.\n\n다른 옵션인 A는 개발자가 모든 코드를 고쳐야 하므로 '최소 운영 오버헤드' 조건에 맞지 않습니다.",
+    "explanation": "정답은 B입니다. EKS에는 'Kubernetes Secrets' 전용 암호화 기능이 내장되어 있습니다. 이 기능을 켜고 AWS의 금고 열쇠인 KMS와 연결만 해두면, 여러분이 비밀번호를 저장할 때마다 AWS가 배경에서 알아서 척척 암호화해줍니다.\n\nhttps://docs.aws.amazon.com/eks/latest/userguide/kms-encryption.html",
     "glossary": {
       "AWS KMS (Key Management Service)": "데이터를 자물쇠로 잠그고 열 때 쓰는 열쇠(키)를 안전하게 보관하고 관리해주는 보안실",
       "Kubernetes Secrets": "비밀번호, 토큰 등 노출되면 안 되는 정보를 안전하게 저장하는 쿠버네티스의 바구니",
@@ -230,7 +230,7 @@ export const quizData = [
       "앱 서버들 앞에 'Application Load Balancer(ALB)'를 두고, 보안 그룹을 통해 웹 서버 그룹만 입장을 허용합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n다중 계층(Multi-tier) 앱 보안의 정석은 '보안 그룹(Security Group) 체이닝'입니다. 로드 밸런서(ALB)를 입구에 두고, 보안 그룹 설정에서 \"웹 서버 보안 그룹에 속한 녀석들의 80번 포트 요청만 받아줄게\"라고 설정하면 됩니다. IP 주소가 바뀌어도 그룹만 같으면 자동으로 인식되므로 매우 편리하고 안전합니다.\n\n다른 옵션인 C(NLB)는 IP 주소 기반으로만 막을 수 있어 서버가 늘어나거나 바뀔 때마다 규칙을 일일이 수정해야 하는 번거로움이 있습니다.",
+    "explanation": "정답은 D입니다. 다중 계층(Multi-tier) 앱 보안의 정석은 '보안 그룹(Security Group) 체이닝'입니다. 로드 밸런서(ALB)를 입구에 두고, 보안 그룹 설정에서 "웹 서버 보안 그룹에 속한 녀석들의 80번 포트 요청만 받아줄게"라고 설정하면 됩니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules",
     "glossary": {
       "Security Group (보안 그룹)": "서버의 가상 방화벽으로, 어떤 주소나 어떤 그룹에서 오는 트래픽을 허용할지 결정함",
       "Application Load Balancer (ALB)": "여러 대의 앱 서버에 골고루 트래픽을 나눠주는 똑똑한 안내 데스크",
@@ -247,7 +247,7 @@ export const quizData = [
       "EKS에 'CloudWatch Container Insights'를 활성화하여 대시보드에서 한눈에 확인합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n컨테이너들의 건강 검진 보고서라고 할 수 있는 'Container Insights'를 켜면 됩니다. CPU 사용량, 메모리, 네트워크 성능은 물론이고 개별 서비스의 로그까지 AWS가 알아서 수집해서 알록달록한 그래프로 보여줍니다. 쿠버네티스 환경에 가장 최적화된 모니터링 방식입니다.\n\n다른 옵션인 C(CloudTrail)는 '누가 서버를 껐나?' 같은 관리 기록을 보는 용도이지, 앱 내부의 지표를 보는 용도는 아닙니다.",
+    "explanation": "정답은 D입니다. 컨테이너들의 건강 검진 보고서라고 할 수 있는 'Container Insights'를 켜면 됩니다. CPU 사용량, 메모리, 네트워크 성능은 물론이고 개별 서비스의 로그까지 AWS가 알아서 수집해서 알록달록한 그래프로 보여줍니다.\n\nhttps://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html",
     "glossary": {
       "CloudWatch Container Insights": "컨테이너 환경의 지표와 로그를 자동으로 수집하여 분석해주고 시각화해주는 전문 서비스",
       "Metrics (측정항목/지표)": "CPU, 메모리 등 시스템의 상태를 숫자로 나타낸 데이터",
@@ -264,7 +264,7 @@ export const quizData = [
       "Config 기능을 써서 설정 바뀐 것만 체크하고 EventBridge로 알람을 줍니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nAWS의 인공지능 보안 보안팀인 'GuardDuty'는 계정 탈취나 비정상적인 접근 패턴을 귀신같이 찾아냅니다. 여기서 찾아낸 정보들을 'Security Hub'라는 종합 관제 센터로 보내면, 알기 쉬운 대시보드 형태로 리스크를 한눈에 파악할 수 있습니다. 가장 강력한 보안 감시 듀오입니다.\n\n다른 옵션인 A(Macie)는 데이터 내용물이 '개인 정보(카드번호 등)'인지를 확인하는 용도이지, 해커의 공격 패턴을 감시하는 용도는 아닙니다.",
+    "explanation": "정답은 C입니다. AWS의 인공지능 보안 보안팀인 'GuardDuty'는 계정 탈취나 비정상적인 접근 패턴을 귀신같이 찾아냅니다. 여기서 찾아낸 정보들을 'Security Hub'라는 종합 관제 센터로 보내면 리스크를 한눈에 파악할 수 있습니다.\n\nhttps://aws.amazon.com/guardduty/",
     "glossary": {
       "Amazon GuardDuty": "머신러닝과 위협 정보를 활용해 AWS 계정과 리소스에 대한 예기치 못한 활동을 찾아내는 탐정 서비스",
       "AWS Security Hub": "여러 보안 서비스(GuardDuty, Inspector 등)의 결과를 한곳에 모아 우선순위를 정하고 통합 관리하는 관제 센터",
@@ -282,7 +282,7 @@ export const quizData = [
       "사무실에 'AWS DataSync' 에이전트를 심고, EFS를 목적지로 설정해 동기화를 돌립니다."
     ],
     "answer": [1, 4],
-    "explanation": "정답은 B, E(원문 index 1, 4)입니다.\n\nNFS 방식(공유 드라이브)을 AWS에서도 그대로 쓰려면 'Amazon EFS'가 최선입니다. 여기에 'AWS DataSync'라는 전문 이사 서비스를 더하면, 사무실 데이터를 가동 중단 없이 실시간으로 AWS EFS에 복제해줍니다. 속도도 빠르고 중간에 전송이 끊겨도 알아서 다시 이어주므로 매우 든든합니다.\n\n다른 옵션인 C(S3)는 파일 방식(NFS)과 성격이 달라서 기존 앱들이 데이터를 못 읽을 수 있어 적합하지 않습니다.",
+    "explanation": "정답은 E입니다. NFS 방식(공유 드라이브)을 AWS에서도 그대로 쓰려면 'Amazon EFS'가 최선입니다. 여기에 'AWS DataSync'라는 전문 이사 서비스를 더하면, 사무실 데이터를 가동 중단 없이 실시간으로 AWS EFS에 복제해줍니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "Amazon EFS": "여러 서버가 공유해서 쓸 수 있는 용량이 무제한으로 늘어나는 클라우드용 파일 저장소",
       "AWS DataSync": "NFS, SMB 등 로컬 데이터를 AWS로 광속으로 옮겨주는 대규모 전송 전문 서비스",
@@ -299,7 +299,7 @@ export const quizData = [
       "단일 영역 FSx를 쓰되 5년 보존 정책만 걸고 서부 리전으로 천천히 복사합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n안정성을 위해 'Multi-AZ'를 쓰는 게 기본이며, 중요한 데이터 삭제 방지는 'Vault Lock - Compliance(규정 준수) 모드'가 최강입니다. 이 모드로 5년을 설정하면 AWS 직원이나 사장님이 와도 5년 전엔 절대 데이터를 지울 수 없습니다. RPO 5분 조건은 AWS Backup의 주기적인 리전 복사 기능으로 충족 가능합니다.\n\n다른 옵션인 B(거버넌스 모드)는 적절한 권한을 가진 관리자는 삭제할 수 있어 '절대 삭제 금지'라는 강력한 요건에는 규정 준수 모드(C)가 더 어울립니다.",
+    "explanation": "정답은 C입니다. 안정성을 위해 'Multi-AZ'를 쓰는 게 기본이며, 중요한 데이터 삭제 방지는 'Vault Lock - Compliance(규정 준수) 모드'가 최강입니다. 이 모드로 5년을 설정하면 AWS 직원이라도 5년 전엔 절대 데이터를 지울 수 없습니다.\n\nhttps://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html",
     "glossary": {
       "Amazon FSx for Windows File Server": "윈도우 서버에서 쓰는 공유 드라이브를 AWS에서 그대로 쓰게 해주는 서비스",
       "AWS Backup Vault Lock": "백업된 금고를 잠가서 보존 기간이 끝나기 전까지는 누구도 삭제나 수정을 못 하게 막는 기술",
@@ -316,7 +316,7 @@ export const quizData = [
       "서비스 연결 역할(SLR)을 만들어서 마스터 계정 주인만 수정 가능하게 막습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nAWS Organizations의 최강 무기인 'SCP'는 계정의 주인(Root 사용자)조차도 거부할 수 없는 절대적인 규칙입니다. SCP로 특정 서비스(CloudTrail 등)의 설정을 못 바꾸게 못 박아버리면, 개발자가 아무리 높은 권한을 가졌어도 감시 카메라를 끌 수 없어 보안이 철저히 유지됩니다.\n\n다른 옵션인 A는 루트 사용자 본인이 본인 정책을 떼어버릴 수 있어 완벽한 방패가 되지 못합니다.",
+    "explanation": "정답은 C입니다. AWS Organizations의 최강 무기인 'SCP'는 계정의 주인(Root 사용자)조차도 거부할 수 없는 절대적인 규칙입니다. SCP로 특정 서비스(CloudTrail 등)의 설정을 못 바꾸게 못 박아버리면 보안이 철저히 유지됩니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
     "glossary": {
       "Service Control Policy (SCP)": "조직 내의 계정들이 할 수 있는 행동을 제한하는 가장 강력한 중앙 집권적 보안 정책",
       "CloudTrail": "AWS에서 누가 언제 무엇을 했는지 모든 행동을 녹화하는 블랙박스나 CCTV 같은 역할",
@@ -333,7 +333,7 @@ export const quizData = [
       "용량은 크고 싸지만 속도 편차가 큰 HDD(Throughput Optimized) 방식을 고수합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n성능의 일관성이 가장 중요하다면 '프로비저닝된 IOPS SSD'가 정답입니다. 이 녀석은 \"초당 만 번의 클릭(IOPS) 속도를 항상 유지해줘!\"라고 돈을 더 내고 약속받는 서비스라, 트래픽이 몰려도 속도가 떨어지지 않고 한결같은 쾌적함을 보장합니다.\n\n다른 옵션인 A는 서버를 끄면 데이터가 증발해버리므로 '내구성 있는 저장소'라는 조건에 탈락입니다.",
+    "explanation": "정답은 C입니다. 성능의 일관성이 가장 중요하다면 '프로비저닝된 IOPS SSD'가 정답입니다. 이 녀석은 "초당 만 번의 클릭(IOPS) 속도를 항상 유지해줘!"라고 돈을 더 내고 약속받는 서비스라 한결같은 쾌적함을 보장합니다.\n\nhttps://aws.amazon.com/ebs/provisioned-iops/",
     "glossary": {
       "Provisioned IOPS SSD": "입출력 속도(IOPS)를 미리 예약하여 성능을 100% 보장받는 최고급 기업용 SSD 볼륨",
       "Latency (지연 시간)": "데이터가 오가는 데 걸리는 미세한 대기 시간. 낮을수록 빠릿빠릿함",
@@ -350,7 +350,7 @@ export const quizData = [
       "람다(Lambda) 함수를 하나 짜서 사진이 올라올 때마다 동부로 복사하라는 코드를 심습니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nS3에는 '복제(Replication)'라는 아주 편한 기능이 있습니다. 한 번만 설정해두면 AWS가 뒤에서 실시간으로 새 파일을 다른 리전으로 옮겨줍니다. 코딩 한 줄 없이 리전 간 백업을 구현할 수 있는 가장 표준적이고 쉬운 방법입니다.\n\n다른 옵션인 D도 가능은 하지만, 람다를 직접 관리해야 하므로 '최소 운영 노력'이라는 조건에서 S3 순정 기능(A)에 밀립니다.",
+    "explanation": "정답은 A입니다. S3에는 '복제(Replication)'라는 아주 편한 기능이 있습니다. 한 번만 설정해두면 AWS가 뒤에서 실시간으로 새 파일을 다른 리전으로 옮겨줍니다. 코딩 한 줄 없이 리전 간 백업을 구현할 수 있는 가장 쉬운 방법입니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html",
     "glossary": {
       "Cross-Region Replication (CRR)": "서로 다른 지리적 리전에 있는 S3 버킷 사이에 데이터를 자동으로 동기화하는 기능",
       "S3 (Simple Storage Service)": "AWS에서 제공하는 사용한 만큼만 돈 내는 무제한 파일 창고",
@@ -368,7 +368,7 @@ export const quizData = [
       "웹 서버 수십 대를 띄우고 공유 드라이브(EFS)에 파일을 넣어 동기화합니다."
     ],
     "answer": [0, 3],
-    "explanation": "정답은 A, D(원문 index 0, 3)입니다.\n\n'수백만 명 접속 vs 한산함' + '유연한 데이터 구조'라는 키워드에는 DynamoDB 온디맨드(A)가 찰떡궁합입니다. 서버 사양 고민 없이 쓰는 만큼만 돈 내면 되고 구조 변경도 자유롭습니다. 여기에 정적 파일은 S3+CloudFront(D) 조합으로 처리하면 전 세계 어디서든 수백만 명이 동시에 접속해도 끄떡없는 초강력 웹 앱이 탄생합니다.\n\n다른 옵션인 B도 좋지만, NoSQL인 DynamoDB가 스키마 변경이 잦은 환경에서는 더 유연하고 확장성이 뛰어납니다.",
+    "explanation": "정답은 A와 D입니다. '수백만 명 접속 vs 한산함' + '유연한 데이터 구조'라는 키워드에는 DynamoDB 온디맨드(A)가 찰떡궁합입니다. 여기에 정적 파일은 S3+CloudFront(D) 조합으로 처리하면 전 세계 어디서든 수백만 명 접속에도 끄떡없습니다.\n\nhttps://aws.amazon.com/dynamodb/",
     "glossary": {
       "DynamoDB On-demand": "서버 용량을 미리 정하지 않고, 들어오는 요청 횟수만큼만 돈을 내는 무한 확장 NoSQL DB",
       "CloudFront": "이미지나 정적 파일을 전 세계 곳곳의 Edge 서버에 복사해두고 가장 가까운 곳에서 빠르게 쏴주는 서비스",
@@ -385,7 +385,7 @@ export const quizData = [
       "CloudFront 뒤에 WAF를 두고 그 뒤에 다시 API Gateway를 엮는 복잡한 구조를 짭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nSQL 인젝션이나 크로스 사이트 스크립팅(XSS) 같은 애플리케이션 계층의 '지능형 해킹'을 막는 데는 AWS WAF가 정답입니다. API Gateway와 WAF는 단 몇 번의 클릭으로 서로 연결할 수 있어 운영이 매우 간편하고 보안 효과도 뛰어납니다.\n\n다른 옵션인 A(Shield)는 대규모 트래픽으로 서버를 마비시키는 DDoS 공격을 막는 것이 주 임무라, 교묘한 SQL 인젝션 수법을 막기엔 부족합니다.",
+    "explanation": "정답은 B입니다. SQL 인젝션이나 크로스 사이트 스크립팅(XSS) 같은 앱 계층의 '지능형 해킹'을 막는 데는 AWS WAF가 정답입니다. API Gateway와 WAF는 단 몇 번의 클릭으로 서로 연결할 수 있어 운영이 매우 간편합니다.\n\nhttps://aws.amazon.com/waf/",
     "glossary": {
       "AWS WAF": "웹 사이트의 주소나 내용을 분석해 나쁜 의도의 메시지가 섞여 있는지 감시하고 막아주는 필터",
       "SQL Injection": "로그인 창 같은 입력 칸에 특수한 DB 명령어를 넣어 서버를 속이고 정보를 빼가는 대표적인 해킹 수법",
@@ -402,7 +402,7 @@ export const quizData = [
       "SAML 2.0이라는 국제 표준 연동 방식을 사용하여 회사의 AD 그룹과 AWS 역할(Role)을 연결(Mapping)합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'SAML 2.0 연동'은 기업용 통합 로그인(SSO)의 표준입니다. 회사의 로그인 서버(AD)에서 본인 확인이 끝나면, AWS가 그 정보를 믿고 해당 직원에게 알맞은 권한(Role)을 잠시 빌려주는 방식입니다. 덕분에 직원은 원래 쓰던 ID로 로그인하면 되고, 관리자는 1,500개의 아이디를 따로 관리할 필요가 없어집니다.\n\n다른 옵션인 A는 퇴사자 관리 등이 전혀 안 되어 보안과 운영 면에서 최악의 선택입니다.",
+    "explanation": "정답은 D입니다. 'SAML 2.0 연동'은 기업용 통합 로그인(SSO)의 표준입니다. 회사의 로그인 서버(AD)에서 본인 확인이 끝나면, AWS가 그 정보를 믿고 해당 직원에게 알맞은 권한(Role)을 잠시 빌려주는 방식입니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html",
     "glossary": {
       "SAML 2.0 (Security Assertion Markup Language)": "서로 다른 시스템 간에 로그인 인증 정보를 안전하게 주고받기 위한 국제 표준 규격",
       "Federation (페더레이션/연합)": "한 서비스의 집 주인 증명을 다른 서비스에서도 그대로 인정해주는 '신뢰' 기반의 로그인 연동 기술",
@@ -419,7 +419,7 @@ export const quizData = [
       "Route 53에서 '지리 근접(Geoproximity)' 라우팅을 써서 편차 기반으로 분산시킵니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n판권 문제는 '어느 나라에서 접속했느냐'가 핵심입니다. Route 53의 지리적 위치 라우팅을 쓰면, 접속자의 국가를 파악해 \"한국 손님은 한국 전용 서버 주소로 가세요\"라고 친절하게 안내해줄 수 있습니다. 판권 준수는 물론이고 현지 최적화된 콘텐츠 제공에도 아주 효과적입니다.\n\n다른 옵션인 D(지리 근접)는 물리적 거리뿐만 아니라 '가중치'를 섞어 트래픽 범위를 조절하는 데 쓰이는 더 복잡한 기술이라, 단순 국가별 분기인 Geolocation(C)이 문제의 의도에 더 정확히 부합합니다.",
+    "explanation": "정답은 C입니다. 판권 문제는 '어느 나라에서 접속했느냐'가 핵심입니다. Route 53의 지리적 위치 라우팅을 쓰면, 접속자의 국가를 파악해 "한국 손님은 한국 전용 서버 주소로 가세요"라고 친절하게 안내해줄 수 있습니다.\n\nhttps://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geolocation.html",
     "glossary": {
       "Geolocation Routing (지리적 위치 라우팅)": "접속자의 국가나 대륙 정보를 보고 가장 알맞은 서버 주소를 알려주는 DNS 규칙",
       "Amazon Route 53": "도메인 이름을 IP로 매칭해주며, 지능적인 라우팅으로 전 세계 트래픽을 지휘하는 교통 관제소",

@@ -16,6 +16,7 @@ export const quizData = [
       "2": "Snowball은 오프라인 이송 방식이라 매일 발생하는 500GB 데이터를 처리하기에는 운영 복잡성이 매우 높습니다.",
       "3": "EBS 스냅샷을 만들어 리전 간 복사하는 방식은 데이터베이스나 서버 백업에 적합하며, 단순 데이터 집계용으로는 너무 복잡하고 느립니다."
     },
+    "explanation": "정답은 A입니다. 전 세계적으로 분산된 지점에서 대용량 데이터를 신속하게 수집하기 위해서는 AWS 엣지 로케이션을 활용하는 S3 Transfer Acceleration이 최적입니다. 멀티파트 업로드를 병행하면 대용량 파일 전송의 효율성을 더욱 높일 수 있습니다.\n\nhttps://aws.amazon.com/s3/transfer-acceleration/",
     "glossary": {
       "S3 Transfer Acceleration": "AWS의 전용 네트워크 망을 사용하여 S3로의 데이터 업로드 속도를 높여주는 기능",
       "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
@@ -34,11 +35,12 @@ export const quizData = [
     "answer": 2,
     "domain": "Analytics",
     "explanations": {
-      "0": "Redshift는 데이터 웨어하우스로, S3에서 데이터를 로드하는 과정이 필요하며 쿼리 속도는 빠르나 운영 오버헤드가 발생합니다.",
-      "1": "CloudWatch Logs는 스트리밍 로그 수집에 적합하며, S3에 이미 저장된 JSON 파일을 직접 SQL로 쿼리하기에는 Athena가 더 적합합니다.",
-      "2": "S3 버킷에 저장된 JSON 방식의 로그를 별도의 데이터 이동이나 서버 구축 없이 즉석에서 SQL로 분석하기에는 Amazon Athena가 가장 적합합니다. Athena는 서버리스 서비스로 운영 오버헤드가 거의 없습니다.",
-      "3": "EMR은 대규모 분산 처리에 적합하지만, 단순하고 주문형 쿼리를 위해 Spark 클러스터를 띄우는 것은 운영 오버헤드가 너무 큽니다."
+      "0": "Amazon Redshift는 데이터 웨어하우스 서비스로, S3에서 데이터를 로드하는 ETL 과정이 필요하며 실시간 쿼리보다는 복잡한 분석에 적합합니다.",
+      "1": "CloudWatch Logs는 실시간 로그 수집 및 모니터링에 집중되어 있으며, S3에 이미 저장된 정적 파일을 쿼리하기에는 Athena의 유연성이 더 높습니다.",
+      "2": "Amazon Athena는 S3에 저장된 JSON, CSV 등 다양한 형식의 데이터를 서버 관리 없이 SQL로 직접 조회할 수 있게 해줍니다. 기존 아키텍처를 거의 변경하지 않고도 즉시 분석이 가능하므로 운영 오버헤드가 가장 낮습니다.",
+      "3": "Amazon EMR은 Spark나 Hadoop 같은 대규모 분산 처리 프레임워크가 필요할 때 사용하지만, 단순한 주문형 쿼리를 위해 클러스터를 구성하는 것은 비효율적입니다."
     },
+    "explanation": "정답은 C입니다. S3에 저장된 JSON 로그 파일을 최소한의 노력으로 분석하려면 서버리스 서비스인 Amazon Athena가 가장 적합합니다. 별도의 데이터 이동 없이 SQL만으로 즉석 쿼리가 가능합니다.\n\nhttps://aws.amazon.com/athena/",
     "glossary": {
       "Athena": "S3에 있는 데이터를 표준 SQL로 직접 분석할 수 있는 서버리스 대화형 쿼리 서비스",
       "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
@@ -56,11 +58,12 @@ export const quizData = [
     "answer": 0,
     "domain": "Security",
     "explanations": {
-      "0": "AWS Organizations 환경에서 특정 조직 전체에 대해서만 리소스 접근을 허용하고 싶을 때는 버킷 정책의 조건 절에 aws:PrincipalOrgID를 사용하는 것이 가장 깔끔하고 효율적인 해결책입니다.",
-      "1": "OU 단위 접근 제어도 가능하지만, 문제에서 요구하는 '조직 내 모든 계정' 제한에는 조직 ID를 쓰는 것이 운영 오버헤드가 더 적습니다.",
-      "2": "CloudTrail 이벤트를 감시하여 정책을 수동으로 업데이트하는 것은 운영 오버헤드가 매우 높고 실시간성이 떨어집니다.",
-      "3": "개별 태그 지정 방식은 수많은 사용자나 계정이 추가될 때마다 관리 포인트가 기하급수적으로 늘어납니다."
+      "0": "aws:PrincipalOrgID 조건 키를 사용하면 특정 조직(Organizations)에 속한 모든 계정의 접근을 한꺼번에 허용하거나 제한할 수 있습니다. 이는 개별 계정 ID를 일일이 나열하는 것보다 관리 효율성이 훨씬 높습니다.",
+      "1": "aws:PrincipalOrgPaths는 특정 OU(조직 단위) 경로를 지정할 때 쓰이지만, 조직 전체를 대상으로 할 때는 OrgID가 더 간결합니다.",
+      "2": "CloudTrail을 통한 수동 업데이트는 자동화가 어렵고 관리가 매우 번거로우며 확장성이 떨어집니다.",
+      "3": "태그 기반(ABAC) 접근 제어도 훌륭한 방식이지만, '조직 내 모든 계정'이라는 조건에는 Organizational ID 기반 제어가 가장 직접적이고 효율적입니다."
     },
+    "explanation": "정답은 A입니다. AWS Organizations 환경에서 여러 계정의 접근 권한을 조직 단위로 통제할 때는 버킷 정책의 조건 절에 aws:PrincipalOrgID 전역 조건 키를 활용하는 것이 모범 사례입니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalorgid",
     "glossary": {
       "AWS Organizations": "여러 AWS 계정을 중앙에서 통합 관리하고 제어하는 서비스",
       "aws:PrincipalOrgID": "AWS 리소스 정책에서 특정 조직 내의 보안 주체만 허용할 때 사용하는 조건 키"
@@ -76,7 +79,7 @@ export const quizData = [
       "S3 엔드포인트에 액세스하기 위한 프라이빗 링크가 있는 Amazon API Gateway API 를 \n생성합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. VPC 내부의 EC2 인스턴스가 퍼블릭 인터넷을 통하지 않고 S3와 직접 통신하며 데이터를 주고받으려면 게이트웨이 VPC 엔드포인트를 생성해야 합니다. 이 방식을 통해 보안을 강화하면서도 프라이빗한 연결 경로를 확보할 수 있습니다.\n\n단순히 인스턴스 프로파일을 통해 권한을 주는 것만으로는 네트워크 경로 자체가 인터넷을 우회하도록 만들 수 없으므로 엔드포인트 설정이 필수적입니다.",
+    "explanation": "정답은 A입니다. VPC 내부의 EC2 인스턴스가 퍼블릭 인터넷을 통하지 않고 S3와 직접 통신하려면 게이트웨이 VPC 엔드포인트를 생성해야 합니다. 이를 통해 보안을 강화하고 프라이빗한 연결 경로를 확보할 수 있습니다.\n\nhttps://aws.amazon.com/vpc/endpoints/",
     "glossary": {
       "VPC Endpoint (Gateway)": "인터넷 게이트웨이 없이 VPC와 S3/DynamoDB를 프라이빗하게 연결하는 서비스",
       "EC2": "클라우드에서 빌려 쓰는 가상 서버 인스턴스"
@@ -92,7 +95,7 @@ export const quizData = [
       "두 서버 모두에 요청을 보내도록 Application Load Balancer 를 구성합니다. 올바른 \n서버에서 각 문서를 반환합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. EBS 볼륨은 특정 가용 영역 내에서 단일 인스턴스에 종속적인 구조를 가집니다. 따라서 여러 가용 영역의 서버가 동일한 파일 세트를 공유하며 서비스하려면 네트워크 기반의 공유 스토리지인 Amazon EFS로 데이터를 옮겨야 합니다.\n\n이렇게 EFS를 마운트하여 사용하면 어떤 서버로 접속하더라도 사용자는 동일한 문서를 중단 없이 확인할 수 있게 됩니다.",
+    "explanation": "정답은 C입니다. 여러 가용 영역의 EC2 인스턴스가 동일한 파일 세트를 공유하려면 일관된 파일 시스템 구조를 제공하는 Amazon EFS가 적합합니다. EBS는 특정 영역에 종속적이라 공유에 한계가 있습니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "EFS (Elastic File System)": "여러 개의 EC2 인스턴스가 동시에 공유해서 사용할 수 있는 네트워크 기반 확장형 파일 스토리지",
       "EBS": "EC2 인스턴스 한 대에 붙여서 사용하는 하드디스크 역할의 전용 저장소"
@@ -108,7 +111,7 @@ export const quizData = [
       "온프레미스 네트워크와 AWS \n간에 AWS Direct Connect \n연결을 설정합니다. \n온프레미스에 S3 파일 게이트웨이를 배포합니다. S3 파일 게이트웨이에 연결할 공용 \nVIF(가상 인터페이스)를 생성합니다. S3 버킷을 생성합니다. S3 파일 게이트웨이에서 새 \nNFS 파일 공유를 생성합니다. 새 파일 공유가 S3 버킷을 가리키도록 합니다. 기존 NFS \n파일 공유에서 S3 파일 게이트웨이로 데이터를 전송합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 70TB라는 대규모 데이터를 이동시키면서 기존 네트워크 대역폭을 소모하지 않으려면 물리적 장치를 통한 오프라인 이송 방식인 AWS Snowball Edge를 사용하는 것이 최선입니다.\n\n인터넷을 통한 직접 전송이나 파일 게이트웨이 방식은 수십 테라바이트의 데이터를 옮기는 동안 회선에 큰 부담을 줄 수 있어 최소 네트워크 대역폭 사용이라는 목적에 어긋납니다.",
+    "explanation": "정답은 B입니다. 70TB의 대규모 데이터를 이동시키면서 네트워크 대역폭 부담을 최소화하려면 물리적 장치인 AWS Snowball Edge를 사용하는 오프라인 이송 방식이 가장 빠르고 효율적입니다.\n\nhttps://aws.amazon.com/snowball/",
     "glossary": {
       "Snowball Edge": "대량의 데이터를 오프라인으로 이송하기 위해 AWS에서 제공하는 물리적 데이터 이송 장비",
       "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
@@ -124,7 +127,7 @@ export const quizData = [
       "여러 Amazon Simple Queue Service(Amazon SQS) 구독이 있는 Amazon Simple \nNotification Service(Amazon SNS) 주제에 메시지를 게시합니다. 대기열의 메시지를 \n처리하도록 소비자 애플리케이션을 구성합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 하나의 메시지를 수많은 개별 서비스로 동시에 전달하며 시스템 간 의존성을 낮추려면 Amazon SNS와 SQS 대기열을 조합한 팬아웃 구조가 가장 적합합니다.\n\nSNS에서 뿌려준 메시지를 각 서비스용 SQS 큐가 받아내면, 트래픽이 갑자기 치솟는 상황에서도 각 마이크로서비스가 자신의 처리 속도에 맞춰 안정적으로 데이터를 처리할 수 있어 확장성이 뛰어납니다.",
+    "explanation": "정답은 D입니다. 하나의 메시지를 수십 개의 서비스로 동시 전파(Fan-out)하며 확장성을 확보하려면 SNS와 SQS 대기열을 조합하는 아키텍처가 마이크로서비스 간의 결합도를 낮추는 최상의 선택입니다.\n\nhttps://aws.amazon.com/sns/",
     "glossary": {
       "SNS": "구독자들에게 메시지를 푸시하는 알림 서비스 (Fan-out 구조용)",
       "SQS": "메시지를 대기열에 보관하여 비동기식으로 처리하게 해주는 큐 서비스"
@@ -140,7 +143,7 @@ export const quizData = [
       "Auto Scaling 그룹에서 관리되는 Amazon EC2 인스턴스로 기본 서버와 컴퓨팅 노드를 \n구현합니다. 작업의 대상으로 Amazon EventBridge(Amazon CloudWatch Events)를 \n구성합니다. 컴퓨팅 노드의 부하를 기반으로 EC2 Auto Scaling 을 구성합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 시스템의 탄력성을 극대화하려면 작업을 SQS 대기열에 담아두고, 처리 대기 중인 작업의 양에 맞춰 컴퓨팅 서버의 수를 자동으로 조절해야 합니다.\n\n이렇게 대기열 크기를 기준으로 Auto Scaling을 설정하면 실제 워드로드의 변화에 가장 민감하고 효율적으로 대응할 수 있으며, 서버의 결합도를 낮추는 현대적인 아키텍처를 완성할 수 있습니다.",
+    "explanation": "정답은 B입니다. 시스템의 탄력성을 극대화하려면 작업을 SQS 대기열에 담고, 대기열에 쌓인 작업량(백로그)에 맞춰 컴퓨팅 노드를 자동으로 조절하는 대상 추적 조정 정책을 사용해야 합니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)",
       "Auto Scaling": "서버 부하에 따라 자동으로 인스턴스 수를 늘리거나 줄이는 기능"
@@ -156,7 +159,7 @@ export const quizData = [
       "각 사용자의 컴퓨터에 유틸리티를 설치하여 Amazon S3 에 액세스합니다. S3 수명 주기 \n정책을 생성하여 7 일 후 데이터를 S3 Glacier Flexible Retrieval 로 전환합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. S3 파일 게이트웨이는 온프레미스의 로컬 캐시를 활용해 자주 쓰이는 최신 파일에는 아주 빠른 접근 속도를 제공합니다. 동시에 오래된 파일은 S3로 자동 이동시키고 수명 주기 정책을 통해 Glacier Deep Archive로 보냄으로써 저장 비용을 획기적으로 낮출 수 있습니다.\n\n이는 저장 용량 한계 문제를 해결하면서도 성능과 비용 효율성을 동시에 잡을 수 있는 가장 이상적인 하이브리드 솔루션입니다.",
+    "explanation": "정답은 B입니다. 온프레미스에서 자주 쓰는 파일은 로컬 캐시로 빠르게 접근하고, 오래된 파일은 S3로 자동 이동시키는 S3 파일 게이트웨이와 수명 주기 정책의 조합이 하이브리드 스토리지의 정석입니다.\n\nhttps://aws.amazon.com/storagegateway/",
     "glossary": {
       "Storage Gateway (S3)": "온프레미스 환경에서 표준 파일 시스템 인터페이스를 통해 S3 스토리지를 사용할 수 있게 해주는 하이브리드 스토리지",
       "S3 Glacier": "자주 액세스하지 않는 데이터의 장기 아카이빙을 위한 매우 저렴한 스토리지 클래스"
@@ -172,7 +175,7 @@ export const quizData = [
       "API Gateway 통합을 사용하여 애플리케이션이 주문을 수신할 때 Amazon Simple Queue \nService(Amazon SQS) 표준 대기열에 메시지를 보냅니다. 처리를 위해 AWS Lambda \n함수를 호출하도록 SQS 표준 대기열을 구성합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 주문 처리와 같이 데이터가 입력된 순서 그대로 선입선출되는 것이 중요한 시스템에서는 SQS FIFO 대기열을 사용해야 합니다. \n\n일반 대기열은 순서를 보장하지 않지만 FIFO 대기열은 메시지 순서를 완벽히 유지하며 한 번만 정확하게 처리되도록 관리해주어 주문 중복이나 순서 꼬임 등의 문제를 원천적으로 방지합니다.",
+    "explanation": "정답은 B입니다. 주문 처리와 같이 순서가 뒤바뀌면 안 되는 시스템에서는 SQS FIFO 대기열을 사용하여 메시지의 선입선출(First-In-First-Out)과 정확히 한 번 처리되는 정밀함을 보장해야 합니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "SQS FIFO Queue": "메시지가 들어온 순서대로 한 번만 처리되도록 보장하는 특수한 대기열 시스템",
       "API Gateway": "모든 규모의 API를 손쉽게 생성, 유지 관리 및 보안 조치를 할 수 있는 관리 서비스"
@@ -188,7 +191,7 @@ export const quizData = [
       "각 EC2 인스턴스에 대해 암호화된 Amazon Elastic Block Store(Amazon EBS) 볼륨을 \n생성합니다. 새 EBS 볼륨을 각 EC2 인스턴스에 연결합니다. 자격 증명 파일을 새 EBS \n볼륨으로 마이그레이션합니다. 애플리케이션이 새 EBS 볼륨을 가리키도록 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 서버 내부에 파일로 보관하던 위험한 비밀번호 정보를 가장 안전하고 효율적으로 관리하는 방법은 AWS Secrets Manager를 사용하는 것입니다.\n\n이 서비스는 암호를 암호화하여 보관할 뿐만 아니라 일정 기간마다 암호를 자동으로 변경해주는 기능까지 제공하여 자격 증명 노출 사고를 방지하고 운영 부담을 획기적으로 낮춰줍니다.",
+    "explanation": "정답은 A입니다. 데이터베이스 암호와 같은 민감한 자격을 안전하게 보관하고 주기적으로 자동 교체하려면 AWS Secrets Manager가 필수입니다. 코드에 암호를 적지 않아도 되어 보안성이 비약적으로 향상됩니다.\n\nhttps://aws.amazon.com/secrets-manager/",
     "glossary": {
       "Secrets Manager": "데이터베이스 암호 등 민감한 정보를 안전하게 암호화하여 저장하고 자동 교체 기능을 제공하는 서비스",
       "Aurora": "AWS가 구축한 고성능 관계형 데이터베이스 엔진"
@@ -204,7 +207,7 @@ export const quizData = [
       "ALB 가 오리진인 Amazon CloudFront 배포를 생성합니다. S3 버킷을 엔드포인트로 \n포함하는 AWS Global Accelerator 표준 액셀러레이터를 생성합니다. 두 개의 도메인 이름을 \n만듭니다. 하나의 도메인 이름이 동적 콘텐츠의 CloudFront DNS 이름을 가리키도록 합니다. \n다른 도메인 이름이 정적 콘텐츠에 대한 가속기 DNS 이름을 가리키도록 합니다. 도메인 \n이름을 웹 애플리케이션의 끝점으로 사용합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. S3에 저장된 정적 웹 파일과 가변적인 동적 콘텐츠를 동시에 최적화하는 가장 강력한 수단은 CloudFront를 배포하는 것입니다.\n\n엣지 로케이션을 통해 전 세계 어디서든 가까운 서버에서 데이터를 받아볼 수 있게 설정하면 전반적인 지연 시간이 대폭 줄어듭니다. 또한 하나의 도메인 아래에서 여러 데이터 소스를 연동할 수 있어 관리도 간편해집니다.",
+    "explanation": "정답은 A입니다. S3의 정적 데이터와 ALB의 동적 데이터를 동시에 가속화하려면 CloudFront가 최선입니다. 전 세계 엣지 로케이션을 통해 사용자 근처에서 데이터를 제공하므로 전반적인 지연 시간이 줄어듭니다.\n\nhttps://aws.amazon.com/cloudfront/",
     "glossary": {
       "CloudFront": "전 세계 엣지 로케이션을 통해 콘텐츠 전송 속도를 높여주는 CDN 서비스",
       "Route 53": "AWS의 클라우드 DNS(도메인 이름 서비스)"
@@ -220,7 +223,7 @@ export const quizData = [
       "AWS Key Management Service(AWS KMS) 다중 리전 고객 관리형 키를 사용하여 자격 \n증명을 비밀로 암호화합니다. Amazon DynamoDB 전역 테이블에 암호를 저장합니다. AWS \nLambda 함수를 사용하여 DynamoDB 에서 암호를 검색합니다. RDS API 를 사용하여 비밀을 \n교체합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 여러 리전에 걸친 통합 관리와 비밀번호 교체 자동화를 가장 손쉽게 처리하는 도구는 역시 Secrets Manager입니다. \n\n복잡한 프로그래밍이나 수동 작업 없이도 다중 리전에 데이터를 실시간으로 복제해주고, 유지 관리 주기에 맞춰 알아서 정보를 갱신해주므로 사람이 일일이 관리할 때 발생할 수 있는 보안 취약점을 완벽히 해결해줍니다.",
+    "explanation": "정답은 A입니다. 여러 리전에 걸친 통합 관리와 비밀번호 교체 자동화를 가장 손쉽게 처리하는 도구는 Secrets Manager입니다. 다중 리전 복제 기능을 통해 재난 복구 환경에서도 동일한 자격을 사용할 수 있습니다.\n\nhttps://aws.amazon.com/secrets-manager/",
     "glossary": {
       "Secrets Manager": "보안 자격 증명을 안전하게 관리하고 일정에 따라 자동 교체하며 다른 리전으로 복제까지 가능한 관리형 서비스",
       "RDS": "관계형 데이터베이스(MySQL, PostgreSQL 등)를 자동으로 관리해주는 서비스"
@@ -236,7 +239,7 @@ export const quizData = [
       "EC2 스팟 인스턴스와 함께 Memcached 용 Amazon ElastiCache 를 사용합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 관계형 데이터베이스 중 읽기 부하를 감지해 자동으로 성능을 키우고 싶다면 Amazon Aurora가 정답입니다.\n\nAurora는 최대 15개까지 읽기 전용 복제본을 자동으로 생성하고 제거하는 기능을 갖추고 있어 트래픽 급증 시에도 안정적인 응답을 보장합니다. 또한 고성능 분산 스토리지를 통해 일반 DB보다 훨씬 빠른 성능과 높은 가용성을 동시에 제공합니다.",
+    "explanation": "정답은 C입니다. 읽기 부하가 많은 관계형 데이터베이스 환경에서는 Amazon Aurora의 Auto Scaling 기능을 활용하여 트래픽에 따라 읽기 전용 복제본을 자동으로 늘리고 줄여 성능을 유지해야 합니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Aurora": "AWS 클라우드 전용으로 제작된 고성능, 자동 확장 지원 관계형 데이터베이스",
       "Read Replica": "읽기 전용 복제본을 생성하여 데이터베이스의 읽기 부하를 분산시키는 기술"
@@ -252,7 +255,7 @@ export const quizData = [
       "AWS Firewall Manager 를 사용하여 프로덕션 VPC 에 대한 트래픽 검사 및 트래픽 \n필터링에 필요한 규칙을 생성합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 대규모 기업급 방화벽 장비와 동일한 수준으로 트래픽 한 줄 한 줄을 정밀하게 검사하고 걸러내고 싶다면 AWS Network Firewall을 도입해야 합니다.\n\nVPC 전체의 경계에서 L3부터 L7 레이어까지 포괄하는 고성능 패킷 분석과 규칙 기반 차단 기능을 제공하여 네트워크 보안 수준을 온프레미스 장비 이상으로 강력하게 끌어올릴 수 있습니다.",
+    "explanation": "정답은 C입니다. 기업급 방화벽 장비처럼 트래픽을 정밀하게 검사하고 필터링하려면 AWS Network Firewall이 적합합니다. L3부터 L7까지 포괄하는 보안 규칙을 통해 VPC 경계 보안을 강화할 수 있습니다.\n\nhttps://aws.amazon.com/network-firewall/",
     "glossary": {
       "Network Firewall": "VPC 전체에 대한 세밀한 트래픽 제어 및 보안 필터링을 제공하는 고성능 방화벽 서비스",
       "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
@@ -268,7 +271,7 @@ export const quizData = [
       "Amazon S3 의 데이터에 대한 AWS Glue 테이블과 크롤러를 생성합니다. Amazon Athena \n연합 쿼리를 사용하여 PostgreSQL 용 Amazon RDS 내의 데이터에 액세스합니다. Amazon \nAthena 를 사용하여 보고서를 생성합니다. 보고서를 Amazon S3 에 게시합니다. S3 버킷 \n정책을 사용하여 보고서에 대한 액세스를 제한합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 여러 곳에 흩어진 데이터들을 하나로 묶어 아름다운 보고서로 만들고 관리하는 가장 세련된 방법은 Amazon QuickSight를 사용하는 것입니다.\n\n대시보드 형태로 구성하여 누구는 전부 다 볼 수 있고, 누구는 일부만 볼 수 있게 하는 그룹별 권한 제어 기능이 매우 강력하여 기업용 데이터 시각화 솔루션으로 가장 완성도 높은 경험을 제공합니다.",
+    "explanation": "정답은 B입니다. 여러 소스의 데이터를 시각화하고 사용자 그룹별로 세밀한 접근 권한을 제어하려면 Amazon QuickSight가 가장 강력합니다. 대시보드를 통해 비즈니스 통찰력을 안전하게 공유할 수 있습니다.\n\nhttps://aws.amazon.com/quicksight/",
     "glossary": {
       "QuickSight": "대규모 데이터를 시각화하고 대시보드를 통해 비즈니스 분석을 수행하는 BI 서비스",
       "Data Lake": "정형/비정형 데이터를 한꺼번에 저장하고 분석할 수 있는 대규모 중앙 저장소"
@@ -284,7 +287,7 @@ export const quizData = [
       "S3 버킷에 대한 액세스 권한을 부여하는 IAM 사용자를 생성합니다. 사용자 계정을 EC2 \n인스턴스에 연결합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 서버가 리소스에 직접 접근해야 할 때는 번거롭게 아이디와 비밀번호를 심지 않는 것이 보안의 기본입니다.\n\n인스턴스에 부여하는 배지 같은 개념인 IAM 역할을 활용하면 보안 사고 발생 시에도 자격 증명이 노출되지 않고, 운영 시스템 수준에서 정밀하고 안전하게 접근 권한을 관리할 수 있습니다.",
+    "explanation": "정답은 A입니다. 서버가 다른 AWS 서비스에 접근할 때는 고정된 자격 증명을 쓰는 대신 IAM 역할을 부여하는 것이 보안 모범 사례입니다. 임시 자격 증명을 사용하여 유출 위험을 원천 봉쇄합니다.\n\nhttps://aws.amazon.com/iam/",
     "glossary": {
       "IAM Role": "특정 서비스나 사용자가 AWS 리소스에 접근할 수 있도록 임시 권한을 부여하는 장치",
       "S3": "AWS에서 제공하는 무제한 파일 저장소(객체 스토리지)"
@@ -301,7 +304,7 @@ export const quizData = [
       "Amazon EventBridge(Amazon CloudWatch Events) 이벤트를 구성하여 S3 버킷을 \n모니터링합니다. 이미지가 업로드되면 추가 처리를 위해 애플리케이션 소유자의 이메일 \n주소와 함께 Amazon ample Notification Service(Amazon SNS) 주제에 알림을 보냅니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A와 B입니다. 갑자기 수만 장의 이미지가 업로드되어도 시스템이 터지지 않게 하려면 전용 대기열 서비스인 SQS를 중간에 배치해야 합니다.\n\nS3에서 신호를 주면 SQS가 차례대로 줄을 세우고, Lambda가 여유가 생길 때마다 하나씩 꺼내어 완벽하게 압축을 실행하는 이 방식은 분산 시스템 설계의 가장 정석적인 고효율 모델입니다.",
+    "explanation": "정답은 A와 B입니다. 대량의 파일 업로드 시 시스템 부하를 조절하고 내구성을 확보하려면 S3 이벤트를 SQS에 담고 Lambda가 이를 순차적으로 처리하게 하는 이벤트 기반 비동기 설계가 가장 견고합니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "SQS": "시스템 간 메시지를 주고받는 대기열 서비스(분산 처리용)",
       "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스"
@@ -317,7 +320,7 @@ export const quizData = [
       "검사 VPC\n에 게이트웨이 로드 밸런서를 배포합니다. 게이트웨이 로드 밸런서 \n엔드포인트를 생성하여 수신 패킷을 수신하고 패킷을 어플라이언스로 전달합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 타사에서 만든 전문 보안 소프트웨어를 우리 네트워크와 유기적으로 연결하여 실시간 트래픽을 검사하고 싶을 때 쓰는 것이 게이트웨이 로드 밸런서입니다.\n\n이 기능을 쓰면 복잡한 네트워크 배선 없이도 모든 패킷을 보안 관문으로 통과시켰다가 다시 안전하게 리전 내 서버로 전달할 수 있어 운영 편의성이 압도적으로 높습니다.",
+    "explanation": "정답은 D입니다. 타사 보안 장비를 우리 네트워크에 유기적으로 통합하여 실시간 트래픽을 검사하고 싶을 때는 Gateway Load Balancer가 핵심입니다. 복잡한 라우팅 설정 없이도 보안 관문을 구축할 수 있습니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/gateway-load-balancer/",
     "glossary": {
       "Gateway Load Balancer (GWLB)": "타사 가상 어플라이언스에서 발생하는 트래픽을 효율적으로 관리하고 규모를 조정하는 로드 밸런서",
       "VPC": "AWS 클라우드 내에 나만의 전용 가상 네트워크 공간"
@@ -333,7 +336,7 @@ export const quizData = [
       "프로덕션 EBS 볼륨의 EBS 스냅샷을 만듭니다. EBS 스냅샷에서 EBS 빠른 스냅샷 복원 \n기능을 켭니다. 스냅샷을 새 EBS 볼륨으로 복원합니다. 테스트 환경의 EC2 인스턴스에 새 \nEBS 볼륨을 연결합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 수 테라바이트급의 대용량 프로덕션 데이터를 마치 마법처럼 즉시 테스트 장비로 옮기면서도 최고의 속도를 보장하고 싶을 때 필요한 것이 'Fast Snapshot Restore' 기능입니다.\n\n이 기술을 사용하면 일반적인 데이터 복원 시 걸리는 긴 예열 시간을 완전히 제거하고, 처음부터 초고속 데이터 처리를 즉각 시작할 수 있어 업무 효율이 크게 올라갑니다.",
+    "explanation": "정답은 D입니다. 대용량 데이터를 즉시 테스트 장비로 옮기면서도 초기부터 최고 성능을 내고 싶을 때는 EBS Fast Snapshot Restore 기능이 필수입니다. 예열 시간 없이 즉각적인 I/O를 보장합니다.\n\nhttps://aws.amazon.com/ebs/",
     "glossary": {
       "Fast Snapshot Restore (FSR)": "스냅샷을 볼륨으로 복원할 때 사전 로딩 과정 없이 처음부터 최고 성능을 낼 수 있게 해주는 기능",
       "EBS Snapshot": "EBS 볼륨의 데이터를 특정 시점의 복사본으로 저장해두는 백업 아이템"
@@ -349,7 +352,7 @@ export const quizData = [
       "Amazon S3 버킷을 사용하여 웹 사이트의 정적 콘텐츠를 호스팅합니다. Amazon \nCloudFront 배포를 배포합니다. S3 버킷을 오리진으로 설정합니다. 백엔드 API 에 Amazon \nAPI Gateway 및 AWS Lambda 함수를 사용합니다. Amazon DynamoDB 에 데이터를 \n저장합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 하루에 단 한 번, 수백만 명이 전력으로 접속하는 타임 세일 상황에서도 절대 중단 없는 쾌적함을 선사하려면 서버리스 풀 세트 방식이 가장 세련됩니다.\n\n사용자가 직접 서버를 관리하고 늘리는 기존 방식 대신, 트래픽에 따라 무제한에 가깝게 알아서 확장되는 DynamoDB와 Lambda를 쓰면 어떤 폭주 상황에서도 밀리초 단위의 경쾌한 응답 속도를 경험할 수 있습니다.",
+    "explanation": "정답은 D입니다. 수백만 건의 폭발적인 요청에도 초저지연 응답을 보장하려면 서버리스 풀 세트(S3 + CloudFront + API Gateway + Lambda + DynamoDB) 방식이 확장성과 가용성 면에서 압도적입니다.\n\nhttps://aws.amazon.com/serverless/",
     "glossary": {
       "DynamoDB": "초당 수백만 건의 요청도 밀리초 단위로 처리할 수 있는 완전 관리형 NoSQL 데이터베이스",
       "Serverless": "사용자가 서버를 직접 관리하지 않고 실행된 코드만큼만 비용을 지불하는 컴퓨팅 모델"
@@ -365,7 +368,7 @@ export const quizData = [
       "S3 One Zone-Infrequent Access(S3 One Zone-IA)"
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 데이터가 언제 얼마나 필요한지 도무지 예측할 수 없는 상황에서 최고의 가성비를 찾는다면 지능형 계층화가 정답입니다.\n\n이 기능은 AWS가 자체 AI를 통해 데이터 접근 빈도를 모니터링하고, 잘 안 쓰는 파일은 알아서 싼 요금제로, 자주 쓰는 파일은 빠른 요금제로 옮겨주어 주머니 부담을 확 줄여줍니다.",
+    "explanation": "정답은 B입니다. 파일 접근 패턴이 불규칙하거나 예측하기 어렵다면 AWS가 알아서 요금제를 최적화해주는 S3 Intelligent-Tiering이 정답입니다. 성능 저하 없이 자동으로 저장 비용을 절감해줍니다.\n\nhttps://aws.amazon.com/s3/storage-classes/intelligent-tiering/",
     "glossary": {
       "Intelligent-Tiering": "데이터의 접근 빈도를 감시하여 자동으로 가장 저렴한 스토리지 계층으로 옮겨주는 기능",
       "S3 Standard": "가장 높은 가용성과 빠른 성능을 제공하는 S3의 범용 스토리지 클래스"
@@ -381,7 +384,7 @@ export const quizData = [
       "S3 수명 주기 구성을 생성하여 1 개월 후에 객체를 S3 Standard\n에서 S3 One \nZone-Infrequent Access(S3 One Zone-IA)로 전환합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 딱 한 달만 쓰고 나머지는 영구 보관용인 백업 파일은 고민할 것 없이 '빙산(Glacier)'급 창고에 넣어두는 것이 비용을 아끼는 지혜입니다.\n\n특히 가장 깊은 보관소인 Deep Archive를 선택하면 사용한 지 한 달이 지나는 순간 자동으로 요금이 가장 저렴한 상태로 전환되므로, 비용은 아끼면서 데이터는 안전하게 지킬 수 있습니다.",
+    "explanation": "정답은 B입니다. 1개월 뒤에는 거의 보지 않는 장기 보관용 백업 데이터는 수명 주기 정책을 통해 S3 Glacier Deep Archive로 전환하는 것이 비용을 가장 아끼는 지혜로운 방법입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/glacier/",
     "glossary": {
       "Glacier Deep Archive": "연간 1~2회 정도만 접근하는 초저가 장기 아카이브 스토리지 (S3 최저가)",
       "Lifecycle Policy": "S3에 저장된 객체가 일정 시간이 지나면 자동으로 하위 계층으로 옮겨지거나 삭제되도록 관리하는 기능"
@@ -397,7 +400,7 @@ export const quizData = [
       "AWS 비용 및 사용 보고서를 사용하여 보고서를 생성하고 Amazon S3 버킷으로 \n보냅니다. Amazon S3 와 함께 Amazon QuickSight 를 소스로 사용하여 인스턴스 유형을 \n기반으로 대화형 그래프를 생성합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. '어디서 돈이 샐까?'라는 질문에 가장 빠르게 그래프와 분석표로 답해주는 도구는 Cost Explorer입니다.\n\n이 기능을 쓰면 어떤 인스턴스 유형이 범인인지, 날짜별로 비용이 어떻게 뛰었는지 필터 클릭 몇 번으로 밝혀낼 수 있어 복잡한 데이터 분석 없이도 즉시 원인을 교정할 수 있게 해줍니다.",
+    "explanation": "정답은 B입니다. 비용 증가 원인을 파악하기 위해 세부 필터링과 시각적 분석이 필요하다면 Cost Explorer가 최고의 성능을 냅니다. 원치 않는 수직적 확장이 발생한 위치를 즉시 찾아낼 수 있습니다.\n\nhttps://aws.amazon.com/aws-cost-management/aws-cost-explorer/",
     "glossary": {
       "Cost Explorer": "컴퓨팅 비용 등 AWS 지출 내역을 시각화하고 세부적으로 분석하여 비용 절감 포인트를 찾는 도구",
       "Vertical Scaling": "서버의 사양(CPU, Mem 등)을 더 높은 등급으로 올려 성능을 높이는 방식"
@@ -413,7 +416,7 @@ export const quizData = [
       "두 개의 Lambda 함수를 설정합니다. 정보를 수신할 하나의 기능을 구성하십시오. \n정보를 데이터베이스에 로드하도록 다른 기능을 구성하십시오. Amazon Simple Queue \nService(Amazon SQS) 대기열을 사용하여 Lambda 함수를 통합합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 대용량 데이터가 한꺼번에 들이닥칠 때 람다 함수가 한계에 부딪힌다면, 중간에 완충 장치인 SQS 대기열을 두는 시스템 분리 설계가 정답입니다.\n\n이렇게 하면 들이닥친 데이터를 일단 큐에 안전하게 모셔두고, 저장이 담당 서버리스 함수가 자신의 보폭에 맞춰 차근차근 데이터를 처리할 수 있어 시스템 전체의 안정성이 압도적으로 높아집니다.",
+    "explanation": "정답은 D입니다. 대용량 데이터 로드 시 람다의 한계를 극복하려면 중간에 SQS 대기열을 두어 트래픽을 완충하고, 후속 람다가 차근차근 데이터를 처리하게 하는 디커플링 설계가 반드시 필요합니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "SQS (Simple Queue Service)": "메시지를 임시로 보관하여 서버 간의 처리 속도 차이를 완충해주는 분산 대기열 서비스",
       "Lambda": "서버 관리 없이 코드만 실행하면 되는 서버리스 컴퓨팅 서비스"

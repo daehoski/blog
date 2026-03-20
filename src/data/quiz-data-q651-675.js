@@ -9,7 +9,7 @@ export const quizData = [
       "180일 뒤 Standard-IA로, 1년 뒤 Glacier 유연한 검색, 5년 뒤 Deep Archive로 보냅니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n데이터 유실을 막으려면 최소 3개 AZ에 저장하는 Standard-IA를 써야 합니다. 1년 뒤 '즉시 사용' 요건은 Glacier Instant Retrieval이 딱이며, 5년 뒤 12시간 이내 검색은 가장 저렴한 Deep Archive가 정답입니다.\n\n다른 옵션인 A(One Zone-IA)는 데이터 센터 한 곳이 무너지면 이미지가 사라질 위험이 있어 '정보 유실 금지' 조건에 어긋납니다.",
+    "explanation": "정답은 C입니다. 데이터 유실을 막으려면 최소 3개 AZ에 저장하는 Standard-IA를 써야 합니다. 1년 뒤 '즉시 사용' 요건은 Glacier Instant Retrieval이 딱이며, 5년 뒤 12시간 이내 검색은 가장 저렴한 Deep Archive가 정답입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/",
     "glossary": {
       "S3 Standard-IA": "가끔 보지만 소중한 데이터를 저렴하게 보관하는 등급",
       "S3 Glacier Instant Retrieval": "거의 안 보지만 필요할 때 1초 만에 꺼낼 수 있는 저렴한 보관소",
@@ -27,7 +27,7 @@ export const quizData = [
       "관리 노드(Master)까지 스팟으로 채워서 최대한 돈을 아낍니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n하루 6시간만 일하면 되므로, 일이 끝나면 클러스터를 아예 삭제하는 '임시(Transient) 클러스터'가 가장 경제적입니다. 중요한 대장(Master)과 핵심(Core) 노드는 안정적인 온디맨드로, 단순 계산만 돕는 작업(Task) 노드는 90% 저렴한 스팟으로 섞어 쓰는 것이 고수의 비법입니다.\n\n다른 옵션인 A는 일이 없는 나머지 18시간 동안 서버 요금을 내야 하므로 가성비가 떨어집니다.",
+    "explanation": "정답은 B입니다. 하루 6시간만 일하면 되므로, 일이 끝나면 클러스터를 아예 삭제하는 '임시(Transient) 클러스터'가 가장 경제적입니다. 중요한 대장(Master)과 핵심(Core) 노드는 안정적인 온디맨드로, 단순 계산만 돕는 작업(Task) 노드는 90% 저렴한 스팟으로 섞어 쓰는 방식이 효율적입니다.\n\nhttps://aws.amazon.com/emr/",
     "glossary": {
       "Amazon EMR": "빅데이터(Hadoop, Spark 등)를 클라우드에서 쉽고 빠르게 돌려주는 서비스",
       "Transient Cluster (임시 클러스터)": "작업이 끝나면 자동으로 폭파되어 비용을 아끼는 단기 프로젝트용 서버 그룹",
@@ -44,7 +44,7 @@ export const quizData = [
       "보고서 뽑는 날에만 DB 서버 사양을 엄청나게 키웁니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nRDS의 '읽기 전용 복제본'은 조회 전담 조수입니다. 한 달에 한 번 있는 무거운 조회 업무를 이 조수에게 맡기면, 주인이 일하는 메인 DB는 평소처럼 쌩쌩하게 가동됩니다. 가장 쉽고 관리 수고가 적은 표준 방식입니다.\n\n다른 옵션인 C(Athena)도 가능은 하지만, 매번 데이터를 S3로 엑스포트(Export)해야 하는 번거로움이 있어 '운영 효율' 면에서 복제본 방식에 밀립니다.",
+    "explanation": "정답은 A입니다. RDS의 '읽기 전용 복제본'은 조회 전담 조수입니다. 한 달에 한 번 있는 무거운 조회 업무를 이 조수에게 맡기면, 주인이 일하는 메인 DB는 평소처럼 쌩쌩하게 가동됩니다. 가장 쉽고 관리 수고가 적은 표준 방식입니다.\n\nhttps://aws.amazon.com/rds/features/read-replicas/",
     "glossary": {
       "Read Replica (읽기 전용 복제본)": "주 DB의 정보를 실시간으로 복사해 오직 조회 작업만 대신 해주는 도우미 서버",
       "Amazon RDS": "DB 설치, 백업, 보안 패치를 자동으로 해주는 관리형 DB 서비스",
@@ -61,7 +61,7 @@ export const quizData = [
       "대용량 분석 전용인 Redshift로 모든 데이터를 이사합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'RDS Proxy'는 손님들이 DB 문 앞까지 줄을 서게 관리해주는 똑똑한 지배인입니다. 수만 명의 접속을 효과적으로 쪼개서 DB에 전달해주므로 '연결 초과'를 막아주고, 서버 교체(Failover) 시에도 손님들이 길을 잃지 않게 즉시 새 서버로 안내해주어 복구 시간도 획기적으로 줄여줍니다.\n\n다른 옵션인 C(DAX)는 NoSQL인 DynamoDB 전용이라 Aurora(MySQL)에는 쓸 수 없습니다.",
+    "explanation": "정답은 B입니다. 'RDS Proxy'는 손님들이 DB 문 앞까지 줄을 서게 관리해주는 똑똑한 지배인입니다. 수만 명의 접속을 효과적으로 쪼개서 DB에 전달해주므로 '연결 초과'를 막아주고, 서버 교체(Failover) 시 복구 시간도 획기적으로 줄여줍니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Amazon RDS Proxy": "DB 연결 통로를 미리 확보(Pooling)해두고 효율적으로 나눠주는 관리형 프록시 서비스",
       "Failover (장애 조치)": "메인 서버가 고장 났을 때 예비 서버로 임무를 즉시 넘기는 기술",
@@ -78,7 +78,7 @@ export const quizData = [
       "Glue(PySpark) 작업을 매일 밤 예약해서 처리합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n2MB 데이터와 30초 계산 시간은 람다(Lambda)에게 껌값(?) 같은 아주 작은 일입니다. 람다는 서버를 24시간 켜둘 필요도 없고, 정말 일한 수초만큼만 돈을 내면 되므로 이런 소규모 반복 작업에는 가성비 끝판왕입니다.\n\n다른 옵션인 A, B, D는 데이터가 테라바이트(TB) 급으로 많을 때나 쓰는 '거물급' 장비들이라 비용이 훨씬 비쌉니다.",
+    "explanation": "정답은 C입니다. 2MB 데이터와 30초 계산 시간은 람다(Lambda)에게 아주 작은 일입니다. 람다는 서버를 24시간 켜둘 필요도 없고, 정말 일한 수초만큼만 돈을 내면 되므로 이런 소규모 반복 작업에는 가성비 끝판왕입니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "AWS Lambda": "서버 관리 없이 코드만 올리면 알아서 돌아가는 서버리스 실행 환경",
       "Python (파이썬)": "데이터 분석과 인공지능 분야에서 가장 널리 쓰이는 쉽고 강력한 프로그래밍 언어",
@@ -95,7 +95,7 @@ export const quizData = [
       "수천 개의 람다 함수를 동시에 실행시켜서 각자 계산하게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'ParallelCluster'는 수백 대의 서버를 하나의 거대한 슈퍼컴퓨터처럼 묶어주는 전문 도구입니다. 여기에 서버끼리 데이터를 초고속으로 주고받는 약속인 'MPI'를 더하면, 복잡한 사기 탐지 계산을 전 세계에서 가장 빠르게 끝낼 수 있습니다.\n\n다른 옵션인 D(Lambda)는 서버 간의 긴밀한 소통이 불가능해 이런 하이테크 병렬 처리에는 어울리지 않습니다.",
+    "explanation": "정답은 B입니다. 'ParallelCluster'는 수백 대의 서버를 하나의 거대한 슈퍼컴퓨터처럼 묶어주는 전문 도구입니다. 여기에 서버끼리 데이터를 초고속으로 주고받는 약속인 'MPI'를 더하면, 복잡한 사기 탐지 계산을 전 세계에서 가장 빠르게 끝낼 수 있습니다.\n\nhttps://aws.amazon.com/hpc/parallelcluster/",
     "glossary": {
       "AWS ParallelCluster": "AWS 환경에서 슈퍼컴퓨터(HPC)를 클릭 몇 번으로 뚝딱 만들어주는 관리 도구",
       "MPI (Message Passing Interface)": "여러 대의 컴퓨터가 계산 중인 데이터를 광속으로 서로 주고받기 위해 사용하는 표준 통신 규약",
@@ -112,7 +112,7 @@ export const quizData = [
       "API Gateway를 입구에 두고 모든 트래픽을 EKS로 쏘게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n쿠버네티스 환경에서 특정 주소(/path)를 보고 알맞은 목적지로 보내주는 일(L7 라우팅)은 ALB가 제일 잘합니다. 'AWS Load Balancer Controller'를 쓰면 쿠버네티스 설정만으로도 ALB를 뚝딱 만들 수 있어 관리가 매우 편하고 비용 효율도 좋습니다.\n\n다른 옵션인 D(API Gateway)는 기능은 풍부하지만 일반적인 내부 서비스 라우팅에는 ALB보다 비용이 더 비싸질 수 있습니다.",
+    "explanation": "정답은 B입니다. 쿠버네티스 환경에서 특정 주소(/path)를 보고 알맞은 목적지로 보내주는 일(L7 라우팅)은 ALB가 제일 잘합니다. 'AWS Load Balancer Controller'를 쓰면 관리가 매우 편하고 비용 효율도 좋습니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/application-load-balancer/",
     "glossary": {
       "Application Load Balancer (ALB)": "주소(URL)나 내용을 보고 똑똑하게 길을 안내하는 7계층 로드 밸런서",
       "AWS Load Balancer Controller": "쿠버네티스가 AWS의 로드 밸런서를 직접 조종할 수 있게 해주는 마법의 도구",
@@ -130,7 +130,7 @@ export const quizData = [
       "MySQL을 쓰기 편한 NoSQL인 DynamoDB로 강제 마이그레이션합니다."
     ],
     "answer": [0, 2],
-    "explanation": "정답은 A, C(원문 index 0, 2)입니다.\n\n구조를 안 바꾸면서 튼튼하게 만드는 정석은 ①웹 서버를 여러 대 띄우고(ASG) 입구엔 로드 밸런서(ALB)를 두는 것, ②DB는 전문 관리 서비스(RDS)에 맡기되 비상용 서버를 하나 더 두는 '다중 AZ' 기능을 켜는 것입니다.\n\n다른 옵션인 D나 E는 앱을 아예 새로 코딩하거나 DB 종류를 바꿔야 하므로 '변경 최소화' 조건에 탈락입니다.",
+    "explanation": "정답은 A와 C입니다. 구조를 안 바꾸면서 튼튼하게 만드는 정석은 ①웹 서버를 여러 대 띄우고(ASG) 입구엔 로드 밸런서(ALB)를 두는 것, ②DB는 전문 관리 서비스(RDS)에 맡기되 비상용 서버를 하나 더 두는 '다중 AZ' 기능을 켜는 것입니다.\n\nhttps://aws.amazon.com/rds/features/high-availability/",
     "glossary": {
       "Auto Scaling Group (ASG)": "서버가 고장 나면 자동으로 새 서버를 띄워 머릿수를 유지해주는 보호막",
       "RDS Multi-AZ": "서버 하나가 고장 나도 다른 지역의 예비 서버로 즉시 임무를 넘겨 DB를 살려내는 기술",
@@ -147,7 +147,7 @@ export const quizData = [
       "가장 비싼 온디맨드 인스턴스로만 채워서 개발 속도를 높입니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n개발 및 테스트 용도라면 비용 절감이 최우선입니다. 'EKS 관리형 노드 그룹'에서 '스팟 인스턴스'를 선택하면, AWS가 노드의 생명 주기도 챙겨주면서 가격은 온디맨드보다 최대 90%나 저렴하게 쓸 수 있습니다. 조금 불안정해도 테스트용으로는 가성비 최고입니다.\n\n다른 옵션인 B는 섞어 쓰는 만큼 비용이 더 나가므로 '가장 비용 효율적'인 선택(A)에 밀립니다.",
+    "explanation": "정답은 A입니다. 개발 및 테스트 용도라면 비용 절감이 최우선입니다. 'EKS 관리형 노드 그룹'에서 '스팟 인스턴스'를 선택하면, AWS가 노드의 생명 주기도 챙겨주면서 가격은 온디맨드보다 최대 90%나 저렴하게 쓸 수 있습니다.\n\nhttps://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html",
     "glossary": {
       "Managed Node Group (관리형 노드 그룹)": "쿠버네티스 서버(노드)의 패치와 업데이트, 교체를 AWS가 알아서 다 해주는 모드",
       "Spot Instance (스팟 인스턴스)": "AWS의 남는 자원을 파격가에 빌려 쓰되, 주인이 필요하면 반납해야 하는 알뜰형 모델",
@@ -164,7 +164,7 @@ export const quizData = [
       "개별 사용자들에게 S3 직접 접속법을 가르쳐주고 7일 뒤에 Glacier로 옮기게 시킵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n기존 SMB 방식(윈도우 공유 폴더)을 유지하면서 S3의 저렴한 저장 공간을 빌려 쓰는 가장 편한 장비가 'S3 파일 게이트웨이'입니다. 여기에 S3의 보관 규칙(수명 주기)을 더해 7일 뒤에 자동 보관 모드(Deep Archive)로 보내면, 관리자는 손 하나 안 대고 비용을 획기적으로 줄일 수 있습니다.\n\n다른 옵션인 D는 직원들의 일 효율을 떨어뜨리고 실수할 위험이 큰 하수 중의 하수입니다.",
+    "explanation": "정답은 B입니다. 기존 SMB 방식(윈도우 공유 폴더)을 유지하면서 S3의 저렴한 저장 공간을 빌려 쓰는 가장 편한 장비가 'S3 파일 게이트웨이'입니다. 여기에 S3 수명 주기 규칙을 더해 자동 보관 모드(Deep Archive)로 보내면 비용을 획기적으로 줄일 수 있습니다.\n\nhttps://aws.amazon.com/filegateway/",
     "glossary": {
       "S3 File Gateway": "기존의 파일 공유 방식(SMB/NFS)으로 S3에 부드럽게 글을 남기게 해주는 교량 서비스",
       "S3 Glacier Deep Archive": "가장 저렴한 끝판왕 저장소로, 데이터를 꺼내는 데 몇 시간~하루가 걸려도 상관없을 때 씁니다.",
@@ -181,7 +181,7 @@ export const quizData = [
       "EC2 서버에 직접 정기 스케줄러(Cron)를 걸어서 수동 동기화 스크립트를 돌립니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nAWS DataSync는 '똑똑한 이사 센터'입니다. 소스 데이터가 바뀌었는지 자동으로 감지해서 변경된 부분만 골라 전송해주는 기능이 내장되어 있습니다. 람다 코드를 짤 필요도 없고 서버를 관리할 필요도 없는 가장 '최소 운영' 모델입니다.\n\n다른 옵션인 B(Lambda)도 가능은 하지만, 코딩과 예외 처리를 직접 해야 하므로 운영 수고가 훨씬 많이 듭니다.",
+    "explanation": "정답은 A입니다. AWS DataSync는 '똑똑한 이사 센터'입니다. 소스 데이터가 바뀌었는지 자동으로 감지해서 변경된 부분만 골라 전송해주는 기능이 내장되어 있습니다. 람다 코드를 짤 필요도 없고 서버를 관리할 필요도 없는 가장 '최소 운영' 모델입니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "AWS DataSync": "S3, EFS, 온프레미스 저장소 간의 대규모 전송과 동기화를 번개처럼 해주는 서비스",
       "Incremental Copy (증분 복사)": "처음엔 다 옮기고, 그다음부턴 바뀐 부분만 골라 옮겨서 시간과 비용을 아끼는 기술",
@@ -198,7 +198,7 @@ export const quizData = [
       "범용 캐시 서비스인 ElastiCache Redis를 따로 구축해서 연결합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nDAX는 DynamoDB 전용 '인메모리 캐시' 엔진입니다. 앱 코드를 거의 안 고치고도 버튼 하나로 읽기 속도를 10배 이상(마이크로초 수준) 빠르게 만들 수 있습니다. DynamoDB 사용자라면 이보다 편하고 강력한 가속기는 없습니다.\n\n다른 옵션인 D(ElastiCache)도 빠르지만, 앱 코드를 많이 고쳐야 하고 캐시 데이터 관리도 직접 해야 해서 운영 수고가 더 많이 듭니다.",
+    "explanation": "정답은 A입니다. DAX는 DynamoDB 전용 '인메모리 캐시' 엔진입니다. 앱 코드를 거의 안 고치고도 버튼 하나로 읽기 속도를 10배 이상(마이크로초 수준) 빠르게 만들 수 있습니다. DynamoDB 사용자라면 이보다 편하고 강력한 가속기는 없습니다.\n\nhttps://aws.amazon.com/dynamodb/dax/",
     "glossary": {
       "DAX (DynamoDB Accelerator)": "DynamoDB의 읽기 요청을 메모리에 저장해두고 빛의 속도로 응답해주는 전용 캐시 서비스",
       "Microsecond (마이크로초)": "100만 분의 1초. 눈 깜빡임보다 압도적으로 빠른 찰나의 시간",
@@ -216,7 +216,7 @@ export const quizData = [
       "만능 저장소인 'NetApp ONTAP용 Amazon FSx'에 연결합니다."
     ],
     "answer": [0, 4],
-    "explanation": "정답은 A, E(원문 index 0, 4)입니다.\n\n최저 레이턴시(속도)를 위해서는 물리적으로 서버들을 바짝 붙여놓는 '클러스터 배치 그룹'이 필수입니다. 또한 NFS와 SMB라는 서로 다른 통신 규약을 동시에 만족시키며 NAS 기능을 온전히 수행하는 저장소는 'FSx for NetApp ONTAP'이 가장 적합합니다.\n\n다른 옵션인 C(Lustre)는 속도는 더 빠를 수 있지만 SMB를 완벽히 지원하며 NAS를 대체하기에는 ONTAP(E)이 훨씬 유연합니다.",
+    "explanation": "정답은 A와 E입니다. 최저 레이턴시(속도)를 위해서는 물리적으로 서버들을 바짝 붙여놓는 '클러스터 배치 그룹'이 필수입니다. 또한 NFS와 SMB 방식을 동시에 만족시키는 저장소는 'FSx for NetApp ONTAP'이 가장 적합합니다.\n\nhttps://aws.amazon.com/fsx/netapp-ontap/",
     "glossary": {
       "Cluster Placement Group": "네트워크 지연 시간을 극단적으로 줄이기 위해 EC2 서버들을 물리적으로 한 랙에 모아두는 설정",
       "Amazon FSx for NetApp ONTAP": "NFS, SMB, iSCSI 등 모든 방식을 다 지원하는 팔방미인 고성능 저장소 서비스",
@@ -233,7 +233,7 @@ export const quizData = [
       "엔진을 Aurora MySQL로 완전히 바꿔서 이사 갑니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 '관리형'에 가까운 정답은 RDS입니다. RDS SQL Server는 보고서용 '읽기 복제본' 생성을 클릭 한 번으로 지원합니다. 주 서버는 장사를 하고, 복제본 서버는 보고서를 뽑으면 운영 서버의 성능 저하 없이 평화롭게 지낼 수 있습니다.\n\n다른 옵션인 B는 패치, 업데이트 등을 직접 해야 하므로 '관리 오버헤드 최소화'라는 목적에 맞지 않습니다.",
+    "explanation": "정답은 A입니다. 가장 '관리형'에 가까운 정답은 RDS입니다. RDS SQL Server는 보고서용 '읽기 복제본' 생성을 클릭 한 번으로 지원합니다. 주 서버는 장사를 하고, 복제본 서버는 보고서를 뽑으면 운영 서버의 성능 저하 없이 평화롭게 지낼 수 있습니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/SQLServerUserGuide/SQLServer.ReadReplicas.html",
     "glossary": {
       "Amazon RDS for SQL Server": "마이크로소프트의 SQL 서버를 AWS가 대신 돌려주는 관리형 서비스",
       "Read Replica (읽기 전용 복제본)": "주 DB의 업무를 방해하지 않고 옆에서 조용히 데이터 조회만 돕는 도우미 서버",
@@ -250,7 +250,7 @@ export const quizData = [
       "태그가 빠진 것만 골라내는 EventBridge 규칙을 만들고 람다로 기본값 태그만 입힙니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n실시간으로 반응하는 자동화가 핵심입니다. CloudTrail이 '누가 뭘 만들었다'라고 소리치면(Event), 똑똑한 람다(Lambda)가 즉시 RDS DB를 뒤져서 그 사람의 부서 번호를 알아온 뒤 리소스에 이름표(Tag)를 붙여주는 것이 가장 세련된 정답입니다.\n\n다른 옵션인 A는 사용자가 태그까지 직접 달아야 하므로 '자동 태깅'이라는 편리함과는 거리가 멉니다.",
+    "explanation": "정답은 B입니다. 실시간으로 반응하는 자동화가 핵심입니다. CloudTrail이 '누가 뭘 만들었다'라고 소리치면(Event), 똑똑한 람다가 즉시 RDS DB를 뒤져서 그 사람의 부서 번호를 알아온 뒤 리소스에 이름표(Tag)를 붙여주는 방식이 정석입니다.\n\nhttps://aws.amazon.com/eventbridge/",
     "glossary": {
       "AWS Lambda": "이벤트가 발생할 때만 반짝 나타나서 정해진 업무를 수행하고 사라지는 서버리스 요정",
       "Tagging (태그 지정)": "리소스에 '부서: 마케팅' 같은 이름표를 붙여 나중에 비용을 계산하기 편하게 만드는 작업",
@@ -267,7 +267,7 @@ export const quizData = [
       "한 번 만들면 절대 안 지워지게 스냅샷을 꽁꽁 잠가버립니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'휴지통(Recycle Bin)' 기능을 켜두면, 누군가 실수로 스냅샷을 '삭제' 하더라도 즉시 사라지지 않고 며칠간 휴지통에 머뭅니다. 관리자 권한을 뺏지 않으면서도 '아차!' 하는 순간에 데이터를 살릴 수 있는 가장 영리한 안전장치입니다.\n\n다른 옵션인 D(잠금)는 삭제 자체가 불가능해지므로 나중에 필요 없는 파일을 지워야 할 때 오히려 관리가 더 피곤해질 수 있습니다.",
+    "explanation": "정답은 C입니다. '휴지통(Recycle Bin)' 기능을 켜두면, 누군가 실수로 스냅샷을 삭제하더라도 즉시 사라지지 않고 며칠간 휴지통에 머뭅니다. 관리자 권한을 뺏지 않으면서도 실수로 데이터를 날려먹는 상황을 막아주는 안전장치입니다.\n\nhttps://docs.aws.amazon.com/ebs/latest/userguide/recycle-bin-working-with.html",
     "glossary": {
       "Recycle Bin for EBS Snapshots": "삭제된 백업 파일을 바로 안 버리고 일정 기간 보관해주는 클라우드판 휴지통",
       "Accidental Deletion (실수 삭제)": "잘못 클릭하거나 명령어를 잘못 입력해 중요한 자료를 날려먹는 상황",
@@ -284,7 +284,7 @@ export const quizData = [
       "사내망에 '자격 증명 브로커(Custom Broker)' 앱을 만들어 STS로부터 임시 열쇠를 받아오게 합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nSAML 같은 현대적인 대화법이 안 통할 때는 중간에 통역사(자격 증명 브로커)를 세워야 합니다. 이 앱이 사내 LDAP에서 아이디를 확인한 뒤, AWS 보안실(STS)에 가서 \"이 사람 우리 직원 맞으니 1시간만 쓸 임시 열쇠 좀 줘\"라고 요청해서 로그인 주소를 만들어주는 방식이 정석입니다.\n\n다른 옵션인 A(Identity Center)는 SAML이라는 공통 언어를 써야만 대화가 가능하므로 이 상황에선 쓸 수 없습니다.",
+    "explanation": "정답은 D입니다. SAML 같은 현대적인 대화법이 안 통할 때는 중간에 통역사(자격 증명 브로커)를 세워야 합니다. 이 앱이 사내 LDAP에서 아이디를 확인한 뒤, AWS 보안실(STS)에 가서 임시 열쇠를 받아와 로그인하게 해주는 방식이 정석입니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_common-scenarios_federation.html",
     "glossary": {
       "Identity Broker (자격 증명 브로커)": "서로 다른 로그인 시스템 사이에서 인증 정보를 확인하고 연결해주는 중간 다리 역할",
       "AWS STS (Security Token Service)": "잠시만 쓰고 버리는 보안용 임시 열쇠를 발급해주는 서비스",
@@ -301,7 +301,7 @@ export const quizData = [
       "서버들의 보안 그룹(Security Group)에서 그 IP의 입장을 아예 닫아버립니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n이미 'AWS WAF(웹 방화벽)'라는 훌륭한 입구 방패를 쓰고 있으므로, 그 방패의 블랙리스트 명단에 해당 악성 IP를 추가하는 것이 가장 깔끔하고 정확합니다. WAF는 애플리케이션 계층(L7)의 공격을 막는 것이 전문이라 SQL 인젝션 방어와 시너지가 좋습니다.\n\n다른 옵션인 A(NACL)도 가능은 하지만, 로드 밸런서 환경에서는 실제 손님의 IP를 정확히 가려내기 어려운 경우가 많아 WAF에서 처리하는 것이 훨씬 정석입니다.",
+    "explanation": "정답은 B입니다. 이미 'AWS WAF(웹 방화벽)'라는 훌륭한 입구 방패를 쓰고 있으므로, 그 방패의 블랙리스트 명단에 해당 악성 IP를 추가하는 것이 가장 깔끔하고 정확합니다. WAF는 SQL 인젝션 방어와 시너지가 매우 좋습니다.\n\nhttps://aws.amazon.com/waf/",
     "glossary": {
       "AWS WAF": "웹 사이트로 들어오는 나쁜 요청이나 특정 IP 주소를 깐깐하게 검사해서 막아주는 방화벽",
       "SQL Injection (SQL 주입)": "로그인 창 같은 곳에 나쁜 코드를 넣어 데이터베이스를 휘젓는 해킹 기법",
@@ -318,7 +318,7 @@ export const quizData = [
       "Elastic Beanstalk에 다 올려서 AWS가 알아서 한꺼번에 관리하게 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n덩어리(모놀리스)를 기능별로 작게 쪼개는 '마이크로서비스'와, 이를 안전하게 관리해주는 'ECS(컨테이너)' 조합이 정석입니다. 서비스를 쪼개면 특정 기능만 업데이트할 때 전체가 멈추지 않아도 되고, 보고서 생성 같은 무거운 일도 독립적으로 확장해서 처리할 수 있어 훨씬 유연해집니다.\n\n다른 옵션인 B(스팟 인스턴스)는 도중에 서버가 회수당할 수 있어, 20분이나 걸리고 실패 시 처음부터 다시 해야 하는 작업에는 위험합니다.",
+    "explanation": "정답은 C입니다. 시스템을 기능별로 작게 쪼개는 '마이크로서비스'와, 이를 안전하게 관리해주는 'ECS(컨테이너)' 조합이 정석입니다. 서비스를 쪼개면 특정 기능만 업데이트할 때 전체가 멈추지 않아도 되고, 보고서 같은 무거운 일도 독립적으로 처리할 수 있습니다.\n\nhttps://aws.amazon.com/ecs/",
     "glossary": {
       "Monolith (모놀리스)": "모든 기능을 하나의 커다란 성 안에 몽땅 집어넣어, 하나가 고장 나면 전체가 위험한 설계 방식",
       "Microservices (마이크로서비스)": "시스템을 작은 단위로 쪼개어 서로 협력하게 만드는 유연한 설계 방식",
@@ -335,7 +335,7 @@ export const quizData = [
       "모든 컨테이너 코드를 람다(Lambda)로 완전히 다시 작성해서 배포합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'최소 운영 오버헤드' 요건에는 AWS가 이미 다 차려놓은 밥상인 ECS가 최고입니다. 복잡한 쿠버네티스(EKS) 설정을 배울 필요 없이, '작업 배치 전략'에서 'Spread' 옵션만 켜주면 AWS가 알아서 3개 영역에 컨테이너를 골고루 뿌려줍니다.\n\n다른 옵션인 D는 앱의 근본적인 실행 환경을 바꿔야 하므로 '변경 최소화' 조건에 탈락입니다.",
+    "explanation": "정답은 A입니다. '최소 운영 오버헤드' 요건에는 AWS가 이미 다 차려놓은 밥상인 ECS가 최고입니다. '작업 배치 전략'에서 'Spread' 옵션만 켜주면 AWS가 알아서 3개 영역에 컨테이너를 골고루 뿌려 가용성을 높여줍니다.\n\nhttps://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html",
     "glossary": {
       "Amazon ECS (Elastic Container Service)": "AWS에서 컨테이너를 가장 쉽고 빠르게 돌릴 수 있는 관리형 도구",
       "High Availability (고가용성)": "서버 하나, 전산실 하나가 고장 나도 서비스는 멈추지 않고 계속 돌아가는 능력",
@@ -352,7 +352,7 @@ export const quizData = [
       "미리 대기시키는 '프로비저닝된 동시성'을 설정하고, 'Compute Optimizer' 권장대로 메모리를 늘립니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n람다는 메모리를 늘리면 비례해서 CPU 파워도 강해집니다! 'Compute Optimizer'의 조언을 받아 메모리를 적절히 증설하면, 작업 속도가 훨씬 빨라져서 오히려 전체 실행 시간(비용 청구 시간)이 줄어들 수도 있습니다. 여기에 '프로비저닝된 동시성'으로 예열까지 해두면 대기 시간(Cold Start)도 없어집니다.\n\n다른 옵션인 A처럼 메모리를 무작정 줄이면 CPU 성능도 같이 떨어져서 작업 시간이 한참 길어지므로 결국 돈이 더 나갈 수 있습니다.",
+    "explanation": "정답은 D입니다. 람다는 메모리를 늘리면 비례해서 CPU 파워도 강해집니다. 'Compute Optimizer'의 상담을 받아 메모리를 적절히 늘리면 작업 속도가 빨라져 오히려 비용이 줄어들 수 있습니다. '프로비저닝된 동시성'으로 예열까지 하면 완벽합니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html",
     "glossary": {
       "Provisioned Concurrency (프로비저닝된 동시성)": "람다가 즉시 출동할 수 있게 미리 따뜻하게 데워진 상태로 대기시켜 조회 지연을 없애는 기능",
       "AWS Compute Optimizer": "머신러닝을 통해 내 서버나 람다의 사양이 적정하지 분석해주는 공짜 조언 서비스",
@@ -370,7 +370,7 @@ export const quizData = [
       "과거 데이터를 넣으면 미래를 점쳐주는 'Amazon Forecast'에 학습을 맡깁니다."
     ],
     "answer": [2, 4],
-    "explanation": "정답은 C, E(원문 index 2, 4)입니다.\n\nAI를 몰라도 과거 시계열 데이터(과거 실적)만 던져주면 미래 수요를 알려주는 전문 서비스가 'Amazon Forecast'입니다. 학습시킨 뒤 그 결과값을 람다(Lambda) 함수 등으로 시각화하거나 불러오게 만들면, ML 전문가 없이도 훌륭한 부품 예측 시스템이 완성됩니다.\n\n다른 옵션인 A, B(SageMaker)는 데이터 과학자들이 직접 코딩하고 모델을 깎아야 하는 고가 기술이라 문제의 의도와 맞지 않습니다.",
+    "explanation": "정답은 C와 E입니다. AI 지식이 없어도 과거 기록만 던져주면 미래 수요를 알려주는 전문 서비스가 'Amazon Forecast'입니다. 학습시킨 뒤 결과값을 람다(Lambda) 함수 등으로 시각화하거나 불러오게 만들면 훌륭한 시스템이 완성됩니다.\n\nhttps://aws.amazon.com/forecast/",
     "glossary": {
       "Amazon Forecast": "과거 기록을 바탕으로 미래의 수요, 판매량, 재고 등을 인공지능이 대신 예측해주는 '점쟁이' 서비스",
       "Machine Learning (기계 학습)": "컴퓨터가 방대한 데이터를 공부해서 스스로 규칙을 찾아내도록 만드는 인공지능 기술",
@@ -387,7 +387,7 @@ export const quizData = [
       "Route 53 지연 시간 라우팅과 CloudFront+WAF 조합으로 모든 걸 해결합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'Global Accelerator'는 전 세계 어디서든 변하지 않는 2개의 '고정 IP'를 줍니다. 여기서 들어온 손님을 'ALB'로 안내하고, 그 길목에 'AWS WAF(웹 방화벽)'라는 보안 필터를 설치하면 성능과 고정 IP, 보안이라는 세 마리 토끼를 완벽히 잡을 수 있습니다.\n\n다른 옵션인 A는 WAF가 L4 장비인 NLB에는 붙을 수 없어 기술적으로 불가능한 조합입니다.",
+    "explanation": "정답은 B입니다. 'Global Accelerator'는 전 세계 어디서든 변하지 않는 2개의 '고정 IP'를 줍니다. 여기서 들어온 손님을 'ALB'로 안내하고 그 길목에 'WAF'라는 보안 필터를 설치하면 성능과 고정 IP, 보안을 완벽히 잡을 수 있습니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "AWS Global Accelerator": "전 세계 사용자 트래픽을 AWS 전용 광랜으로 안내하여 가속하고 고정 IP를 제공하는 하이패스 서비스",
       "Anycast IP (애니캐스트 IP)": "전 세계 어디서든 똑같은 주소(고정 IP)를 쓰지만, 접속한 곳과 가장 가까운 대문으로 연결되는 마법의 기술",
@@ -404,7 +404,7 @@ export const quizData = [
       "트래픽에 맞춰 자동으로 늘어나는 'Auto Scaling 그룹'과 미리 구워둔 '이미지(AMI)'를 씁니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'Auto Scaling'은 손님의 수에 맞춰 서버 대수를 알아서 늘렸다 줄였다 하는 마법 같은 기능입니다. 미리 설치가 끝난 'AMI(이미지)'를 준비해두면, 새 인스턴스가 1분 만에 쾌속으로 투입되어 수많은 손님을 감당할 수 있습니다. 한가할 땐 서버를 빼니 돈도 아껴집니다.\n\n다른 옵션인 A나 B는 서버를 켜두거나 미리 돈을 지불해야 해 낭비가 매우 심한 '돈 잔치' 모델입니다.",
+    "explanation": "정답은 D입니다. 'Auto Scaling'은 손님의 수에 맞춰 서버 대수를 알아서 늘렸다 줄였다 하는 마법 같은 기능입니다. 미리 설정이 끝난 'AMI(이미지)'를 준비해두면 새 인스턴스가 1분 만에 투입되어 수많은 손님을 감당할 수 있습니다.\n\nhttps://aws.amazon.com/ec2/autoscaling/",
     "glossary": {
       "Auto Scaling": "서버 부하에 따라 자동으로 컴퓨터 대수를 조절하는 클라우드의 핵심 기술",
       "AMI (Amazon Machine Image)": "운영체제와 웹 서버 설정을 미리 싹 다 구워놓은 '복제용 붕어빵 틀'",

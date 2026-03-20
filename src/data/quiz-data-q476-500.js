@@ -9,7 +9,7 @@ export const quizData = [
       "IAM 역할을 만들고, 최대 권한 범위를 정하는 '권한 경계(Permissions Boundary)'를 설정합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nIAM 그룹에 권한을 주는 정석적인 방법은 '정책(Policy)'을 만들어 그룹에 붙이는 것입니다. 이때 보안의 대원칙인 '최소 권한의 원칙(Principle of Least Privilege)'을 지켜야 합니다. 즉, 사용자가 업무를 수행하는 데 꼭 필요한 권한만 딱 맞춰서 주는 것이죠. 이렇게 하면 관리도 편하고 보안 사고의 위험도 최소화할 수 있습니다.\n\n다른 옵션인 B(역할 연결)는 그룹에 직접 할 수 없는 작업이며, D는 주로 권한 오남용을 막는 추가 안전장치이지 권한 부여의 기본 수단은 아닙니다.",
+    "explanation": "정답은 C입니다. IAM 그룹에 권한을 주는 정석은 '정책(Policy)'을 만들어 그룹에 붙이는 것입니다. 이때 '최소 권한의 원칙'을 지켜 꼭 필요한 권한만 딱 맞춰주는 것이 가장 안전합니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
     "glossary": {
       "IAM Group (그룹)": "여러 명의 IAM 사용자에게 한 번에 동일한 권한을 부여하기 위해 묶어둔 집합",
       "IAM Policy (정책)": "누가 어떤 리소스에 대해 어떤 행동을 할 수 있는지 정의해 둔 JSON 문서",
@@ -24,7 +24,7 @@ export const quizData = [
       "D. (Action: s3:DeleteObject, Resource: arn:aws:s3:::bucket/*)"
     ],
     "answer": 1,
-    "explanation": "정답은 D입니다.\n\n질문에서 '객체를 삭제할 수 없다'고 했으므로, 정책에 반드시 's3:DeleteObject' 권한이 명시되어야 합니다. 또한 객체에 대한 작업은 버킷 이름 뒤에 '/*'를 붙여서 '버킷 내부의 모든 물건'을 대상으로 지정해야 정확히 작동합니다. (참고: 문제 캡처상 D가 올바른 삭제 권한 구문임)\n\n다른 옵션인 B는 버킷 목록만 보는 권한이라 삭제와는 상관이 없습니다.",
+    "explanation": "정답은 D입니다. 객체 삭제가 안 된다고 했으므로 's3:DeleteObject' 권한이 문장에 들어있어야 합니다. 또한 대상 리소스를 버킷 내부 전체(/*)로 지정해야 해당 버킷의 모든 객체를 지울 수 있게 됩니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazons3.html",
     "glossary": {
       "Action (작업)": "정책에서 허용하거나 거부할 특정 동작(예: 읽기, 쓰기, 삭제 등)",
       "Resource (리소스)": "정책이 적용될 대상(예: 특정 S3 버킷이나 파일 주소)",
@@ -41,7 +41,7 @@ export const quizData = [
       "정적 웹 사이트용 버킷에 폴더를 만들고, 특정 폴더에만 Object Lock 보존 기간을 수동으로 겁니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'아무도 못 건드리게 박제'해야 한다면 S3 Object Lock이 유일한 정답입니다. 이 기능을 쓰면 보존 기간(Retention Period)이 지나기 전에는 파일을 지우거나 덮어쓰는 게 물리적으로 불가능해집니다. 특히 버전 관리(Versioning)와 함께 쓰면 과거 기록까지 완벽히 보호되어 법적인 효력을 갖는 문서 보관에 최적입니다.\n\n다른 옵션인 A는 관리자가 권한을 스스로 바꿔서 삭제할 수 있는 허점이 있고, C는 삭제 후에 복구하는 식이라 '삭제 금지'라는 목적 달성에는 미흡합니다.",
+    "explanation": "정답은 B입니다. '박제' 수준의 보호가 필요하다면 S3 Object Lock이 유일한 정답입니다. 이 기능을 쓰면 보존 기간이 지나기 전에는 누구도 파일을 지우거나 덮어쓸 수 없습니다. 버전 관리와 함께 쓰면 보안이 더욱 완벽해집니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
     "glossary": {
       "S3 Object Lock (객체 잠금)": "한 번 저장된 순수한 파일을 일정 기간 동안 절대 수정하거나 지우지 못하게 하는 WORM 기술",
       "S3 Versioning (버전 관리)": "파일이 바뀔 때마다 과거 기록을 모두 남겨두어 실수로 지워도 언제든 되살릴 수 있게 하는 기능",
@@ -58,7 +58,7 @@ export const quizData = [
       "Elastic Beanstalk를 사용해 프로토타입의 설정값을 일일이 참조해가며 새 환경을 만듭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'인프라의 자동화된 배포' 하면 바로 떠올려야 할 서비스가 CloudFormation입니다. 우리가 만든 복잡한 인프라 구조를 JSON이나 YAML 같은 텍스트 파일(템플릿)로 적어두면, AWS가 그 설계도대로 똑같은 복제품을 전국 어디든 순식간에 만들어줍니다. 이것을 'IaC(Infrastructure as Code)'라고 부르며 현대적인 클라우드 운영의 표준입니다.\n\n다른 옵션인 A와 C는 배포 도구가 아니며, D는 Beanstalk가 지원하는 특정 환경에 맞춰 앱을 새로 구성해야 하는 번거로움이 있습니다.",
+    "explanation": "정답은 B입니다. 인프라 인스턴스 자동화 배포하면 CloudFormation입니다. 설계도를 텍스트 파일로 적어두면 AWS가 버튼 하나로 똑같은 복제품을 전국 어디든 만들어줍니다. 이를 'IaC'라고 부릅니다.\n\nhttps://aws.amazon.com/cloudformation/",
     "glossary": {
       "AWS CloudFormation": "설계도(템플릿)를 보고 AWS의 모든 자원을 자동으로 생성, 수정, 삭제해주는 서비스",
       "IaC (Infrastructure as Code)": "인프라 설정을 코드로 작성하여 관리함으로써 인간의 실수를 줄이고 재사용성을 높이는 방식",
@@ -75,7 +75,7 @@ export const quizData = [
       "가상 프라이빗 게이트웨이 (VPG)"
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n원래 S3는 인터넷 주소를 가진 서비스지만, 'VPC 엔드포인트'를 만들면 VPC 내부의 서버와 S3 사이에 '전용 터널'이 뚫립니다. 이 터널을 통하면 데이터가 공용 인터넷으로 나가지 않고 AWS 내부망 안에서만 뱅글뱅글 돕니다. 보안도 최고고, 심지어 속도도 빠르며 데이터 전송 요금까지 아낄 수 있는 필수 기능입니다.\n\n다른 옵션인 C(프라이빗 서브넷)만으로는 외부 S3와 통신할 구멍이 없어 결국 NAT나 엔드포인트가 필요하고, A는 암호화 도구라 네트워크 경로와는 무관합니다.",
+    "explanation": "정답은 B입니다. 통신이 공용 인터넷을 타지 않게 하려면 'VPC 엔드포인트'를 만들어야 합니다. 이를 통해 S3 등의 서비스와 내부망 안에서만 대화하도록 전용 터널을 뚫어줍니다. 보안과 비용 모두에 유리합니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html",
     "glossary": {
       "VPC Endpoint (VPC 엔드포인트)": "인터넷 게이트웨이 없이도 내부망(VPC)에서 S3 등의 서비스로 안전하게 직접 접속하게 돕는 통로",
       "Private Network (사내망)": "외부 인터넷과 분리되어 인증된 사용자나 장치만 접근할 수 있는 안전한 네트워크 구역",
@@ -92,7 +92,7 @@ export const quizData = [
       "AWS AppConfig를 이용해 동적으로 캐시 정책을 바꾸는 방식"
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n캐시와 DB의 '데이터 일치(Consistency)'가 최우선이라면 'Write-through'가 정석입니다. 애플리케이션이 데이터를 저장할 때 DB와 캐시에 동시에 기록하기 때문에, 사용자는 언제나 캐시에서 최신 정보를 만날 수 있습니다. 다만 매번 두 번씩 써야 하므로 쓰기 성능이 약간 떨어질 수 있다는 점은 기억해두세요.\n\n다른 옵션인 A(지연 로딩)는 캐시에 없는 순간(Cache Miss)에만 채우므로 일시적으로 과거 데이터가 보일 수 있는 단점이 있습니다.",
+    "explanation": "정답은 B입니다. 데이터 일관성이 최우선이라면 'Write-through'가 정석입니다. DB에 쓸 때 캐시에도 동시에 기록하므로 사용자는 언제나 최신 정보를 만날 수 있습니다.\n\nhttps://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Strategies.html#Strategies.WriteThrough",
     "glossary": {
       "Write-through Cache": "데이터를 저장할 때 DB와 캐시에 동시에 써서 데이터 불일치를 원천 방지하는 방식",
       "Data Consistency (데이터 일관성)": "여러 곳에 저장된 정보가 서로 충돌 없이 똑같은 값을 유지하는 성질",
@@ -109,7 +109,7 @@ export const quizData = [
       "사내망과 AWS 사이에 전용 VPN을 뚫고 's3 cp' 명령으로 야금야금 복사합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n대량의 데이터를 안정적으로, 그리고 운영자의 개입 없이 옮기려면 DataSync가 짱입니다. DataSync는 전송 중 암호화와 무결성 검사를 알아서 해주고, 네트워크 속도도 꽉 채워 효율적으로 관리합니다. 100GB는 100Mbps 회선으로도 며칠이면 충분히 옮길 수 있는 양이라 굳이 무거운 Snowball 장비를 빌릴 필요도 없습니다.\n\n다른 옵션인 A는 전송 중 끊기면 처음부터 다시 해야 할 수 있어 불안정하고, D는 VPN 설치라는 배보다 배꼽이 더 큰 작업이 추가됩니다.",
+    "explanation": "정답은 B입니다. 대량의 데이터를 안정적으로 옮기려면 DataSync가 답입니다. 전송 중 암호화와 무결성 검사를 알아서 해주고 네트워크 속도도 효율적으로 관리해줍니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "AWS DataSync": "온프레미스와 AWS 사이에서 대량의 데이터를 빠르고 안전하게 동기화해주는 서비스",
       "Migration (마이그레이션)": "운영 중인 시스템이나 데이터를 새로운 환경(예: 클라우드)으로 옮기는 과정",
@@ -126,7 +126,7 @@ export const quizData = [
       "Fargate 서버를 하나 24시간 띄워놓고, 그 안에서 'Windows 작업 스케줄러'를 돌립니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nWindows 컨테이너 작업이고 주기가 일정하다면 ECS의 '예약된 작업'이 정답입니다. 작업이 필요할 때(10분마다)만 컨테이너 서버(Fargate)를 잠깐 띄워 일을 시키고 끝나면 바로 꺼버리기 때문에, 24시간 서버를 켜두는 것보다 훨씬 저렴합니다. 아쉽게도 Lambda는 아직 Windows 기반 컨테이너를 직접 지원하지 않아 대안이 될 수 없습니다.\n\n다른 옵션인 D는 놀고 있는 시간에도 서버 요금이 계속 나가서 돈 낭비이고, B는 더 복잡한 대량 처리용이라 오버헤드가 큽니다.",
+    "explanation": "정답은 C입니다. Windows 컨테이너 작업이고 주기가 일정하다면 ECS의 '예약된 작업'이 정답입니다. 필요할 때만 Fargate를 띄워 일을 시키고 꺼버리기 때문에 매우 경제적입니다.\n\nhttps://docs.aws.amazon.com/AmazonECS/latest/developerguide/scheduled_tasks.html",
     "glossary": {
       "Fargate (파게이트)": "서버 관리 없이 컨테이너만 던져주면 알아서 실행해주는 서버리스 컨테이너 엔진",
       "Scheduled Task (예약된 작업)": "정해진 시간(예: 매주 월요일, 매시간 등)에 특정 프로그램을 자동으로 실행하는 설정",
@@ -144,7 +144,7 @@ export const quizData = [
       "Organizations 전체에 'IAM Identity Center(구 SSO)'를 설정하고 사내 디렉터리와 통합합니다."
     ],
     "answer": [1, 3],
-    "explanation": "정답은 A와 E입니다.\n\n여러 계정을 중앙 집중적으로 관리하려면 먼저 Organizations(A)라는 우산을 씌워야 합니다. 그 후, 직원들이 아이디 하나로 이 방 저 방(계정)을 다닐 수 있게 'IAM Identity Center(E)'를 구성해 사내 로그인 시스템과 연결하면 됩니다. 그러면 직원들은 평소 쓰던 아이디로 로그인해서 권한이 있는 모든 계정에 한 번에 접속할 수 있어 아주 편리합니다.\n\n다른 옵션인 B(Cognito)는 일반 앱 사용자를 위한 것이지 회사 직원 관리용은 아니며, C는 설정 방식이 틀렸습니다.\n\n(참고: 원문 옵션 0, 4가 논리적으로 맞음)",
+    "explanation": "정답은 A와 E입니다. 여러 계정을 통합 관리하려면 Organizations(A)가 필수이며, 아이디 하나로 접속하게 하려면 IAM Identity Center(E)를 사내 디렉터리와 통합하면 됩니다.\n\nhttps://aws.amazon.com/identitycenter/",
     "glossary": {
       "AWS Organizations": "여러 AWS 계정을 그룹화하여 통합 결제와 보안 정책을 편리하게 관리하는 서비스",
       "IAM Identity Center (AWS SSO)": "한 번의 로그인으로 여러 AWS 계정과 비즈니스 앱에 접근할 수 있게 돕는 관문 서비스",
@@ -161,7 +161,7 @@ export const quizData = [
       "S3 One Zone-IA 등급에 보관해 비용을 더 깎고 파일 유실 위험은 감수합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 저렴한 보관소는 Glacier 계열이지만, 보통 꺼내는 데 몇 시간이 걸립니다. 하지만 '긴급 검색' 신청을 하면 1~5분 만에 데이터를 가져올 수 있죠. 비록 긴급 검색 수수료는 비싸지만, '평소 거의 안 보는' 아카이브라면 시스템 유지비 자체를 낮추는 Glacier가 전체 비용 면에서 훨씬 이익입니다.\n\n다른 옵션인 C와 D는 저장 비용 자체가 Glacier보다 비싸서 '최소 비용' 달성에 불리합니다.",
+    "explanation": "정답은 A입니다. 가장 저렴한 보관소는 Glacier이지만 꺼내는 데 시간이 걸립니다. 하지만 '긴급 검색'을 쓰면 1~5분 만에 데이터를 가져올 수 있어, 가끔 발생하는 긴급 상황에 효율적으로 대응할 수 있습니다.\n\nhttps://aws.amazon.com/s3/storage-classes/glacier/",
     "glossary": {
       "Amazon S3 Glacier": "자주 안 쓰는 데이터를 아주 저렴한 가격으로 장기 보관해주는 아카이브 저장소",
       "Expedited Retrieval (긴급 검색)": "보통 시간이 걸리는 Glacier 데이터를 1~5분 내외로 빠르게 되찾아오는 유료 서비스",
@@ -178,7 +178,7 @@ export const quizData = [
       "예약 인스턴스(RI)를 대량 구매해 EC2에 모든 계층을 직접 깔고 24시간 모니터링합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'운영 비용 절감'과 '단순함'이 핵심입니다. 웹 화면은 서버 없이 S3(A) 하나면 끝납니다. 로직 서버도 우리가 직접 OS 패치를 할 필요 없는 Fargate(A)에게 맡기세요. DB는 알아서 백업하고 관리해주는 RDS(A)가 책임집니다. 이렇게 하면 우리는 서버 관리자가 아니라 '개발자'로서의 본업에만 충실할 수 있습니다.\n\n다른 옵션들은 직접 관리해야 할 서버(EC2)가 포함되어 있거나, EKS처럼 관리가 지나치게 복잡한 도구들이 섞여 있습니다.",
+    "explanation": "정답은 A입니다. 운영 비용과 관리 수고를 줄이는 최강 조합입니다. 화면은 S3, 로직은 서버 없는 Fargate, DB는 관리형인 RDS를 쓰면 개발자는 코드에만 집중할 수 있습니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Three-tier Architecture (3계층 아키텍처)": "웹(사용자 접점), 앱(비즈니스 로직), DB(데이터 저장)를 물리적으로 분리해 안정성과 확장성을 높인 설계",
       "AWS Fargate": "서버를 빌려 쓰지 않고 컨테이너만 등록하면 알아서 리소스를 할당해 실행해주는 엔진",
@@ -195,7 +195,7 @@ export const quizData = [
       "EFS를 만들되, 보안을 위해 접속 통로는 딱 하나만 만들고 여러 포인트로 공유합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n(참고: 원문 정답은 index 2인 'Mount Target이 여러 개인 EFS'가 맞음)\n정답은 C입니다.\n\n리눅스 서버들(Linux instances)이 가장 편하게 나눠 쓰는 파일 저장소는 EFS입니다. 가용 영역마다 접속 통로(Mount Target)를 만들어두면 사내 망에서도 VPN을 타고 들어와 마치 자기 하드디스크처럼 쓸 수 있습니다. 용량도 쓰는 만큼 알아서 늘어나니 확장성 걱정도 필요 없는 효자 서비스입니다.\n\n다른 옵션인 B(EBS)는 가용 영역을 넘나들거나 온프레미스 서버에서 쓰기에 제약이 너무 많습니다.",
+    "explanation": "정답은 C입니다. 리눅스 서버들이 가장 편하게 나눠 쓰는 파일 저장소는 EFS입니다. 가용 영역마다 접속 통로를 만들어두면 사내 망에서도 VPN을 타고 들어와 로컬 하드처럼 쓸 수 있습니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS (Elastic File System)": "수천 개의 서버가 동시에 접속해 파일을 공유할 수 있는 리눅스용 무제한 저장소",
       "Mount (마운트)": "외부 저장 장치를 컴퓨터 내부의 파일 시스템처럼 연결해서 쓰는 일",
@@ -212,7 +212,7 @@ export const quizData = [
       "조직 통합 결제 기능을 끄고 각자 돈을 내게 해서 관심을 끊게 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n계정 주인(Root)마저 굴복시킬 수 있는 유일한 힘은 AWS Organizations의 SCP입니다. SCP로 특정 행동(Billing 조회 등)을 거부하면, 그 계정의 신적인 존재인 루트 사용자라도 결제 정보를 볼 수 없습니다. 재무팀의 엄격한 요구 사항을 한 번에 가장 확실하게 해결하는 마법 같은 기능입니다.\n\n다른 옵션들은 보안 설정상 루트 사용자의 권한을 완전히 뺏을 수 없어 조건 충족이 불가능합니다.",
+    "explanation": "정답은 C입니다. 루트 사용자마저 통제할 수 있는 유일한 힘은 SCP입니다. SCP로 결제 정보 조회를 거부하면, 계정 주인이라도 돈 관계를 볼 수 없게 되어 재무팀의 요구를 완벽히 충족합니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
     "glossary": {
       "SCP (Service Control Policy)": "조직 내 계정의 권한을 중앙에서 강력하게 제한하는 가드레일 정책",
       "Organization Unit (OU)": "여러 계정을 용도별(개발, 재무 등)로 묶어 관리하는 가상의 폴더",
@@ -229,7 +229,7 @@ export const quizData = [
       "DynamoDB에 저장 옵션을 켜고, 14일 뒤에 데이터가 사라지는 유통기한(TTL) 설정을 겁니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n메시지 배달 실패 시 쓰레기통이 아닌 '반송함'으로 보내는 기능을 데드 레터 대기열(DLQ)이라고 합니다. 배달 못한 메시지가 생기면 이를 SQS라는 보관소에 자동으로 쌓아주게 설정하세요. 그 SQS의 보존 기간을 14일로 설정하면, 우리 엔지니어들이 넉넉한 시간 동안 왜 배달이 안 됐는지 분석하고 해결할 수 있습니다.\n\n다른 옵션인 B는 모든 주문 흐름에 대기열을 억지로 끼워 넣는 식이라 설계 변경 공사가 커질 수 있습니다.",
+    "explanation": "정답은 C입니다. 배달 실패 시 쓰레기통이 아닌 반송함으로 보내는 기능이 DLQ입니다. 실패한 메시지를 SQS(보관소)에 쌓아두고 보존 기간을 넉넉히 14일로 주면 엔인니어가 나중에 분석할 수 있습니다.\n\nhttps://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html",
     "glossary": {
       "Dead Letter Queue (DLQ, 데드 레터 대기열)": "메시지 처리에 실패했을 때 해당 메시지를 버리지 않고 분석을 위해 따로 모아두는 대기열",
       "Amazon SNS (Simple Notification Service)": "한 번의 메시지 발행으로 수많은 구독자(서버, 이메일 등)에게 알림을 쏘는 서비스",
@@ -246,7 +246,7 @@ export const quizData = [
       "매 정시마다 DB 전체를 조회해서 파일을 만드는 람다 스케줄을 돌립니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n코딩 필요 없이 가장 세련된 방식은 'Export to S3' 기능입니다. 이 기능을 쓰면 DB가 일하느라 쓰는 엔진 성능(RCU)을 전혀 갉아먹지 않고, AWS 내부망이 알아서 데이터를 S3로 복제해줍니다. '지정 시간 복구(PITR)'를 켜두면 마법처럼 실시간 백업이 완성됩니다.\n\n다른 옵션인 C나 D는 람다 코딩도 해야 하고, 잘못하면 DB 읽기 용량을 다 써버려 실제 서비스가 느려질 위험이 있습니다.",
+    "explanation": "정답은 B입니다. 가장 세련된 방식은 'Export to S3'입니다. DB 엔진 성능에 전혀 지장을 주지 않으면서 설정만으로 실시간 백업이 완성됩니다.\n\nhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.html",
     "glossary": {
       "Export to S3": "DynamoDB의 데이터를 엔진 성능 저하 없이 S3 객체로 직접 뽑아내주는 편리한 기능",
       "PITR (Point-in-Time Recovery)": "지난 35일 이내의 어느 시점으로든 DB를 되돌릴 수 있게 해주는 마법 같은 실시간 백업 옵션",
@@ -263,7 +263,7 @@ export const quizData = [
       "SQS 표준 대기열을 쓰고 람다에게 암호 키를 직접 휘두를 수 있는 대장 권한을 부여합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'비동기'이고 '가성비'가 중요하다면 SQS 표준 대기열이 0순위입니다. (FIFO는 더 비싸고 속도 제한이 있습니다.) 신용카드 데이터이니 KMS로 암호를 거는 건 필수적이며, 람다가 일을 하려면 그 암호를 풀(Decrypt) 수 있는 권한만 딱 맞춰서 주면 됩니다. 이것이 가장 알뜰하고 튼튼한 정석 설계입니다.\n\n다른 옵션들처럼 굳이 순서가 중요하지 않은 작업에 비싼 FIFO를 쓰는 건 낭비입니다.",
+    "explanation": "정답은 A입니다. 비동기이고 가성비가 중요하다면 SQS 표준 대기열이 최고입니다. KMS로 암호를 거는 것은 기본이며 필요한 권한만 람다에게 부여하는 설계가 가장 알뜰하고 튼튼합니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "Standard Queue (표준 대기열)": "무제한 처리량과 가장 저렴한 가격을 가진 SQS의 기본 대기열 방식",
       "SSE-KMS (서버 측 암호화)": "데이터가 하드디스크에 저장될 때 AWS의 키 관리 시스템을 이용해 자동으로 자물쇠를 채우는 것",
@@ -280,7 +280,7 @@ export const quizData = [
       "승인된 서버만 들어있는 전용 백화점인 'Service Catalog' 시스템을 구축해 거기서만 쇼핑하게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n부탁이나 감시보다는 '원천 차단'이 최고입니다. SCP를 사용해 \"t3.micro 같은 저렴한 타입 말고는 아무것도 못 만들어!\"라고 가이드라인(가드레일)을 쳐두면, 개발자가 실수로 비싼 인스턴스를 클릭해도 오류가 나며 생성이 안 됩니다. 운영 수고가 가장 적고 효과가 즉각적입니다.\n\n다른 옵션인 D(Service Catalog)도 좋은 방법이지만, 시스템 구축 비용과 관리 오버헤드가 SCP보다 훨씬 큽니다.",
+    "explanation": "정답은 B입니다. 가이드라인(가드레일)을 치는 데는 SCP가 최고입니다. 저렴한 타입 말고는 아예 생성이 안 되게 막아버리면 개발자의 실수를 원천 차단할 수 있습니다.\n\nhttps://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
     "glossary": {
       "SCP (Service Control Policy)": "조직 내 계정의 권한을 중앙에서 강력하게 제한하는 가드레일 정책",
       "Instance Type (인스턴스 유형)": "CPU, 메모리 사양에 따라 나뉘는 서버의 등급(예: t3.medium, c5.large 등)",
@@ -297,7 +297,7 @@ export const quizData = [
       "Transcribe로 받아쓰기를 한 뒤, Comprehend가 알아서 번역과 감정 분석을 한꺼번에 처리하게 합니다."
     ],
     "answer": [2, 3, 4],
-    "explanation": "정답은 C입니다.\n\n(참고: 원문 옵션 3, 4, 5 선택이 논리적으로 맞음)\n프로세스는 이렇습니다. 1. Transcribe가 음성을 텍스트로 '받아쓰기' 합니다. 2. Translate가 글로벌 언어를 '영어'로 번역합니다. 3. 마지막으로 Comprehend(이걸 이해함)가 글 속에 숨은 고객의 긍정/부정 '감정'을 분석해 보고서를 냅니다. 이 순서가 AI 서비스 활용의 정석 코스입니다.\n\n다른 옵션인 Polly는 글자를 목소리로 바꾸는 서비스라 반대 역할이며, Lex는 주로 챗봇을 만들 때 씁니다.",
+    "explanation": "정답은 C입니다. 음성을 텍스트로(Transcribe) -> 영어로 번역(Translate) -> 감정 분석(Comprehend)의 3단계 코스가 AI 분석의 정석입니다.\n\nhttps://aws.amazon.com/comprehend/",
     "glossary": {
       "Amazon Transcribe": "음성 파일을 분석해 텍스트로 변환해주는 '받아쓰기' AI 서비스",
       "Amazon Translate": "수십 개의 언어를 고품질의 다른 언어로 즉시 번역해주는 서비스",
@@ -314,7 +314,7 @@ export const quizData = [
       "관리자가 지금 접속 중인 곳이 정책에 적힌 '승인된 IP 대역(CIDR)' 밖이기 때문입니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n정책의 가장 밑바닥에 숨겨진 'Condition(조건)'을 확인해보세요. 만약 특정 사무실 IP에서만 명령을 내릴 수 있게 묶어두었다면, 집이나 외부 카페에서 접속했을 땐 당연히 차단됩니다. 권한(Allow)은 있지만 상황(Condition)이 맞지 않아 발생하는 전형적인 보안 차단 사례입니다.\n\n다른 옵션인 B는 보통 자원 기반 정책에서 쓰는 항목이라 현재 상황과는 거리가 멉니다.",
+    "explanation": "정답은 D입니다. 정책의 Condition 항목에 특정 사무실 IP만 적어두면, 그 외의 장소에서 접속했을 땐 403 오류가 뜨며 차단됩니다. 보안을 강화하는 전형적인 방법입니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IPAddress",
     "glossary": {
       "Condition (조건)": "정책이 언제 적용될지 정하는 세부 규칙(시간, IP 주소, MFA 여부 등)",
       "403 Forbidden": "시스템이 누군지는 알겠으나, 그 행동을 할 권한이 없어서 거절할 때 내뱉는 오류",
@@ -331,7 +331,7 @@ export const quizData = [
       "S3 Select 기능을 사용하여 파일 하나하나를 열어보며 카드 번호 패턴을 찾습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n데이터 속에서 개인정보를 찾아내는 데 특화된 전문 탐정은 Amazon Macie입니다. Macie는 인공지능(ML)을 이용해 수백만 개의 파일 속에서 주민번호, 카드번호, 여권번호 같은 패턴을 기막히게 찾아내 경고를 줍니다. 보안 사고를 예방하는 데 있어서 S3의 가장 믿음직한 파수꾼입니다.\n\n다른 옵션인 B(Athena)나 D(S3 Select)는 데이터가 어떤 구조인지 우리가 다 알아야 검색이 가능하므로, 숨겨진 개인정보를 찾기에는 한계가 큽니다.",
+    "explanation": "정답은 C입니다. 데이터 속 개인정보를 찾아내는 전문 탐정은 Amazon Macie입니다. AI를 이용해 카드번호, 여권번호 같은 패턴을 기막히게 찾아내 경고를 줍니다.\n\nhttps://aws.amazon.com/macie/",
     "glossary": {
       "Amazon Macie": "S3에 저장된 민감한 데이터를 자동으로 발견, 분류 및 보호하는 완전 관리형 보안 서비스",
       "PII (Personally Identifiable Information)": "이름, 번호 등으로 특정 개인을 알아볼 수 있는 민감한 개인 정보",
@@ -349,7 +349,7 @@ export const quizData = [
       "전용선(DX) 너머의 EFS를 사내 서버에 직접 연결해서 원격 저장소로 활용합니다."
     ],
     "answer": [1, 3],
-    "explanation": "정답은 B와 D입니다.\n\n사내 서버와 클라우드 저장소를 잇는 가교 역할을 하는 것이 Storage Gateway입니다. NFS가 필요할 땐 'S3 파일 게이트웨이(B)'를 설치해 마치 로컬 서버처럼 쓰면 되고, 윈도우/리눅스 블록 장치가 필요할 땐 '볼륨 게이트웨이(D)'를 설치하면 됩니다. 두 장치 모두 자주 쓰는 파일은 우리 사무실 장비에 미리 담아두는 '로컬 캐싱' 기능이 있어 속도 문제도 해결해줍니다.\n\n다른 옵션인 A는 운영 체제 수준에서 불안정하며, E는 네트워크 지연(Latency) 때문에 로컬 스피드를 내기 어렵습니다.",
+    "explanation": "정답은 B와 D입니다. 사내망과 캐시를 잇는 게이트웨이가 정답입니다. 파일이 필요하면 S3 파일 게이트웨이, 블록 장치가 필요하면 볼륨 게이트웨이를 설치하세요.\n\nhttps://aws.amazon.com/storagegateway/",
     "glossary": {
       "AWS Storage Gateway": "온프레미스에서 클라우드 스토리지(S3, EBS 등)를 로컬 하드처럼 쓸 수 있게 해주는 가상 장치",
       "Local Caching (로컬 캐싱)": "자주 쓰는 데이터를 사무실 가까운 곳에 미리 복사해두어 응답 속도를 높이는 것",
@@ -367,7 +367,7 @@ export const quizData = [
       "NAT 게이트웨이를 하나 더 사서 트래픽을 분산해 단위당 요금을 조금이나마 낮춰봅니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nS3 트래픽 때문에 NAT 요금이 나가는 건 '불필요한 과금'입니다. 무료인 '게이트웨이 VPC 엔드포인트'를 구성하고 라우팅 테이블에 등록만 해주면, S3로 가는 데이터는 더 이상 비싼 NAT 통로를 거치지 않고 전용 무료 하이패스를 타게 됩니다. 보안은 그대로 유지하면서 통신 비용만 쏙 빼주는 AWS의 고마운 선물입니다.\n\n다른 옵션인 A(NAT 인스턴스)는 직접 관리해야 하는 수고가 들고 성능도 보장하기 어렵습니다.",
+    "explanation": "정답은 C입니다. S3 트래픽 때문에 비싼 NAT 요금을 낼 필요가 없습니다. 무료인 '게이트웨이 VPC 엔드포인트'를 구성하면 통신 비용이 거의 0원이 됩니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
     "glossary": {
       "VPC Gateway Endpoint": "VPC와 S3/DynamoDB 사이를 인터넷 없이 무료로 잇는 전용 통로",
       "NAT Gateway (NAT 게이트웨이)": "내부망 서버가 인터넷에 안전하게 접속하게 돕지만, 데이터 양에 따라 사용료가 비쌀 수 있는 장치",
@@ -384,7 +384,7 @@ export const quizData = [
       "버전 관리 기능을 꺼버리고 딱 서버 2대에만 사진을 따로 복사해서 보관합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n관리의 수고를 덜어주는 S3의 최고 자동 기능은 수명 주기(Lifecycle) 규칙입니다. 설정 하나만으로 \"최신 버전 2개만 남기고 나머지는 다 지워!\" 혹은 \"30일 지난 버전은 삭제해!\"라고 명령해두면, S3가 매일 밤 알아서 청량하게 버킷을 청소해줍니다. 비용은 줄고 관리자는 편해지는 윈-윈 전략입니다.\n\n다른 옵션인 B는 코딩과 유지 보수 수고가 들고, D는 버전 관리의 장점(실수 복구)을 포기하는 극단적인 선택입니다.",
+    "explanation": "정답은 A입니다. S3 수명 주기 규칙을 써서 '최신 버전 2개만 남기고 삭제'하도록 설정하세요. S3가 매일 밤 알아서 청소해주니 비용은 줄고 관리는 편해집니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-configuration-examples.html",
     "glossary": {
       "S3 Lifecycle Management": "데이터 보존 기간이나 버전 개수에 따라 파일을 자동으로 삭제하거나 옮겨주는 관리 기능",
       "Noncurrent Version (이전 버전)": "S3 버전 관리 기능에서 최신본(Current) 뒤에 숨겨진 과거 상태의 파일들",
@@ -401,7 +401,7 @@ export const quizData = [
       "AWS 파트너사에게 우리 상황에 맞는 '200Mbps 호스팅 연결' 상품으로 교체해 달라고 요청합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nDirect Connect는 우리가 직접 전선을 깔 수도 있지만, 파트너사가 미리 깔아둔 망을 빌려 쓰는 '호스팅 연결(Hosted Connection)' 방식도 있습니다. 1Gbps가 과분하다면 파트너사를 통해 더 저렴한 200Mbps 같은 낮은 대역폭 상품으로 갈아타는 것이 가장 현실적이고 안전한 비용 절감 방법입니다.\n\n다른 옵션인 B는 기술적으로 불가능합니다. 전용선 대역폭은 물리적/계약적 설정이라 클릭 한 번으로 무 자르듯 바꿀 수 없기 때문입니다.",
+    "explanation": "정답은 D입니다. 전용선 대역폭이 너무 높다면 파트너사를 통해 더 저렴한 대역폭 상품(호스팅 연결)으로 갈아타는 것이 가장 효율적인 비용 절감법입니다.\n\nhttps://aws.amazon.com/directconnect/",
     "glossary": {
       "AWS Direct Connect (DX)": "공용 인터넷을 우회해 사내 망과 AWS를 직접 연결하는 고속 전용선 서비스",
       "Hosted Connection (호스팅 연결)": "AWS 파트너사를 통해 네트워크 대역폭을 쪼개서 분양받는 알뜰한 연결 방식",
@@ -419,7 +419,7 @@ export const quizData = [
       "거대 장비인 Snowball Edge를 빌려 CLI 명령어로 데이터를 꾸역꾸역 담아 트럭으로 보냅니다."
     ],
     "answer": [0, 3],
-    "explanation": "정답은 A와 D입니다.\n\nWindows 파일 서버 마이그레이션의 마스터 도구는 AWS DataSync입니다. 단순히 파일만 옮기는 게 아니라, 누가 이 파일을 볼 수 있는지 적힌 깐깐한 권한 정보(ACL)까지 똑같이 복사해주기 때문입니다. 네트워크 성능이 좋으면 에이전트 직접 전송(A)을 쓰고, 데이터가 너무 많아 인터넷이 비명을 지르면 Snowcone 박스(D)를 가져와서 담아 보내면 됩니다. 두 방법 모두 '권한 유지'의 정석입니다.\n\n다른 옵션들은 권한 정보가 유실될 위험이 있거나 이사 절차가 지나치게 복잡해 추천하지 않습니다.",
+    "explanation": "정답은 A와 D입니다. Windows 파일 이사는 DataSync가 마스터입니다. 권한 정보(ACL)까지 똑같이 복사해주기 때문입니다. 데이터가 너무 많으면 Snowcone 장비에 담아 보내는 것도 좋은 방법입니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "FSx for Windows File Server": "윈도우 표준 프로토콜(SMB)과 완벽히 호환되는 클라우드용 관리형 공유 저장소",
       "ACL (Access Control List)": "어떤 사용자가 어떤 파일을 읽거나 수정할 수 있는지 적혀 있는 권한 목록",

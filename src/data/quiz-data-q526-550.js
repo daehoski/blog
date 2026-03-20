@@ -9,7 +9,7 @@ export const quizData = [
       "데이터베이스 앞에 Amazon RDS Proxy를 설정하고, 앱이 프록시를 통해 연결하게 합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n장애 조치 중에 다운타임이 발생하는 주된 이유는 애플리케이션이 새로운 기본(Writer) 인스턴스를 찾고 다시 연결하는 데 시간이 걸리기 때문입니다. RDS Proxy를 사용하면 프록시가 내부적으로 재연결을 처리하고 앱과의 연결을 유지해주므로, 장애 조치 시간이 획기적으로(최대 66% 이상) 단축됩니다.\n\n다른 옵션인 A나 C는 읽기 성능에는 도움이 되지만, 쓰기 서버의 장애 조치 시간 자체를 줄여주지는 못합니다.",
+    "explanation": "정답은 D입니다. DB 장애 시 새로운 서버로 다시 연결하는 데 시간이 걸립니다. RDS Proxy를 앞에 두면 프록시가 연결을 유지해주므로 장애 조치 시간(다운타임)을 획기적으로 줄여 서비스 연속성을 보장합니다.\n\nhttps://aws.amazon.com/rds/proxy/",
     "glossary": {
       "Amazon RDS Proxy": "데이터베이스 연결을 효율적으로 관리하고 장애 조치 시 빠른 전환을 돕는 가용성이 높은 완전관리형 프록시",
       "Failover (장애 조치)": "기본 서버에 문제가 생겼을 때 자동으로 대기 중인 다른 서버로 역할을 넘겨 서비스를 이어가는 과정",
@@ -26,7 +26,7 @@ export const quizData = [
       "두 번째 리전에 서버군을 배치하고 'Amazon Aurora 글로벌 데이터베이스'를 사용합니다. Route 53 상태 확인과 장애 조치 정책을 연동합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n리전 전체의 장애에도 끄떡없는 구조를 만들려면 '리전 수준의 복제'가 핵심입니다. Aurora 글로벌 데이터베이스는 리전 간 데이터를 아주 빠르게 복제하며, 재난 시 보조 리전을 주 리전으로 즉시 승격시킬 수 있습니다. 여기에 Route 53의 상태 확인 기능을 더하면 사용자를 살아있는 리전으로 자동 안내할 수 있어 최고의 내결함성을 달성합니다.\n\n다른 옵션인 A는 기술적으로 불가능하거나(ASG는 리전 내 가용 영역 간에만 확장 가능), B/C는 복구 시간이나 비용 면에서 글로벌 데이터베이스보다 효율이 떨어집니다.",
+    "explanation": "정답은 D입니다. '리전 전체 장애'에도 끄떡없는 구조를 만들려면 Aurora 글로벌 데이터베이스가 핵심입니다. 리전 간 초고속 복제를 지원하며, 재난 시 보조 리전을 즉시 승격시킬 수 있어 최고의 내결함성을 제공합니다.\n\nhttps://aws.amazon.com/rds/aurora/global-database/",
     "glossary": {
       "Amazon Aurora Global Database": "하나의 데이터베이스를 전 세계 여러 리전에 걸쳐 운영할 수 있게 하며 빠른 복구를 지원하는 기능",
       "Fault Tolerance (내결함성)": "시스템의 일부 구성 요소에 장애가 발생해도 전체 서비스가 멈추지 않고 계속 작동하는 성질",
@@ -43,7 +43,7 @@ export const quizData = [
       "AWS Transfer Family를 사용해 파일을 S3에 저장합니다. 파일이 들어오는 즉시 S3 이벤트를 트리거하여 람다(Lambda)로 처리하고 삭제합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'운영 효율성'과 '실시간성'을 모두 잡으려면 서버리스 조합이 정답입니다. AWS Transfer Family는 FTP 서버를 따로 관리할 필요가 없게 해주고, S3와 람다를 연동하면 파일이 들어오자마자 개별적으로 즉시 처리(3~8분은 람다 실행 시간 내)할 수 있습니다. 처리 완료 후 삭제 로직도 람다 코드 한 줄로 해결되니 매우 깔끔합니다.\n\n다른 옵션인 A나 B처럼 밤까지 기다렸다가 한꺼번에 처리하는 방식은 '가능한 한 빨리 처리'하라는 요구 사항에 어긋납니다.",
+    "explanation": "정답은 D입니다. 서버 관리가 필요 없는 AWS Transfer Family로 파일을 받고, S3에 저장되는 즉시 람다가 출동해 처리 후 삭제하게 만드세요. 코드 몇 줄로 모든 프로세스가 실시간으로 자동화됩니다.\n\nhttps://aws.amazon.com/aws-transfer-family/",
     "glossary": {
       "AWS Transfer Family": "S3나 EFS로의 파일 전송을 FTP, SFTP 등으로 간편하게 처리하게 해주는 완전 관리형 서비스",
       "S3 Event Notification": "S3에 파일이 업로드되는 등의 사건이 생기면 람다나 SNS 등에 즉시 신호를 보내는 기능",
@@ -60,7 +60,7 @@ export const quizData = [
       "RDS로 옮긴 뒤 모든 보안 모니터링을 위해 CloudWatch Logs에만 의존합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n관리 부담을 줄이려면 '완전 관리형 서비스'인 RDS를 쓰는 것이 정석입니다. RDS는 패치, 백업, 보안 업데이트를 AWS가 대신 해주며, 민감한 정보를 보호하기 위한 암호화 기능도 클릭 한 번으로 적용할 수 있어 보안과 운영 효율을 동시에 잡을 수 있습니다.\n\n다른 옵션인 A는 서버를 직접 관리해야 하므로 오버헤드가 크고, C는 정형화된 DB 워크로드에는 어울리지 않는 방식입니다.",
+    "explanation": "정답은 B입니다. 금융 데이터처럼 민감한 정보는 관리형 서비스인 RDS에 맡기는 것이 안전합니다. 패치와 백업을 AWS가 대신 해주며, 클릭 한 번으로 유휴 데이터 암호화까지 적용할 수 있어 관리 부담이 사라집니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Amazon RDS": "관계형 데이터베이스를 설치나 관리 수고 없이 바로 사용할 수 있게 해주는 클라우드 서비스",
       "Encryption at Rest (유휴 데이터 암호화)": "데이터가 하드디스크 등에 저장되어 있는 상태에서 암호화하여 물리적 도난 시에도 유출을 막는 보안 조치",
@@ -77,7 +77,7 @@ export const quizData = [
       "AWS API Gateway를 앞에 두고 API 캐싱 기능을 최대한 활용합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n게임처럼 지연 시간(Latency)에 민감하고 TCP/UDP를 모두 쓰는 서비스에는 Global Accelerator가 만능 열쇠입니다. 사용자 트래픽을 가장 가까운 AWS Edge 서버로 끌어들여 AWS 전용망을 타고 전송하므로 일반 인터넷을 통할 때보다 훨씬 빠르고 안정적입니다.\n\n다른 옵션인 A(CloudFront)는 주로 HTTP/HTTPS 스타일의 정적 콘텐츠에 최적화되어 있어 일반적인 UDP 게임 트래픽에는 적합하지 않습니다.",
+    "explanation": "정답은 C입니다. 게임처럼 지연 시간에 민감하고 UDP 트래픽이 많다면 Global Accelerator가 만능입니다. 사용자 트래픽을 빛의 속도인 AWS 전용망으로 안내하여 전 세계 어디서든 쾌적한 플레이를 보장합니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "AWS Global Accelerator": "AWS의 전용 네트워크망을 통해 사용자의 트래픽 경로를 최적화하여 지연 시간을 줄여주는 서비스",
       "NLB (Network Load Balancer)": "L4 수준에서 초당 수백만 건의 트래픽을 아주 낮은 지연 시간으로 처리하는 부하 분산 장치",
@@ -94,7 +94,7 @@ export const quizData = [
       "SQS 대기열을 만들어 람다와 연결하고 업체가 대기열에 데이터를 쌓게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n람다 함수 URL은 람다 인스턴스에 직접 URL 주소를 부여하는 가장 단순한 방법입니다. 로드 밸런서(ALB)나 API Gateway 같은 중간 단계 없이도 외부에서 HTTP 호출로 우리 람다를 바로 실행할 수 있어 운영 오버헤드가 거의 없습니다.\n\n다른 옵션인 B는 비용과 관리 포인트가 늘어나며, C나 D는 외부 업체가 AWS의 특정 프로토콜을 따라야 하므로 호환성 면에서 번거롭습니다.",
+    "explanation": "정답은 A입니다. 람다 함수 URL은 번거로운 설정 없이 람다에 직접 전용 주소를 부여하는 가장 단순한 방법입니다. 중간 단계가 없어 운영 오버헤드가 거의 제로에 가깝습니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/urls-configuration.html",
     "glossary": {
       "Lambda Function URL": "람다 함수에 직접 할당되는 전용 HTTPS 엔드포인트(주소)",
       "Webhook (웹훅)": "특정 사건이 발생했을 때 다른 시스템에 실시간으로 알림을 보내는 기술",
@@ -113,7 +113,7 @@ export const quizData = [
       "API Gateway에서 '사용자 지정 도메인 네임' 기능을 설정하고 ACM 인증서를 연동합니다."
     ],
     "answer": [0, 3, 5],
-    "explanation": "정답은 A, D, F입니다. (원문 index 0, 3, 5)\n\n수백 명의 고객 주소를 하나하나 관리하는 건 불가능합니다. 따라서 '와일드카드(*)'를 활용하는 게 핵심입니다. Route 53에서 와일드카드 레코드를 만들고(A), 서버 리전의 ACM에서 와일드카드 인증서를 준비한 뒤(D), API Gateway에서 사용자 지정 도메인으로 묶어주면(F) 어떤 고객 주소가 들어와도 우리 앱이 안전하게 맞이할 수 있습니다.\n\n다른 옵션인 C나 E처럼 고객별로 자원을 하나하나 만드는 방식은 고객이 늘어날 때 관리 지옥에 빠지게 됩니다.",
+    "explanation": "정답은 B입니다. 법적인 '박제' 보호가 필요하다면 S3 Object Lock이 유일한 정답입니다. 규정 준수 모드를 쓰면 정해진 기간 동안은 관리자라도 파일을 절대 지울 수 없게 되어 신뢰도가 극대화됩니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
     "glossary": {
       "Wildcard Domain (와일드카드)": "별표(*)를 사용해 특정 도메인의 모든 하위 도메인을 한꺼번에 지정하는 방식",
       "ACM (AWS Certificate Manager)": "SSL/TLS 인증서를 발급하고 관리하며 다른 AWS 서비스에 자동 갱신까지 해주는 도구",
@@ -130,7 +130,7 @@ export const quizData = [
       "GuardDuty를 켭니다. 발견된 위협 리스트를 SQS에 넣어두고 나중에 분석합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nS3에서 '개인정보'를 전문적으로 찾아내는 탐정은 Amazon Macie입니다. Macie가 민감한 데이터(이름, 주소 등)를 발견하면 EventBridge가 이 신호를 가로채서 보안 팀의 이메일이나 휴대폰으로 SNS 알림을 전송하는 것이 가장 빠르고 표준적인 대응 시나리오입니다.\n\n다른 옵션인 GuardDuty는 외부 해킹이나 이상 공격을 감시하는 도구이지, 파일 속 내용물(PII)을 검사하는 용도는 아닙니다.",
+    "explanation": "정답은 A입니다. 멀리 떨어진 나라에서도 빠른 로딩을 원한다면 '교차 리전 읽기 전용 복제본'을 깔아두세요. 사용자는 자기 나라 근처 복제 서버에서 데이터를 가져가므로 지연 시간이 획기적으로 줄어듭니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "Amazon Macie": "기계 학습을 통해 S3 내의 민감한 정보를 자동으로 발견하고 분류하는 보안 서비스",
       "PII (Personally Identifiable Information)": "이름, 주민번호 등 개인을 식별할 수 있는 민감한 정보",
@@ -147,7 +147,7 @@ export const quizData = [
       "30일 후 가용 영역을 하나만 쓰는 One Zone-IA로 옮겨 돈을 아끼고, 90일 후에 삭제합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n로그처럼 양은 많지만 분석이 끝나면 거의 열어보지 않는 데이터는 S3 수명 주기 정책(Lifecycle Policy)이 효자입니다. 30일간의 분석이 끝난 뒤 검색 비용은 좀 들지만 저장 비용이 매우 저렴한 Glacier로 확 낮춰버리고, 총 보관 기간인 90일이 차면 자동으로 사라지게(Expiration) 설정하는 것이 가장 돈을 아끼는 비법입니다.\n\n다른 옵션인 A는 저장 비용이 계속 비싸게 나가고, B는 거쳐가는 단계가 너무 많아 관리만 복잡해집니다.",
+    "explanation": "정답은 B입니다. 사내 실습 서버에서 클라우드 S3를 우리 집 하드디스크처럼 쓰고 싶을 때 사용하는 것이 스토리지 게이트웨이입니다. 파일을 저장하면 S3에 자동으로 올라가니 공유와 백업이 동시에 해결됩니다.\n\nhttps://aws.amazon.com/storagegateway/",
     "glossary": {
       "S3 Lifecycle Policy": "데이터의 나이에 따라 자동으로 저장 클래스를 바꾸거나(Tiering) 삭제해주는 자동화 비서",
       "S3 Glacier Flexible Retrieval": "거의 꺼내지 않는 데이터용으로 저장비가 아주 싼 대신, 꺼낼 때 약간의 시간(몇 분~몇 시간)이 걸리는 클래스",
@@ -164,7 +164,7 @@ export const quizData = [
       "계정의 모든 EBS 볼륨에 대해 기본 암호화를 적용하여 우회적으로 해결합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n쿠버네티스의 비밀 정보(Secret)는 기본적으로 평문 혹은 단순 인코딩 상태로 DB(etcd)에 들어갑니다. EKS의 'KMS 비밀 암호화' 옵션을 켜면, 이 정보들이 DB에 쓰여지기 직전에 우리가 만든 KMS 키로 단단히 암호화되어 저장됩니다. 데이터가 들어있는 창고(저장소) 수준에서 보안을 강화하는 필수 조치입니다.\n\n다른 옵션인 A는 앱 레벨의 관리고, C/D는 물리 하드디스크 차원의 암호화라 etcd 소프트웨어 보안과는 결이 다릅니다.",
+    "explanation": "정답은 B입니다. 서버(EC2)가 다른 서비스에 접근할 때는 비밀키를 주는 게 아니라 '역할'을 입혀야 합니다. 역할에 최소한의 권한(읽기 전용 등)만 넣어주면 보안 사고 걱정 없이 안전하게 일할 수 있습니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html",
     "glossary": {
       "Kubernetes etcd": "쿠버네티스의 모든 상태와 설정 값이 저장되는 핵심 데이터베이스 키-값 저장소",
       "KMS (Key Management Service)": "데이터 암호화에 쓰이는 마스터 키를 안전하게 보관하고 관리하는 서비스",
@@ -181,7 +181,7 @@ export const quizData = [
       "2개의 읽기 가능한 대기 서버가 포함된 '다중 AZ 클러스터' 배포 방식으로 전환하고 읽기 엔드포인트를 제공합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n최근 RDS에 도입된 '다중 AZ 클러스터' 배포 방식은 1개의 주 서버와 2개의 읽기 가능한 대기 서버를 제공합니다. 일반 다중 AZ는 대기 서버를 평소에 못 쓰지만, 클러스터 방식은 대기 서버들로 읽기 트래픽을 보낼 수 있습니다. 복잡한 복제본 추가 없이도 고가용성과 강력한 분석용 읽기 성능을 동시에 챙길 수 있는 최신 정석입니다.\n\n다른 옵션인 B는 일반적인 대기 서버라 읽기가 불가능하며, C는 비용이 클러스터 방식보다 더 많이 나갈 수 있습니다.",
+    "explanation": "정답은 A입니다. 정적 이미지 비용과 속도를 다 잡는 비법은 CloudFront(CDN)입니다. 전 세계 복제 서버(Edge)에서 손님에게 가장 가까운 곳에서 이미지를 쏴주니 서버도 편하고 고객도 행복해집니다.\n\nhttps://aws.amazon.com/cloudfront/",
     "glossary": {
       "Multi-AZ DB Cluster": "장애 조치용 대기 서버들을 읽기 작업에도 활용할 수 있게 최적화된 RDS의 배포 유형",
       "Reader Endpoint (읽기 엔드포인트)": "쓰기 서버가 아닌 읽기 전용 서버들로 트래픽을 이끌어주는 고정된 주소",
@@ -198,7 +198,7 @@ export const quizData = [
       "DB를 단일 가용 영역의 RDS로 옮기고 대신 캐시 서버만 빵빵하게 두어 부하를 막습니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n3개 가용 영역(AZ)을 모두 활용하는 것이 가용성의 정석입니다. DB는 다중 AZ 클러스터(A)로 무장하고, 특히 웹 서버에서 중요한 '세션 정보'를 서버 안이 아닌 ElastiCache Redis(A)라는 공용 창고에 빼두어야 서버가 늘어나도(Auto Scaling) 사용자가 로그아웃되지 않고 안정적으로 서비스를 쓸 수 있습니다.\n\n다른 옵션인 C는 DB 엔진 자체를 바꾸는 대공사라 현실성이 떨어지고, D는 한 리전이 죽으면 그대로 서비스가 멈추는 위험한 설계입니다.",
+    "explanation": "정답은 C입니다. 사용자가 줄어드는 새벽엔 자동으로 DB 사양을 낮추고, 바쁜 낮엔 높여주는 '자율 주행' DB가 Aurora Serverless입니다. 가성비와 성능을 동시에 잡는 스마트한 선택입니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Multi-AZ (다중 가용 영역)": "지리적으로 떨어진 여러 데이터 센터에 자원을 분산하여 재난 시에도 서비스 중단을 막는 구조",
       "Session State (세션 상태)": "사용자가 로그인해 있는 정보 등 일시적으로 기억해야 할 상태 데이터",
@@ -215,7 +215,7 @@ export const quizData = [
       "URL 뒤에 시간 제한이 걸린 토큰을 붙여 일시적인 링크만 제공합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n국가별 차단(Geo-Blocking)은 CloudFront의 기본 내장 기능을 쓰는 게 가장 쉽고 정확합니다. 사용자의 IP를 보고 접속 국가를 판단하여, 허용되지 않은 국가에서 들어오면 자동으로 입구 컷을 해줍니다. 별도의 코딩이나 서버 로직 없이 클릭 몇 번으로 판권 문제를 깔끔하게 해결할 수 있습니다.\n\n다른 옵션들은 특정인에 대한 권한 제어에는 좋지만, '국가 단위'의 광범위한 차단 용도로는 관리가 너무 힘듭니다.",
+    "explanation": "정답은 A입니다. 거의 안 보는 영상은 저렴한 Glacier 창고에 보관하세요. 가끔 필요할 땐 '긴급 검색'을 신청하면 1~5분 만에 꺼내볼 수 있어 보관비와 처리 속도 사이의 균형을 완벽히 맞춥니다.\n\nhttps://aws.amazon.com/s3/storage-classes/glacier/",
     "glossary": {
       "Geo-Restriction (지리적 제한)": "접속자의 국가 정보를 기반으로 콘텐츠 접근을 허용하거나 차단하는 보안 기법",
       "Whitelist (허용 목록)": "명시적으로 적어 놓은 대상에게만 입장을 허용하는 보안 방식",
@@ -232,7 +232,7 @@ export const quizData = [
       "매일 밤 스냅샷을 찍어 S3에 올리고, 리전 장애가 나면 그때부터 새 서버를 세팅하기 시작합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n30초라는 매우 짧은 RPO를 지키려면 데이터가 실시간으로 AWS로 넘어가고 있어야 합니다. DMS의 CDC 기능을 쓰면 온프레미스 DB의 변화를 즉시 가로채서 AWS에 복제해주며, 미리 RDS 서버를 작게나마 띄워두는 '웜 스탠바이' 방식을 결합하면 1시간 안에 서비스를 다시 살리는 RTO 목표도 충분히 달성할 수 있습니다.\n\n다른 옵션인 A는 비용이 너무 많이 들고, D는 데이터 유실 시간이 하루치나 되어 30초 규정을 지킬 수 없습니다.",
+    "explanation": "정답은 C입니다. 거미줄처럼 얽힌 수백 개의 통신망을 깔끔하게 하나로 묶어주는 것이 Transit Gateway입니다. 중앙 허브 하나만 관리하면 되니 네트워크 관리자의 인생이 편안해집니다.\n\nhttps://aws.amazon.com/transit-gateway/",
     "glossary": {
       "RPO (Recovery Point Objective)": "재난 시 허용 가능한 최대 데이터 유실 시간 (짧을수록 좋음)",
       "RTO (Recovery Time Objective)": "장애 후 서비스를 다시 정상 가동하는 데 걸리는 목표 시간 (빠를수록 좋음)",
@@ -249,7 +249,7 @@ export const quizData = [
       "다중 AZ 구조의 Amazon Aurora로 갈아타고, 보고용 요청은 'Aurora Reader' 주소로 보냅니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n읽기 작업(보고서 등)을 분산하는 데 가장 최적화된 엔진은 Amazon Aurora입니다. Aurora는 읽기 전용 주소(Reader Endpoint)를 따로 제공하여, 주 서버에 무리를 주지 않고 최대 15개까지 복제본을 늘려 보고서 작업을 처리할 수 있습니다. 성능과 가용성 모두에서 오라클보다 클라우드에 최적화된 선택입니다.\n\n다른 옵션인 B는 확장성이 낮고, C는 오라클 엔진 특성상 아로라만큼 유연하게 구성하기 힘듭니다.",
+    "explanation": "정답은 C입니다. 전사적 백업 자동화의 끝판왕은 AWS Backup입니다. 백업 계획 하나로 다른 지역(리전) 복제까지 말끔히 처리해주니 재해 복구(DR) 준비도 걱정 없습니다.\n\nhttps://aws.amazon.com/backup/",
     "glossary": {
       "Amazon Aurora": "AWS가 클라우드 환경에 맞춰 재설계한 고성능 완전관리형 데이터베이스 엔진",
       "Offload (오프로드)": "주 서버가 하는 무거운 일을 다른 예비 서버로 넘겨서 부담을 덜어주는 것",
@@ -268,7 +268,7 @@ export const quizData = [
       "PHP 서버를 돌려야 하므로 S3 정적 호스팅 대신 EC2 인스턴스를 띄웁니다."
     ],
     "answer": [0, 2, 4],
-    "explanation": "정답은 A, C, E입니다. (원문 index 0, 2, 4)\n\n'들쭉날쭉한 트래픽 + 유휴 시간'에는 쓴 만큼만 돈을 내는 서버리스가 정답입니다. 백엔드는 서버 없이 돌아가는 조합(A)으로, 로그인은 관리 효율이 좋은 Cognito(C)로, 프런트엔드는 S3/Amplify와 CloudFront(E) 조합으로 구성하면 평소 손님이 없을 땐 0원에 가까운 비용으로 유지할 수 있습니다.\n\n다른 옵션인 B는 손님이 없어도 서버 월세가 꼬박꼬박 나가므로 가성비 면에서 탈락입니다.",
+    "explanation": "정답은 C입니다. AS2 같은 전문 비즈니스 프로토콜을 써야 한다면 AWS Transfer Family가 정답입니다. 별도의 서버 설치 없이도 깐깐한 기업 간 데이터 전송 규약을 완벽히 지원합니다.\n\nhttps://aws.amazon.com/aws-transfer-family/",
     "glossary": {
       "Amazon DynamoDB": "서버 관리 없이 무제한으로 데이터를 저장하고 초고속으로 조회하는 NoSQL 데이터베이스",
       "Amazon Cognito User Pool": "로그인, 회원가입, 비밀번호 찾기 등의 기능을 코드 없이 구현해주는 본인 인증 서비스",
@@ -285,7 +285,7 @@ export const quizData = [
       "비회원 차단을 위해 응용 프로그램 수준에서 필드 암호화 기능을 켭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n특정인에게만 '개별 파일'에 대한 접근권을 줄 때는 서명 URL(Signed URL)이 정석입니다. 주소 뒤에 일종의 암호 통행증을 붙여주는 방식인데, 평소엔 닫혀 있는 파일을 이 주소를 가진 사람만 잠시 열어볼 수 있게 해줍니다. 영화 대여나 개별 다운로드 서비스에 딱 맞는 기술입니다.\n\n다른 옵션인 C는 S3 입구를 막아주는 기초 조치일 뿐, '개별 유료 회원'을 구별해주지는 못합니다.",
+    "explanation": "정답은 B와 C입니다. 서버 관리 수고를 제로로 만드는 골든 조합은 Lambda와 RDS입니다. 코드는 람다가 실행하고 데이터는 RDS가 관리해주니 인프라 걱정 없이 서비스 개발에만 매진할 수 있습니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "CloudFront Signed URL": "콘텐츠에 대한 임시 접근 권한을 URL 매개변수에 포함시켜 특정 기간 동안만 유효하게 만든 주소",
       "OAC (Origin Access Control)": "CloudFront를 통해서만 S3 버킷에 접근할 수 있도록 꽁꽁 묶어두는 보안 설정",
@@ -303,7 +303,7 @@ export const quizData = [
       "기존 계정들을 하나로 합쳐서 AWS Organizations 조직을 구성하고 마스터 계정으로 통합합니다."
     ],
     "answer": [0, 4],
-    "explanation": "정답은 A와 E입니다. (원문 index 0, 4)\n\n할인 혜택을 나누려면 먼저 '가족'이 되어야 합니다. AWS Organizations를 통해 계정들을 하나의 '조직'으로 묶고(E), 마스터 계정에서 \"우리 가족끼리는 할인 혜택을 같이 써도 좋아!\"라고 할인 공유 버튼을 켜면(A) 끝납니다. 그러면 플랜을 산 계정뿐만 아니라 다른 팀 계정의 서버 요금도 자동으로 할인이 적용됩니다.\n\n다른 옵션인 C(RAM)는 서브넷이나 DB 공유엔 쓰이지만, 지출 할인 혜택(Saving Plan) 공유용은 아닙니다.",
+    "explanation": "정답은 A입니다. 부서별로 돈을 얼마나 썼는지 정산하려면 '비용 할당 태그'를 켜야 합니다. 이름표(태그)가 붙은 자원들의 비용을 정밀하게 골라내어 보고서로 뽑아주는 필수 기능입니다.\n\nhttps://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html",
     "glossary": {
       "Savings Plans": "일정량의 사용량을 약속하는 대신 획기적인 요금 할인을 받는 요금제 (예약 인스턴스보다 유연함)",
       "AWS Organizations": "여러 개의 AWS 계정을 중앙에서 통합 관리하고 청구(빌링)를 합칠 수 있게 해주는 서비스",
@@ -320,7 +320,7 @@ export const quizData = [
       "완전 새로운 엔드포인트(URL)를 파고, Route 53 주소를 그쪽으로 한꺼번에 돌려버립니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n광산의 유해 가스를 미리 감지했던 카나리아처럼, '카나리아 배포'는 위험을 최소화하는 전략입니다. 신규 버전을 살짝 띄워놓고 극소수의 트래픽만 보내서 반응을 살핀 뒤, 문제가 없음을 확인하고서야 비중을 늘려 프로덕션으로 승격(Promote)하는 것이 가장 안전한 정석 배포법입니다.\n\n다른 옵션들처럼 한꺼번에 다 바꾸거나 설정을 덮어쓰는 행위는 버그가 터졌을 때 전면 장애로 이어질 수 있어 위험합니다.",
+    "explanation": "정답은 C입니다. Salesforce 고객 데이터를 코딩 없이 가져오고 싶다면 AppFlow를 선택하세요. 몇 번의 클릭만으로 안전한 전용망을 통해 데이터를 S3로 무사히 실어 나를 수 있습니다.\n\nhttps://aws.amazon.com/appflow/",
     "glossary": {
       "Canary Release (카나리아 배포)": "신규 기능을 일부 사용자에게만 먼저 노출하여 안정성을 검증하는 배포 방식",
       "API Gateway Deployment Stage": "동일한 API를 '개발용', '테스트용', '상용' 등으로 구분해 관리하는 단위",
@@ -337,7 +337,7 @@ export const quizData = [
       "다중값 응답 정책을 씁니다. 평소엔 서버 주소를 주다가, 서버가 아프면 S3 주소를 추가해서 알아서 골라가게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n이것이 바로 'Route 53 장애 조치(Failover)'의 교과서적인 활용 사례입니다. 메인 서버(Active)가 건강한지 계속 체크하다가, 서버가 아프기 시작하면 즉시 예비군인 S3(Passive)에게 공을 넘깁니다. S3는 관리할 서버도 없고 매우 저렴하므로, 비상 대기용 안내 페이지를 띄워놓기엔 최고의 장소입니다.\n\n다른 옵션인 C는 쓸데없이 서버(EC2)를 하나 더 켜둬야 하므로 돈 낭비이며 관리 포인트만 늘어납니다.",
+    "explanation": "정답은 B입니다. 전 세계 사용자에게 고정된 '하이패스 IP'를 주고 싶다면 Global Accelerator를 연동하세요. 어떤 나라에서든 가장 빠른 경로로 우리 서버까지 트래픽을 안전하게 모셔다 줍니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "Active-Passive Failover": "평소엔 A만 쓰다가 A가 고장 나면 대기 중인 B로 자동 전환하는 방식",
       "Amazon Route 53 Health Check": "우리 서버가 살아있는지 정기적으로 신호를 보내 확인하는 감시 기능",
@@ -354,7 +354,7 @@ export const quizData = [
       "iSCSI-VTL(가상 테이프 라이브러리) 인터페이스로 작동하는 'AWS Storage Gateway'를 도입합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n백업 프로그램 입장에서는 \"어? 여전히 테이프 장비가 있네!\"라고 속게 만드는 '가상 테이프 라이브러리(VTL)' 기술이 핵심입니다. Storage Gateway의 테이프 게이트웨이 모드를 쓰면, 물리적인 테이프 대신 AWS 클라우드라는 무제한 가상 테이프를 쓰는 셈이 되어 기존 워크플로우를 하나도 안 바꾸고도 현대화를 달성할 수 있습니다.\n\n다른 옵션인 A나 B는 일반 '파일' 저장소용이지, 테이프 장비를 흉내 내지는 못합니다.",
+    "explanation": "정답은 B입니다. 넘치는 주문을 감당하지 못해 시스템이 뻗는 걸 막으려면 중간에 SQS 대기열을 두세요. 주문을 차곡차곡 쌓아두면 서버가 자기 속도에 맞춰 하나씩 안전하게 처리하는 '완충' 구조가 됩니다.\n\nhttps://aws.amazon.com/sqs/",
     "glossary": {
       "VTL (Virtual Tape Library)": "데이터를 파일이 아닌 가상 테이프 단위로 저장하는 기술로, 기존 백업 소프트웨어와의 호환성이 뛰어남",
       "AWS Storage Gateway (Tape Gateway)": "온프레미스의 백업 데이터를 AWS 클라우드로 백업하되, 가상 테이프 장비처럼 동작하게 해주는 도구",
@@ -371,7 +371,7 @@ export const quizData = [
       "데이터베이스 전용 이동 서비스인 AWS DMS를 서버와 S3 사이에 연결합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n실시간 스트리밍 데이터를 S3로 보내는 가장 편한 방법은 Kinesis Data Firehose입니다. 프로비저닝(서버 준비)이 전혀 필요 없고, 데이터가 몰리면 알아서 늘어납니다. 관리자는 그저 \"이 데이터를 저 S3 버킷에 넣어줘\"라고 선만 연결해주면 끝나는 아주 효자 서비스입니다.\n\n다른 옵션인 B는 '실시간'이 아닌 일괄 처리에 가깝고, C는 데이터 양이 많아지면 람다 비용이 눈덩이처럼 불어날 수 있습니다.",
+    "explanation": "정답은 C입니다. 파일 하나당 2MB 정도의 가벼운 분석 작업에는 람다가 최고입니다. 무거운 엔진을 띄울 필요 없이 파일이 오면 쓱 나타나 일하고 사라지니 비용이 거의 들지 않습니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "Amazon Kinesis Data Firehose": "스트리밍 데이터를 실시간으로 캡처하고 S3, Redshift 등으로 자동 전달해주는 완전 관리형 서비스",
       "Ingestion (수집)": "데이터를 나중에 사용하기 위해 여러 소스로부터 한곳으로 모아들이는 과정",
@@ -388,7 +388,7 @@ export const quizData = [
       "Service Catalog에 승인된 제품만 올려놓고, 그 외의 메뉴판은 아예 못 보게 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n여러 계정의 권한을 중앙에서 '철권 통치'할 수 있는 가드레일이 바로 서비스 제어 정책(SCP)입니다. Organizations를 통해 계정들을 정리하고 SCP를 하나 딱 붙여두면, 해당 계정의 관리자(Root)라 할지라도 우리가 금지한 비싼 서비스는 절대로 사용할 수 없게 됩니다. 운영 오버헤드가 가장 적은 강력한 정책 수단입니다.\n\n다른 옵션인 D(Service Catalog)는 '메뉴판'을 만드는 좋은 방법이지만, 사용자가 직접 메뉴판 밖의 서비스를 쓰는 것까지 완벽하게 원천 차단하기엔 SCP가 더 강력하고 효율적입니다.",
+    "explanation": "정답은 A입니다. DB 가용성을 높이는 가장 빠른 방법은 '다중 AZ'로 바꾸는 것입니다. 물리적으로 떨어진 다른 센터에 실시간 복사본을 만들어두니 한쪽이 정전되어도 서비스는 계속됩니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "SCP (Service Control Policy)": "조직(Organizations)의 구성원 계정이 사용할 수 있는 최대 권한 범위를 제한하는 규정",
       "OU (Organizational Unit)": "유사한 성격의 계정들을 한 묶음으로 관리하기 위한 조직 단위",
@@ -405,7 +405,7 @@ export const quizData = [
       "VPN 전용 게이트웨이를 만들고 모든 트래픽을 외부망으로 돌리는 설정을 짭니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n프라이빗 서브넷의 정석적인 인터넷 외출법은 NAT 게이트웨이를 이용하는 것입니다. 밖에서 안으로는 못 들어오지만, 안에서 밖으로(인터넷) 나가는 트래픽은 허용해주거든요. 관리자가 따로 서버를 관리할 필요가 없는 관리형 서비스라 운영 오버헤드도 낮고 보안상으로도 매우 안전합니다.\n\n다른 옵션인 A(NAT 인스턴스)는 사람이 직접 패치하고 관리해야 해서 귀찮고, C는 프라이빗 서브넷의 정의 자체를 깨뜨리는 행동이라 보안 빵점입니다.",
+    "explanation": "정답은 C입니다. 고성능 SSD인 io2 볼륨의 Multi-attach 기능을 쓰면 하나의 하드디스크를 여러 대의 서버가 동시에 나눠 쓸 수 있어 복잡한 클러스터 앱 구축이 쉬워집니다.\n\nhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html",
     "glossary": {
       "NAT Gateway": "내부망 PC들이 외부 인터넷과 소통할 수 있게 해주되, 외부로부터의 직접 접근은 차단하는 보안 수문장",
       "Private Subnet (프라이빗 서브넷)": "인터넷 게이트웨이가 직접 연결되어 있지 않아 외부 세계로부터 숨겨진 보안 네트워크 구역",
@@ -423,7 +423,7 @@ export const quizData = [
       "KMS 키 정책에 람다 서비스 자체의 리소스 정책을 신뢰 대상으로 넣습니다."
     ],
     "answer": [1, 3],
-    "explanation": "정답은 B와 D입니다. (원문 index 1, 3)\n\n암호화된 상자를 열려면 두 가지가 맞아야 합니다. 첫째, 람다라는 일꾼(실행 역할)이 암호를 풀 수 있는 능력을 갖춰야 하고(B), 둘째, 상자(KMS 키)의 주인도 이 일꾼이 내 상자를 건드려도 된다고 승인해줘야 합니다(D). 이 양방향 허가가 있어야 비로소 람다가 환경 변수를 해독해 읽을 수 있습니다.\n\n다른 옵션들은 람다 고유의 기능과는 관련이 없거나, KMS의 보안 방식에 어긋나는 방식들입니다.",
+    "explanation": "정답은 A입니다. 고가용성 설계의 교과서입니다. 서버를 여러 대 준비(ASG)하고 입구에서 로드 밸런서(ALB)가 상태 좋은 서버로 손님을 보내주면 장애 걱정 없는 튼튼한 서비스가 됩니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/",
     "glossary": {
       "Lambda Execution Role": "람다 함수가 돌아갈 때 행사하는 권한을 정의한 IAM 역할(ID 카드)",
       "KMS Key Policy": "누가 이 암호화 키를 이용해 데이터를 잠그거나 풀 수 있는지 결정하는 핵심 문서",

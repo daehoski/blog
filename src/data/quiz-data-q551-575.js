@@ -9,7 +9,7 @@ export const quizData = [
       "S3 Standard를 유지하다가 7일 후 S3 Glacier Deep Archive로 바로 넘깁니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n첫 주(7일)는 자주 쓰이므로 고성능인 S3 Standard가 적합합니다. 이후 수년간 보관할 때는 저장 비용이 매우 저렴한 Glacier 클래스가 효자입니다. 문제에서 '6시간 내 검색'이 가능해야 한다고 했는데, Glacier의 표준 인출(Standard Retrieval) 방식은 보통 3~5시간이면 완료되므로 이 요구사항을 완벽히 충족하면서 비용을 최소화할 수 있습니다.\n\n다른 옵션인 D(Deep Archive)는 저장비는 더 싸지만, 데이터를 꺼내는 데 최소 12시간 이상이 걸리므로 6시간 제한 규정을 지킬 수 없습니다.",
+    "explanation": "정답은 A입니다. 첫 주(7일)는 자주 쓰이므로 고성능인 S3 Standard가 적합합니다. 이후 수년간 보관할 때는 저장 비용이 매우 저렴한 Glacier 클래스가 효율적입니다. Glacier의 표준 인출 방식(3~5시간)은 '6시간 내 검색' 조건을 완벽히 충족하면서 비용을 최소화할 수 있는 최적의 선택입니다.\n\nhttps://aws.amazon.com/s3/storage-classes/glacier/",
     "glossary": {
       "S3 Glacier": "자주 열어보지 않는 데이터의 장기 보관을 위해 설계된 아주 저렴한 저장 공간",
       "S3 Lifecycle Policy": "데이터의 보관 기간에 따라 자동으로 저장 비용이 싼 곳으로 옮겨주거나 삭제해주는 자동 비서",
@@ -26,7 +26,7 @@ export const quizData = [
       "1년 약정으로 전체 선결제 'EC2 Instance Savings Plans'를 구독합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n서버 사양(인스턴스 제품군)을 자주 바꾸는 환경에서는 유연성이 생명입니다. Compute Savings Plans는 인스턴스 크기, 제품군, 리전, 운영 체제에 상관없이 약정한 금액만큼 무조건 할인을 적용해주기 때문에 유연성이 가장 높습니다.\n\n다른 옵션인 D(EC2 Instance Savings Plans)는 특정 제품군 내에서만 유연할 뿐, 제품군 자체를 바꿀 때는 혜택이 사라지므로 부적합합니다.",
+    "explanation": "정답은 B입니다. 서버 사양(인스턴스 제품군)을 자주 바꾸는 환경에서는 유연성이 생명입니다. Compute Savings Plans는 인스턴스 크기, 제품군, 리전, 운영 체제에 상관없이 약정한 금액만큼 전체적인 할인을 적용해주기 때문에 가장 높은 활용도를 보장합니다.\n\nhttps://aws.amazon.com/savingsplans/compute-savings-plans/",
     "glossary": {
       "Compute Savings Plans": "사양이나 지역을 바꿔도 상관없이 컴퓨팅 사용량에 대해 최대 66%까지 할인을 제공하는 요금제",
       "EC2 Instance Savings Plans": "특정 인스턴스 제품군(예: m5, c5 등) 내에서만 유연성을 보장하는 요금제",
@@ -43,7 +43,7 @@ export const quizData = [
       "Amazon GuardDuty를 켜서 S3에 비정상적인 접근이 있는지 감시하게 합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'S3 속의 개인정보(PII) 찾기'라는 요구사항이 나오면 정답은 십중팔구 Amazon Macie입니다. Macie는 머신러닝을 이용해 버킷 안의 수많은 파일을 뒤져 이름, 주민번호, 카드번호 같은 민감 정보를 자동으로 분류해줍니다.\n\n다른 옵션인 GuardDuty(D)는 외부의 해킹 시도를 막는 도구이며, Security Hub(B)는 보안 점검 현황을 통합해서 보여주는 대시보드 역할입니다.",
+    "explanation": "정답은 A입니다. 'S3 속의 개인정보(PII) 찾기'라는 요구사항의 끝판왕은 Amazon Macie입니다. 머신러닝을 이용해 버킷 안의 수많은 파일을 뒤져 이름, 주민번호, 카드번호 같은 민감 정보를 자동으로 분류하고 보고해주므로 운영 수고가 거의 들지 않습니다.\n\nhttps://aws.amazon.com/macie/",
     "glossary": {
       "Amazon Macie": "기계 학습과 패턴 매칭을 통해 S3 내의 민감한 데이터를 자동으로 검색하고 보호하는 보안 서비스",
       "PII (Personally Identifiable Information)": "이름, 전화번호처럼 개인을 식별할 수 있는 민감한 정보",
@@ -60,7 +60,7 @@ export const quizData = [
       "앱 서버는 고성능 컴퓨팅(HPC) 제품군, DB는 메모리 최적화 제품군을 선택합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n문제에서 앱과 DB '모두' 메모리 사용률이 높다고 명확히 명시했습니다. 따라서 고민할 것 없이 두 서버 모두 메모리 용량 대비 가성비가 가장 좋고 성능이 뛰어난 '메모리 최적화(r 제품군 등)' 인스턴스를 선택하는 것이 정답입니다.\n\n다른 옵션인 A는 앱 서버의 메모리 갈증을 해결해주지 못하며, D는 불필요하게 비싼 고성능 연산 자원을 낭비하게 됩니다.",
+    "explanation": "정답은 C입니다. 문제에서 앱과 DB '모두' 메모리 사용률이 높다고 명시했습니다. 따라서 고민할 것 없이 두 서버 모두 메모리 용량 대비 성능이 가장 뛰어난 '메모리 최적화(r 제품군 등)' 인스턴스를 선택하는 것이 정석입니다.\n\nhttps://aws.amazon.com/ec2/instance-types/r6g/",
     "glossary": {
       "Memory Optimized Instance": "대규모 데이터를 메모리에서 빠르게 처리해야 하는 작업(DB, 캐시 등)에 최적화된 서버 유형",
       "Compute Optimized Instance": "CPU 연산 능력이 중요한 작업(영상 인코딩, 게임 서버 등)에 적합한 유형",
@@ -77,7 +77,7 @@ export const quizData = [
       "SQS용 '게이트웨이 엔드포인트'를 설치하고, 프라이빗 서브넷에 NAT 게이트웨이를 추가로 둡니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nS3나 DynamoDB가 아닌 대부분의 서비스(SQS 포함)는 '인터페이스 VPC 엔드포인트(PrivateLink)'를 통해 전용 통로를 만듭니다. 이때 엔드포인트는 서버가 있는 '프라이빗 서브넷' 내부에 위치해야 하며(A), 보안 그룹을 통해 서버로부터의 트래픽을 허가해주는 것이 가장 안전하고 정석적인 구성입니다.\n\n다른 옵션인 D처럼 SQS에 게이트웨이 엔드포인트를 쓰겠다는 건 잘못된 기술 선택입니다(SQS는 인터페이스 방식만 지원).",
+    "explanation": "정답은 A입니다. SQS 같은 서비스는 '인터페이스 VPC 엔드포인트(PrivateLink)'를 통해 전용 통로를 만듭니다. 이때 엔드포인트는 서버가 있는 '프라이빗 서브넷' 내부에 위치해야 하며(A), 보안 그룹을 통해 서버로부터의 트래픽을 허가해주는 것이 가장 안전한 설계입니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html",
     "glossary": {
       "Interface VPC Endpoint": "AWS PrivateLink 기술을 이용해 인터넷을 거치지 않고 VPC 내부 망으로만 특정 서비스에 접속하게 해주는 주소",
       "SQS (Simple Queue Service)": "메시지를 임시로 보관하여 시스템 간의 부하를 조절하고 연결을 유연하게 돕는 서비스",
@@ -94,7 +94,7 @@ export const quizData = [
       "템플릿 안에서 IAM 사용자를 새로 만들고, 그 비매너 키를 사용자 데이터(User Data)를 통해 서버 파일로 저장합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nEC2 서버가 AWS 서비스와 소통할 때 '비밀번호'를 사용하는 건 매우 위험한 구식 방법입니다. 정답은 'IAM 역할(Role)'입니다. 역할을 만들고 이를 '인스턴스 프로필'이라는 바구니에 담아 EC2에 던져주면, 서버는 내부적으로 안전한 임시 열쇠를 발급받아 DynamoDB를 마음껏 이용할 수 있게 됩니다.\n\n다른 옵션인 C나 D는 유출 위험이 큰 액세스 키를 코드나 설정에 노출하므로 보안 원칙에 어긋납니다.",
+    "explanation": "정답은 B입니다. EC2 서버가 AWS 서비스와 소통할 때 비밀번호를 사용하는 건 금물입니다. 'IAM 역할(Role)'을 만들고 이를 '인스턴스 프로필'에 담아 EC2에 연결하면, 서버는 내부적으로 안전한 임시 열쇠를 발급받아 DynamoDB를 마음껏 이용할 수 있게 됩니다.\n\nhttps://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html",
     "glossary": {
       "IAM Role (IAM 역할)": "사용자 대신 특정 서비스나 자원이 일시적으로 행사할 수 있는 권한의 묶음",
       "Instance Profile (인스턴스 프로필)": "IAM 역할을 EC2 인스턴스에 전달하기 위해 사용하는 일종의 전송용 컨테이너",
@@ -111,7 +111,7 @@ export const quizData = [
       "AWS Glue로 사전 처리를 하고 Lake Formation을 이용해 데이터를 합쳐 분석합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'병렬 데이터 처리'와 '대용량 보강 분석'이라는 키워드가 나오면 빅데이터의 제왕 Amazon EMR(Elastic MapReduce)이 가장 강력한 후보입니다. EMR은 수많은 서버(Hadoop, Spark 등)를 병렬로 돌려 S3의 데이터를 빛의 속도로 스캔하고, 분석 환경 안에서 Redshift의 정보와 결합하여 고도의 통찰을 뽑아낼 수 있습니다.\n\n다른 옵션인 A(Athena)는 간편한 정규 쿼리용이며, 복잡한 병렬 연산과 커스텀 로직이 필요한 '보강 처리'에는 EMR이 더 전문적입니다.",
+    "explanation": "정답은 B입니다. '병렬 데이터 처리'와 '대용량 보강 분석'이라는 키워드가 나오면 빅데이터의 제왕 Amazon EMR이 정답입니다. 수많은 서버를 동시에 돌려 S3의 데이터를 스캔하고 Redshift의 정보와 결합하여 고도의 통찰을 뽑아낼 수 있습니다.\n\nhttps://aws.amazon.com/emr/",
     "glossary": {
       "Amazon EMR": "Hadoop, Spark 같은 빅데이터 프레임워크를 이용해 방대한 데이터를 분산 처리하는 서비스",
       "Amazon Redshift": "초대용량 데이터를 분석하는 데 최적화된 데이터 창고(Data Warehouse) 서비스",
@@ -128,7 +128,7 @@ export const quizData = [
       "Direct Connect를 신청해서 AWS 전용선을 리전 내부에 깔아버립니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nVPC 피어링은 같은 리전 내에서 두 네트워크를 연결하는 가장 싸고 빠른(지연 시간이 없는) 방법입니다. 별도의 게이트웨이 비용이 들지 않고, 연결 자체에 대한 유지비도 없으므로 비용 효율성 면에서 따라올 자가 없습니다.\n\n다른 옵션인 A(Transit Gateway)는 수십 개 이상의 VPC를 연결할 때나 쓰는 비싼 장비이며, B나 D는 외부망과 연결할 때나 고민하는 방식입니다.",
+    "explanation": "정답은 C입니다. VPC 피어링은 같은 리전 내에서 두 네트워크를 직접 잇는 가장 저렴하고 빠른 방법입니다. 별도의 게이트웨이 비용이 들지 않고 지연 시간도 거의 없어 비용 효율성 면에서 따라올 자가 없습니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html",
     "glossary": {
       "VPC Peering": "두 VPC를 마치 하나의 네트워크인 것처럼 직접 연결해주는 서비스",
       "Transit Gateway": "수백 개의 VPC나 사내망을 거미줄처럼 복잡하지 않게 중앙에서 한 번에 연결하는 허브",
@@ -146,7 +146,7 @@ export const quizData = [
       "조직의 마스터 계정(부모 계정)에서 팀별로 지정한 특정 태그를 비용 추적용으로 활성화합니다."
     ],
     "answer": [1, 4],
-    "explanation": "정답은 B와 E입니다. (원문 index 1, 4)\n\n비용 구분을 위해 리소스에 미리 달아둔 태그(예: Team=Alpha)를 '돈 계산용'으로 쓰려면 마스터 계정(E)에서 승인을 해줘야 합니다. 결제 설정 창에서 우리가 만든 사용자 지정 태그를 딱 찍어서 \"이걸로 비용을 쪼개서 보여줘!\"라고 선택(B)하면, 그 이후부터는 청구서에 팀별로 항목이 나뉘어 나옵니다.\n\n다른 옵션인 D처럼 자식 계정에서 아무리 활성화해봤자, 최종 청구 권한을 가진 마스터 계정에서 설정을 안 하면 소용이 없습니다.",
+    "explanation": "정답은 B와 E입니다. 비용 구분을 위해 리소스에 달아둔 태그를 사용하려면, 조직의 마스터 계정(E)에서 해당 태그를 '비용 할당 태그'로 활성화(B)해줘야 합니다. 그래야 통합 청구서에서 팀별로 항목이 나뉘어 나옵니다.\n\nhttps://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html",
     "glossary": {
       "Tag (태그)": "리소스에 붙이는 라벨(메타데이터). 예: 부서, 프로젝트명, 관리자",
       "Cost Allocation Tags (비용 할당 태그)": "특정 태그를 기준으로 비용 보고서를 쪼개서 분석하게 해주는 기능",
@@ -163,7 +163,7 @@ export const quizData = [
       "CloudFormation 템플릿의 드리프트 감지 기능을 이용해 OU의 현재 상태를 체크합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nControl Tower는 여러 계정을 안전하게 관리해주는 지휘관 같은 서비스입니다. 여기서 관리하는 계정이나 조직 구조가 처음 설정값에서 벗어나면(Drift), 관제 센터(Dashboard)에서 즉시 알림을 주어 원래대로 돌려놓거나 원인을 파악할 수 있게 해줍니다.\n\n다른 옵션인 C는 기록만 남길 뿐 '실시간 알림'과는 거리가 멀고 업무 강도가 너무 높습니다.",
+    "explanation": "정답은 A입니다. Control Tower는 여러 계정을 관리하는 지휘관 서비스입니다. 여기서 관리하는 조직 구조가 처음 설정값에서 벗어나면(Drift), 관제 대시보드에서 즉시 알림을 주어 구조 변경을 실시간으로 감지할 수 있습니다.\n\nhttps://aws.amazon.com/controltower/",
     "glossary": {
       "AWS Control Tower": "여러 계정의 보안 가이드라인(가드레일)을 자동으로 설정하고 관리해주는 서비스",
       "Drift (드리프트)": "처음 의도했던 설정(Template)이나 구조에서 실제 인프라 상태가 어긋나 있는 상태",
@@ -180,7 +180,7 @@ export const quizData = [
       "DynamoDB 스트림과 람다를 엮어, 데이터가 바뀔 때마다 ElastiCache를 업데이트하는 시스템을 개발합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'DynamoDB 전용 가속기'인 DAX가 정답입니다. DAX는 DynamoDB의 읽기 성능을 극대화하기 위해 설계된 완전 관리형 인메모리 캐시로, 별도의 복잡한 캐싱 코드를 짤 필요 없이 API 주소만 DAX로 바꾸면 바로 작동하므로 운영 오버헤드가 가장 적습니다.\n\n다른 옵션인 B, C, D는 개발자가 캐시 데이터를 넣고 빼는 로직을 직접 관리해야 하므로 '최소 운영 오버헤드' 조건에 맞지 않습니다.",
+    "explanation": "정답은 A입니다. 'DynamoDB 전용 가속기'인 DAX가 정답입니다. DAX는 완전 관리형 인메모리 캐시로, 별도의 복잡한 캐싱 코드를 짤 필요 없이 읽기 성능을 0.001초(마이크로초) 수준으로 끌어올려 줍니다.\n\nhttps://aws.amazon.com/dynamodb/dax/",
     "glossary": {
       "Amazon DAX (DynamoDB Accelerator)": "DynamoDB의 응답 속도를 기존 밀리초 단위에서 마이크로초 단위로 높여주는 전용 캐시 서비스",
       "Latency (지연 시간)": "요청을 보냈을 때 결과가 돌아올 때까지 걸리는 대기 시간",
@@ -198,7 +198,7 @@ export const quizData = [
       "엔드포인트용 보안 그룹을 만들고 서버 IP를 등록합니다."
     ],
     "answer": [0, 1],
-    "explanation": "정답은 A와 B입니다. (원문 index 0, 1)\n\nS3나 DynamoDB 같은 서비스는 '게이트웨이 엔드포인트'라는 특별한 문을 VPC에 만듭니다(B). 문만 만든다고 끝이 아니라, 우리 서버들이 이 문을 통해서 나가야 한다는 걸 알려주기 위해 '라우팅 테이블'이라는 이정표에도 이 엔드포인트 정보를 적어줘야(A) 비로소 인터넷을 거치지 않는 비밀 통로가 완성됩니다.",
+    "explanation": "정답은 A와 B입니다. S3와 DynamoDB는 '게이트웨이 엔드포인트'를 사용합니다(B). 엔드포인트를 만든 후, 우리 서버들이 이 통로를 쓰도록 '라우팅 테이블'이라는 이정표에 엔드포인트 정보를 추가(A)해야 비로소 폐쇄망 통신이 가능해집니다.\n\nhttps://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-ddb.html",
     "glossary": {
       "Gateway VPC Endpoint": "S3와 DynamoDB를 위해 제공되는 인터넷 게이트웨이 없이 내부망으로만 연결하는 특수 경로",
       "Route Table (라우팅 테이블)": "네트워크 패킷이 목적지를 찾아가기 위해 참조하는 지도",
@@ -215,7 +215,7 @@ export const quizData = [
       "EKS Anywhere를 메인 지휘소로 삼고 다른 클러스터들을 수동으로 연결합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nAmazon EKS 커넥터는 어디에 있든 상관없이(타사 클라우드, 온프레미스 등) 쿠버네티스 클러스터를 AWS 웹 콘솔 한곳에 등록해서 볼 수 있게 해주는 아주 편리한 도구입니다. 이를 통해 복잡한 세팅 없이도 여러 클러스터의 상태를 통합 관리할 수 있어 운영 수고가 대폭 줄어듭니다.\n\n다른 옵션인 A는 모니터링 수집 도구일 뿐 적극적인 관리 환경을 제공하지는 않습니다.",
+    "explanation": "정답은 B입니다. Amazon EKS 커넥터는 외부 쿠버네티스 클러스터를 AWS 웹 콘솔 한곳에 등록해서 볼 수 있게 해주는 도구입니다. 전산실(온프레미스) 클러스터도 EKS 콘솔에서 통합 관리할 수 있어 운영 효율이 대폭 상승합니다.\n\nhttps://docs.aws.amazon.com/eks/latest/userguide/eks-connector.html",
     "glossary": {
       "Amazon EKS Connector": "외부 쿠버네티스 클러스터를 AWS EKS 콘솔과 연결하여 가시성을 확보해주는 기능",
       "Kubernetes (쿠버네티스)": "컨테이너화된 애플리케이션을 자동으로 배포하고 관리해주는 오픈소스 플랫폼",
@@ -232,7 +232,7 @@ export const quizData = [
       "FSx for Windows를 서버에 연결하고 윈도우 파일 권한 기능을 통해 접근을 막습니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nDB 관리자가 데이터를 기웃거리지 못하게 하는 가장 확실한 방법은 'DB에 들어가기 전'에 이미 알아볼 수 없게 바꿔버리는 것입니다. 앱 서버에서 미리 데이터를 암호화(클라이언트 측 암호화)해서 보내면, DB에는 암호문만 쌓이게 됩니다. 열쇠(KMS 키)는 앱만 가지고 있으므로 DBA가 관리 쿼리를 날려도 진짜 내용은 볼 수 없습니다.\n\n다른 옵션인 A는 DB 파일 자체는 보호하지만, 관리자 권한으로 로그인해서 쿼리를 날릴 때는 데이터가 투명하게 보이므로 부적합합니다.",
+    "explanation": "정답은 B입니다. DB 관리자조차 데이터를 못 보게 하려면 'DB에 들어가기 전'에 암호화해야 합니다. 앱 서버에서 KMS를 이용해 암호화(클라이언트 측 암호화)해서 보내면, DB에는 암호문만 쌓이므로 열쇠가 없는 관리자는 진짜 내용을 볼 수 없습니다.\n\nhttps://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#client-side-encryption",
     "glossary": {
       "Client-side Encryption": "데이터가 전송되거나 서버에 저장되기 전, 사용자 시스템에서 미리 암호화하는 보안 방식",
       "DBA (Database Administrator)": "데이터베이스를 설치, 관리 및 최적화하는 총괄 관리자",
@@ -249,7 +249,7 @@ export const quizData = [
       "DynamoDB로 구조를 확 바꿔서 옮기고 오토 스케일링 정책을 겁니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n기존 MySQL 앱과의 호환성을 100% 지키면서 클라우드만의 강력한 자동 확장(Auto Scaling) 혜택을 누리기에 Amazon Aurora가 최적입니다. 특히 DMS(데이터베이스 마이그레이션 서비스)를 쓰면 가동 중지 시간을 최소화하면서 안전하게 이사할 수 있습니다.\n\n다른 옵션인 A(RDS MySQL)는 스토리지 용량은 늘려주지만, '성능(CPU/메모리)' 확장은 Aurora만큼 유연하게 자동화하기 어렵습니다.",
+    "explanation": "정답은 C입니다. 기존 MySQL 앱과의 호환성을 100% 지키면서 클라우드만의 자동 확장 혜택을 누리기에 Amazon Aurora가 최적입니다. DMS를 함께 사용하면 가동 중지 시간을 최소화하며 안전하게 이사할 수 있습니다.\n\nhttps://aws.amazon.com/rds/aurora/",
     "glossary": {
       "Amazon Aurora": "MySQL/PostgreSQL과 완벽히 호환되면서 성능은 3~5배 더 뛰어난 AWS 클라우드 전용 DB",
       "AWS DMS (Database Migration Service)": "데이터베이스를 중단 없이 클라우드로 안전하게 옮겨주는 배송 서비스",
@@ -266,7 +266,7 @@ export const quizData = [
       "개별 서버마다 EBS를 달아두고, 서버끼리 파일들을 수동으로 동기화시킵니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n리눅스 서버 여러 대가 동시에 한 드라이브를 내 것처럼 쓰고 싶을 땐 Amazon EFS가 정석입니다. Windows나 Linux 어디서든 표준 파일 시스템 프로토콜(NFS)만 있으면 자유롭게 연결 가능하며, 사용한 용량만큼만 돈을 내면서도 수천 대의 서버가 동시에 달라붙어 작업할 수 있습니다.\n\n다른 옵션인 A(S3)는 일반적인 파일 폴더 구조와는 결이 다른 '객체 저장소'라 동시에 파일을 수정하는 등의 작업에는 어울리지 않습니다.",
+    "explanation": "정답은 B입니다. 리눅스 서버 여러 대가 동시에 한 드라이브를 쓰고 싶을 땐 Amazon EFS가 정석입니다. 표준 NFS 프로토콜을 사용하며 사용한 만큼만 비용을 내는 합리적인 공유 저장소입니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS": "여러 EC2 인스턴스가 동시에 공유해서 사용할 수 있는 네트워크 기반 파일 저장소 (리눅스용 NFv4 표준)",
       "Mount (마운트)": "외부 저장 장치나 네트워크 저장소를 운영 체제 내부의 폴더처럼 연결하는 과정",
@@ -283,7 +283,7 @@ export const quizData = [
       "ALB + EC2 조합으로 처리한 뒤 EFS 공유 드라이브에 저장합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'서버리스 + 독립적 기능 확장' 하면 정답은 묻지도 따지지도 않고 API Gateway와 Lambda 조합입니다. 서버를 직접 건드릴 필요 없이 코드만 올리면 되고(A), 데이터 양이 아무리 많아져도 무한 확장 가능한 DynamoDB가 뒤를 받쳐주면 가장 현대적이고 유지보수가 쉬운 시스템이 완성됩니다.\n\n다른 옵션인 C는 SQL Server라는 관리 포인트(서버)를 직접 챙겨야 하므로 서버리스 철학에 어긋납니다.",
+    "explanation": "정답은 A입니다. '서버리스 + 독립적 확장' 요구에는 API Gateway와 Lambda 조합이 최고의 정답입니다. 여기에 무한 확장 가능한 DynamoDB가 뒤를 받쳐주면 유지보수가 가장 쉬운 현대적인 시스템이 완성됩니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "AWS Lambda": "서버 관리 없이 이벤트에 반응하여 코드를 1회성으로 실행해주는 경제적인 기술",
       "Amazon API Gateway": "외부에서 들어오는 HTTP 요청(창구)을 안전하게 관리하고 다른 서비스로 넘겨주는 관문",
@@ -300,7 +300,7 @@ export const quizData = [
       "Storage Gateway를 쓰고 ElastiCache를 덧붙여 속도를 보장합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n페타바이트급의 방대한 데이터를 가장 저렴하고 안전하게 보관할 곳은 S3뿐입니다. 여기에 더해 '기다리는 시간 최소화'를 위해 사용자 근처의 Edge 서버에 데이터를 미리 갖다 놓는 CloudFront(CDN)를 결합하면 최강의 속도와 용량을 동시에 확보할 수 있습니다.\n\n다른 옵션인 B(Glacier)는 데이터를 꺼내는 데 최소 몇 분에서 몇 시간이 걸려 '기다림 최소화'라는 조건에 정면으로 위배됩니다.",
+    "explanation": "정답은 A입니다. 방대한 데이터를 저렴하고 안전하게 보관할 곳은 S3뿐입니다. 여기에 더해 전 세계 사용자에게 빛의 속도로 배달해주는 CloudFront(CDN)를 결합하면 속도와 용량을 모두 잡을 수 있습니다.\n\nhttps://aws.amazon.com/cloudfront/",
     "glossary": {
       "Amazon CloudFront": "전 세계Edge 로케이션을 이용해 이미지, 동영상 등을 사용자에게 빛의 속도로 배달하는 서비스",
       "Caching (캐싱)": "자주 찾는 데이터를 가까운 곳에 임시로 복제해두어 빠르게 꺼내 쓰는 기술",
@@ -317,7 +317,7 @@ export const quizData = [
       "CloudTrail을 통해 EventBridge와 관련된 API 호출 기록을 전부 뒤져봅니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nEventBridge가 규칙을 감지했는지, 그리고 타겟(타사 API)을 호출하려고 시도했는지를 가장 먼저 확인할 수 있는 수치는 CloudWatch 지표입니다. `TriggeredRules` 나 `Invocations` 같은 수치를 보면 우리 장비가 일을 하긴 했는지 즉시 알 수 있어 문제 해결의 첫걸음이 됩니다.\n\n다른 옵션 중 B(DLQ)도 실패 원인을 찾는 데 좋지만, 문제에서 '규칙 조건 충족 여부'와 '호출 시도 여부'를 먼저 확인하라고 했으므로 지표 확인이 최우선입니다.",
+    "explanation": "정답은 A입니다. EventBridge 규칙이 제대로 작동하는지 확인할 수 있는 첫 번째 지표는 CloudWatch Metrics입니다. 트리거 횟수나 호출 시도 횟수 지표를 통해 우리 시스템이 일을 제대로 시작했는지 즉시 파악할 수 있습니다.\n\nhttps://docs.aws.amazon.com/eventbridge/latest/userguide/eb-monitoring.html",
     "glossary": {
       "Amazon EventBridge": "시스템 내부의 사건들을 감지해 다른 곳으로 알려주는 이벤트 우체국",
       "CloudWatch Metrics": "시스템의 현재 상태(CPU 사용률, 호출 횟수 등)를 숫자로 보여주는 성능 지표",
@@ -334,7 +334,7 @@ export const quizData = [
       "부하(CPU 사용량 등)를 감시하는 자동 조정(Dynamic Scaling)만 믿고 기다립니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'이미 예정된 이벤트(매주 금요일 밤)'에는 예약된 작업(Scheduled Scaling)이 정석입니다. 기계적으로 특정 요일, 특정 시간에 서버를 미리 늘려놓을 수 있어 사람이 따로 신경 쓸 필요가 전혀 없습니다. CPU 사용량이 오르길 기다렸다가 뒷북치는 일반 자동 조정보다 훨씬 똑똑한 방식입니다.\n\n다른 옵션인 A나 C는 소중한 금요일 저녁 시간을 관리자가 직접 불태워야 하므로 '운영 오버헤드 최소화'에 어긋납니다.",
+    "explanation": "정답은 B입니다. '매주 금요일 밤'처럼 예정된 이벤트에는 예약된 작업(Scheduled Scaling)이 정석입니다. 특정 요일과 시간에 맞춰 자동으로 서버를 늘려놓으므로 사람이 직접 신경 쓸 필요가 전혀 없습니다.\n\nhttps://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-scheduled.html",
     "glossary": {
       "Scheduled Scaling (예약된 조정)": "정해진 시간과 날짜에 맞춰 미리 서버를 늘리거나 줄여놓는 계획적인 확장 방식",
       "Dynamic Scaling (동적 조정)": "CPU 사용량 등이 80%를 넘으면 그때 서버를 한 대 더 추가하는 반응형 확장 방식",
@@ -351,7 +351,7 @@ export const quizData = [
       "ACM에서 인증서를 관리하되, 외부 CA 승인 절차를 AWS가 대신 처리하게 위임하는 설정을 보강합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n최신 보안 표준인 TLS 1.3과 외부 CA 인증서를 모두 써야 하는 상황입니다. 먼저 외부 CA에서 받은 인증서 파일을 ACM(AWS Certificate Manager)으로 가져와야 하며(A), 그 다음 TLS 1.3을 지원하는 API Gateway의 'HTTP API' 유형을 선택해 연동하는 것이 정석입니다.\n\n다른 옵션 중 B처럼 ACM이 타사 CA를 대신해서 '발급'해주는 기능은 없으며(관리만 해줄 뿐), 오직 가져온 인증서만 사용할 수 있습니다.",
+    "explanation": "정답은 A입니다. 외부 CA 인증서와 최신 TLS 1.3을 모두 써야 하는 상황입니다. 먼저 인증서를 ACM으로 가져오기(Import) 하고, TLS 1.3을 지원하는 API Gateway의 'HTTP API' 유형을 선택해 연동하는 것이 정석 설계입니다.\n\nhttps://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-custom-domain-names.html",
     "glossary": {
       "TLS 1.3": "데이터를 더 빠르게 전송하면서도 보안성은 더 높인 최신 암호화 통신 규칙",
       "CA (Certificate Authority)": "이 사이트가 진짜임을 증명해주는 공신력 있는 인증 기관",
@@ -368,7 +368,7 @@ export const quizData = [
       "정확히 2GiB 메모리를 가진 RDS MySQL 서버를 예약 인스턴스로 구매합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'예측 불가능한 트래픽 + 관리 오버헤드 최소'라는 조건에는 Aurora Serverless v2가 끝판왕입니다. 부하에 따라 DB 사양(CPU/메모리)을 단 몇 초 만에 세밀하게(0.5 ACU 단위 등) 조절해주므로, 관리자가 일일이 서버 크기를 고민하거나 바꿀 필요가 전혀 없습니다.\n\n다른 옵션인 D는 정해진 사양 이상의 부하가 오면 서버가 뻗어버릴 수 있어 유연성이 떨어집니다.",
+    "explanation": "정답은 C입니다. '예측 불가능한 트래픽 + 관리 오버헤드 최소' 조건에는 Aurora Serverless v2가 끝판왕입니다. 부하에 따라 사양을 단 몇 초 만에 세밀하게 조절해주므로 관리자가 서버 크기를 고민할 필요가 없습니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Amazon Aurora Serverless v2": "DB 부하에 따라 사양을 실시간으로 자동 조절해주는 지능형 데이터베이스 엔진",
       "ACU (Aurora Capacity Unit)": "Aurora Serverless에서 사용하는 연산 능력(CPU와 메모리 조합)의 단위",
@@ -385,7 +385,7 @@ export const quizData = [
       "람다 'SnapStart' 기능을 활성화하여 초기 상태를 스냅샷으로 저장해둡니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\nJava 기반 람다의 고질병인 '콜드 스타트(첫 실행 지연)'를 해결해주는 구원 투수가 바로 SnapStart입니다. 함수가 처음 로딩되었을 때의 깨끗한 상태를 스냅샷으로 찍어두었다가, 나중에 호출될 때 이걸 바로 꺼내 쓰기 때문에 초기화 시간을 획기적으로 줄여줍니다. 심지어 추가 비용도 없습니다.\n\n다른 옵션인 A(프로비저닝된 동시성)도 효과는 확실하지만 '추가 비용'이 든다는 단점이 있어 비용 효율 면에서 밀립니다.",
+    "explanation": "정답은 D입니다. Java 기반 람다의 초기 지연(Cold Start)을 해결해주는 구원 투수가 SnapStart입니다. 함수 초기 상태를 스냅샷으로 저장했다 꺼내 쓰기 때문에 속도가 획기적으로 빨라지며 추가 비용도 들지 않습니다.\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/snapstart.html",
     "glossary": {
       "Cold Start (콜드 스타트)": "오랫동안 안 쓰던 람다 함수가 호출되었을 때, 서버를 새로 준비하고 코드를 올리느라 처음에만 느려지는 현상",
       "SnapStart": "Lambda 함수를 초기화된 상태로 미리 저장해두어 호출 즉시 실행되게 돕는 성능 최적화 기술",
@@ -402,7 +402,7 @@ export const quizData = [
       "컨테이너(ECS) 기반의 MySQL로 옮겨서 필요할 때만 컨테이너를 띄워 씁니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'거의 안 쓰다가 가끔 빡세게 쓰는' 환경에는 서버리스 DB가 최고입니다. Aurora Serverless v2는 보고서를 뽑는 주말 2시간 동안만 사양을 높여 일하고, 나머지 시간엔 최소 사양(0.5 ACU)으로 유지하거나 멈출 수 있어(v1 기준) 비용을 극적으로 아껴줍니다.\n\n다른 옵션인 C는 쓰든 안 쓰든 서버 월세가 나가며, 관리는 관리대로 직접 해야 해서 효율이 낮습니다.",
+    "explanation": "정답은 A입니다. 거의 안 쓰다가 가끔 빡세게 쓰는 환경에는 서버리스 DB가 최고입니다. Aurora Serverless v2는 사용량에 맞춰 비용이 청구되므로 주말 2시간 작업 외의 시간 동안 돈을 극적으로 아낄 수 있습니다.\n\nhttps://aws.amazon.com/rds/aurora/serverless/",
     "glossary": {
       "Amazon RDS": "복잡한 DB 설치와 백업을 AWS가 대신 해주는 관리형 데이터베이스 서비스",
       "Aurora Serverless": "사용자가 서버 사양을 정할 필요 없이 부하에 맞춰 돈만 내고 쓰는 DB 형태",
@@ -419,7 +419,7 @@ export const quizData = [
       "리전 간 읽기 전용 복제본(Cross-Region)을 만들어 멀리서도 읽게 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n최근 RDS에 도입된 '다중 AZ DB 클러스터'는 고가용성뿐만 아니라 '읽기 성능 확장'까지 한 번에 해결해줍니다. 기존 다중 AZ는 대기 서버가 놀고만 있었지만, 이 클러스터 모델은 두 대의 대기 서버로 읽기 트래픽을 나눠 보낼 수 있어 효율이 훨씬 좋습니다.\n\n다른 옵션인 B는 읽기 성능 확장에 한계가 있고, A는 PostgreSQL이 아닌 NoSQL 기반이라 요구사항과 맞지 않습니다.",
+    "explanation": "정답은 C입니다. 최신 '다중 AZ DB 클러스터'는 고가용성뿐만 아니라 읽기 성능 확장까지 잡았습니다. 대기 서버 두 대를 읽기 작업에 적극 투입할 수 있어 기존 방식보다 훨씬 효율이 좋습니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html",
     "glossary": {
       "Multi-AZ DB Cluster": "가용성과 읽기 성능이라는 두 마리 토끼를 잡기 위해 설계된 RDS의 최신 배포 방식",
       "High Availability (고가용성)": "시스템이 장애 없이 거의 100%에 가깝게 계속 작동하는 능력",

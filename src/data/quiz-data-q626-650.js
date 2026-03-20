@@ -9,7 +9,7 @@ export const quizData = [
       "S3 Transfer Acceleration 기능을 켜서 업로드 속도만 높입니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\nAWS DataSync는 대규모 데이터를 옮길 때 전송 중이나 전송 후에 데이터가 원본과 똑같은지 자동으로 검증(Verification)해주는 기능이 내장되어 있습니다. 신뢰성이 가장 높으며 설정도 간편합니다.\n\n다른 옵션인 D는 속도만 빨라질 뿐 데이터 무결성을 자동으로 꼼꼼히 체크해주지는 않습니다.",
+    "explanation": "정답은 B입니다. AWS DataSync는 대규모 데이터를 옮길 때 전송 중이나 전송 후에 데이터가 원본과 똑같은지 자동으로 검증(Verification)해주는 기능이 내장되어 있습니다. 신뢰성이 가장 높으며 설정도 간편합니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "AWS DataSync": "온프레미스와 AWS 사이의 대용량 데이터 전송을 자동화하고 가속화하는 서비스",
       "Data Integrity (데이터 무결성)": "데이터가 전송이나 저장 과정에서 변조되거나 깨지지 않고 원래 상태를 유지하는 성질",
@@ -26,7 +26,7 @@ export const quizData = [
       "두 개의 가용 영역(AZ)에 EC2 서버를 띄우고 오토 스케일링을 걸어 직접 관리합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n기존에 서버를 직접 관리(패치, 업데이트 등)하던 수고를 없애는 가장 좋은 방법은 서버가 필요 없는 '관리형 서비스'인 Route 53을 쓰는 것입니다. 영역 파일을 한 번만 옮겨두면 AWS가 알아서 전 세계에 분산해주고 가용성도 100%에 가깝게 보장합니다.\n\n원문에서 서버 복제(C)나 EC2(D)를 언급했지만, 이는 '운영 오버헤드 최소화'라는 목적에는 어울리지 않는 하수입니다.",
+    "explanation": "정답은 A입니다. 기존에 서버를 직접 관리하던 수고를 없애는 가장 좋은 방법은 서버가 필요 없는 '관리형 서비스'인 Route 53을 쓰는 것입니다. 영역 파일을 한 번만 옮겨두면 AWS가 알아서 전 세계에 분사해주고 가용성도 100% 보장합니다.\n\nhttps://aws.amazon.com/route53/",
     "glossary": {
       "Amazon Route 53": "서버 관리 없이 도메인 이름과 트래픽을 지휘하는 AWS의 똑똑한 길잡이(DNS) 서비스",
       "Hosted Zone (호스트 존)": "특정 도메인의 DNS 레코드를 모아놓은 가상의 관리 바구니",
@@ -43,7 +43,7 @@ export const quizData = [
       "다중 리전 액세스 포인트를 만들어서 로그를 분석합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n'S3 Storage Lens'는 전사적인 S3 사용 현황을 화려한 대시보드로 보여주는 분석 도구입니다. 여기에는 용량뿐만 아니라 '불완전한 멀티파트 업로드'처럼 돈만 나가고 쓸모없는 파일들의 개수도 포함되어 있어 비용 절감 포인트를 찾기에 딱입니다.\n\n다른 옵션인 B(SCP)는 보고(Reporting) 기능이 아니라 차단 서비스이므로 문제의 의도와 다릅니다.",
+    "explanation": "정답은 C입니다. 'S3 Storage Lens'는 전사적인 S3 사용 현황을 화려한 대시보드로 보여줍니다. 여기에는 '불완전한 멀티파트 업로드'처럼 돈만 나가고 쓸모없는 파일들의 개수도 포함되어 있어 비용 절감 포인트를 찾기에 딱입니다.\n\nhttps://aws.amazon.com/s3/storage-lens/",
     "glossary": {
       "S3 Storage Lens": "수천 개의 버킷에 담긴 데이터 양과 활동 패턴을 한눈에 분석해주는 전사적 통계 서비스",
       "Incomplete Multipart Upload": "큰 파일을 쪼개서 올리다가 중간에 끊겨서 용량만 차지하고 완성되지 못한 파일 조각들",
@@ -60,7 +60,7 @@ export const quizData = [
       "Amazon RDS '블루/그린 배포(Blue/Green)' 기능을 써서 조용히 테스트하고 한 번에 교체합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다.\n\n'블루/그린 배포'는 똑같은 복제 서버(그린)를 옆에 하나 더 만들어서 그쪽 버전만 살짝 올린 뒤 충분히 테스트 해보는 방식입니다. 모든 게 완벽하면 버튼 하나로 손님들을 새 서버(그린)로 옮길 수 있어 사고 위험이 거의 없습니다.\n\n다른 옵션인 A는 서버를 꺼야 하거나 테스트 중에 실제 데이터가 오염될 위험이 있어 고수들은 피하는 방식입니다.",
+    "explanation": "정답은 D입니다. '블루/그린 배포'는 똑같은 복제 서버(그린)를 옆에 하나 더 만들어서 그쪽 버전만 살짝 올린 뒤 충분히 테스트 해보는 방식입니다. 모든 게 완벽하면 버튼 하나로 손님들을 새 서버로 옮길 수 있어 사고 위험이 거의 없습니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/blue-green-deployments.html",
     "glossary": {
       "Blue/Green Deployment": "현재 가동 중인 환경(Blue)과 똑같은 새 환경(Green)을 만들어 안전하게 검증하고 교체하는 배포 전략",
       "Amazon RDS": "DB 설치와 버전 업그레이드를 자동화해주는 AWS의 고마운 DB 관리 서비스",
@@ -77,7 +77,7 @@ export const quizData = [
       "ECS on EC2 방식을 택해서 매번 서버를 껐다 켰다 하게 만듭니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. (원문 index 2)\n\n2시간이라는 긴 작업 시간은 람다(최대 15분)로는 감당이 안 됩니다. 그렇다고 서버(EC2)를 계속 켜두는 건 돈 낭비죠. 이럴 땐 필요할 때만 컨테이너를 잠깐 빌려 쓰는 'Fargate'가 정답입니다. 작업이 끝나면 비용 청구도 멈추므로 경제적입니다.\n\n다른 옵션인 A는 하루 22시간 동안 놀고 있는 서버 비용을 내야 하므로 가성비가 매우 떨어집니다.",
+    "explanation": "정답은 C입니다. 2시간이라는 긴 작업 시간은 람다(최대 15분)로는 감당이 안 됩니다. 이럴 땐 필요할 때만 컨테이너를 잠깐 빌려 쓰는 'Fargate'가 정답입니다. EventBridge 스케줄러를 쓰면 정해진 시간에만 딱 실행할 수 있습니다.\n\nhttps://aws.amazon.com/fargate/",
     "glossary": {
       "AWS Fargate": "서버 사양을 고민할 필요 없이 컨테이너만 실행하면 되는 서버리스 컴퓨팅 엔진",
       "Amazon EventBridge": "정해진 시간이나 특정 사건(이벤트)에 맞춰 다른 서비스를 실행시키는 일종의 똑똑한 타이머",
@@ -94,7 +94,7 @@ export const quizData = [
       "데이터 요약본을 QLDB에 넣고 Neptune Streams로 엉뚱한 감시를 합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n친구의 친구, 좋아하는 관심사 등 거미줄처럼 얽킨 데이터를 분석하는 데는 그래프 전용 DB인 'Amazon Neptune'이 필수입니다. 여기에 데이터가 바뀔 때마다 즉시 알려주는 'Neptune Streams'를 더하면 실시간 추천 시스템을 가장 편하게 만들 수 있습니다.\n\n원문에서 언급한 C나 D(QLDB)는 데이터의 위변조 방지가 중요한 장부 기록용이지, 복잡한 인맥 분석용이 아닙니다.",
+    "explanation": "정답은 B입니다. 친구의 친구, 좋아하는 관심사 등 거미줄처럼 얽킨 데이터를 분석하는 데는 그래프 전용 DB인 'Neptune'이 필수입니다. 여기에 데이터가 바뀔 때마다 즉시 알려주는 'Neptune Streams'를 더하면 실시간 추천 시스템을 가장 편하게 만들 수 있습니다.\n\nhttps://aws.amazon.com/neptune/",
     "glossary": {
       "Amazon Neptune": "사람, 장소, 사물 간의 복잡한 관계를 연결하고 탐색하는 데 특화된 고성능 그래프 데이터베이스",
       "Neptune Streams": "Neptune 데이터베이스에 새 정보가 오거나 바뀔 때 그 내역을 실시간으로 알려주는 통로",
@@ -111,7 +111,7 @@ export const quizData = [
       "비싼 프로비저닝된 IOPS(SSD) 볼륨을 여러 서버가 같이 쓰도록 억지로 엮습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n여러 대의 리눅스 서버가 하나의 저장소를 '동시에' 읽고 쓰고 싶다면 정답은 무조건 EFS입니다. 가용 영역(AZ)에 상관없이 네트워크를 통해 연결되므로 서버가 늘어나도 관리하기가 매우 편합니다.\n\n다른 옵션인 D(EBS 공유)는 특수한 클러스터링 설정이 필요하고 관리가 까다로워 일반적인 파일 공유에는 EFS(C)가 훨씬 유리합니다.",
+    "explanation": "정답은 C입니다. 여러 대의 리눅스 서버가 하나의 저장소를 '동시에' 읽고 쓰고 싶다면 정답은 무조건 EFS입니다. 가용 영역(AZ)에 상관없이 네트워크를 통해 연결되므로 서버가 늘어나도 관리하기가 매우 편합니다.\n\nhttps://aws.amazon.com/efs/",
     "glossary": {
       "Amazon EFS (Elastic File System)": "수천 대의 EC2 인스턴스가 동시에 공유해서 쓸 수 있는 리눅스용 클라우드 파일 저장소",
       "Concurrent Access (동시 접속)": "여러 대의 컴퓨터가 하나의 데이터에 한꺼번에 달라붙어 작업하는 상태",
@@ -128,7 +128,7 @@ export const quizData = [
       "Kinesis Data Firehose를 앞에 세워서 모든 쿼리를 줄 세워 기다리게 합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n주 서버는 데이터의 수정과 삭제만으로도 벅찹니다. 단순히 정보를 읽어가는 조회 작업들은 '읽기 전용 복제본'을 여러 명 고용해서 그 친구들에게 맡기면 주 서버의 숨통이 트이고 전체 앱 속도가 빨라집니다.\n\n다른 옵션인 A(스탠바이 서버)는 장애 시 교체용이라 평소에는 일을 시킬 수 없는 비상 대기조일 뿐입니다.",
+    "explanation": "정답은 C입니다. 무거워진 주 DB의 짐을 덜어주기 위해 똑같은 복사본인 '읽기 전용 복제본'을 여러 개 고용하세요. 단순히 정보를 읽어가는 조회 작업들을 이 친구들에게 맡기면 주 서버의 숨통이 트이고 전체 앱 속도가 빨라집니다.\n\nhttps://aws.amazon.com/rds/features/read-replicas/",
     "glossary": {
       "Read Replica (읽기 전용 복제본)": "주 DB의 복사본을 만들어 오직 정보 조회 작업만 전담시키는 보조 서버",
       "Query (쿼리)": "데이터베이스에게 정보를 달라고 하거나 수정하라고 내리는 컴퓨터 명령어",
@@ -145,7 +145,7 @@ export const quizData = [
       "컨설팅 직원 100명에게 우리 회사 IAM 아이디를 일일이 하나씩 다 발급해줍니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n남의 집 열쇠를 새로 만드는 것보다, 그 사람이 가진 열쇠를 우리 집 문에 등록해주는 것이 훨씬 안전합니다. 업체 직원들은 자기네 회사 아이디로 로그인한 상태에서 우리 S3 데이터를 읽을 수 있게 되므로, 우리는 남의 회사 아이디를 관리할 수고를 덜 수 있습니다.\n\n다른 옵션인 D는 업체 직원이 퇴사할 때마다 우리가 아이디를 삭제해야 하므로 관리가 지옥이 됩니다.",
+    "explanation": "정답은 C입니다. 남의 집 열쇠를 새로 만드는 것보다, 그 사람이 가진 열쇠를 우리 집 문에 등록해주는 것이 훨씬 안전합니다. 업체 계정의 아이디들이 우리 S3에 접근할 수 있게 '교차 계정 권한'을 설정하면 관리가 훨씬 깔끔해집니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html#example-bucket-policies-use-case-2",
     "glossary": {
       "Cross-account Access": "서로 다른 AWS 계정끼리 자원을 공유할 수 있도록 허가해주는 보안 설정",
       "Bucket Policy (버킷 정책)": "S3 바구니에 누가 들어오고 나갈 수 있는지 적어놓은 깐깐한 출입 명부",
@@ -162,7 +162,7 @@ export const quizData = [
       "관계형 DB 전문인 EFS로 모든 데이터를 옮기고 리전 복제 버튼을 누릅니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\nFSx for NetApp ONTAP은 실제 NetApp 장비와 똑같은 소프트웨어를 씁니다. 따라서 NetApp의 전용 복제 기술인 'SnapMirror'를 쓰면 수천 킬로미터 떨어진 리전 사이에서도 데이터가 마치 거울처럼 똑같이 유지됩니다. 가장 빠르고 정확하며 설정도 쉽습니다.\n\n다른 옵션인 A나 B는 윈도우/리눅스 파일 시스템의 특성을 100% 반영하지 못하거나 복구 시간이 오래 걸릴 수 있습니다.",
+    "explanation": "정답은 C입니다. FSx for NetApp ONTAP은 실제 NetApp 장비와 똑같은 소프트웨어를 씁니다. 따라서 NetApp의 전용 복제 기술인 'SnapMirror'를 쓰면 수천 킬로미터 떨어진 리전 사이에서도 데이터가 마치 거울처럼 똑같이 유지됩니다.\n\nhttps://docs.aws.amazon.com/fsx/latest/ONTAPGuide/snapmirror-replication.html",
     "glossary": {
       "Amazon FSx for NetApp ONTAP": "기업용 고성능 저장 장치인 NetApp ONTAP을 AWS에서 그대로 쓰게 해주는 서비스",
       "SnapMirror": "NetApp 장비끼리 데이터를 광속으로 복제하고 동기화하는 전용 기술",
@@ -179,7 +179,7 @@ export const quizData = [
       "서버 이사 서비스인 SMS를 통해 메시지를 실시간으로 낚아채서 람다로 던집니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n갑자기 쏟아지는 요청에 서버가 터지지 않게 '번호표'를 뽑고 기다리게 만드는 것이 SQS(대기열)의 역할입니다. SNS로 받은 알림을 SQS에 차곡차곡 쌓아두면, 람다는 자신이 처리할 수 있는 만큼만 꺼내 가므로 시스템이 절대 무너지지 않고 확장성(Scalability)도 최고가 됩니다.\n\n다른 옵션인 A나 B는 구조가 너무 복잡해져서 배보다 배꼽이 더 커지는 상황이 됩니다.",
+    "explanation": "정답은 C입니다. 갑자기 쏟아지는 요청에 서버가 터지지 않게 '번호표'를 뽑고 기다리게 만드는 것이 SQS(대기열)의 역할입니다. SNS 알림을 SQS에 차곡차곡 쌓아두면 람다가 처리 속도에 맞춰 안전하게 작업을 마무리할 수 있습니다.\n\nhttps://docs.aws.amazon.com/sns/latest/dg/sns-common-scenarios.html",
     "glossary": {
       "Amazon SQS (Simple Queue Service)": "메시지나 데이터를 임시로 보관하며 순서대로 처리할 수 있게 돕는 클라우드 대기열 서비스",
       "Amazon SNS": "메시지를 여러 곳으로 한 번에 뿌려주는 방송국 같은 푸시 알림 서비스",
@@ -197,7 +197,7 @@ export const quizData = [
       "MySQL 전통 DB인 Aurora를 씁니다."
     ],
     "answer": [1, 2],
-    "explanation": "정답은 B, C(원문 index 1, 2)입니다.\n\n이런 무작위 트래픽(0~500건/초)에는 서버 사양을 고민할 필요 없는 '람다'와 'DynamoDB' 조합이 천생연분입니다. 람다는 요청이 올 때만 반짝 일하고, DynamoDB는 간단한 데이터(키-값 형태) 저장에 최적화되어 있어 속도도 빠르고 비용도 매우 저렴합니다.\n\n다른 옵션인 E(Aurora)는 1GB 미만의 작은 데이터를 담기에는 설정이 과하고 비용도 람다+DynamoDB 조합보다 비쌉니다.",
+    "explanation": "정답은 B와 C입니다. 예측 불가능한 트래픽(0~500건/초)에는 서버 사양 고민 없는 '람다'와 'DynamoDB' 조합이 천생연분입니다. 사용한 만큼만 돈을 내며 1GB 미만의 간단한 데이터 처리에 가장 가성비가 높은 설계입니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "AWS Lambda": "서버 관리 없이 코드만 올리면 트래픽에 맞춰 자동으로 수천 번 실행되는 서버리스 엔진",
       "Amazon DynamoDB": "규모에 상관없이 10밀리초 안에 데이터를 찾아주는 초고성능 NoSQL 데이터베이스",
@@ -214,7 +214,7 @@ export const quizData = [
       "SFTP 서버를 따로 구축하고 Secrets Manager로 모든 직원의 비밀번호를 관리합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'사전 지정 URL'은 일종의 '임시 입장권'입니다. 로그인 없이도 이 주소만 있으면 정해진 시간(예: 1시간) 동안만 파일을 내려받을 수 있습니다. 관리자가 아이디를 일일이 만들지 않아도 안전하게 파일을 공유할 수 있는 가장 가볍고 똑똑한 방법입니다.\n\n다른 옵션인 D는 SFTP 서버 유지비와 관리 수고가 너무 많이 들어 '운영 오버헤드 최소화'에 어긋납니다.",
+    "explanation": "정답은 A입니다. '사전 지정 URL'은 일종의 '임시 입장권'입니다. 로그인 없이도 이 주소만 있으면 정해진 시간(예: 1시간) 동안만 파일을 내려받을 수 있어 관리가 가볍고 보안은 확실합니다.\n\nhttps://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html",
     "glossary": {
       "S3 Presigned URL": "S3 객체에 대해 특정 시간 동안만 유효한 임시 접근 권한을 부여한 보안 인터넷 주소",
       "Temporary Access (임시 접근)": "필요할 때만 잠시 문을 열어주고 시간이 지나면 자동으로 닫히는 보안 방식",
@@ -231,7 +231,7 @@ export const quizData = [
       "서버가 죽었는지 체크하는 상태 확인(Health Check) 주기를 더 빠르게 바꿉니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'세션 고정'이 켜져 있으면, 한 번 접속한 손님은 계속 그 서버랑만 대화하게 됩니다. 운 나쁘게 헤비 업로더들이 한 서버에만 몰리면 그 서버만 과부하가 걸리게 되죠. 이 기능을 끄면 로드 밸런서가 손님들을 모든 서버에 공평하게 랜덤으로 나눠주게 되어 부하가 균일해집니다.\n\n다른 옵션인 B는 문제 해결과 상관없는 장비 교체일 뿐 근본적인 라우팅 정책을 바꾸지는 못합니다.",
+    "explanation": "정답은 A입니다. '세션 고정'이 켜져 있으면 한 번 접속한 손님은 계속 그 서버랑만 대화하게 됩니다. 이 기능을 끄면 로드 밸런서가 손님들을 모든 서버에 공평하게 나눠주게 되어 특정 서버에 일이 몰리는 현상을 막을 수 있습니다.\n\nhttps://docs.aws.amazon.com/elasticloadbalancing/latest/application/sticky-sessions.html",
     "glossary": {
       "Sticky Session (스티키 세션)": "사용자의 로그인 상태유지 등을 위해 특정 서버로만 계속 안내하는 기능",
       "Load Balancing (부하 분산)": "밀려드는 트래픽을 여러 대의 서버에 골고루 나눠주어 시스템이 안 터지게 하는 것",
@@ -249,7 +249,7 @@ export const quizData = [
       "새로운 실행 역할(Role)을 만들어서 람다에게 선물하고 다시는 안 건드킵니다."
     ],
     "answer": [1, 3],
-    "explanation": "정답은 B, D(원문 index 1, 3)입니다.\n\nKMS 보안은 이중 잠금장치와 같습니다. ①람다가 그 키를 쓸 권리가 있는지 배지(IAM Policy)를 확인하고, ②금고 키(Key Policy) 쪽에서도 그 람다를 아는 사람으로 등록해줘야 합니다. 이 두 가지가 모두 맞아야 비로소 기밀 파일을 열어볼 수 있습니다.\n\n다른 옵션인 A나 C는 보안상 위험하거나 기술적으로 KMS 정책 구조에 맞지 않는 방식입니다.",
+    "explanation": "정답은 B와 D입니다. KMS 보안은 이중 잠금장치와 같습니다. ①람다가 키를 쓸 권리가 있는지 배지(IAM Role)를 확인하고, ②자물쇠 자체의 허가 명단(Key Policy)에도 그 람다를 등록해줘야 비로소 암호를 풀 수 있습니다.\n\nhttps://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html",
     "glossary": {
       "AWS KMS (Key Management Service)": "데이터 암호화에 쓰는 열쇠를 안전하게 보관하고 누가 썼는지 기록하는 보안실",
       "Key Policy": "누가 이 자물쇠(암호화 키)를 만질 수 있는지 키 자체에 적어둔 깐깐한 허가서",
@@ -266,7 +266,7 @@ export const quizData = [
       "데이터를 다 받아다가 QuickSight라는 그래프 툴에서 매일 실시간으로 봅니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n한 달에 딱 한 번만 하는 분석에 비싼 서버(Redshift, EMR)를 24시간 켜두는 건 돈 낭비입니다. S3에 보고서 파일을 생성해두고, 분석하고 싶을 때만 'Athena'를 켜서 SQL 명령어를 날리면 쓴 만큼만 돈을 내므로 가장 합리적인 가성비 분석법이 됩니다.\n\n다른 옵션인 A는 실시간 처리용이라 한 달에 한 번 보는 월간 보고용에는 너무 과한(Overkill) 장비입니다.",
+    "explanation": "정답은 B입니다. 한 달에 딱 한 번만 하는 분석에 비싼 서버를 24시간 켜두는 건 낭비입니다. S3에 보고서(CUR)를 담아두고, 분석하고 싶을 때만 'Athena'를 켜서 SQL 명령어를 날리면 쓴 만큼만 돈을 내므로 가장 합리적입니다.\n\nhttps://aws.amazon.com/athena/",
     "glossary": {
       "AWS Cost and Usage Report (CUR)": "비용과 사용량에 대한 가장 상세한 내역을 담은 일종의 가계부 파일",
       "Amazon Athena": "S3에 담긴 텍스트 파일을 서버 없이 SQL(데이터베이스 언어)로 검색해주는 서비스",
@@ -283,7 +283,7 @@ export const quizData = [
       "서버 앞단에 NAT 인스턴스를 겹겹이 쌓아 모든 패킷을 직접 전달합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\nUDP 패킷을 사용하는 게임 서버에는 고성능 L4 장비인 NLB가 정답입니다. NLB는 UDP를 공식 지원할 뿐만 아니라 오토 스케일링 그룹과도 찰떡궁합이라, 손님이 갑자기 늘어나도 지연 시간(Latency) 없이 매끄럽게 게임을 즐기게 해줍니다.\n\n다른 옵션인 B(ALB)는 UDP를 처리할 줄 모르는 웹 전용 장비라 게임 서버에는 쓸 수 없습니다.",
+    "explanation": "정답은 A입니다. UDP 패킷을 사용하는 게임 서버에는 고성능 L4 장비인 NLB가 정답입니다. NLB는 UDP를 공식 지원할 뿐만 아니라 오토 스케일링 그룹과도 찰떡궁합이라 지연 시간 없는 쾌적한 게임 환경을 보장합니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/network-load-balancer/",
     "glossary": {
       "Network Load Balancer (NLB)": "가장 낮은 계층에서 엄청난 속도로 트래픽을 나눠주며 TCP/UDP를 모두 지원하는 장비",
       "UDP (User Datagram Protocol)": "속도를 위해 데이터가 중간에 조금 새도 괜찮으니 일단 빨리 보내는 방식. 실시간 게임이나 방송에 필수",
@@ -300,7 +300,7 @@ export const quizData = [
       "EMR 빅데이터 클러스터를 구축해서 매일 모든 데이터를 정제하고 닦습니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n매일 로그가 쌓이지만 주 1회 단기 분석만 한다면, 저렴한 창고인 S3에 데이터를 던져두고 분석할 때만 Athena로 훑는 것이 압도적으로 쌉니다. 서버 유지비가 0원이고 쿼리한 데이터 양만큼만 돈을 내기 때문입니다.\n\n다른 옵션인 C(OpenSearch)는 실시간 검색에는 좋지만, 주 1회 분석을 위해 24시간 서버비를 내는 건 가성비 면에서 낙제점입니다.",
+    "explanation": "정답은 A입니다. 매일 로그가 쌓이지만 주 1회 단기 분석만 한다면, 저렴한 창고인 S3에 데이터를 던져두고 분석할 때만 Athena로 훑는 것이 압도적으로 쌉니다. 서버 유지비가 0원이라 가성비가 매우 뛰어납니다.\n\nhttps://aws.amazon.com/athena/",
     "glossary": {
       "Amazon Athena": "S3에 있는 데이터에 대고 SQL을 날리면 바로 답을 알려주는 서버리스 분석 서비스",
       "SQL (Structured Query Language)": "표 형태의 데이터에서 정보를 찾아내기 위해 사용하는 전 세계 표준 컴퓨터 언어",
@@ -318,7 +318,7 @@ export const quizData = [
       "DNS 관리자에게 레코드 하나만 추가하면 끝나는 'DNS 유효성 검사' 방식을 택합니다."
     ],
     "answer": [0, 4],
-    "explanation": "정답은 A, E(원문 index 0, 4)입니다.\n\n전체 하위 도메인을 한 번에 보호하려면 '와일드카드(*)' 인증서가 가성비 최고입니다. 여기에 증명 방식으로 'DNS 유효성 검사'를 선택하면, AWS가 알아서 도메인 주인을 확인하고 만료 전에 갱신까지 해주므로 운영자가 손댈 일이 아예 없어집니다.\n\n다른 옵션인 D는 매번 이메일을 확인하고 버튼을 누르는 귀찮은 작업이 필요해 '자동화'에 매우 불리합니다.",
+    "explanation": "정답은 A와 E입니다. 전체 하위 도메인을 한 번에 보호하려면 '와일드카드(*)' 인증서가 가성비 최고입니다. 여기에 'DNS 유효성 검사'를 선택하면 AWS가 만료 전 갱신까지 알아서 해주므로 운영자가 손댈 일이 아예 없어집니다.\n\nhttps://docs.aws.amazon.com/acm/latest/userguide/dns-validation.html",
     "glossary": {
       "Wildcard Certificate (와일드카드 인증서)": "하나의 인증서로 *.example.com에 속한 모든 하위 도메인들을 한꺼번에 보호하는 가성비 인증서",
       "DNS Validation (DNS 유효성 검사)": "도메인 설정값(CNAME)을 통해 내가 주인임을 인증하는 방식으로, 자동 갱신이 지원됨",
@@ -335,7 +335,7 @@ export const quizData = [
       "조금 저렴한 사용자 지정 키 저장소를 만들어 우리만의 암호 규칙을 정합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n'외부 키 저장소(XKS)'는 AWS의 보안 자물쇠(KMS)를 쓰긴 하되, 실제 금고 열쇠는 회사 내부(온프레미스) 장비에 두는 기술입니다. AWS는 열쇠를 직접 보관하지 않고 필요할 때만 회사 장비에 물어보게 되므로, 가장 까다로운 규제 요건까지 만족시킬 수 있습니다.\n\n다른 옵션인 A(CloudHSM)는 열쇠가 AWS 데이터 센터 안에 있게 되므로 'AWS 클라우드 외부 보관'이라는 조건을 만족하지 못합니다.",
+    "explanation": "정답은 B입니다. '외부 키 저장소(XKS)'는 AWS의 자물쇠를 쓰긴 하되 실제 금고 열쇠는 회사 내부 장비에 두는 기술입니다. 법규상 열쇠를 클라우드 외부에 보관해야 할 때 필수적으로 사용되는 초고보안 옵션입니다.\n\nhttps://docs.aws.amazon.com/kms/latest/developerguide/concept-external-key-store.html",
     "glossary": {
       "AWS KMS External Key Store (XKS)": "AWS 외부의 전산실(HSM 등)에 보관된 키를 사용하여 AWS 리소스를 암호화하는 가장 높은 보안 수준의 기술",
       "HSM (Hardware Security Module)": "암호 키를 해킹으로부터 물리적으로 완벽히 격격하여 보관하는 전용 보안 하드웨어",
@@ -352,7 +352,7 @@ export const quizData = [
       "Resource Access Manager를 써서 계정 간의 복잡한 공유 설정을 수동으로 잡습니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n수백 대의 노드가 병렬로 동시에 달려드는 HPC(슈퍼컴퓨팅) 작업에는 'Lustre'라는 파일 시스템이 전 세계 표준입니다. AWS의 FSx for Lustre는 S3와 실시간으로 연결되어 데이터를 가져오고, 계산이 끝나면 다시 결과를 S3로 쏴주는 기능이 아주 강력해 전문가들이 가장 선호합니다.\n\n다른 옵션인 A(EFS)는 일반적인 파일 공유에는 좋지만, 1ms 미만의 극적인 성능 요구와 대규모 병렬 계산(HPC)에는 Lustre에 비해 힘이 부칩니다.",
+    "explanation": "정답은 C입니다. 수백 대의 노드가 동시에 달려드는 HPC(슈퍼컴퓨팅) 작업에는 'Lustre' 파일 시스템이 표준입니다. S3와 실시간으로 연동되어 데이터를 가져오고 결과를 쏴주기 때문에 전문가들이 선호하는 솔루션입니다.\n\nhttps://aws.amazon.com/fsx/lustre/",
     "glossary": {
       "Amazon FSx for Lustre": "수천 대의 서버가 동시에 데이터에 달려들어 계산할 수 있게 돕는 초고성능 HPC용 파일 시스템",
       "HPC (High Performance Computing)": "기상 예측이나 신약 개발처럼 슈퍼컴퓨터를 써야 할 정도의 방대한 계산 작업",
@@ -369,7 +369,7 @@ export const quizData = [
       "경로 기반 라우팅을 쓰는 ALB 로드 밸런서로 지역마다 정성껏 안내합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n'Global Accelerator'는 전 세계 AWS 전용망 입구(Edge)에 2개의 고정된 애니캐스트(Anycast) IP 주소를 줍니다. 사용자는 가장 가까운 AWS 입구로 들어가서 전용 광랜을 타고 서버로 가기 때문에 인터넷 정체가 없고, 서버 리전에 장애가 나면 0.1초 만에 다른 리전으로 손님들을 옮겨주어 주캐싱 문제도 해결합니다.\n\n다른 옵션인 B(Route 53)는 DNS 방식이라, 통신사가 IP 주소를 옛날 걸로 기억(Caching)하고 있으면 장애 시에도 손님이 계속 죽은 서버로 가려고 해서 문제 해결이 늦습니다.",
+    "explanation": "정답은 A입니다. 'Global Accelerator'는 전 세계 고정된 2개의 전용 IP 주소를 줍니다. 인터넷 정체를 피하고 서버 리전에 장애가 나도 즉시 다른 리전으로 손님을 옮겨주어 주소 캐싱 문제까지 말끔히 해결합니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "AWS Global Accelerator": "전 세계 사용자의 트래픽을 AWS 전용망을 통해 최단 경로로 인도하고 장애 시 즉시 경로를 바꿔주는 가속 서비스",
       "VoIP (Voice over IP)": "인터넷망을 이용해 실시간으로 목소리를 주고받는 기술. 지연 시간에 매우 예민함",
@@ -386,7 +386,7 @@ export const quizData = [
       "EFS 프로비저닝된 처리량 모드를 써서 일정한 돈을 내고 속도를 고정합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다.\n\n수천 대의 서버가 동시에 붙는 예보 시스템에는 Lustre 파일 시스템이 딱입니다. 특히 'Persistent(지속형)' 모드를 쓰면, 계산 중에 서버 한두 대가 죽어도 데이터가 날아가지 않고 안전하게 보관되므로 며칠씩 걸리는 예보 작업을 안심하고 돌릴 수 있습니다.\n\n다른 옵션인 A(Scratch)는 일시적인 연산용이라 한 대만 고장 나도 데이터가 다 날아갈 수 있어 '영구 저장' 요건에 맞지 않습니다.",
+    "explanation": "정답은 B입니다. 수천 대의 서버가 동시에 붙는 예보 시스템에는 Lustre 파일 시스템이 딱입니다. 특히 'Persistent(지속형)' 모드를 쓰면 데이터가 안전하게 영구 보관되므로 며칠씩 걸리는 작업을 안심하고 돌릴 수 있습니다.\n\nhttps://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-storage-options.html",
     "glossary": {
       "Persistent (퍼시스턴트/지속형)": "데이터가 사라지지 않고 하드디스크에 영구적으로 안전하게 기록되는 상태",
       "Throughput (처리량)": "통로를 통해 한 번에 얼마나 많은 데이터를 흘려보낼 수 있는지를 나타내는 척도",
@@ -403,7 +403,7 @@ export const quizData = [
       "값싼 마그네틱 테이프 방식을 쓰면서 속도가 나오길 기원합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다.\n\n최신형 EBS인 gp3는 '용량'과 '속도(IOPS)'를 따로 떼어서 살 수 있는 혁신적인 녀석입니다. 용량은 조금만 사고 속도만 15,000으로 높이면, 비싼 io1 볼륨보다 훨씬 저렴한 가격에 똑같은 쾌적함을 누릴 수 있어 가성비 끝판왕으로 불립니다.\n\n다른 옵션인 A(gp2)는 속도를 높이려면 용량도 같이 뻥튀기해서 사야 하므로 불필요한 비용이 나갑니다.",
+    "explanation": "정답은 C입니다. 최신형 EBS인 gp3는 '용량'과 '속도(IOPS)'를 따로 떼어서 살 수 있습니다. 용량은 조금만 사고 속도만 높일 수 있어, 비싼 io1 볼륨보다 훨씬 저렴한 가격에 똑같은 고성능을 누릴 수 있습니다.\n\nhttps://aws.amazon.com/ebs/general-purpose/",
     "glossary": {
       "Amazon EBS GP3": "성능(IOPS)을 용량과 상관없이 독립적으로 업그레이드할 수 있는 최신 가성비 SSD",
       "IOPS (Input/Output Operations Per Second)": "하드디스크가 초당 얼마나 많은 읽기/쓰기 작업을 처리할 수 있는지 나타내는 성능 지표",
@@ -420,7 +420,7 @@ export const quizData = [
       "엔진 자체를 Aurora MySQL로 완전히 바꿔서 마이그레이션 모험을 떠납니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다.\n\n가장 편한 방법은 관리형 서비스인 RDS를 쓰는 것입니다. RDS SQL Server는 '읽기 전용 복제본'을 버튼 클릭 몇 번으로 만들 수 있어, 주 서버는 장사를 하고 조수 서버(복제본)는 보고서를 뽑는 식으로 역할을 분담해 성능과 운영 효율이라는 두 마리 토끼를 다 잡을 수 있습니다.\n\n다른 옵션인 B는 서버를 직접 관리해야 하므로 '운영 오버헤드 최소화'라는 조건에서 탈락입니다.",
+    "explanation": "정답은 A입니다. 가장 편한 방법은 관리형 서비스인 RDS를 쓰는 것입니다. RDS SQL Server는 '읽기 전용 복제본'을 버튼 클릭 몇 번으로 만들 수 있어 주 서버와 보고서용 서버의 역할을 깔끔하게 나눌 수 있습니다.\n\nhttps://docs.aws.amazon.com/AmazonRDS/latest/SQLServerUserGuide/SQLServer.ReadReplicas.html",
     "glossary": {
       "Read Replica (읽기 전용 복제본)": "주 데이터베이스의 데이터를 실시간으로 복사해 오직 조회용 업무만 전담하는 보조 서버",
       "Amazon RDS for SQL Server": "윈도우용 주력 DB인 SQL Server의 설치, 백업, 복제를 AWS가 대신 해주는 서비스",

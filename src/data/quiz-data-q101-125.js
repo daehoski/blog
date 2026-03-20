@@ -9,7 +9,7 @@ export const quizData = [
       "퍼블릭 서브넷 중 하나에 송신 전용 인터넷 게이트웨이를 생성합니다. VPC 가 아닌 \n트래픽을 외부 전용 인터넷 게이트웨이로 전달하는 프라이빗 서브넷에 대한 라우팅 \n테이블을 업데이트합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 각 가용 영역(AZ)에 있는 프라이빗 서브넷의 인스턴스들이 인터넷(소프트웨어 업데이트 등)에 접속하게 하려면, 각 AZ의 퍼블릭 서브넷에 'NAT 게이트웨이'를 하나씩 배치하는 것이 고가용성 측면에서 가장 권장됩니다. 이렇게 하면 특정 AZ의 NAT 게이트웨이가 장애가 나더라도 다른 AZ의 통신에는 영향을 주지 않는 'AZ 독립적' 아키텍처를 구성할 수 있습니다.",
+    "explanation": "정답은 A입니다. 각 가용 영역(AZ)에 있는 프라이빗 서브넷의 인스턴스들이 인터넷에 안전하게 접속하게 하려면, 각 AZ의 퍼블릭 서브넷에 'NAT 게이트웨이'를 하나씩 배치하는 것이 고가용성 측면에서 가장 권장됩니다.\n\nhttps://aws.amazon.com/vpc/",
     "glossary": {
       "NAT Gateway": "프라이빗 서브넷의 인스턴스가 인터넷과 통신할 수 있게 하되, 외부에서 내부로의 직접 접속은 차단하는 관리형 네트워크 장비",
       "고가용성 (High Availability)": "시스템의 한 부분이 고장 나도 전체 서비스가 중단되지 않고 계속 유지되도록 설계된 상태"
@@ -26,7 +26,7 @@ export const quizData = [
       "AWS DataSync 를 사용하여 온프레미스 SFTP 서버에 적합한 위치 구성을 생성합니다."
     ],
     "answer": [1, 4],
-    "explanation": "정답은 B와 E입니다. 온프레미스 SFTP 서버의 데이터를 AWS EFS로 자동화하여 마이그레이션하려면 'AWS DataSync'가 가장 적합한 도구입니다. 먼저 온프레미스 환경에 DataSync 에이전트를 설치(B)하고, DataSync 서비스에서 소스(SFTP)와 대상(EFS)에 대한 '위치 구성(Location)'을 생성(E)하여 전송 작업을 자동화할 수 있습니다.",
+    "explanation": "정답은 B와 E입니다. 온프레미스 SFTP 서버의 데이터를 AWS EFS로 자동화하여 마이그레이션하려면 'AWS DataSync'가 최적의 도구입니다. 에이전트 설치와 위치 구성은 필수 단계입니다.\n\nhttps://aws.amazon.com/datasync/",
     "glossary": {
       "AWS DataSync": "온프레미스 스토리지와 AWS 서비스 간의 대량 데이터 전송을 빠르고 안전하게 자동화하는 서비스",
       "EFS": "여러 EC2 인스턴스가 동시에 공유해서 사용할 수 있는 서버리스 파일 시스템"
@@ -42,7 +42,7 @@ export const quizData = [
       "FindMatches 기계 학습(ML) 변환을 사용합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. AWS Glue ETL 작업이 이전에 처리한 데이터를 기억하고 새로 추가된 데이터만 처리하게 하려면 '작업 북마크(Job Bookmarks)' 기능을 활성화해야 합니다. 이 기능은 실행 상태 정보를 유지하여 동일한 데이터가 중복 처리되는 것을 자동으로 방지하고 운영 효율을 높여줍니다.",
+    "explanation": "정답은 A입니다. AWS Glue ETL 작업이 이전에 처리한 데이터를 기억하고 새로 추가된 데이터만 처리하게 하려면 '작업 북마크(Job Bookmarks)' 기능을 활성화해야 합니다.\n\nhttps://aws.amazon.com/glue/",
     "glossary": {
       "Job Bookmarks": "AWS Glue가 이전 ETL 실행 중에 처리된 데이터를 추적하여 중복 처리를 방지하는 기능",
       "S3": "AWS에서 제공하는 확장성이 뛰어나고 내구성이 높은 객체 스토리지 서비스"
@@ -59,7 +59,7 @@ export const quizData = [
       "80% CPU 사용률로 설정된 대상 추적 조정 정책과 함께 Auto Scaling 그룹의 EC2 스팟 \n인스턴스를 사용합니다."
     ],
     "answer": [0, 2],
-    "explanation": "정답은 A와 C입니다. 대규모 DDoS 공격으로부터 웹사이트를 보호하려면 'AWS Shield Advanced'(A)를 통해 자동화된 실시간 완화 기능을 적용하는 것이 필수적입니다. 또한 'Amazon CloudFront'(C)를 도입하면 전 세계 엣지 환경에 트래픽이 분산되어 특정 서버로의 집중 공격을 막아내고 가용성을 획기적으로 향상시킬 수 있습니다.",
+    "explanation": "정답은 A와 C입니다. 대규모 DDoS 공격으로부터 웹사이트를 보호하려면 'AWS Shield Advanced'와 'Amazon CloudFront'의 글로벌 엣지 거점을 활용한 분산 방어 전략이 가장 효과적입니다.\n\nhttps://aws.amazon.com/shield/",
     "glossary": {
       "AWS Shield Advanced": "표준형보다 강력한 보호 기능을 제공하며, DDoS 공격 발생 시 대응 팀의 지원을 받을 수 있는 서비스",
       "DDoS": "수많은 컴퓨터를 동원해 웹 사이트에 과부하를 일으켜 마비시키는 공격 방식"
@@ -75,7 +75,7 @@ export const quizData = [
       "lambda:InvokeFunction 을 작업으로, Service: events.amazonaws.com 을 보안 주체로 \n사용하여 리소스 기반 정책을 함수에 추가합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. EventBridge가 특정 Lambda 함수를 실행할 수 있도록 허용할 때는 '리소스 기반 정책'을 함수에 추가하는 것이 가장 적절합니다. 이때 작업(Action)은 호출만 가능하게 'lambda:InvokeFunction'으로 제한하고, 보안 주체(Principal)를 'events.amazonaws.com'으로 명시하여 최소 권한 원칙을 준수할 수 있습니다.",
+    "explanation": "정답은 D입니다. EventBridge가 Lambda를 호출할 수 있게 허용할 때는 '리소스 기반 정책'을 함수에 추가하세요. 최소 권한 원칙에 따라 호출 권한(InvokeFunction)만 부여하는 것이 안전합니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "최소 권한 원칙 (Least Privilege)": "작업 수행에 꼭 필요한 만큼의 권한만 부여하여 보안 사고를 예방하는 원칙",
       "Resource-based Policy": "사용자가 아닌 리소스(Lambda 등)에 직접 연결하여 누가 이 리소스를 사용할 수 있는지 정의하는 정책"
@@ -91,7 +91,7 @@ export const quizData = [
       "자동 교체 기능이 있는 AWS KMS 키(SSE-KMS)를 사용한 서버 측 암호화"
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. '감사 기록'과 '키 순환'이 모두 필요할 때는 'AWS KMS(SSE-KMS)'가 정답입니다. 특히 매년 키를 교체해야 하는 요구 사항을 충족하면서도 운영 오버헤드를 줄이려면, 수동이 아닌 '자동 키 교체'가 활성화된 KMS 키를 사용하는 것이 가장 효율적입니다.",
+    "explanation": "정답은 D입니다. 감사 기록과 매년 자동 키 교체 요구 사항을 충족하려면 AWS KMS(SSE-KMS)를 사용하고 '자동 키 교체' 옵션을 켜두는 것이 운영 부담이 가장 적습니다.\n\nhttps://aws.amazon.com/kms/",
     "glossary": {
       "AWS KMS": "데이터를 암호화하는 데 사용되는 가상 키를 생성하고 관리해주는 보안 서비스",
       "Key Rotation (키 순환)": "보안을 위해 주기적으로 새로운 키를 생성하여 기존 키를 대체하는 작업"
@@ -107,7 +107,7 @@ export const quizData = [
       "Amazon Kinesis Data Analytics 와 함께 Amazon API Gateway 를 사용합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 위치 데이터를 수집하고 이를 외부에서 REST API를 통해 접근할 수 있게 하려면 'Amazon API Gateway'와 'AWS Lambda'의 조합이 가장 적합합니다. Lambda는 위치 정보를 처리하거나 저장소(DynamoDB 등)에서 검색하는 로직을 담당하며, API Gateway는 이를 표준 REST 인터페이스로 노출해줍니다.",
+    "explanation": "정답은 B입니다. 위치 데이터를 수집하고 외부에서 REST API로 접근하게 만들려면 서버리스의 정석인 'Amazon API Gateway'와 'AWS Lambda' 조합이 확장성과 운영 효율 면에서 압도적입니다.\n\nhttps://aws.amazon.com/api-gateway/",
     "glossary": {
       "API Gateway": "개발자가 API를 쉽게 생성, 게시, 관리 및 보호할 수 있도록 도와주는 완전관리형 서비스",
       "REST API": "웹의 장점을 활용할 수 있는 아키텍처 스타일을 따르는 HTTP 기반의 API 인터페이스"
@@ -123,7 +123,7 @@ export const quizData = [
       "RDS 이벤트 알림을 구독하고 Amazon Simple Notification Service(Amazon SNS) 주제를 \n여러 Amazon Simple Queue Service(Amazon SQS) 대기열로 보냅니다. AWS Lambda \n함수를 사용하여 대상을 업데이트합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 하나의 이벤트를 여러 개의 서로 다른 대상(시스템)으로 동시에 전달해야 할 때는 'SNS 구독 모델'을 통한 '팬아웃(Fan-out)' 아키텍처가 가장 효율적입니다. SNS 주제에 여러 SQS 대기열을 구독시키면, 하나의 메시지가 발생했을 때 모든 대기열로 복제되어 병렬 처리가 가능해집니다.",
+    "explanation": "정답은 D입니다. 하나의 이벤트를 여러 시스템으로 동시에 퍼뜨리는 '팬아웃' 구조를 만들려면 SNS 주제를 중심으로 여러 SQS 대기열을 구독시키는 방식이 가장 유연하고 견고합니다.\n\nhttps://aws.amazon.com/sns/",
     "glossary": {
       "Fan-out (팬아웃)": "하나의 메시지를 여러 수신자에게 동시에 복제하여 전달하는 아키텍처 패턴",
       "Amazon SNS": "구독 중인 엔드포인트나 사용자에게 메시지를 푸시해주는 완전관리형 알림 서비스"
@@ -139,7 +139,7 @@ export const quizData = [
       "S3 객체 잠금이 활성화된 S3 버킷을 생성합니다. 버전 관리를 활성화합니다. 개체에 \n법적 \n보존을 \n추가합니다. \n객체를 \n삭제해야 \n하는 \n사용자의 \nIAM \n정책에 \ns3:PutObjectLegalHold 권한을 추가합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 객체가 해제될 때까지 '무기한' 수정/삭제되지 않도록 하려면 S3 객체 잠금의 '법적 보존(Legal Hold)' 모드가 적합합니다. 법적 보존은 만료 날짜가 없으며 명시적으로 해제할 때까지 유효합니다. 또한 's3:PutObjectLegalHold' 권한이 있는 특정 사용자만 보존을 관리하거나 삭제할 수 있어 안전합니다.",
+    "explanation": "정답은 D입니다. 정해진 기간이 아닌 해제할 때까지 무기한으로 파일을 보호하고 싶다면 S3 객체 잠금의 '법적 보존(Legal Hold)' 모드를 사용하세요. 특정 권한자만 이를 관리할 수 있어 안전합니다.\n\nhttps://aws.amazon.com/s3/features/object-lock/",
     "glossary": {
       "S3 Object Lock": "지정된 기간 또는 무기한으로 객체가 삭제되거나 덮어쓰기되는 것을 방지하는 기능",
       "Legal Hold (법적 보존)": "만료 기간이 정해지지 않은 상태에서 잠금을 유지하는 기능으로, 수동으로 해제하기 전까지 객체를 보호함"
@@ -156,7 +156,7 @@ export const quizData = [
       "업로드된 이미지의 크기를 조정하기 위해 일정에 따라 AWS Lambda 함수를 호출하는 \nAmazon EventBridge(Amazon CloudWatch Events) 규칙을 생성합니다."
     ],
     "answer": [2, 3],
-    "explanation": "정답은 C와 D입니다. 웹 서버의 부하를 줄이려면 사용자 브라우저에서 '미리 서명된 URL(Pre-signed URL)'을 통해 S3로 직접 업로드(C)하게 하는 것이 가장 좋습니다. 업로드 완료 후에는 'S3 이벤트 알림'을 통해 Lambda 함수를 자동으로 실행(D)하여 이미지 크기 조정 작업을 비동기로 처리함으로써 서버 응답 속도를 높일 수 있습니다.",
+    "explanation": "정답은 C와 D입니다. 웹 서버의 짐을 덜어주려면 사용자 브라우저에서 S3로 직접 업로드(Pre-signed URL)하게 하고, 업로드 완료 이벤트를 받아 Lambda가 이미지 크기를 조정하게 설계하세요.\n\nhttps://aws.amazon.com/s3/",
     "glossary": {
       "Pre-signed URL": "보안 자격 증명을 공유하지 않고도 특정 시간 동안 S3에 파일을 직접 업로드할 수 있게 해주는 임시 URL",
       "S3 Event Notification": "S3 버킷에서 파일 업로드 같은 이벤트가 발생했을 때 Lambda 등을 자동 실행하는 기능"
@@ -172,7 +172,7 @@ export const quizData = [
       "두 가용 영역에 구성된 활성/대기 브로커와 함께 Amazon MQ 를 사용합니다. 두 가용 \n영역에 걸쳐 소비자 EC2 인스턴스에 대한 Auto Scaling 그룹을 추가합니다. 다중 AZ 가 \n활성화된 MySQL 용 Amazon RDS 를 사용합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. '낮은 운영 복잡성'과 '고가용성'을 모두 만족하려면 관리형 서비스를 활용해야 합니다. 메시지 브로커는 'Amazon MQ(Active/Standby)', 소비자는 'Auto Scaling 그룹'을 통한 EC2 자동 관리, 데이터베이스는 'RDS Multi-AZ'를 사용하면 장애 발생 시 자동으로 인프라가 복구되는 고가용성 구조가 완성됩니다.",
+    "explanation": "정답은 D입니다. 기존의 ActiveMQ 환경을 고가용성으로 바꾸려면 관리형인 Amazon MQ(Active/Standby)와 RDS Multi-AZ, 그리고 소비자의 자동 확장을 위한 Auto Scaling 그룹을 결합하세요.\n\nhttps://aws.amazon.com/amazon-mq/",
     "glossary": {
       "Amazon MQ": "ActiveMQ, RabbitMQ 같은 오픈소스 메시지 브로커를 AWS에서 관리해주는 서비스",
       "RDS Multi-AZ": "두 개의 가용 영역에 데이터베이스를 배치하여 장애 시 자동으로 보조 DB로 전환되는 고가용성 옵션"
@@ -188,7 +188,7 @@ export const quizData = [
       "AWS ParallelCluster 와 같은 고성능 컴퓨팅(HPC) 솔루션을 사용하여 적절한 규모로 \n들어오는 요청을 처리할 수 있는 HPC 클러스터를 설정합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 컨테이너화된 앱을 '최소한의 운영 오버헤드'로 실행하려면 서버 관리가 필요 없는 'AWS Fargate'가 최적입니다. Amazon ECS에서 Fargate를 사용하고 'Service Auto Scaling'과 'ALB'를 결합하면, 트래픽 증가에 따라 자동으로 컨테이너 수가 조절되어 안정적인 서비스 운영이 가능합니다.",
+    "explanation": "정답은 A입니다. 컨테이너화된 앱을 서버 관리 없이 자동으로 늘리고 줄이며 운영하고 싶다면 Fargate 기반의 ECS를 사용하세요. 로드 밸런서(ALB) 연동을 통해 안정적인 서비스가 가능합니다.\n\nhttps://aws.amazon.com/fargate/",
     "glossary": {
       "AWS Fargate": "서버나 클러스터를 직접 관리할 필요 없이 컨테이너를 실행할 수 있는 서버리스 엔진",
       "Application Load Balancer (ALB)": "애플리케이션 계층(Layer 7)에서 들어오는 트래픽을 여러 대상으로 골고루 분산해주는 장치"
@@ -204,7 +204,7 @@ export const quizData = [
       "Amazon EC2 컴퓨팅이 포함된 AWS Snowball Edge Storage Optimized 디바이스를 \n주문합니다. 데이터를 장치에 복사합니다. AWS 에서 새 EC2 인스턴스를 생성하여 변환 \n애플리케이션을 실행합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 50TB의 대용량 데이터를 인터넷 대역폭 소모 없이 옮기려면 'AWS Snowball Edge' 장비를 사용하는 것이 가장 빠르고 확실합니다. 데이터를 옮긴 후, 매주 수행하던 변환 작업은 클라우드 환경에 최적화된 서버리스 ETL 서비스인 'AWS Glue'를 통해 재구성하면 운영 오버헤드를 최소화할 수 있습니다.",
+    "explanation": "정답은 C입니다. 50TB의 대량 데이터를 대역폭 걱정 없이 옮기려면 Snowball Edge를 사용하고, 옮긴 후의 복잡한 변환 작업은 서버리스 데이터 통합 도구인 AWS Glue에게 맡기세요.\n\nhttps://aws.amazon.com/snowball/",
     "glossary": {
       "AWS Snowball Edge": "인터넷 대신 물리적인 장비를 사용하여 테라바이트급 데이터를 AWS로 전송하는 서비스",
       "AWS Glue": "데이터를 추출, 변환, 로드(ETL)할 수 있도록 도와주는 완전관리형 데이터 통합 서비스"
@@ -220,7 +220,7 @@ export const quizData = [
       "EC2 인스턴스 수를 3 개로 늘립니다. 프로비저닝된 IOPS SSD(io2) Amazon Elastic Block \nStore(Amazon EBS) 볼륨을 사용하여 사진과 메타데이터를 저장합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. 확장성이 중요한 서비스에서 사진(파일)은 'Amazon S3'에 저장하고, 텍스트 형태의 메타데이터만 'DynamoDB'에 저장하는 것이 AWS의 표준 설계 패턴입니다. 사진 처리는 트래픽에 따라 자동 확장되는 'AWS Lambda'를 활용하면 급격한 부하 변동에도 유연하고 효율적으로 대응할 수 있습니다.",
+    "explanation": "정답은 C입니다. 사진 파일은 무한 저장소인 S3에, 메타데이터는 번개처럼 빠른 DynamoDB에 나눠 담으세요. 처리는 Lambda에게 맡기면 사용자 수 변화에 유연하게 대응하는 정석 설계가 완성됩니다.\n\nhttps://aws.amazon.com/lambda/",
     "glossary": {
       "DynamoDB": "어떤 규모에서도 10밀리초 미만의 성능을 제공하는 완전관리형 NoSQL 데이터베이스",
       "Serverless (서버리스)": "사용자가 서버를 직접 관리하지 않고 클라우드가 리소스를 자동으로 제어하는 컴퓨팅 방식"
@@ -236,7 +236,7 @@ export const quizData = [
       "VPC 에서 인터넷 게이트웨이를 제거합니다. AWS Direct Connect 연결을 설정하고 Direct \nConnect 연결을 통해 Amazon S3 로 트래픽을 라우팅합니다."
     ],
     "answer": 2,
-    "explanation": "정답은 C입니다. S3 트래픽이 '인터넷'을 거치지 않고 AWS 내부망인 '프라이빗 경로'를 사용하게 하려면 'S3용 VPC 엔드포인트(게이트웨이 유형)'를 사용해야 합니다. 인스턴스를 프라이빗 서브넷으로 옮기고 라우팅 테이블에 엔드포인트를 연결하면 보안성과 성능을 동시에 잡을 수 있습니다.",
+    "explanation": "정답은 C입니다. S3 트래픽이 인터넷으로 새나가지 않게 하려면 전용 통로인 '게이트웨이 VPC 엔드포인트'를 설치하세요. 보안 규정 준수와 데이터 전송 안정성을 한 번에 해결할 수 있습니다.\n\nhttps://aws.amazon.com/vpc/endpoints/",
     "glossary": {
       "VPC Endpoint": "인터넷 게이트웨이 없이 VPC와 지원되는 AWS 서비스 간에 비공격인 프라이빗 연결을 제공하는 기술",
       "Private Subnet": "인터넷에서 직접 접근할 수 없는 가상 네트워크 구역으로 내부 리소스 보호에 사용됨"
@@ -253,7 +253,7 @@ export const quizData = [
       "새 웹사이트를 만듭니다. Application Load Balancer 뒤에서 Amazon EC2 인스턴스의 \nAuto Scaling 그룹을 사용하여 웹 사이트를 배포합니다."
     ],
     "answer": [0, 3],
-    "explanation": "정답은 A와 D입니다. '정적 콘텐츠'만 있고 서버 관리를 피하고 싶다면 'S3 정적 웹 사이트 호스팅'(D)이 최고의 선택입니다. 여기에 'Amazon CloudFront'(A)를 글로벌 엣지로 사용하면 HTTPS 보안이 강화될 뿐만 아니라 전 세계에서 높은 성능으로 접근 가능한 고확장성 서비스를 운영할 수 있습니다.",
+    "explanation": "정답은 A와 D입니다. 1년에 고작 4번 바뀌는 정적 사이트라면 S3 정적 호스팅이 제일 쌉니다. 여기에 CloudFront를 씌우면 전 세계 어디서든 빠르고 보안이 강화된 HTTPS 환경을 제공할 수 있습니다.\n\nhttps://aws.amazon.com/cloudfront/",
     "glossary": {
       "Static Web Hosting": "S3 버킷을 사용하여 HTML, CSS, 이미지 같은 정적 파일을 웹 사이트로 서비스하는 기능",
       "CloudFront": "전 세계 사용자에게 빠른 속도로 콘텐츠를 전달하고 SSL/TLS 암호화를 제공하는 CDN 서비스"
@@ -269,7 +269,7 @@ export const quizData = [
       "각 애플리케이션 서버에 Amazon Kinesis Agent 를 설치하고 구성하여 Amazon Kinesis \nData Streams 에 로그를 전달합니다. Amazon OpenSearch Service(Amazon Elasticsearch \nService)에 로그를 전달하도록 Kinesis Data Streams 를 구성합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. CloudWatch Logs의 데이터를 OpenSearch로 '거의 실시간' 전송하는 가장 간단하고 관리가 필요 없는 방법은 '로그 그룹 구독 필터' 기능을 사용하는 것입니다. AWS 콘솔에서 제공하는 기본 연동 기능을 사용하면 추가적인 코드 개발 없이도 대규모 로그 데이터를 효율적으로 분석 플랫폼으로 스트리밍할 수 있습니다.",
+    "explanation": "정답은 A입니다. 실시간 로그 분석을 위해 OpenSearch로 데이터를 보내고 싶다면 CloudWatch Logs의 '구독 필터' 기능을 활용하세요. 코딩 없이 설정만으로 로그를 스트리밍할 수 있습니다.\n\nhttps://aws.amazon.com/opensearch-service/",
     "glossary": {
       "CloudWatch Logs Subscription": "로그 이벤트를 실시간으로 다른 소스(Lambda, Kinesis, OpenSearch 등)로 전송해주는 필터 기능",
       "OpenSearch Service": "로그 분석, 실시간 애플리케이션 모니터링 및 웹 사이트 검색을 위해 사용되는 오픈소스 분석 엔진"
@@ -285,7 +285,7 @@ export const quizData = [
       "Amazon S3"
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 900TB라는 대규모 데이터를 '비용 효율적'이면서도 '무한 확장 가능'하게 저장하기 위해 가장 적합한 서비스는 'Amazon S3'입니다. EBS나 EFS에 비해 스토리지 단가가 매우 저렴하며, 데이터 양이 늘어나도 성능 저하 없이 자동으로 확장되므로 대규모 텍스트 저장소용으로 최적입니다.",
+    "explanation": "정답은 D입니다. 900TB 규모의 막대한 텍스트 문서를 가장 저렴하게 보관하면서도 무한히 확장할 수 있는 안식처는 Amazon S3입니다. 내구성과 가성비 면에서 S3를 따라올 서비스가 없습니다.\n\nhttps://aws.amazon.com/s3/",
     "glossary": {
       "Amazon S3": "데이터 보존 용량에 제한이 없고 내구성이 매우 뛰어나 객체 기반 스토리지 서비스",
       "Cost-Effectiveness (비용 효율성)": "성능을 유지하면서도 비용을 최소화하는 클라우드 설계의 핵심 목표"
@@ -301,7 +301,7 @@ export const quizData = [
       "한 리전에서 AWS Shield 를 설정합니다. 리전 웹 ACL 을 API 단계와 연결합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. '여러 계정'과 '여러 리전'에 걸쳐 있는 보안 규칙을 공통적으로 적용하고 중앙 집중식으로 관리하려면 'AWS Firewall Manager'가 필수입니다. 이를 통해 WAF 규칙을 한 번만 정의하면 모든 리전의 API Gateway가 SQL 인젝션 및 XSS 공격으로부터 자동으로 보호되므로 관리 노력을 극대화할 수 있습니다.",
+    "explanation": "정답은 B입니다. 여러 계정과 리전에 흩어진 API 게이트웨이의 보안 규칙을 한곳에서 일관되게 관리하고 싶다면 AWS Firewall Manager가 유일한 해결책입니다. WAF 규칙을 중앙에서 제어하세요.\n\nhttps://aws.amazon.com/firewall-manager/",
     "glossary": {
       "Firewall Manager": "여러 계정과 리소스에 걸쳐 WAF, Shield 규칙을 중앙에서 일관되게 관리할 수 있는 서비스",
       "WAF (Web Application Firewall)": "HTTP 트래픽을 필터링하여 웹 애플리케이션을 겨냥한 일반적인 웹 공격을 차단하는 보안 서비스"
@@ -317,7 +317,7 @@ export const quizData = [
       "2 개의 NLB 를 2 개의 ALB(Application Load Balancer)로 교체합니다. 두 ALB 중 하나로 \n요청을 라우팅하는 Amazon Route 53 지연 시간 라우팅 정책을 생성합니다. Amazon \nCloudFront 배포를 생성합니다. Route 53 레코드를 배포의 오리진으로 사용합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. 전 세계(미국 및 유럽) 사용자에게 '성능'과 '가용성'을 제공하면서 여러 리전의 로드 밸런서로 연결하려면 'AWS Global Accelerator'가 최적입니다. 이는 AWS의 전역 전용 네트워크를 사용하여 지연 시간을 줄이고, 리전 장애 발생 시 정상적인 다른 리전으로 트래픽을 자동으로 전환(Failover)해주는 고가용성 기능을 지원합니다.",
+    "explanation": "정답은 B입니다. 전 세계 사용자에게 가장 빠른 성능을 제공하면서 여러 나라에 흩어진 서버로 트래픽을 안내하고 싶다면 Global Accelerator를 사용하세요. AWS 전용망을 타는 전역 IP가 제공됩니다.\n\nhttps://aws.amazon.com/global-accelerator/",
     "glossary": {
       "Global Accelerator": "AWS 글로벌 네트워크를 통해 사용자 트래픽의 성능을 최대 60% 개선하고 지연 시간을 줄이는 서비스",
       "Anycast IP": "전 세계 여러 곳에서 동일한 IP를 사용하여 가장 가까운 엣지 로케이션으로 트래픽을 유도하는 방식"
@@ -333,7 +333,7 @@ export const quizData = [
       "AWS Key Management Service(AWS KMS) 관리형 키(SSE-KMS)로 서버 측 암호화를 \n사용하여 암호화된 Amazon S3 버킷에 스냅샷을 복사합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. 이미 생성된 RDS 인스턴스는 나중에 직접 암호화를 활성화할 수 없습니다. 따라서 최신 스냅샷을 '복사'하면서 암호화를 선택하고, 생성된 '암호화된 스냅샷'을 기반으로 새 데이터베이스 인스턴스를 복원하여 기존 인스턴스를 교체하는 과정이 필요합니다.",
+    "explanation": "정답은 A입니다. 이미 만들어진 RDS의 암호화를 뒤늦게 활성화할 순 없습니다. 최신 스냅샷을 '복사'하면서 암호화 옵션을 켜고, 그 스냅샷으로 새 DB를 복원하여 기존 것을 교체하는 게 정석입니다.\n\nhttps://aws.amazon.com/rds/",
     "glossary": {
       "DB Snapshot": "특정 시점의 데이터베이스 전체를 복사하여 백업해두는 이미지 파일",
       "Restoration (복원)": "백업 데이터나 스냅샷을 사용하여 데이터베이스를 정상 상태로 다시 구축하는 과정"
@@ -349,7 +349,7 @@ export const quizData = [
       "IAM 정책을 사용하여 암호화 키를 보호할 수 있는 액세스 권한이 있는 사용자의 범위를 \n제한합니다."
     ],
     "answer": 1,
-    "explanation": "정답은 B입니다. '확장성'과 '낮은 운영 부담'을 모두 가진 키 관리 인프라를 구축하기 위한 AWS 표준 서비스는 'KMS'입니다. KMS는 키 생성, 보관, 갱신 및 접근 제어를 모두 관리해주므로 개발자가 직접 암호화 하드웨어나 인프라를 운영할 필요가 없습니다.",
+    "explanation": "정답은 B입니다. 수많은 개발자가 쓸 수 있는 키 관리 인프라를 운영 부담 없이 구축하려면 AWS KMS를 활용하세요. 키 생성부터 자동 교체, 권한 관리까지 AWS가 똑똑하게 다 책임져줍니다.\n\nhttps://aws.amazon.com/kms/",
     "glossary": {
       "AWS KMS": "보안 하드웨어(HSM)를 기반으로 고성능 키 관리 기능을 제공하는 완전관리형 서비스",
       "Operational Burden (운영 부담)": "시스템 유지 관리를 위해 인력이 들여야 하는 시간과 노력의 정도"
@@ -365,7 +365,7 @@ export const quizData = [
       "SSL 인증서를 AWS Certificate Manager(ACM)로 가져옵니다. ACM 의 SSL 인증서를 \n사용하는 HTTPS 리스너로 Application Load Balancer 를 생성합니다."
     ],
     "answer": 3,
-    "explanation": "정답은 D입니다. 개별 서버에서 수행하던 무거운 SSL 암호화 작업을 분리하여 별도로 처리하는 'SSL 오프로딩'이 필요합니다. SSL 인증서를 'ACM'에 통합하고 'Application Load Balancer(ALB)'에서 HTTPS를 처리하도록 설정하면, 웹 서버는 순수 비즈니스 로직에만 CPU 자원을 집중할 수 있게 되어 성능이 개선됩니다.",
+    "explanation": "정답은 D입니다. 서버가 매번 암호화를 푸느라 쩔쩔매고 있다면, 그 지루한 작업은 앞단의 로드 밸런서(ALB)에게 맡기세요. ACM 인증서와 결합하면 서버는 비즈니스 로직에만 온전히 집중하게 됩니다.\n\nhttps://aws.amazon.com/elasticloadbalancing/",
     "glossary": {
       "SSL Termination (SSL 종료)": "서버 앞단(로드 밸런서 등)에서 암호화된 트래픽을 해독하여 서버에는 일반 트래픽으로 전달하는 기술",
       "ACM (AWS Certificate Manager)": "SSL/TLS 인증서를 무료로 또는 유료로 쉽게 발급받고 자동으로 갱신해주는 관리형 서비스"
@@ -381,7 +381,7 @@ export const quizData = [
       "AWS Lambda 에서 처리를 구현합니다."
     ],
     "answer": 0,
-    "explanation": "정답은 A입니다. '상태 비저장(Stateless)'이며 중단되어도 큰 문제가 없는 배치 작업에는 '스팟 인스턴스'가 비용면에서 압도적으로 유리합니다. 온디맨드 인스턴스 대비 최대 90%까지 저렴하게 사용할 수 있으므로, 대규모 병렬 처리가 필요한 무거운 배치 작업의 비용을 획기적으로 낮출 수 있습니다.",
+    "explanation": "정답은 A입니다. 언제 꺼져도 상관없는 배치 작업에는 '스팟 인스턴스'가 최고입니다. 정가 대비 최대 90% 저렴한 요금으로 대규모 병렬 처리를 수행하여 지갑을 두툼하게 지킬 수 있습니다.\n\nhttps://aws.amazon.com/ec2/spot/",
     "glossary": {
       "Spot Instance": "AWS의 남는 여유 자원을 경매 방식으로 저렴하게 사용하는 옵션으로, AWS가 필요할 경우 2분 전 예고 후 인스턴스를 회수할 수 있음",
       "Stateless (상태 비저장)": "작업 데이터가 서버 내부에 저장되지 않아 언제든 중단하거나 다른 서버에서 재시작 가능한 성질"
@@ -398,7 +398,7 @@ export const quizData = [
       "2 개의 가용 영역에 걸쳐 2 개의 퍼블릭 서브넷, 2 개의 프라이빗 서브넷 및 2 개의 NAT \n게이트웨이로 VPC\n를 구성합니다. 퍼블릭 서브넷에 Application Load Balancer\n를 \n배포합니다."
     ],
     "answer": [0, 4],
-    "explanation": "정답은 A와 E입니다. 인스턴스와 DB를 외부에 노출하지 않으려면 둘 다 '프라이빗 서브넷'에 배치해야 하며(A), 고가용성을 위해 'Multi-AZ DB'와 '2개 이상의 가용 영역'을 사용해야 합니다. 또한 외부 인터넷 접속을 위해선 'NAT 게이트웨이'가 필요하며, 외부 트래픽을 받기 위한 'ALB'는 반드시 '퍼블릭 서브넷'에 배치되어야 합니다(E).",
+    "explanation": "정답은 A와 E입니다. 보안을 위해 서버와 DB는 프라이빗 구역(A)에 숨기고, 외부 손님을 위한 로드 밸런서는 퍼블릭 구역(E)에 두세요. 인터넷 접속은 NAT 게이트웨이를 통하는 정석 보안 설계입니다.\n\nhttps://aws.amazon.com/vpc/",
     "glossary": {
       "2-Tier Architecture": "웹/앱 계층과 데이터베이스 계층으로 분리된 전형적인 서버 인프라 설계",
       "NAT Gateway": "프라이빗 서브넷 인스턴스가 인터넷에 연결되도록 도와주는 게이트웨이"
