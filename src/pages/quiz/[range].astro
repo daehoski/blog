@@ -3,6 +3,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { allQuizData } from '../../data/all-quiz-data.js';
+import { supabase } from '../../lib/supabase.js';
 import '../../styles/quiz.css';
 
 export function getStaticPaths() {
@@ -60,7 +61,14 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                     <div id="quiz-wrapper">
                         <form id="quiz-form">
                             {quizData.map((quiz, index) => (
-                                <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)}>
+                                <article 
+                                    class="quiz-card" 
+                                    id={`quiz-${quiz.id}`} 
+                                    data-quiz-id={quiz.id}
+                                    data-answer={JSON.stringify(quiz.answer)} 
+                                    data-explanations={JSON.stringify(quiz.explanations || {})}
+                                    data-category={quiz.domain || "기본"}
+                                >
                                     <div class="quiz-question-header">
                                         <span class="quiz-badge">Q{quiz.id}</span>
                                         <h2 class="quiz-question-text">{quiz.question}</h2>
@@ -87,9 +95,12 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                     <div class="quiz-result-area hidden" id={`result-${quiz.id}`}>
                                         <div class="quiz-explanation">
                                             <div class="quiz-explanation-title">
-                                                <span>📖 해설</span>
+                                                <span>📖 맞춤 해설</span>
                                             </div>
-                                            <p class="explanation-text">{quiz.explanation}</p>
+                                            <div id={`explanation-content-${quiz.id}`} class="explanation-text">
+                                                {/* 선택지에 따른 해설이 동적으로 삽입될 위치 */}
+                                                {!quiz.explanations && <p>{quiz.explanation}</p>}
+                                            </div>
                                         </div>
 
                                         {quiz.glossary && Object.keys(quiz.glossary).length > 0 && (
@@ -179,11 +190,17 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 		</main>
 		<Footer />
 
-		<script is:inline define:vars={{ quizData }}>
-			document.addEventListener('DOMContentLoaded', () => {
+		<script>
+            import { supabase } from '../../lib/supabase.js';
+
+			document.addEventListener('DOMContentLoaded', async () => {
 				const gradeButtons = document.querySelectorAll('.grade-btn');
 				const showSummaryBtn = document.getElementById('show-summary-btn');
 				const userSelections = {};
+
+                // Get User Session
+                const { data: { session } } = await supabase.auth.getSession();
+                const userId = session?.user?.id;
 
                 // Exit Modal Logic
                 const backBtn = document.getElementById('back-to-list');
@@ -203,7 +220,6 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
                 backBtn?.addEventListener('click', (e) => showExitModal(e, '/quiz'));
                 
-                // Intercept Logo and Nav clicks
                 document.querySelectorAll('.logo a, .internal-links a').forEach(link => {
                     link.addEventListener('click', (e) => {
                         const href = (link as HTMLAnchorElement).getAttribute('href');
@@ -221,16 +237,18 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
 				// 개별 문제 채점
 				gradeButtons.forEach(btn => {
-					btn.addEventListener('click', () => {
-						const quizId = parseInt(btn.dataset.quizId);
+					btn.addEventListener('click', async () => {
+						const quizId = parseInt(btn.dataset.quizId || "0");
 						const quizCard = document.getElementById(`quiz-${quizId}`);
-						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer));
+                        if (!quizCard) return;
+
+						const isMultiple = Array.isArray(JSON.parse(quizCard.dataset.answer || "[]"));
                         
                         let selectedOptions;
                         if (isMultiple) {
-                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt(el.value));
+                            selectedOptions = Array.from(quizCard.querySelectorAll(`input[name="q${quizId}"]:checked`)).map(el => parseInt((el as HTMLInputElement).value));
                         } else {
-                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`);
+                            const selected = quizCard.querySelector(`input[name="q${quizId}"]:checked`) as HTMLInputElement;
                             selectedOptions = selected ? [parseInt(selected.value)] : [];
                         }
 
@@ -240,56 +258,120 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 						}
 
 						userSelections[quizId] = selectedOptions;
-                        const correctAnswers = JSON.parse(quizCard.dataset.answer);
+                        const correctAnswers = JSON.parse(quizCard.dataset.answer || "[]");
                         const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+                        const explanations = JSON.parse(quizCard.dataset.explanations || '{}');
 
 						// UI 업데이트
 						const options = quizCard.querySelectorAll('.quiz-option');
-						options.forEach((opt, idx) => {
-							const input = opt.querySelector('input');
+						options.forEach((opt) => {
+							const input = opt.querySelector('input') as HTMLInputElement;
 							input.disabled = true;
 							opt.classList.add('disabled');
 
-							if (correctAnswerList.includes(idx)) {
+							if (correctAnswerList.includes(parseInt(input.value))) {
 								opt.classList.add('correct');
-							} else if (selectedOptions.includes(idx)) {
+							} else if (selectedOptions.includes(parseInt(input.value))) {
 								opt.classList.add('wrong');
 							}
 						});
 
+                        // Explanations Display
+                        const expContainer = document.getElementById(`explanation-content-${quizId}`);
+                        if (expContainer) {
+                            expContainer.innerHTML = '';
+                            
+                            // User's wrong choices explanations
+                            selectedOptions.forEach(idx => {
+                                if (!correctAnswerList.includes(idx) && explanations[idx]) {
+                                    const p = document.createElement('p');
+                                    p.className = 'exp-wrong';
+                                    p.style.color = '#ef4444';
+                                    p.style.fontSize = '0.9rem';
+                                    p.style.marginBottom = '0.5rem';
+                                    p.innerHTML = `<strong>❌ 선택 오답 (${String.fromCharCode(65 + idx)}):</strong> ${explanations[idx]}`;
+                                    expContainer.appendChild(p);
+                                }
+                            });
+
+                            // Correct answers explanations
+                            correctAnswerList.forEach(idx => {
+                                if (explanations[idx]) {
+                                    const p = document.createElement('p');
+                                    p.className = 'exp-correct';
+                                    p.style.color = '#10b981';
+                                    p.style.fontSize = '0.9rem';
+                                    p.style.marginBottom = '0.5rem';
+                                    p.innerHTML = `<strong>✅ 정답 (${String.fromCharCode(65 + idx)}):</strong> ${explanations[idx]}`;
+                                    expContainer.appendChild(p);
+                                }
+                            });
+
+                            // Fallback to legacy explanation if empty
+                            if (expContainer.innerHTML === '' && quizCard.dataset.legacyExplanation) {
+                                expContainer.innerHTML = `<p>${quizCard.dataset.legacyExplanation}</p>`;
+                            }
+                        }
+
 						btn.classList.add('hidden');
-						document.getElementById(`result-${quizId}`).classList.remove('hidden');
+						const resultArea = document.getElementById(`result-${quizId}`);
+                        if (resultArea) resultArea.classList.remove('hidden');
+
+                        // Upsert Progress
+                        if (userId) {
+                            await supabase.from('user_progress').upsert({
+                                user_id: userId,
+                                last_quiz_id: quizId,
+                                updated_at: new Date().toISOString()
+                            });
+                        }
 					});
 				});
 
 				// 최종 결과 보기
-				showSummaryBtn.addEventListener('click', () => {
+				showSummaryBtn?.addEventListener('click', () => {
 					let correctCount = 0;
+                    const domainStats = {};
 					const wrongListContainer = document.getElementById('wrong-list-container');
-					wrongListContainer.innerHTML = '';
+					if (!wrongListContainer) return;
+                    wrongListContainer.innerHTML = '';
 
-					quizData.forEach(quiz => {
-						const userChoices = userSelections[quiz.id] || [];
-						const correctAnswers = Array.isArray(quiz.answer) ? quiz.answer : [quiz.answer];
+                    const quizCards = document.querySelectorAll('.quiz-card');
+                    
+					quizCards.forEach((quizCard : any) => {
+                        const quizId = parseInt(quizCard.dataset.quizId);
+                        const domain = quizCard.dataset.category || "기본";
+                        
+                        if (!domainStats[domain]) domainStats[domain] = { total: 0, wrong: 0 };
+                        domainStats[domain].total++;
+
+						const userChoices = userSelections[quizId] || [];
+						const correctAnswers = JSON.parse(quizCard.dataset.answer);
+						const correctAnswerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 						
-                        const isCorrect = userChoices.length === correctAnswers.length && 
-                                          userChoices.every(choice => correctAnswers.includes(choice));
+                        const isCorrect = userChoices.length === correctAnswerList.length && 
+                                          userChoices.every((val : any) => correctAnswerList.includes(val));
 
 						if (isCorrect) {
 							correctCount++;
 						} else {
+                            domainStats[domain].wrong++;
 							const wrongItem = document.createElement('div');
 							wrongItem.className = 'quiz-wrong-item';
 							
+                            const questionText = quizCard.querySelector('.quiz-question-text')?.textContent;
+                            const optionsList = Array.from(quizCard.querySelectorAll('.quiz-option-text')).map((el : any) => el.textContent);
+
 							const userChoiceTexts = userChoices.length > 0 
-                                ? userChoices.map(idx => quiz.options[idx]).join(', ') 
+                                ? userChoices.map((idx : any) => optionsList[idx]).join(', ') 
                                 : "미선택";
-							const correctChoiceTexts = correctAnswers.map(idx => quiz.options[idx]).join(', ');
+							const correctChoiceTexts = correctAnswerList.map((idx : any) => optionsList[idx]).join(', ');
 
 							wrongItem.innerHTML = `
 								<div style="margin-bottom: 0.5rem;">
-									<span class="quiz-badge" style="background:#ef4444;">Q${quiz.id}</span>
-									<strong style="margin-left:0.5rem;">${quiz.question}</strong>
+									<span class="quiz-badge" style="background:#ef4444;">Q${quizId}</span>
+                                    <span class="quiz-badge" style="background:#6b7280; margin-left: 0.5rem;">${domain}</span>
+									<strong style="margin-left:0.5rem;">${questionText}</strong>
 								</div>
 								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #fff1f2; border-radius: 4px;">
 									❌ 내 답변: ${userChoiceTexts}
@@ -297,28 +379,56 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 								<div style="font-size: 0.9rem; margin-bottom: 0.5rem; padding: 0.5rem; background: #f0fdf4; border-radius: 4px;">
 									✅ 정답: ${correctChoiceTexts}
 								</div>
-								<div style="font-size: 0.85rem; color: #666; border-top: 1px solid #eee; padding-top: 0.5rem;">
-									💡 해설: ${quiz.explanation}
-								</div>
 							`;
 							wrongListContainer.appendChild(wrongItem);
 						}
 					});
 
-					document.getElementById('final-score').textContent = correctCount;
-					document.getElementById('summary-result').classList.remove('hidden');
-					
-					const message = correctCount === quizData.length 
-						? "🎉 만점입니다! 완벽해요!" 
-						: correctCount >= quizData.length * 0.8 
-							? "👍 아주 훌륭한 성적입니다!" 
-							: `📖 ${quizData.length}문제 중 ${correctCount}문제를 맞혔습니다. 오답 노트를 확인해 보세요.`;
-					document.getElementById('score-message').textContent = message;
+                    // Render Domain Stats
+                    const statsHeader = document.createElement('div');
+                    statsHeader.className = 'domain-stats-container';
+                    statsHeader.innerHTML = '<h3 style="margin-top: 2rem; margin-bottom: 1rem;">📊 도메인별 취약점 분석</h3>';
+                    
+                    Object.entries(domainStats).forEach(([domain, stats] : [string, any]) => {
+                        const correct = stats.total - stats.wrong;
+                        const percent = Math.round((correct / stats.total) * 100);
+                        const statItem = document.createElement('div');
+                        statItem.className = 'domain-stat-item';
+                        statItem.style.marginBottom = '1rem';
+                        statItem.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.9rem;">
+                                <span>${domain}</span>
+                                <span>${percent}% (${correct}/${stats.total})</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                <div style="width: ${percent}%; height: 100%; background: ${percent < 50 ? '#ef4444' : percent < 80 ? '#f59e0b' : '#10b981'};"></div>
+                            </div>
+                        `;
+                        statsHeader.appendChild(statItem);
+                    });
+                    
+                    wrongListContainer.prepend(statsHeader);
 
-					showSummaryBtn.classList.add('hidden');
+					const finalScoreEl = document.getElementById('final-score');
+                    if (finalScoreEl) finalScoreEl.textContent = correctCount.toString();
+					
+                    const summaryResult = document.getElementById('summary-result');
+                    if (summaryResult) summaryResult.classList.remove('hidden');
+					
+					const totalQuestions = quizCards.length;
+					const message = correctCount === totalQuestions 
+						? "🎉 만점입니다! 완벽해요!" 
+						: correctCount >= totalQuestions * 0.8 
+							? "👍 아주 훌륭한 성적입니다!" 
+							: `📖 ${totalQuestions}문제 중 ${correctCount}문제를 맞혔습니다. 오답 노트를 확인해 보세요.`;
+					
+                    const scoreMsgEl = document.getElementById('score-message');
+                    if (scoreMsgEl) scoreMsgEl.textContent = message;
+
+					showSummaryBtn?.classList.add('hidden');
 					
 					setTimeout(() => {
-						document.getElementById('summary-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+						document.getElementById('summary-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 					}, 100);
 				});
 			});

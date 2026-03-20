@@ -117,9 +117,29 @@ const getDisplayRange = (r) => {
 		<main>
 			<section style="text-align: center; margin-bottom: 5rem;">
 				<h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; color: #1d1d1f; font-weight: 800; letter-spacing: -0.04em;">AWS SAA-C03 실전 연습 문제</h1>
-				<p style="color: #86868b; font-size: 1.2rem; line-height: 1.6; font-weight: 500; max-width: 600px; margin: 0 auto;">
+				<p style="color: #86868b; font-size: 1.2rem; line-height: 1.6; font-weight: 500; max-width: 600px; margin: 0 auto; margin-bottom: 3rem;">
 					총 725개 문항을 25문제씩 관리하기 쉽게 구성했습니다. 가장 직관적인 환경에서 학습을 시작하세요.
 				</p>
+                
+                <div id="resume-container" class="hidden" style="margin-top: 2rem;">
+                    <a id="resume-btn" href="#" class="primary-btn" style="
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        background: #1d1d1f;
+                        color: white;
+                        padding: 1rem 2.5rem;
+                        border-radius: 9999px;
+                        text-decoration: none;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                        transition: all 0.3s;
+                    ">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                        이어서 풀기 (Q<span id="resume-quiz-id"></span>번)
+                    </a>
+                </div>
 			</section>
 
 			<div class="quiz-list-container">
@@ -138,5 +158,38 @@ const getDisplayRange = (r) => {
 			</div>
 		</main>
 		<Footer />
+        <script>
+            import { supabase } from '../../lib/supabase.js';
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    const { data, error } = await supabase
+                        .from('user_progress')
+                        .select('last_quiz_id')
+                        .eq('user_id', session.user.id)
+                        .single();
+                    
+                    if (data && data.last_quiz_id) {
+                        const lastId = data.last_quiz_id;
+                        const container = document.getElementById('resume-container');
+                        const resumeBtn = document.getElementById('resume-btn');
+                        const quizIdSpan = document.getElementById('resume-quiz-id');
+                        
+                        // Find range
+                        let rangeKey = '';
+                        const start = Math.floor((lastId - 1) / 25) * 25 + 1;
+                        const end = start + 24;
+                        rangeKey = `q${start}-${end}`;
+                        
+                        if (container && resumeBtn && quizIdSpan) {
+                            quizIdSpan.textContent = lastId;
+                            resumeBtn.href = `/quiz/${rangeKey}#quiz-${lastId}`;
+                            container.classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+        </script>
 	</body>
 </html>
