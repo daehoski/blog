@@ -316,12 +316,14 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 
                         if (supabase && (await supabase.auth.getSession()).data.session) {
 							const { data: { session } } = await supabase.auth.getSession();
-                            await supabase.from('wrong_answers').upsert({
-                                user_id: session.user.id,
-                                quiz_id: quizId,
-                                selected_options: selectedOptions,
-                                is_correct: isCorrect
-                            });
+                            try {
+                                await supabase.from('wrong_answers').insert({
+                                    user_id: session.user.id,
+                                    question_id: String(quizId)
+                                });
+                            } catch (e) {
+                                console.error('Wrong answer save error:', e);
+                            }
                         } else if (!isCorrect) {
                             const guestWrongAnswers = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
                             guestWrongAnswers[quizId] = {

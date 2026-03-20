@@ -14,15 +14,13 @@ export async function syncGuestData(userId) {
 
   const records = quizIds.map(id => ({
     user_id: userId,
-    quiz_id: parseInt(id),
-    selected_options: guestData[id].selected,
-    created_at: guestData[id].date || new Date().toISOString()
+    question_id: String(id)
   }));
 
   try {
     const { error } = await supabase
       .from('wrong_answers')
-      .upsert(records, { onConflict: ['user_id', 'quiz_id'] });
+      .upsert(records, { onConflict: ['user_id', 'question_id'] });
 
     if (error) {
       console.error('Error syncing guest data:', error);
