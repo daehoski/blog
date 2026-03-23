@@ -124,7 +124,7 @@ const getDisplayRange = (r) => {
 
 			<div class="quiz-list-container">
 				{allRanges.map((range) => (
-					<a href={`/quiz/${quizSlugMap[range] || range}`} class="quiz-card">
+					<a href={`/quiz/${quizSlugMap[range] || range}/`} class="quiz-card">
                         <div>
                             <span class="quiz-badge">SAA-C03</span>
 						    <h3>{getDisplayRange(range)}</h3>
