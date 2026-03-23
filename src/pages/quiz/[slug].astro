@@ -151,7 +151,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
 					<div class="quiz-nav-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem;">
 						{allRanges.filter(r => r.startsWith('q')).map((r) => (
 							<a 
-								href={`/quiz/${quizSlugMap[r] || r}`} 
+								href={`/quiz/${quizSlugMap[r] || r}/`} 
 								class={`quiz-nav-item ${r === range ? 'active' : ''}`}
 								style={`
 									display: block;
