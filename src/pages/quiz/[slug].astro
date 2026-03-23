@@ -321,7 +321,7 @@ const allRanges = Object.keys(allQuizData).sort((a, b) => {
                                 quiz_id: quizId,
                                 selected_options: selectedOptions,
                                 is_correct: isCorrect
-                            });
+                            }, { onConflict: ['user_id', 'quiz_id'] });
                         } else if (!isCorrect) {
                             const guestWrongAnswers = JSON.parse(localStorage.getItem('guest_wrong_answers') || '{}');
                             guestWrongAnswers[quizId] = {

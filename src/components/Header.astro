@@ -9,8 +9,8 @@ import HeaderLink from './HeaderLink.astro';
 			<h2 class="logo"><a href="/">{SITE_TITLE}</a></h2>
 			<div class="internal-links">
 				<HeaderLink href="/">Home</HeaderLink>
-				<HeaderLink href="/quiz">Quiz</HeaderLink>
-				<HeaderLink href="/about">About</HeaderLink>
+				<HeaderLink href="/quiz/">Quiz</HeaderLink>
+				<HeaderLink href="/about/">About</HeaderLink>
 			</div>
 		</div>
 		<div class="nav-right">
@@ -48,7 +48,7 @@ import HeaderLink from './HeaderLink.astro';
 			if (authSection) {
 				authSection.innerHTML = `
 					<div class="user-info">
-						<a href="/mypage" class="desktop-text user-name-link">${name}님</a>
+						<a href="/mypage/" class="desktop-text user-name-link">${name}님</a>
 						<button id="header-logout-btn" class="logout-btn">
 							<span class="desktop-text">로그아웃</span>
 							<span class="mobile-icon">

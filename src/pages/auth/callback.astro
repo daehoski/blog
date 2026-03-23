@@ -38,7 +38,7 @@ import BaseHead from '../../components/BaseHead.astro';
           await syncGuestData(session.user.id);
           
           // Always redirect to MyPage after login/sync as requested
-          window.location.href = '/mypage';
+          window.location.href = '/mypage/';
         } else {
           window.location.href = '/';
         }

@@ -47,7 +47,7 @@ export async function signInWithGoogle() {
     return;
   }
 
-  const redirectTo = window.location.origin + '/auth/callback';
+  const redirectTo = window.location.origin + '/auth/callback/';
   console.log('🔁 Redirect URL:', redirectTo);
 
   try {
