@@ -1,0 +1,791 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+import { topicTree } from '../data/aws-saa-topic-tree.js';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`AWS SAA-C03 Encyclopedia - ${SITE_TITLE}`} description="AWS Certified Solutions Architect - Associate 서비스 상세 기술 백과사전 및 아키텍처 연계 마인드맵" />
+		<!-- Premium Typography -->
+		<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+		
+		<style is:global>
+			/* =============================================
+			   APPLE-STYLE DESIGN SYSTEM
+			   - Base font: 16px (standard)
+			   - Color: Apple palette (#F5F5F7, #1D1D1F, #86868B)
+			   - Spacing: generous whitespace
+			   - Style: glassmorphism + soft shadows
+			   ============================================= */
+			:root {
+				--bg-main: #F5F5F7;
+				--accent-blue: #0071E3;
+				--text-main: #1D1D1F;
+				--text-secondary: #86868B;
+				--font: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+				--radius-card: 20px;
+				--radius-modal: 28px;
+				--shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+				--shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
+				--shadow-modal: 0 40px 120px rgba(0, 0, 0, 0.22);
+				--transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+			}
+
+			*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+			body {
+				background: var(--bg-main);
+				color: var(--text-main);
+				font-family: var(--font);
+				font-size: 16px; /* FIXED: was 10px ??caused rem chaos */
+				line-height: 1.5;
+				-webkit-font-smoothing: antialiased;
+				letter-spacing: -0.015em;
+				overflow-x: hidden;
+			}
+
+			main {
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 60px 24px 120px;
+			}
+
+			/* ??? HERO ??? */
+			.hero-section {
+				text-align: center;
+				margin-bottom: 56px;
+				animation: fadeUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+			}
+
+			.hero-section h1 {
+				font-size: clamp(36px, 6vw, 64px);
+				font-weight: 700;
+				letter-spacing: -0.04em;
+				line-height: 1.05;
+				color: var(--text-main);
+				margin-bottom: 16px;
+			}
+
+			.hero-section p {
+				font-size: 19px;
+				color: var(--text-secondary);
+				max-width: 640px;
+				margin: 0 auto;
+				line-height: 1.6;
+				font-weight: 400;
+			}
+
+			/* ??? SEARCH ??? */
+			.search-box-container {
+				width: 600px;
+				max-width: 95%;
+				margin: 0 auto 48px;
+				position: sticky;
+				top: 16px;
+				z-index: 500;
+			}
+
+			.search-bar {
+				background: rgba(255, 255, 255, 0.72);
+				backdrop-filter: blur(20px);
+				-webkit-backdrop-filter: blur(20px);
+				border: 1px solid rgba(0, 0, 0, 0.08);
+				border-radius: 50px;
+				padding: 10px 20px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				box-shadow: var(--shadow-card);
+				transition: var(--transition);
+			}
+
+			.search-bar:focus-within {
+				background: rgba(255, 255, 255, 0.95);
+				box-shadow: var(--shadow-hover);
+			}
+
+			.search-input {
+				flex: 1;
+				border: none;
+				background: transparent;
+				font-size: 15px;
+				font-weight: 500;
+				color: var(--text-main);
+				font-family: var(--font);
+				outline: none;
+			}
+
+			.search-input::placeholder { color: var(--text-secondary); }
+
+			/* ??? CANVAS ??? */
+			.encyclopedia-canvas {
+				background: #FFFFFF;
+				border-radius: 28px;
+				padding: 48px 44px;
+				box-shadow: var(--shadow-card);
+				position: relative;
+			}
+
+			#synergy-lines {
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+				z-index: 1;
+				border-radius: 28px;
+				overflow: hidden;
+			}
+
+			/* ??? CATEGORY ??? */
+			.category-block {
+				margin-bottom: 44px;
+				position: relative;
+				z-index: 10;
+			}
+
+			.category-title {
+				font-size: 13px;
+				font-weight: 700;
+				color: var(--text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				margin-bottom: 16px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.category-title::after {
+				content: '';
+				flex: 1;
+				height: 1px;
+				background: rgba(0,0,0,0.06);
+			}
+
+			.services-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+			}
+
+			/* ??? SERVICE NODE ??? */
+			.service-node {
+				background: #FFFFFF;
+				border: 1px solid rgba(0, 0, 0, 0.08);
+				padding: 10px 20px;
+				border-radius: var(--radius-card);
+				font-size: 14px;
+				font-weight: 600;
+				color: var(--text-main);
+				cursor: pointer;
+				box-shadow: var(--shadow-card);
+				transition: var(--transition);
+				user-select: none;
+			}
+
+			.service-node:hover {
+				background: var(--text-main);
+				color: #FFFFFF;
+				border-color: var(--text-main);
+				transform: translateY(-4px);
+				box-shadow: var(--shadow-hover);
+			}
+
+			/* ??? HUD (hover popup) ??? */
+			.hud-overlay {
+				position: fixed;
+				bottom: 28px;
+				left: 50%;
+				transform: translateX(-50%) translateY(16px);
+				width: 860px;
+				max-width: 94vw;
+				background: rgba(29, 29, 31, 0.88);
+				backdrop-filter: blur(24px);
+				-webkit-backdrop-filter: blur(24px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				padding: 28px 32px;
+				border-radius: 24px;
+				color: #FFFFFF;
+				box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+				z-index: 2000;
+				opacity: 0;
+				pointer-events: none;
+				transition: var(--transition);
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 28px;
+				align-items: start;
+			}
+
+			.hud-overlay.active {
+				opacity: 1;
+				transform: translateX(-50%) translateY(0);
+			}
+
+			/* ??? MODAL ??? */
+			.modal-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.5);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
+				z-index: 5000;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity 0.3s ease;
+			}
+
+			.modal-overlay.active {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			.modal-card {
+				width: 960px;
+				max-width: 95vw;
+				max-height: 88vh;
+				background: #FFFFFF;
+				border-radius: var(--radius-modal);
+				overflow: hidden;
+				box-shadow: var(--shadow-modal);
+				transform: scale(0.94) translateY(20px);
+				transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+				display: flex;
+				flex-direction: column;
+				opacity: 0;
+			}
+
+			.modal-overlay.active .modal-card {
+				transform: scale(1) translateY(0);
+				opacity: 1;
+			}
+
+			.modal-header {
+				padding: 36px 40px 28px;
+				background: #FFFFFF;
+				border-bottom: 1px solid rgba(0,0,0,0.07);
+				position: relative;
+				flex-shrink: 0;
+			}
+
+			.close-btn {
+				position: absolute;
+				top: 24px;
+				right: 24px;
+				width: 32px;
+				height: 32px;
+				background: rgba(0,0,0,0.07);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: var(--transition);
+				color: var(--text-secondary);
+			}
+
+			.close-btn:hover {
+				background: rgba(0,0,0,0.14);
+				color: var(--text-main);
+				transform: rotate(90deg);
+			}
+
+			.modal-cat-tag {
+				font-size: 11px;
+				font-weight: 700;
+				color: var(--accent-blue);
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				margin-bottom: 8px;
+				display: block;
+			}
+
+			.modal-title {
+				font-size: 36px;
+				font-weight: 700;
+				letter-spacing: -0.03em;
+				line-height: 1.1;
+				margin-bottom: 10px;
+				color: var(--text-main);
+			}
+
+			.modal-desc {
+				font-size: 15px;
+				line-height: 1.6;
+				color: var(--text-secondary);
+				max-width: 680px;
+				font-weight: 400;
+			}
+
+			.modal-body {
+				flex: 1;
+				overflow-y: auto;
+				padding: 32px 40px 40px;
+				background: #FFFFFF;
+			}
+
+			/* ─── MODAL SECTIONS ─── */
+			.data-section {
+				margin-bottom: 36px;
+				padding-bottom: 36px;
+				border-bottom: 1px solid rgba(0,0,0,0.06);
+			}
+
+			.data-section:last-child {
+				border-bottom: none;
+				padding-bottom: 0;
+				margin-bottom: 0;
+			}
+
+			.section-header {
+				font-size: 13px;
+				font-weight: 700;
+				color: var(--text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				margin-bottom: 16px;
+			}
+
+			.tech-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+				gap: 12px;
+			}
+
+			.tech-item {
+				background: #F5F5F7;
+				padding: 20px 22px;
+				border-radius: 16px;
+				border-left: 3px solid var(--accent-blue);
+			}
+
+			.tech-item h5 {
+				font-size: 14px;
+				font-weight: 700;
+				color: var(--text-main);
+				margin-bottom: 6px;
+				letter-spacing: -0.01em;
+			}
+
+			.tech-item p {
+				font-size: 13.5px;
+				line-height: 1.65;
+				color: #444;
+				font-weight: 400;
+			}
+
+			/* ─── DECISION MATRIX ─── */
+			.matrix-box {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 12px;
+			}
+
+			.matrix-side {
+				padding: 20px;
+				border-radius: 16px;
+			}
+
+			.matrix-side:first-child {
+				background: #EEF5FF;
+				border: 1px solid rgba(0, 113, 227, 0.15);
+			}
+
+			.matrix-side:last-child {
+				background: #F5F5F7;
+				border: 1px solid rgba(0,0,0,0.07);
+			}
+
+			.matrix-side strong {
+				display: block;
+				font-size: 13px;
+				font-weight: 700;
+				color: var(--accent-blue);
+				margin-bottom: 12px;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+			}
+
+			.matrix-list {
+				list-style: none;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.matrix-list li {
+				font-size: 13.5px;
+				font-weight: 500;
+				color: var(--text-main);
+				display: flex;
+				gap: 6px;
+				line-height: 1.5;
+			}
+
+			/* ─── SYNERGY LINES ─── */
+			.nexus-line {
+				fill: none;
+				stroke: var(--accent-blue);
+				stroke-width: 2.5;
+				stroke-linecap: round;
+				stroke-dasharray: 6 14;
+				animation: dash-flow 16s linear infinite;
+				opacity: 0.5;
+			}
+
+			/* ─── ANIMATIONS ─── */
+			@keyframes dash-flow { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
+			@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+			/* ─── STATE CLASSES ─── */
+			.nd-inactive {
+				opacity: 0.18;
+				filter: grayscale(1);
+				transform: scale(0.97);
+				transition: var(--transition);
+			}
+
+			.nd-focus {
+				opacity: 1 !important;
+				filter: none !important;
+				transform: translateY(-4px) scale(1.06) !important;
+				background: var(--text-main) !important;
+				color: #FFFFFF !important;
+				border-color: transparent !important;
+				box-shadow: var(--shadow-hover) !important;
+			}
+		/* ─── DOMAIN FILTERS ─── */
+			.domain-filters {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 12px;
+				margin-top: -24px;
+				margin-bottom: 48px;
+				position: relative;
+				z-index: 500;
+			}
+			.domain-btn {
+				background: rgba(255, 255, 255, 0.6);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
+				border: 1px solid rgba(0,0,0,0.06);
+				padding: 10px 20px;
+				border-radius: 30px;
+				font-size: 13.5px;
+				font-weight: 600;
+				color: var(--text-secondary);
+				cursor: pointer;
+				transition: var(--transition);
+				font-family: var(--font);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+			}
+			.domain-btn:hover {
+				background: rgba(255, 255, 255, 0.9);
+				color: var(--text-main);
+				transform: translateY(-2px);
+				box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+			}
+			.domain-btn.active {
+				background: var(--text-main);
+				color: #FFFFFF;
+				border-color: var(--text-main);
+				box-shadow: var(--shadow-hover);
+				transform: translateY(-2px);
+			}
+
+		
+			</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="hero-section">
+				<h1>AWS SAA-C03 Encyclopedia</h1>
+				<p>단순한 도구를 넘어서 실전형 기술 백과사전. 30개 이상의 AWS 핵심 서비스에 대한 기술 명세와 아키텍처적 시너지를 한눈에 파악하세요.</p>
+				
+				</section>
+
+			<div class="search-box-container">
+				<div class="search-bar">
+					<input type="text" id="service-search" class="search-input" placeholder="서비스나 아키텍처 키워드를 입력하세요..." />
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+				</div>
+			</div>
+
+			<div class="domain-filters" id="domain-filters">
+				<button class="domain-btn" data-domain="security">🛡️ 보안 및 자격 증명</button>
+				<button class="domain-btn" data-domain="resiliency">🏗️ 고가용성 및 복원력</button>
+				<button class="domain-btn" data-domain="performance">⚡ 성능 효율성</button>
+				<button class="domain-btn" data-domain="cost">💰 비용 최적화</button>
+			</div>
+
+			<div class="encyclopedia-canvas" id="nexus-landscape">
+				<svg id="synergy-lines"></svg>
+				<div class="categories-container">
+					{topicTree.map((cat) => (
+						<article class="category-block" id={`cat-${cat.id}`}>
+							<h3 class="category-title">{cat.title.split('. ')[1]}</h3>
+							<div class="services-row">
+								{cat.services.map((svc) => (
+									<div 
+										class="service-node" 
+										id={`node-${svc.id}`}
+										data-id={svc.id}
+										data-name={svc.name}
+										data-desc={svc.desc}
+										data-cat={cat.title.split('. ')[1]}
+										data-details={JSON.stringify(svc.techDetails || [])}
+										data-comp={JSON.stringify(svc.comparison || null)}
+										data-tips={svc.examTips || ""}
+										data-synergies={encodeURIComponent(JSON.stringify(svc.synergies || null))}
+										data-conn={JSON.stringify(svc.connections || [])}
+									>
+										{svc.name}
+									</div>
+								))}
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+
+			<!-- HUD (Hover) -->
+			<div class="hud-overlay" id="hud">
+				<div>
+					<span style="font-size:0.9rem; font-weight:800; color:var(--accent-blue); text-transform:uppercase; letter-spacing:0.2em;" id="hud-cat">Cat</span>
+					<h2 style="font-family:var(--font-display); font-size:4rem; font-weight:800; margin-top:0.5rem; letter-spacing:-0.04em;" id="hud-name">Service</h2>
+				</div>
+				<div>
+					<p style="font-size:1.4rem; line-height:1.6; color:rgba(255,255,255,0.9); margin-bottom:2rem;" id="hud-desc">Service description goes here...</p>
+					<div id="hud-icons" style="display:flex; gap:1.5rem; flex-wrap:wrap;"></div>
+				</div>
+			</div>
+
+			<!-- DEEP DIVE MODAL -->
+			<div class="modal-overlay" id="modal-overlay">
+				<div class="modal-card">
+					<div class="close-btn" id="modal-close">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+					</div>
+					<div id="modal-content" style="display: contents;">
+						<!-- Injected Content -->
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+
+		<script is:inline>
+			document.addEventListener('DOMContentLoaded', () => {
+				const nodes = document.querySelectorAll('.service-node');
+				const svgLayer = document.getElementById('synergy-lines');
+				const hud = document.getElementById('hud');
+				const search = document.getElementById('service-search');
+				const landscape = document.getElementById('nexus-landscape');
+				
+				const overlay = document.getElementById('modal-overlay');
+				const content = document.getElementById('modal-content');
+				const closeBtn = document.getElementById('modal-close');
+			const drawSynergy = (x1, y1, x2, y2) => {
+					const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+					const midY = y1 + (y2 - y1) / 2;
+					const d = `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+					path.setAttribute('d', d);
+					path.setAttribute('class', 'nexus-line');
+					svgLayer.appendChild(path);
+				};
+
+				const focusOn = (node) => {
+					const id = node.getAttribute('data-id');
+					const name = node.getAttribute('data-name');
+					const desc = node.getAttribute('data-desc');
+					const cat = node.getAttribute('data-cat');
+					const conns = JSON.parse(node.getAttribute('data-conn') || '[]');
+					const details = JSON.parse(node.getAttribute('data-details') || '[]');
+
+					document.getElementById('hud-name').innerText = name;
+					document.getElementById('hud-cat').innerText = cat;
+					document.getElementById('hud-desc').innerText = desc;
+					document.getElementById('hud-icons').innerHTML = details.map(d => `<span style="background:rgba(255,255,255,0.2); padding:0.5rem 1.2rem; border-radius:15px; font-size:1rem; font-weight:800;">${d.title}</span>`).join('');
+					
+					hud.classList.add('active');
+					nodes.forEach(n => n.classList.add('nd-inactive'));
+					node.classList.remove('nd-inactive');
+					node.classList.add('nd-focus');
+
+					const rect = landscape.getBoundingClientRect();
+					const r1 = node.getBoundingClientRect();
+					const x1 = r1.left + r1.width/2 - rect.left;
+					const y1 = r1.top + r1.height/2 - rect.top;
+
+					conns.forEach(targetId => {
+						const targetNode = document.getElementById(`node-${targetId}`);
+						if(targetNode) {
+							targetNode.classList.remove('nd-inactive');
+							targetNode.classList.add('nd-focus');
+							const r2 = targetNode.getBoundingClientRect();
+							const x2 = r2.left + r2.width/2 - rect.left;
+							const y2 = r2.top + r2.height/2 - rect.top;
+							drawSynergy(x1, y1, x2, y2);
+						}
+					});
+				};
+
+				const clearFocus = () => {
+					nodes.forEach(n => n.classList.remove('nd-inactive', 'nd-focus', 'nd-match'));
+					hud.classList.remove('active');
+					svgLayer.innerHTML = '';
+				};
+
+				nodes.forEach(node => {
+					node.addEventListener('mouseenter', () => focusOn(node));
+					node.addEventListener('mouseleave', clearFocus);
+					node.addEventListener('click', () => {
+						const name = node.getAttribute('data-name');
+						const desc = node.getAttribute('data-desc');
+						const cat = node.getAttribute('data-cat');
+						const details = JSON.parse(node.getAttribute('data-details') || '[]');
+						const comp = JSON.parse(node.getAttribute('data-comp') || 'null');
+						const tips = node.getAttribute('data-tips');
+					let synergies = null;
+						try {
+							const attr = node.getAttribute('data-synergies');
+							if (attr && attr !== 'null') {
+								synergies = JSON.parse(decodeURIComponent(attr));
+							}
+						} catch(e) { console.error('Synergy Parse error:', e); }
+
+						content.innerHTML = `
+							<header class="modal-header">
+								<span class="modal-cat-tag">${cat}</span>
+								<h2 class="modal-title">${name}</h2>
+								<p class="modal-desc">${desc}</p>
+							</header>
+							<div class="modal-body">
+								<section class="data-section">
+									<h4 class="section-header">Technical Intelligence</h4>
+									<div class="tech-grid">
+										${details.map(d => `<div class="tech-item"><h5>${d.title}</h5><p>${d.detail}</p></div>`).join('')}
+									</div>
+								</section>
+								${comp ? `
+								<section class="data-section">
+									<h4 class="section-header">Strategic Decision Matrix: ${name} vs ${comp.target}</h4>
+									<div class="matrix-box">
+										<div style="background:#EEF5FF;border:1px solid rgba(0,113,227,0.18);padding:20px;border-radius:16px;">
+											<div style="font-size:12px;font-weight:700;color:#0071E3;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">✅ ${name} 선택 시</div>
+											<div style="display:flex;flex-direction:column;gap:8px;">${comp.points.filter(p=>p.startsWith(name)).map(p=>`<div style='font-size:13.5px;font-weight:500;color:#1D1D1F;line-height:1.5;'>${p.split(': ')[1]}</div>`).join('')}</div>
+										</div>
+										<div style="background:#F5F5F7;border:1px solid rgba(0,0,0,0.08);padding:20px;border-radius:16px;">
+											<div style="font-size:12px;font-weight:700;color:#86868B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">💡 ${comp.target} 선택 시</div>
+											<div style="display:flex;flex-direction:column;gap:8px;">${comp.points.filter(p=>!p.startsWith(name)).map(p=>`<div style='font-size:13.5px;font-weight:500;color:#1D1D1F;line-height:1.5;'>${p.split(': ')[1]}</div>`).join('')}</div>
+										</div>
+									</div>
+								</section>
+								` : ''}
+
+								${synergies && synergies.length > 0 ? `
+								<section class="data-section">
+									<h4 class="section-header">Architecture Synergy (핵심 연계 아키텍처)</h4>
+									<div>
+										${synergies.map(s => `
+											<div style="background:#F6F5FC;border:1px solid rgba(88,86,214,0.12);padding:20px;border-radius:16px;margin-bottom:12px;border-left:4px solid #5856D6;">
+												<div style="font-size:14.5px;font-weight:800;color:#5856D6;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+													<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+													${s.linked}
+												</div>
+												<div style="font-size:14px;color:#1D1D1F;line-height:1.65;font-weight:500;">
+													${s.detail}
+												</div>
+											</div>
+										`).join('')}
+									</div>
+								</section>
+								` : ''}
+								${tips ? `
+								<section class="data-section">
+									<h4 class="section-header">Exam Mastery Insight</h4>
+									<div style="background:#FFF8EC;padding:22px 26px;border-radius:16px;border-left:4px solid #F5A623;">
+										<div style="font-size:11px;font-weight:700;color:#A66B00;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">⭐ 시험 포인트</div>
+										<div style="font-size:15px;color:#6B4600;font-weight:600;line-height:1.65;">${tips}</div>
+									</div>
+								</section>
+								` : ''}
+							</div>
+						`;
+						overlay.classList.add('active');
+					});
+				});
+
+				closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+				overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
+
+				
+			const domainMap = {
+				'security': ['iam', 'kms', 'waf & shield', 'cognito', 'guardduty', 'secrets manager', 'vpc', 'cloudtrail', 'organizations', 'route 53'],
+				'resiliency': ['asg', 'elb (alb/nlb/gwlb)', 'route 53', 's3', 'rds', 'aurora', 'dynamodb', 'efs', 'sqs', 'eventbridge'],
+				'performance': ['cloudfront', 'elasticache', 'global accelerator', 'fsx', 'kinesis', 'api gateway', 'direct connect', 'ecs / eks', 'lambda'],
+				'cost': ['s3 glacier', 'aws batch', 'fargate', 'aws outposts', 'spot', 'step functions']
+			};
+
+			const filterBtns = document.querySelectorAll('.domain-btn');
+			
+			filterBtns.forEach(btn => {
+				btn.addEventListener('click', () => {
+					const domain = btn.getAttribute('data-domain');
+					const isActive = btn.classList.contains('active');
+					
+					// Reset all
+					filterBtns.forEach(b => b.classList.remove('active'));
+					clearFocus();
+					search.value = '';
+					
+					if (!isActive) {
+						btn.classList.add('active');
+						const targets = domainMap[domain];
+						nodes.forEach(n => {
+							const name = n.getAttribute('data-name').toLowerCase();
+							if (targets.some(t => name.includes(t)) || (domain === 'resiliency' && name === 'ec2') || (domain === 'cost' && name === 'ec2')) {
+								n.classList.add('nd-focus');
+							} else {
+								n.classList.add('nd-inactive');
+							}
+						});
+					}
+				});
+			});
+
+			// ESC Key to close modal
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && overlay.classList.contains('active')) {
+					overlay.classList.remove('active');
+				}
+			});
+
+				search.addEventListener('input', (e) => {
+					const q = e.target.value.toLowerCase().trim();
+					clearFocus();
+					if (q.length > 1) {
+						let foundCount = 0;
+						nodes.forEach(n => {
+							const name = n.getAttribute('data-name').toLowerCase();
+							const desc = n.getAttribute('data-desc').toLowerCase();
+							if (name.includes(q) || desc.includes(q)) {
+								n.classList.add('nd-match');
+								foundCount++;
+							}
+						});
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
