@@ -228,10 +228,17 @@ import HeaderLink from './HeaderLink.astro';
 
 	@media (max-width: 768px) {
 		header {
-			padding: 0 1rem;
+			padding: 0 0.75rem;
 		}
 		.nav-left {
 			gap: 0.5rem;
+		}
+		.internal-links {
+			gap: 0;
+		}
+		.internal-links :global(a) {
+			padding: 0.4rem 0.5rem;
+			font-size: 0.8rem;
 		}
 		:global(.desktop-text) {
 			display: none;
@@ -240,9 +247,9 @@ import HeaderLink from './HeaderLink.astro';
 			display: flex;
 		}
 		:global(.login-btn), :global(.logout-btn) {
-			padding: 0.5rem !important;
-			width: 36px;
-			height: 36px;
+			padding: 0.4rem !important;
+			width: 32px;
+			height: 32px;
 		}
 	}
 </style>
