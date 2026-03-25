@@ -228,17 +228,25 @@ import HeaderLink from './HeaderLink.astro';
 
 	@media (max-width: 768px) {
 		header {
-			padding: 0 0.75rem;
+			padding: 0 0.4rem;
+		}
+		nav {
+			gap: 0.2rem;
 		}
 		.nav-left {
-			gap: 0.5rem;
+			gap: 0.3rem;
+			max-width: 80%;
+		}
+		.logo a {
+			font-size: 1rem;
 		}
 		.internal-links {
 			gap: 0;
 		}
 		.internal-links :global(a) {
-			padding: 0.4rem 0.5rem;
-			font-size: 0.8rem;
+			padding: 0.4rem 0.35rem;
+			font-size: 0.75rem;
+			letter-spacing: -0.03em;
 		}
 		:global(.desktop-text) {
 			display: none;
@@ -247,9 +255,9 @@ import HeaderLink from './HeaderLink.astro';
 			display: flex;
 		}
 		:global(.login-btn), :global(.logout-btn) {
-			padding: 0.4rem !important;
-			width: 32px;
-			height: 32px;
+			padding: 0.35rem !important;
+			width: 28px;
+			height: 28px;
 		}
 	}
 </style>
