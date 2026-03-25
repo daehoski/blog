@@ -584,8 +584,12 @@ import { topicTree } from '../data/aws-saa-topic-tree.js';
 			<section class="hero-section">
 				<h1>AWS SAA-C03 Encyclopedia</h1>
 				<p>단순한 도구를 넘어서 실전형 기술 백과사전. 30개 이상의 AWS 핵심 서비스에 대한 기술 명세와 아키텍처적 시너지를 한눈에 파악하세요.</p>
-				
-				</section>
+				<div style="display:flex; justify-content:center; gap:1.5rem; margin-top:2rem; opacity:0.8;">
+					<div style="background:rgba(255,255,255,0.1); padding:0.5rem 1rem; border-radius:12px; font-size:0.85rem; font-weight:600;"><span style="color:var(--accent-blue);">40+</span> 핵심 서비스</div>
+					<div style="background:rgba(255,255,255,0.1); padding:0.5rem 1rem; border-radius:12px; font-size:0.85rem; font-weight:600;"><span style="color:var(--accent-blue);">60+</span> 연계 아키텍처</div>
+					<div style="background:rgba(255,255,255,0.1); padding:0.5rem 1rem; border-radius:12px; font-size:0.85rem; font-weight:600;"><span style="color:var(--accent-blue);">100%</span> 실전 시험 대응</div>
+				</div>
+			</section>
 
 			<div class="search-box-container">
 				<div class="search-bar">
@@ -741,7 +745,13 @@ import { topicTree } from '../data/aws-saa-topic-tree.js';
 							<header class="modal-header">
 								<span class="modal-cat-tag">${cat}</span>
 								<h2 class="modal-title">${name}</h2>
-								<p class="modal-desc">${desc}</p>
+								<div style="display:flex; gap:0.8rem; align-items:center; margin-top:0.5rem;">
+									<p class="modal-desc" style="margin-bottom:0;">${desc}</p>
+									<button id="share-svc" style="background:#F5F5F7; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600; color:#86868B; transition:all 0.2s; display:flex; align-items:center; gap:4px;">
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+										정보 복사
+									</button>
+								</div>
 							</header>
 							<div class="modal-body">
 								<section class="data-section">
@@ -771,7 +781,7 @@ import { topicTree } from '../data/aws-saa-topic-tree.js';
 									<h4 class="section-header">Architecture Synergy (핵심 연계 아키텍처)</h4>
 									<div>
 										${synergies.map(s => `
-											<div style="background:#F6F5FC;border:1px solid rgba(88,86,214,0.12);padding:20px;border-radius:16px;margin-bottom:12px;border-left:4px solid #5856D6;">
+											<div class="synergy-card" style="background:#F6F5FC;border:1px solid rgba(88,86,214,0.12);padding:20px;border-radius:16px;margin-bottom:12px;border-left:4px solid #5856D6;">
 												<div style="font-size:14.5px;font-weight:800;color:#5856D6;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
 													<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
 													${s.linked}
@@ -795,7 +805,20 @@ import { topicTree } from '../data/aws-saa-topic-tree.js';
 								` : ''}
 							</div>
 						`;
+
+						// Share Logic
+						document.getElementById('share-svc').onclick = () => {
+							const textToCopy = `AWS SAA Encyclopedia - ${name}\n\n[Synergy Patterns]\n${synergies ? synergies.map(s => `- ${s.linked}: ${s.detail}`).join('\n') : 'N/A'}`;
+							navigator.clipboard.writeText(textToCopy).then(() => {
+								const btn = document.getElementById('share-svc');
+								const originalText = btn.innerHTML;
+								btn.innerHTML = '✅ 복사 완료!';
+								setTimeout(() => btn.innerHTML = originalText, 2000);
+							});
+						};
+
 						overlay.classList.add('active');
+						focusOn(node); // Persistent synergy visual
 					});
 				});
 
@@ -804,10 +827,10 @@ import { topicTree } from '../data/aws-saa-topic-tree.js';
 
 				
 			const domainMap = {
-				'security': ['iam', 'kms', 'waf & shield', 'cognito', 'guardduty', 'secrets manager', 'vpc', 'cloudtrail', 'organizations', 'route 53'],
-				'resiliency': ['asg', 'elb (alb/nlb/gwlb)', 'route 53', 's3', 'rds', 'aurora', 'dynamodb', 'efs', 'sqs', 'eventbridge'],
-				'performance': ['cloudfront', 'elasticache', 'global accelerator', 'fsx', 'kinesis', 'api gateway', 'direct connect', 'ecs / eks', 'lambda'],
-				'cost': ['s3 glacier', 'aws batch', 'fargate', 'aws outposts', 'spot', 'step functions']
+				'security': ['iam', 'kms', 'waf & shield', 'cognito', 'guardduty', 'secrets manager', 'vpc', 'cloudtrail', 'organizations', 'route 53', 'config', 'inspector', 'macie'],
+				'resiliency': ['asg', 'elb (alb/nlb/gwlb)', 'route 53', 's3', 'rds', 'aurora', 'dynamodb', 'efs', 'sqs', 'eventbridge', 'global accelerator', 'fargate', 'lambda'],
+				'performance': ['cloudfront', 'elasticache', 'global accelerator', 'fsx', 'kinesis', 'api gateway', 'direct connect', 'ecs / eks', 'lambda', 'appsync', 'ebs'],
+				'cost': ['s3 glacier', 'aws batch', 'fargate', 'aws outposts', 'spot', 'step functions', 'savings plans', 'compute optimizer', 'budgets']
 			};
 
 			const filterBtns = document.querySelectorAll('.domain-btn');
