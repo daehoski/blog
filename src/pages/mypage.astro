@@ -135,7 +135,7 @@ import '../styles/quiz.css'; // Reuse some quiz card styles
 				<div class="glass-card">
 					<div class="stats-title">전체 학습 진행률</div>
 					<div id="progress-value" class="stats-value">0%</div>
-					<div id="progress-detail" style="font-size: 0.9rem; color: #86868b; margin-top: 0.25rem;">0 / 725 문제 완료</div>
+					<div id="progress-detail" style="font-size: 0.9rem; color: #86868b; margin-top: 0.25rem;">0 / 723 문제 완료</div>
 					<div class="progress-bar-bg">
 						<div id="progress-fill" class="progress-bar-fill"></div>
 					</div>
@@ -212,10 +212,10 @@ import '../styles/quiz.css'; // Reuse some quiz card styles
                 // count unique quiz_id's solved
                 const attemptedIds = new Set(wrongAnswers.map(r => r.quiz_id));
                 const totalAttempted = attemptedIds.size;
-                const totalProgress = Math.round((totalAttempted / 725) * 100);
+                const totalProgress = Math.round((totalAttempted / 723) * 100);
                 
                 document.getElementById('progress-value').textContent = `${totalProgress}%`;
-                document.getElementById('progress-detail').textContent = `${totalAttempted} / 725 문제 완료`;
+                document.getElementById('progress-detail').textContent = `${totalAttempted} / 723 문제 완료`;
                 document.getElementById('progress-fill').style.width = `${totalProgress}%`;
 
                 // 4. Calculate Today's Count (Past 24h)
