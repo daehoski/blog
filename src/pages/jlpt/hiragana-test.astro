@@ -1,0 +1,350 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { hiraganaChunk1 } from '../../data/jlpt-chunk-1';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`${SITE_TITLE} - JLPT Hiragana`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+				min-height: 70vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			.progress-container {
+				width: 100%;
+				text-align: right;
+				margin-bottom: 2rem;
+				font-size: 1.1rem;
+				font-weight: 600;
+				color: #86868b;
+				letter-spacing: 0.05em;
+			}
+			.card {
+				background: #ffffff;
+				padding: 4rem 2rem;
+				border-radius: 32px;
+				box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+				width: 100%;
+				text-align: center;
+				border: 1px solid rgba(0,0,0,0.05);
+				position: relative;
+				overflow: hidden;
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+			.card.error-shake {
+				animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+				border-color: #ff3b30;
+				box-shadow: 0 10px 40px rgba(255, 59, 48, 0.15);
+			}
+			@keyframes shake {
+				10%, 90% { transform: translate3d(-1px, 0, 0); }
+				20%, 80% { transform: translate3d(2px, 0, 0); }
+				30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+				40%, 60% { transform: translate3d(4px, 0, 0); }
+			}
+			.character-display {
+				font-size: 8rem;
+				font-weight: 700;
+				color: #1d1d1f;
+				margin-bottom: 3rem;
+				line-height: 1;
+				user-select: none; /* 방지: 드래그해서 복사하는 것 방지 */
+			}
+			.input-container {
+				position: relative;
+				max-width: 300px;
+				margin: 0 auto;
+			}
+			input[type="text"] {
+				width: 100%;
+				font-size: 2.5rem;
+				text-align: center;
+				padding: 1rem;
+				border: 2px solid #e5e5ea;
+				border-radius: 16px;
+				background: #f5f5f7;
+				color: #1d1d1f;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				outline: none;
+				text-transform: lowercase; /* 항상 소문자로 보이게 */
+			}
+			input[type="text"]:focus {
+				border-color: #007aff;
+				background: #ffffff;
+				box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+			}
+			input[type="text"]:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+			.feedback-msg {
+				margin-top: 1.5rem;
+				font-size: 1.1rem;
+				font-weight: 600;
+				min-height: 24px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+			.feedback-msg.show {
+				opacity: 1;
+			}
+			.feedback-msg.error {
+				color: #ff3b30;
+			}
+			.feedback-msg.success {
+				color: #34c759;
+			}
+			.penalty-indicator {
+				display: flex;
+				justify-content: center;
+				gap: 8px;
+				margin-top: 1rem;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+			.penalty-indicator.show {
+				opacity: 1;
+			}
+			.dot {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background-color: #e5e5ea;
+				transition: background-color 0.3s;
+			}
+			.dot.filled {
+				background-color: #ff3b30;
+			}
+			.dot.cleared {
+				background-color: #34c759;
+			}
+            .completion-card {
+                display: none; /* 초기에는 숨김 */
+                text-align: center;
+            }
+            .completion-card.show {
+                display: block;
+            }
+            .btn-restart {
+                margin-top: 2rem;
+                padding: 1rem 2rem;
+                background: #1d1d1f;
+                color: white;
+                border: none;
+                border-radius: 9999px;
+                font-size: 1.2rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: transform 0.2s, background 0.2s;
+            }
+            .btn-restart:hover {
+                background: #000;
+                transform: translateY(-2px);
+            }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="progress-container" id="progress-container">
+				<span id="current-step">1</span> / <span id="total-steps">5</span>
+			</div>
+			
+			<div class="card" id="test-card">
+				<div class="character-display" id="char-display">あ</div>
+				
+				<div class="input-container">
+					<input type="text" id="romaji-input" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="발음 입력">
+				</div>
+
+				<div class="feedback-msg" id="feedback"></div>
+				
+				<div class="penalty-indicator" id="penalty-dots">
+					<div class="dot" id="dot-1"></div>
+					<div class="dot" id="dot-2"></div>
+					<div class="dot" id="dot-3"></div>
+				</div>
+			</div>
+
+            <div class="card completion-card" id="completion-card">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">🎉 Chunk 1 통과!</h2>
+                <p style="color: #86868b; font-size: 1.2rem; line-height: 1.5;">이제 5개의 히라가나를 완벽히 인출할 수 있습니다.<br/>하지만 망각 곡선은 작동하고 있습니다. 내일 다시 복습하세요!</p>
+                <button class="btn-restart" id="btn-restart">다시 훈련하기</button>
+            </div>
+		</main>
+		<Footer />
+
+		<script define:vars={{ chunkData: hiraganaChunk1 }}>
+			// Astro의 자체 script 태그 최적화 방식
+			document.addEventListener('DOMContentLoaded', () => {
+				const input = document.getElementById('romaji-input');
+				const charDisplay = document.getElementById('char-display');
+				const feedback = document.getElementById('feedback');
+				const testCard = document.getElementById('test-card');
+				const currentStepEl = document.getElementById('current-step');
+				const penaltyDotsDiv = document.getElementById('penalty-dots');
+				const dots = [
+					document.getElementById('dot-1'),
+					document.getElementById('dot-2'),
+					document.getElementById('dot-3')
+				];
+                const completionCard = document.getElementById('completion-card');
+                const progressContainer = document.getElementById('progress-container');
+                const restartBtn = document.getElementById('btn-restart');
+
+				let currentIndex = 0;
+				let penaltyRemaining = 0; // 0 means normal mode, 3 means penalty mode
+				let penaltyTotal = 3;
+
+				// 문제 초기화
+				function loadQuestion() {
+					if (currentIndex >= chunkData.length) {
+						showCompletion();
+						return;
+					}
+					const currentItem = chunkData[currentIndex];
+					charDisplay.textContent = currentItem.character;
+					currentStepEl.textContent = currentIndex + 1;
+					input.value = '';
+					
+					if (penaltyRemaining === 0) {
+						feedback.classList.remove('show');
+						feedback.textContent = '';
+						feedback.className = 'feedback-msg'; // reset classes
+						penaltyDotsDiv.classList.remove('show');
+						testCard.style.borderColor = 'rgba(0,0,0,0.05)';
+					}
+					
+					input.focus();
+				}
+
+                function showCompletion() {
+                    testCard.style.display = 'none';
+                    progressContainer.style.display = 'none';
+                    completionCard.classList.add('show');
+                }
+
+                function restartTest() {
+                    currentIndex = 0;
+                    penaltyRemaining = 0;
+                    completionCard.classList.remove('show');
+                    testCard.style.display = 'block';
+                    progressContainer.style.display = 'block';
+                    loadQuestion();
+                }
+
+				function updatePenaltyDots() {
+					// 점 UI 업데이트. 3개 중에서 완료된 것(cleared), 남은 것(filled) 표시
+					let cleared = penaltyTotal - penaltyRemaining;
+					for (let i = 0; i < penaltyTotal; i++) {
+						dots[i].className = 'dot'; // reset
+						if (i < cleared) {
+							dots[i].classList.add('cleared');
+						} else {
+							dots[i].classList.add('filled');
+						}
+					}
+				}
+
+				function handleCorrectAnswer() {
+					input.value = ''; // clear input
+					
+					if (penaltyRemaining > 0) {
+						// 페널티 모드 진행 중
+						penaltyRemaining--;
+						updatePenaltyDots();
+						
+						if (penaltyRemaining === 0) {
+							// 페널티 탈출! 다음 문제로
+							feedback.textContent = '통과! 다음 문제로 넘어갑니다.';
+							feedback.className = 'feedback-msg show success';
+							setTimeout(() => {
+								currentIndex++;
+								loadQuestion();
+							}, 800);
+						} else {
+							// 아직 쳐야 함
+							feedback.textContent = `잘했습니다! ${penaltyRemaining}번 더 정확히 입력하세요.`;
+							feedback.className = 'feedback-msg show';
+							feedback.style.color = '#ff9500'; // orange
+						}
+					} else {
+						// 일반 모드 정답
+						feedback.textContent = '정답!';
+						feedback.className = 'feedback-msg show success';
+						input.disabled = true;
+						
+						setTimeout(() => {
+							currentIndex++;
+							input.disabled = false;
+							loadQuestion();
+						}, 500); // 엄청 빠른 전환 (몰입 유지)
+					}
+				}
+
+				function handleWrongAnswer() {
+					const correctRomaji = chunkData[currentIndex].romaji;
+					input.value = ''; // 비워주기
+					
+					// 틀렸을 때 카드 흔들기 액션
+					testCard.classList.remove('error-shake');
+					void testCard.offsetWidth; // trigger reflow
+					testCard.classList.add('error-shake');
+					
+					if (penaltyRemaining === 0) {
+						// 페널티 모드 진입
+						penaltyRemaining = 3;
+						penaltyTotal = 3;
+						penaltyDotsDiv.classList.add('show');
+						updatePenaltyDots();
+						testCard.style.borderColor = '#ff3b30';
+					}
+
+					// 에러 메시지: 강력하게 각인
+					feedback.innerHTML = `오답! 정답은 <strong style="font-size:1.5rem;">'${correctRomaji}'</strong> 입니다.<br/>머리에 새기기 위해 <strong>${penaltyRemaining}회 연속</strong>으로 타이핑하세요.`;
+					feedback.className = 'feedback-msg show error';
+				}
+
+				input.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						const val = input.value.trim().toLowerCase();
+						if (!val) return;
+
+						const currentItem = chunkData[currentIndex];
+						if (val === currentItem.romaji) {
+							handleCorrectAnswer();
+						} else {
+							handleWrongAnswer();
+						}
+					}
+				});
+
+                restartBtn.addEventListener('click', restartTest);
+
+				// 화면 진입 시 무조건 포커스
+				document.addEventListener('click', () => {
+					if(document.activeElement !== input) {
+						input.focus();
+					}
+				});
+
+				// Load first
+				loadQuestion();
+			});
+		</script>
+	</body>
+</html>

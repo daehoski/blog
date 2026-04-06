@@ -1,0 +1,450 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { vocabN5Chunk1 } from '../../data/jlpt-vocab-n5';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`${SITE_TITLE} - 오디오 붕괴 타임어택`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+				min-height: 70vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			.start-screen, .completion-screen {
+				text-align: center;
+			}
+			.btn-primary {
+				margin-top: 2rem;
+				padding: 1.2rem 3rem;
+				background: #ff3b30;
+				color: white;
+				border: none;
+				border-radius: 9999px;
+				font-size: 1.2rem;
+				font-weight: 700;
+				cursor: pointer;
+				transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+				box-shadow: 0 10px 20px rgba(255, 59, 48, 0.3);
+			}
+			.btn-primary:hover {
+				background: #d70015;
+				transform: translateY(-2px);
+				box-shadow: 0 15px 30px rgba(255, 59, 48, 0.4);
+			}
+			.game-container {
+				width: 100%;
+				display: none;
+			}
+			.timer-bar-container {
+				width: 100%;
+				height: 12px;
+				background: #e5e5ea;
+				border-radius: 6px;
+				margin-bottom: 2rem;
+				overflow: hidden;
+				position: relative;
+			}
+			.timer-bar {
+				height: 100%;
+				width: 100%;
+				background: #34c759;
+				transform-origin: left;
+				transition: background-color 0.3s;
+			}
+            .timer-bar.warning { background: #ff9500; }
+            .timer-bar.danger { background: #ff3b30; }
+			.card {
+				background: #ffffff;
+				padding: 3rem 2rem;
+				border-radius: 32px;
+				box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+				text-align: center;
+				border: 1px solid rgba(0,0,0,0.05);
+				position: relative;
+				transition: transform 0.2s, box-shadow 0.2s;
+			}
+			.card.error-shake {
+				animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+				border-color: #ff3b30;
+				box-shadow: 0 10px 40px rgba(255, 59, 48, 0.15);
+			}
+			@keyframes shake {
+				10%, 90% { transform: translate3d(-1px, 0, 0); }
+				20%, 80% { transform: translate3d(2px, 0, 0); }
+				30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+				40%, 60% { transform: translate3d(4px, 0, 0); }
+			}
+			.meaning-display {
+				font-size: 5rem;
+				font-weight: 800;
+				color: #1d1d1f;
+				margin-bottom: 0.5rem;
+                letter-spacing: -0.05em;
+                word-break: keep-all;
+			}
+            .status-text {
+                font-size: 1.1rem;
+                color: #86868b;
+                min-height: 24px;
+                margin-bottom: 1.5rem;
+                font-weight: 600;
+            }
+            .status-text.decay {
+                color: #ff3b30;
+                animation: pulse 1s infinite;
+            }
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.5; }
+                100% { opacity: 1; }
+            }
+            
+			.options-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin: 0 auto;
+                max-width: 400px;
+            }
+            .option-btn {
+                padding: 1.2rem;
+                font-size: 1.6rem; 
+                font-weight: 800;
+                background: #f5f5f7;
+                border: 2px solid #e5e5ea;
+                border-radius: 16px;
+                color: #1d1d1f;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                letter-spacing: 0.05em;
+                word-break: keep-all;
+            }
+            .option-btn:hover:not(:disabled) {
+                background: #ffffff;
+                border-color: #007aff;
+            }
+            .option-btn:disabled {
+                opacity: 0.5;
+                cursor: default;
+            }
+            .option-btn.correct { background: #34c759; color: white; border-color: #34c759; }
+            .option-btn.wrong { background: #ff3b30; color: white; border-color: #ff3b30; }
+
+			.lives-container {
+				display: flex;
+				justify-content: center;
+				gap: 10px;
+				margin-top: 2rem;
+			}
+			.heart {
+				font-size: 1.5rem;
+				transition: transform 0.3s, opacity 0.3s;
+			}
+			.heart.lost {
+				opacity: 0.2;
+				filter: grayscale(100%);
+			}
+            .lock-overlay {
+                display: none;
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(255,255,255,0.95);
+                border-radius: 32px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 10;
+            }
+            .lock-overlay h3 { color: #ff3b30; font-size: 1.5rem; margin-bottom: 1rem; }
+            .lock-answer { font-size: 3.5rem; font-weight: 900; color: #1d1d1f; margin-bottom: 0.5rem; }
+            .lock-romaji { font-size: 1.2rem; color: #86868b; margin-bottom: 0.5rem; }
+            .lock-meaning { font-size: 2rem; color: #007aff; font-weight:bold; margin-bottom: 2rem; }
+            .btn-next { padding: 0.8rem 2rem; background: #1d1d1f; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			
+			<div class="start-screen" id="start-screen">
+				<h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">오디오 붕괴 타임어택</h1>
+				<p style="color: #86868b; font-size: 1.1rem; max-width: 440px; margin: 0 auto; line-height: 1.5;">
+					도파민 폭발 10라운드 미니게임!<br/> 화면서 뜻을 가렸습니다. <strong>오직 귀로만 듣고 5초 안에 올바른 뜻을 고르세요.</strong> <br/>실패할 때마다 원어민 오디오는 더 빠르고 고통스러워집니다.
+				</p>
+				<button class="btn-primary" id="btn-start">🎧 10개 묶음 훈련 시작</button>
+			</div>
+
+			<div class="game-container" id="game-container">
+				
+				<div class="timer-bar-container">
+					<div class="timer-bar" id="timer-bar"></div>
+				</div>
+
+				<div class="card" id="test-card">
+                    <div class="lock-overlay" id="lock-overlay">
+                        <h3>처참한 실패!</h3>
+                        <p>이 매칭을 뇌에 강제로 새기세요:</p>
+                        <div class="lock-answer" id="lock-answer-text">日本語</div>
+                        <div class="lock-romaji" id="lock-romaji-text">romaji</div>
+                        <div class="lock-meaning" id="lock-meaning-text">한국어 뜻</div>
+                        <button class="btn-next" id="btn-force-next">외웠습니다 (다음으로)</button>
+                    </div>
+
+					<div class="meaning-display" id="meaning-display">🎧</div>
+                    <div class="status-text" id="status-text">음성을 집중해서 들으세요...</div>
+
+                    <div class="options-container">
+                        <button class="option-btn" id="btn-opt-1" disabled>Option 1</button>
+                        <button class="option-btn" id="btn-opt-2" disabled>Option 2</button>
+                    </div>
+					
+					<div class="lives-container" id="lives">
+						<span class="heart" id="heart-1">❤️</span>
+						<span class="heart" id="heart-2">❤️</span>
+						<span class="heart" id="heart-3">❤️</span>
+					</div>
+				</div>
+                <div style="margin-top:2rem; text-align:center; color:#adb5bd; font-size:0.9rem;">
+                    진행도: <span id="progress-text">1 / 10</span>
+                </div>
+			</div>
+
+            <div class="completion-screen" id="completion-screen" style="display:none;">
+                <h2 style="font-size: 3rem; margin-bottom: 1rem;">🎉 도파민 훈련 완료!</h2>
+                <p style="color: #86868b; font-size: 1.2rem; line-height: 1.5;">10개의 청크를 완벽히 소화했습니다.<br/>이제 쉬거나 다음 10개 배치를 돌려보세요!</p>
+                <button class="btn-primary" onclick="location.reload()">새로운 10단어 뽑기</button>
+            </div>
+		</main>
+		<Footer />
+
+		<script define:vars={{ globalVocabData: vocabN5Chunk1 }}>
+			document.addEventListener('DOMContentLoaded', () => {
+				const startScreen = document.getElementById('start-screen');
+				const gameContainer = document.getElementById('game-container');
+				const completionScreen = document.getElementById('completion-screen');
+				
+				const btnStart = document.getElementById('btn-start');
+				const meaningDisplay = document.getElementById('meaning-display');
+				const statusText = document.getElementById('status-text');
+				
+                const btnOpt1 = document.getElementById('btn-opt-1');
+                const btnOpt2 = document.getElementById('btn-opt-2');
+
+				const testCard = document.getElementById('test-card');
+				const timerBar = document.getElementById('timer-bar');
+                const progressText = document.getElementById('progress-text');
+				const hearts = [
+					document.getElementById('heart-3'), // index 0
+					document.getElementById('heart-2'), // index 1
+					document.getElementById('heart-1')  // index 2
+				];
+                const lockOverlay = document.getElementById('lock-overlay');
+                const lockAnswerText = document.getElementById('lock-answer-text');
+                const lockRomajiText = document.getElementById('lock-romaji-text');
+                const lockMeaningText = document.getElementById('lock-meaning-text');
+                const btnForceNext = document.getElementById('btn-force-next');
+
+				let currentIndex = 0;
+				let currentWordObj = null;
+				let currentRate = 1.0; 
+				let lives = 3;
+                let timerInterval;
+                let timeLeft = 0;
+                const TIME_LIMIT = 5000; 
+
+                // 데이터 셔플링 및 10개 청크 분리
+                let sessionData = [];
+                function prepareSessionData() {
+                    const shuffled = [...globalVocabData].sort(() => 0.5 - Math.random());
+                    sessionData = shuffled.slice(0, 10);
+                }
+
+				// TTS 설정
+				const synth = window.speechSynthesis;
+				let jaVoice = null;
+				
+				function initVoices() {
+					const voices = synth.getVoices();
+					jaVoice = voices.find(v => v.lang.includes('ja')) || null;
+				}
+				synth.onvoiceschanged = initVoices;
+				initVoices();
+
+				btnStart.addEventListener('click', () => {
+					const utterance = new SpeechSynthesisUtterance('');
+					synth.speak(utterance);
+                    
+                    prepareSessionData(); // 시작 시 10개 뽑기
+
+					startScreen.style.display = 'none';
+					gameContainer.style.display = 'block';
+					startWordRound();
+				});
+
+				function startWordRound() {
+					if (currentIndex >= sessionData.length) {
+						gameContainer.style.display = 'none';
+						completionScreen.style.display = 'block';
+						return;
+					}
+
+					currentWordObj = sessionData[currentIndex];
+                    progressText.textContent = `${currentIndex + 1} / ${sessionData.length}`;
+					
+					currentRate = 1.0;
+					lives = 3;
+					hearts.forEach(h => h.classList.remove('lost'));
+					testCard.classList.remove('error-shake');
+                    statusText.textContent = "오디오 재생 중...";
+                    statusText.classList.remove('decay');
+                    statusText.style.color = '';
+                    timerBar.style.transform = `scaleX(1)`;
+                    timerBar.className = 'timer-bar';
+                    lockOverlay.style.display = 'none';
+
+                    // 핵심 파트: 한국어/일본어를 모두 가리고 청각 의존도 극대화
+					meaningDisplay.innerHTML = `🎧<br/><span style="font-size: 1.5rem; color: #86868b; font-weight: 500;">듣고 뜻을 고르세요</span>`;
+					
+                    // 오답 선지 무작위 추출 (현재 단어와 다른 것 중 하나)
+                    const wrongCandidates = globalVocabData.filter(v => v.id !== currentWordObj.id);
+                    const randomWrongObj = wrongCandidates[Math.floor(Math.random() * wrongCandidates.length)];
+
+                    // 한국어 선지 셔플 세팅
+                    const isFirstOptCorrect = Math.random() > 0.5;
+                    btnOpt1.textContent = isFirstOptCorrect ? currentWordObj.meaning : randomWrongObj.meaning;
+                    btnOpt2.textContent = isFirstOptCorrect ? randomWrongObj.meaning : currentWordObj.meaning;
+                    
+                    btnOpt1.dataset.isCorrect = isFirstOptCorrect ? "true" : "false";
+                    btnOpt2.dataset.isCorrect = !isFirstOptCorrect ? "true" : "false";
+
+                    // 버튼 초기화
+                    [btnOpt1, btnOpt2].forEach(btn => {
+                        btn.className = 'option-btn';
+                        btn.disabled = true; // 오디오 재생 중 클릭 금지
+                    });
+
+					playAudio();
+				}
+
+				function playAudio() {
+                    [btnOpt1, btnOpt2].forEach(btn => btn.disabled = true);
+                    timerBar.style.transform = `scaleX(1)`;
+                    clearInterval(timerInterval);
+
+					if (!jaVoice) {
+                        statusText.textContent = "TTS 음성 없음 (OS 제한). 텍스트로 전환합니다.";
+                        meaningDisplay.innerHTML = `<span style="font-size: 4rem;">${currentWordObj.word}</span>`;
+                        startTimer();
+                        return;
+                    }
+
+					const utterance = new SpeechSynthesisUtterance(currentWordObj.word);
+					utterance.voice = jaVoice;
+					utterance.rate = currentRate;
+                    utterance.pitch = currentRate > 1.0 ? 1.2 : 1.0;
+					
+					utterance.onend = () => {
+                        statusText.textContent = "올바른 뜻을 선택하세요!";
+						startTimer();
+					};
+                    utterance.onerror = (e) => {
+                        startTimer();
+                    }
+					synth.speak(utterance);
+				}
+
+                function startTimer() {
+                    [btnOpt1, btnOpt2].forEach(btn => btn.disabled = false);
+                    
+                    timeLeft = TIME_LIMIT;
+                    const updateInterval = 50; 
+                    
+                    timerInterval = setInterval(() => {
+                        timeLeft -= updateInterval;
+                        const percentage = timeLeft / TIME_LIMIT;
+                        timerBar.style.transform = `scaleX(${Math.max(0, percentage)})`;
+                        
+                        if (percentage < 0.5 && percentage > 0.25) {
+                            timerBar.className = 'timer-bar warning';
+                        } else if (percentage <= 0.25) {
+                            timerBar.className = 'timer-bar danger';
+                        }
+
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            handleFailure("시간 초과!");
+                        }
+                    }, updateInterval);
+                }
+
+                function handleFailure(reason) {
+                    clearInterval(timerInterval);
+                    [btnOpt1, btnOpt2].forEach(btn => btn.disabled = true);
+                    
+                    testCard.classList.remove('error-shake');
+                    void testCard.offsetWidth; // Reflow
+                    testCard.classList.add('error-shake');
+                    
+                    lives--;
+                    hearts[lives].classList.add('lost');
+
+                    if (lives <= 0) {
+                        showLockScreen();
+                    } else {
+                        currentRate += 0.3; 
+                        statusText.textContent = `${reason} 속도가 ${currentRate.toFixed(1)}배속으로 상승합니다!`;
+                        statusText.classList.add('decay');
+                        setTimeout(() => { playAudio(); }, 1200);
+                    }
+                }
+
+                function showLockScreen() {
+                    lockAnswerText.textContent = currentWordObj.word;
+                    lockRomajiText.textContent = `[ ${currentWordObj.romaji} ]`;
+                    lockMeaningText.textContent = currentWordObj.meaning;
+                    lockOverlay.style.display = 'flex';
+                }
+
+                btnForceNext.addEventListener('click', () => {
+                    currentIndex++;
+                    startWordRound();
+                });
+
+                // 선택 버튼 이벤트
+                [btnOpt1, btnOpt2].forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        clearInterval(timerInterval);
+                        const isCorrect = e.target.dataset.isCorrect === "true";
+
+                        if (isCorrect) {
+                            // 정답 처리
+                            [btnOpt1, btnOpt2].forEach(b => b.disabled = true);
+                            e.target.classList.add('correct');
+                            statusText.textContent = "정답!";
+                            statusText.classList.remove('decay');
+                            statusText.style.color = '#34c759';
+                            
+                            setTimeout(() => { currentIndex++; startWordRound(); }, 600);
+                        } else {
+                            // 오답 처리
+                            e.target.classList.add('wrong');
+                            handleFailure("오답!");
+                        }
+                    });
+                });
+			});
+		</script>
+	</body>
+</html>

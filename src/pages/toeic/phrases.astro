@@ -1,0 +1,896 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
+
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title="토익 프레이즈 퀴즈 | 박혜원 파워토익 VOCA"
+			description="박혜원 파워토익 핵심 프레이즈 4지선다 퀴즈. 토익 Part 5 스타일 빈칸 문제로 실전 감각을 키우세요."
+		/>
+		<style>
+			* { box-sizing: border-box; }
+			body { background: #f5f5f7; }
+			main {
+				width: 100%;
+				max-width: 860px;
+				margin: 0 auto;
+				padding: 5rem 1.5rem 4rem;
+			}
+
+			/* ── 헤더 영역 ── */
+			.page-header {
+				text-align: center;
+				margin-bottom: 2.5rem;
+			}
+			.page-header .badge {
+				display: inline-block;
+				padding: 0.35rem 1rem;
+				background: linear-gradient(135deg, #0051c3, #0a84ff);
+				color: white;
+				border-radius: 9999px;
+				font-size: 0.75rem;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				margin-bottom: 1rem;
+			}
+			.page-header h1 {
+				font-size: clamp(1.8rem, 5vw, 2.8rem);
+				font-weight: 800;
+				color: #1d1d1f;
+				letter-spacing: -0.04em;
+				margin-bottom: 0.75rem;
+			}
+			.page-header p {
+				color: #86868b;
+				font-size: 1rem;
+				font-weight: 500;
+			}
+
+			/* ── 진도 바 + 통계 ── */
+			.stats-bar {
+				background: white;
+				border-radius: 20px;
+				padding: 1.25rem 1.75rem;
+				display: flex;
+				align-items: center;
+				gap: 1.5rem;
+				margin-bottom: 2rem;
+				box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+				flex-wrap: wrap;
+			}
+			.stat-item {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+			}
+			.stat-item .num {
+				font-size: 1.3rem;
+				font-weight: 800;
+				color: #1d1d1f;
+				letter-spacing: -0.04em;
+			}
+			.stat-item .label {
+				font-size: 0.72rem;
+				color: #86868b;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+			}
+			.stat-item.correct .num { color: #30d158; }
+			.stat-item.wrong .num { color: #ff3b30; }
+			.progress-container {
+				flex: 1;
+				min-width: 120px;
+			}
+			.progress-label {
+				font-size: 0.72rem;
+				color: #86868b;
+				font-weight: 600;
+				margin-bottom: 0.4rem;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+			}
+			.progress-bar {
+				background: #e5e5ea;
+				border-radius: 999px;
+				height: 8px;
+				overflow: hidden;
+			}
+			.progress-fill {
+				height: 100%;
+				background: linear-gradient(90deg, #0051c3, #34aadc);
+				border-radius: 999px;
+				transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+				width: 0%;
+			}
+
+			/* ── 모드 선택 ── */
+			.mode-selector {
+				display: flex;
+				gap: 0.75rem;
+				margin-bottom: 2rem;
+				flex-wrap: wrap;
+			}
+			.mode-btn {
+				padding: 0.6rem 1.2rem;
+				border-radius: 999px;
+				border: 2px solid #e5e5ea;
+				background: white;
+				font-size: 0.85rem;
+				font-weight: 600;
+				cursor: pointer;
+				color: #86868b;
+				transition: all 0.2s;
+			}
+			.mode-btn.active {
+				border-color: #0051c3;
+				background: #0051c3;
+				color: white;
+			}
+			.mode-btn:hover:not(.active) {
+				border-color: #1d1d1f;
+				color: #1d1d1f;
+			}
+
+			/* ── 퀴즈 카드 ── */
+			.quiz-card {
+				background: white;
+				border-radius: 28px;
+				padding: 2.5rem;
+				box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+				margin-bottom: 1.5rem;
+				animation: fadeIn 0.3s ease;
+			}
+			@keyframes fadeIn {
+				from { opacity: 0; transform: translateY(12px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+
+			.question-num {
+				font-size: 0.75rem;
+				font-weight: 700;
+				color: #86868b;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				margin-bottom: 0.75rem;
+			}
+
+			/* 지문 (빈칸 문제) */
+			.question-sentence {
+				font-size: 1.2rem;
+				font-weight: 500;
+				color: #1d1d1f;
+				line-height: 1.7;
+				margin-bottom: 0.6rem;
+				word-break: keep-all;
+			}
+			.question-sentence .blank {
+				display: inline-block;
+				background: #e8f1ff;
+				color: #0051c3;
+				padding: 0.15rem 0.8rem;
+				border-radius: 8px;
+				font-weight: 700;
+				font-style: normal;
+			}
+			.question-translation {
+				font-size: 0.88rem;
+				color: #86868b;
+				margin-bottom: 2rem;
+				line-height: 1.5;
+			}
+
+			/* 프레이즈 뜻 힌트 (모드에 따라 표시) */
+			.phrase-hint {
+				background: #f5f5f7;
+				border-radius: 14px;
+				padding: 1rem 1.25rem;
+				margin-bottom: 1.5rem;
+				display: none;
+			}
+			.phrase-hint.show { display: block; }
+			.phrase-hint .phrase-en {
+				font-size: 1rem;
+				font-weight: 700;
+				color: #1d1d1f;
+				margin-bottom: 0.25rem;
+			}
+			.phrase-hint .phrase-ko {
+				font-size: 0.85rem;
+				color: #86868b;
+			}
+			.phrase-hint .synonyms {
+				font-size: 0.8rem;
+				color: #0051c3;
+				margin-top: 0.3rem;
+				font-weight: 600;
+			}
+
+			/* 4지선다 */
+			.choices {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.85rem;
+				margin-bottom: 1.5rem;
+			}
+			.choice-btn {
+				background: #f5f5f7;
+				border: 2px solid transparent;
+				border-radius: 16px;
+				padding: 1rem 1.25rem;
+				text-align: left;
+				cursor: pointer;
+				font-size: 1rem;
+				font-weight: 500;
+				color: #1d1d1f;
+				transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				line-height: 1.4;
+			}
+			.choice-btn:hover:not(:disabled) {
+				background: #e8f1ff;
+				border-color: #0051c3;
+				color: #0051c3;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 16px rgba(0, 81, 195, 0.15);
+			}
+			.choice-label {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 1.6rem;
+				height: 1.6rem;
+				border-radius: 50%;
+				background: white;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: #86868b;
+				flex-shrink: 0;
+				transition: all 0.2s;
+			}
+			.choice-btn:hover:not(:disabled) .choice-label {
+				background: #0051c3;
+				color: white;
+			}
+			.choice-btn.correct {
+				background: #e8f9ee !important;
+				border-color: #30d158 !important;
+				color: #1a8a3c !important;
+			}
+			.choice-btn.correct .choice-label {
+				background: #30d158;
+				color: white;
+			}
+			.choice-btn.wrong {
+				background: #fff0f0 !important;
+				border-color: #ff3b30 !important;
+				color: #cc0000 !important;
+			}
+			.choice-btn.wrong .choice-label {
+				background: #ff3b30;
+				color: white;
+			}
+			.choice-btn:disabled {
+				cursor: default;
+				transform: none !important;
+			}
+
+			/* 해설 */
+			.explanation-box {
+				background: #f5f5f7;
+				border-radius: 18px;
+				padding: 1.5rem;
+				display: none;
+				animation: fadeIn 0.3s ease;
+			}
+			.explanation-box.show { display: block; }
+			.explanation-box .exp-header {
+				font-size: 0.72rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: #86868b;
+				margin-bottom: 0.6rem;
+			}
+			.explanation-box .exp-text {
+				font-size: 0.95rem;
+				color: #1d1d1f;
+				line-height: 1.7;
+				word-break: keep-all;
+			}
+			.explanation-box .exp-answer {
+				margin-top: 0.75rem;
+				padding-top: 0.75rem;
+				border-top: 1px solid #e5e5ea;
+				font-size: 0.85rem;
+				color: #30d158;
+				font-weight: 700;
+			}
+
+			/* 다음 버튼 */
+			.next-btn {
+				width: 100%;
+				padding: 1.1rem;
+				background: #1d1d1f;
+				color: white;
+				border: none;
+				border-radius: 16px;
+				font-size: 1rem;
+				font-weight: 700;
+				cursor: pointer;
+				margin-top: 1.25rem;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				display: none;
+			}
+			.next-btn.show { display: block; }
+			.next-btn:hover {
+				background: #000;
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+			}
+
+			/* 완료 화면 */
+			.complete-screen {
+				background: white;
+				border-radius: 28px;
+				padding: 4rem 2.5rem;
+				text-align: center;
+				box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+				display: none;
+			}
+			.complete-screen.show { display: block; }
+			.complete-emoji { font-size: 4rem; margin-bottom: 1.5rem; }
+			.complete-screen h2 {
+				font-size: 2rem;
+				font-weight: 800;
+				color: #1d1d1f;
+				letter-spacing: -0.04em;
+				margin-bottom: 1rem;
+			}
+			.complete-score {
+				font-size: 3.5rem;
+				font-weight: 800;
+				letter-spacing: -0.04em;
+				margin: 1.5rem 0;
+			}
+			.score-good { color: #30d158; }
+			.score-mid { color: #ff9f0a; }
+			.score-bad { color: #ff3b30; }
+			.complete-actions {
+				display: flex;
+				gap: 1rem;
+				justify-content: center;
+				flex-wrap: wrap;
+				margin-top: 2rem;
+			}
+			.action-btn {
+				padding: 0.9rem 2rem;
+				border-radius: 999px;
+				font-size: 0.95rem;
+				font-weight: 700;
+				cursor: pointer;
+				transition: all 0.2s;
+				text-decoration: none;
+				border: 2px solid;
+			}
+			.action-btn.primary {
+				background: #1d1d1f;
+				color: white;
+				border-color: #1d1d1f;
+			}
+			.action-btn.secondary {
+				background: white;
+				color: #1d1d1f;
+				border-color: #e5e5ea;
+			}
+			.action-btn:hover { transform: translateY(-2px); }
+
+			/* 로딩 화면 */
+			.loading-screen {
+				text-align: center;
+				padding: 5rem 2rem;
+				color: #86868b;
+			}
+			.loading-spinner {
+				width: 40px;
+				height: 40px;
+				border: 3px solid #e5e5ea;
+				border-top-color: #0051c3;
+				border-radius: 50%;
+				animation: spin 0.8s linear infinite;
+				margin: 0 auto 1rem;
+			}
+			@keyframes spin { to { transform: rotate(360deg); } }
+
+			@media (max-width: 600px) {
+				main { padding: 3rem 1rem 3rem; }
+				.choices { grid-template-columns: 1fr; }
+				.quiz-card { padding: 1.75rem 1.25rem; }
+				.stats-bar { gap: 1rem; }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<div class="badge">파워토익 VOCA</div>
+				<h1>프레이즈 퀴즈</h1>
+				<p>토익 Part 5 스타일 · 악랄한 4지선다 · 즉각 해설</p>
+			</div>
+
+			<!-- 통계 바 -->
+			<div class="stats-bar">
+				<div class="stat-item">
+					<span class="num" id="stat-current">1</span>
+					<span class="label">현재 문제</span>
+				</div>
+				<div class="stat-item">
+					<span class="num" id="stat-total">—</span>
+					<span class="label">전체</span>
+				</div>
+				<div class="stat-item correct">
+					<span class="num" id="stat-correct">0</span>
+					<span class="label">정답</span>
+				</div>
+				<div class="stat-item wrong">
+					<span class="num" id="stat-wrong">0</span>
+					<span class="label">오답</span>
+				</div>
+				<div class="progress-container">
+					<div class="progress-label">진도</div>
+					<div class="progress-bar">
+						<div class="progress-fill" id="progress-fill"></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 모드 선택 -->
+			<div class="mode-selector">
+				<button class="mode-btn active" id="mode-full" onclick="setMode('full')">전체 풀기</button>
+				<button class="mode-btn" id="mode-quiz-only" onclick="setMode('quiz-only')">퀴즈 있는 것만</button>
+				<button class="mode-btn" id="mode-wrong" onclick="setMode('wrong')">오답만 복습</button>
+				<button class="mode-btn" id="mode-hint" onclick="toggleHint()">💡 힌트 보기</button>
+			</div>
+
+			<!-- 로딩 -->
+			<div class="loading-screen" id="loading-screen">
+				<div class="loading-spinner"></div>
+				<p>문제를 불러오는 중...</p>
+			</div>
+
+			<!-- 퀴즈 카드 -->
+			<div class="quiz-card" id="quiz-card" style="display:none;">
+				<div class="question-num" id="question-num">문제 1 / 1</div>
+
+				<!-- 프레이즈 힌트 (힌트 모드일 때 표시) -->
+				<div class="phrase-hint" id="phrase-hint">
+					<div class="phrase-en" id="hint-phrase"></div>
+					<div class="phrase-ko" id="hint-meaning"></div>
+					<div class="synonyms" id="hint-synonyms"></div>
+				</div>
+
+				<!-- 지문 -->
+				<div class="question-sentence" id="question-sentence"></div>
+				<div class="question-translation" id="question-translation"></div>
+
+				<!-- 보기 -->
+				<div class="choices" id="choices"></div>
+
+				<!-- 해설 -->
+				<div class="explanation-box" id="explanation-box">
+					<div class="exp-header">해설</div>
+					<div class="exp-text" id="exp-text"></div>
+					<div class="exp-answer" id="exp-answer"></div>
+				</div>
+
+				<button class="next-btn" id="next-btn" onclick="nextQuestion()">다음 문제 →</button>
+			</div>
+
+			<!-- 완료 화면 -->
+			<div class="complete-screen" id="complete-screen">
+				<div class="complete-emoji" id="complete-emoji"></div>
+				<h2>퀴즈 완료!</h2>
+				<p style="color:#86868b; margin-bottom:0.5rem;">최종 점수</p>
+				<div class="complete-score" id="complete-score"></div>
+				<p style="color:#86868b; font-size:0.95rem;" id="complete-detail"></p>
+				<div class="complete-actions">
+					<button class="action-btn primary" onclick="restartQuiz()">다시 풀기</button>
+					<button class="action-btn secondary" onclick="restartWrong()">오답만 복습</button>
+					<a href="/toeic/" class="action-btn secondary">허브로 돌아가기</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+
+	<!-- 서버사이드 데이터를 클라이언트로 주입 -->
+	<script define:vars={{ ALL_TOEIC_PHRASES }}>
+		window.IMPORTED_PHRASES = ALL_TOEIC_PHRASES || [];
+	</script>
+
+	<script>
+		// Vite HMR 강제 새로고침용 로그
+		console.log("Toeic Phrases Script Mounted Successfully! HMR Busted.");
+
+		// ──────────────────────────────────────────
+		// 데이터 로딩
+		// ──────────────────────────────────────────
+		let ALL_PHRASES = [];
+		let quizQueue = [];
+		let currentIdx = 0;
+		let correctCount = 0;
+		let wrongCount = 0;
+		let currentMode = 'full';
+		let showHint = false;
+		let answered = false;
+
+		// 로컬스토리지 키
+		const LS_WRONG = 'toeic_wrong_ids';
+		const LS_ATTEMPTS = 'toeic_attempt_ids';
+
+		function loadData() {
+			if (window.IMPORTED_PHRASES && window.IMPORTED_PHRASES.length > 0) {
+				ALL_PHRASES = window.IMPORTED_PHRASES;
+			} else {
+				ALL_PHRASES = getDemoData();
+			}
+
+			document.getElementById('stat-total').textContent = ALL_PHRASES.length;
+			document.getElementById('loading-screen').style.display = 'none';
+			document.getElementById('quiz-card').style.display = 'block';
+			initQuiz();
+		}
+
+		// ──────────────────────────────────────────
+		// 데모 데이터 (OCR 완료 전 미리보기용)
+		// ──────────────────────────────────────────
+		function getDemoData() {
+			return [
+				{
+					id: "0001", phrase: "deliver a speech", meaning: "연설하다",
+					synonyms: ["give a speech", "make a speech"],
+					examples: [{ en: "Ms. Kate Clark will be delivering the keynote speech at the education forum.", ko: "Kate Clark 씨는 교육 포럼에서 기조연설을 할 것이다." }],
+					quiz: {
+						sentence: "The CEO will -------- an important speech at the annual shareholders meeting next Friday.",
+						choices: ["deliver", "delivery", "delivered", "deliverable"],
+						answerIndex: 0,
+						explanation: "빈칸 앞 will이 있으므로 동사원형이 와야 합니다. 'deliver a speech'는 '연설하다'라는 토익 핵심 연어 표현입니다.",
+						translation: "CEO는 다음 주 금요일 연례 주주 총회에서 중요한 연설을 할 것이다."
+					}
+				},
+				{
+					id: "0002", phrase: "use caution", meaning: "주의하다",
+					synonyms: ["exercise caution"],
+					examples: [
+						{ en: "Please make sure to use caution when stepping onto your patio to dry laundry.", ko: "빨래를 말리기 위해 테라스에 발을 디딜 때 반드시 주의하세요." },
+						{ en: "We need to exercise caution when taking these pills.", ko: "이 약들을 복용할 때는 주의해야 합니다." }
+					],
+					quiz: {
+						sentence: "Use -------- when assembling this product since it has some sharp edges.",
+						choices: ["cautiously", "cautious", "caution", "cautioning"],
+						answerIndex: 2,
+						explanation: "'use caution(주의하다)' 자체를 하나의 연어 표현으로 외워 두면, '주의 깊게 사용하다'라고 잘못 해석하여 정답 (A)로 고르는 실수를 줄일 수 있다. 동사 use의 목적어로 명사 caution이 와야 한다.",
+						translation: "날카로운 모서리들이 있으니 이 제품을 조립할 때는 주의하세요."
+					}
+				},
+				{
+					id: "0003", phrase: "reserve the right to + 동사원형", meaning: "~할 권한[권리]을 가지다",
+					synonyms: [],
+					examples: [{ en: "Please note that we reserve the right to cancel a workshop in case of low enrollment.", ko: "등록률이 저조할 경우 저희는 워크숍을 취소할 권한을 갖고 있다는 것을 유념해 주십시오." }],
+					quiz: null
+				},
+				{
+					id: "0004", phrase: "place an order", meaning: "(고객이) 주문하다",
+					synonyms: [],
+					examples: [{ en: "John Galipeau placed an order for office supplies.", ko: "John Galipeau는 사무용품들을 주문했다." }],
+					quiz: null
+				},
+				{
+					id: "0005", phrase: "fill one's order", meaning: "(회사가) ~의 주문을 처리하다[이행하다]",
+					synonyms: ["fulfill one's order", "process one's order"],
+					examples: [{ en: "It will take some time to fill Ms. Dale's order due to the lack of supplies.", ko: "자재 부족으로 인해 Dale 씨의 주문을 처리하는 데 시간이 좀 걸릴 것이다." }],
+					quiz: {
+						sentence: "All online orders placed before 3 P.M. will be -------- and shipped the same day.",
+						choices: ["full", "filled", "fulfilling", "fulfill"],
+						answerIndex: 1,
+						explanation: "be 동사 뒤에 오므로 과거분사(p.p.) 형태가 와야 합니다. 'fill an order = 주문을 처리하다'는 핵심 표현으로, 수동태 be filled가 정답입니다.",
+						translation: "오후 3시 이전에 접수된 모든 온라인 주문들은 당일 처리되어 배송될 것이다."
+					}
+				},
+				{
+					id: "0006", phrase: "launch a campaign", meaning: "캠페인을 벌이다[시작하다]",
+					synonyms: [],
+					examples: [{ en: "After weeks of deliberation, we finally decided to launch a campaign next month.", ko: "여러 주 동안의 심사숙고 끝에, 우리는 마침내 다음 달에 캠페인을 시작하기로 결정했다." }],
+					quiz: {
+						sentence: "The marketing team is planning to -------- a new advertising campaign to promote the product.",
+						choices: ["release", "launch", "establish", "conduct"],
+						answerIndex: 1,
+						explanation: "'launch a campaign'은 '캠페인을 시작하다'의 핵심 연어입니다. release는 제품/앨범 출시, establish는 기관 설립, conduct는 연구/조사 수행에 쓰입니다.",
+						translation: "마케팅 팀은 그 제품을 홍보하기 위한 새로운 광고 캠페인을 시작할 계획이다."
+					}
+				}
+			];
+		}
+
+		// ──────────────────────────────────────────
+		// 퀴즈 초기화
+		// ──────────────────────────────────────────
+		function initQuiz() {
+			const wrongIds = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
+			
+			if (currentMode === 'full') {
+				quizQueue = [...ALL_PHRASES].sort(() => Math.random() - 0.5);
+			} else if (currentMode === 'quiz-only') {
+				quizQueue = ALL_PHRASES.filter(p => p.quiz !== null).sort(() => Math.random() - 0.5);
+			} else if (currentMode === 'wrong') {
+				quizQueue = ALL_PHRASES.filter(p => wrongIds.has(p.id)).sort(() => Math.random() - 0.5);
+				if (quizQueue.length === 0) {
+					alert('오답 목록이 비어있습니다!');
+					return;
+				}
+			}
+
+			currentIdx = 0;
+			correctCount = 0;
+			wrongCount = 0;
+			updateStats();
+			showQuestion();
+		}
+
+		function updateStats() {
+			document.getElementById('stat-current').textContent = Math.min(currentIdx + 1, quizQueue.length);
+			document.getElementById('stat-total').textContent = quizQueue.length;
+			document.getElementById('stat-correct').textContent = correctCount;
+			document.getElementById('stat-wrong').textContent = wrongCount;
+			const pct = quizQueue.length > 0 ? ((currentIdx / quizQueue.length) * 100) : 0;
+			document.getElementById('progress-fill').style.width = pct + '%';
+		}
+
+		// ──────────────────────────────────────────
+		// 문제 표시
+		// ──────────────────────────────────────────
+		function showQuestion() {
+			if (currentIdx >= quizQueue.length) {
+				showComplete();
+				return;
+			}
+
+			const item = quizQueue[currentIdx];
+			answered = false;
+
+			// 힌트
+			const hintEl = document.getElementById('phrase-hint');
+			if (showHint) {
+				hintEl.classList.add('show');
+				document.getElementById('hint-phrase').textContent = item.phrase;
+				document.getElementById('hint-meaning').textContent = item.meaning;
+				const synEl = document.getElementById('hint-synonyms');
+				if (item.synonyms && item.synonyms.length > 0) {
+					synEl.textContent = '= ' + item.synonyms.join(' / ');
+				} else {
+					synEl.textContent = '';
+				}
+			} else {
+				hintEl.classList.remove('show');
+			}
+
+			document.getElementById('question-num').textContent = `문제 ${currentIdx + 1} / ${quizQueue.length}`;
+			updateStats();
+
+			// 퀴즈 데이터가 있으면 → 빈칸 문제 모드
+			if (item.quiz) {
+				const q = item.quiz;
+				// 빈칸을 span으로 치환
+				const sentence = q.sentence.replace(
+					/(-{3,}|\[BLANK\])/g,
+					'<em class="blank">___</em>'
+				);
+				document.getElementById('question-sentence').innerHTML = sentence;
+				document.getElementById('question-translation').textContent = q.translation || '';
+
+				// 보기 셔플 (정답 인덱스 추적)
+				const origChoices = q.choices.map((c, i) => ({ text: c, isCorrect: i === q.answerIndex }));
+				const shuffled = origChoices.sort(() => Math.random() - 0.5);
+
+				renderChoices(shuffled, q.explanation);
+			} else {
+				// 퀴즈 없는 항목 → 프레이즈 의미 4지선다 생성
+				generateMeaningQuiz(item);
+			}
+
+			document.getElementById('explanation-box').classList.remove('show');
+			document.getElementById('next-btn').classList.remove('show');
+			updateStats();
+		}
+
+		function renderChoices(shuffledChoices, explanation) {
+			const choicesEl = document.getElementById('choices');
+			choicesEl.innerHTML = '';
+			const labels = ['A', 'B', 'C', 'D'];
+
+			shuffledChoices.forEach((choice, i) => {
+				const btn = document.createElement('button');
+				btn.className = 'choice-btn';
+				btn.innerHTML = `<span class="choice-label">${labels[i]}</span>${choice.text}`;
+				btn.dataset.correct = choice.isCorrect ? '1' : '0';
+				btn.addEventListener('click', () => handleAnswer(btn, shuffledChoices, choice.isCorrect, explanation));
+				choicesEl.appendChild(btn);
+			});
+		}
+
+		// ── 의미 퀴즈 생성 (퀴즈 없는 항목용) ──
+		function generateMeaningQuiz(item) {
+			// 예문에서 프레이즈 강조 -> 빈칸으로
+			let example = item.examples && item.examples.length > 0 ? item.examples[0] : null;
+			
+			if (example) {
+				// 프레이즈를 빈칸으로
+				const phraseWords = item.phrase.replace(/\+.*/, '').trim(); // "+ 명사" 등 제거
+				const highlighted = example.en.replace(
+					new RegExp(phraseWords.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+					'<em class="blank">___</em>'
+				);
+				document.getElementById('question-sentence').innerHTML = highlighted || `<em class="blank">___</em> — 빈칸에 알맞은 표현을 고르세요.`;
+				document.getElementById('question-translation').textContent = example.ko || '';
+			} else {
+				document.getElementById('question-sentence').innerHTML = `다음 중 "<strong>${item.phrase}</strong>"의 뜻으로 알맞은 것은?`;
+				document.getElementById('question-translation').textContent = '';
+			}
+
+			// 오답 보기: 다른 항목의 meaning에서 랜덤 추출
+			const others = ALL_PHRASES.filter(p => p.id !== item.id && p.meaning).sort(() => Math.random() - 0.5).slice(0, 3);
+			const choices = [
+				{ text: item.meaning, isCorrect: true },
+				...others.map(o => ({ text: o.meaning, isCorrect: false }))
+			].sort(() => Math.random() - 0.5);
+
+			renderChoices(choices, `"${item.phrase}"는 "${item.meaning}"이라는 뜻의 토익 핵심 연어입니다.${item.synonyms && item.synonyms.length > 0 ? ' 동의어: ' + item.synonyms.join(', ') : ''}`);
+		}
+
+		// ──────────────────────────────────────────
+		// 정답 처리
+		// ──────────────────────────────────────────
+		function handleAnswer(clickedBtn, allChoices, isCorrect, explanation) {
+			if (answered) return;
+			answered = true;
+
+			const item = quizQueue[currentIdx];
+			const allBtns = document.querySelectorAll('.choice-btn');
+			
+			allBtns.forEach(btn => {
+				btn.disabled = true;
+				if (btn.dataset.correct === '1') {
+					btn.classList.add('correct');
+				}
+			});
+
+			if (isCorrect) {
+				correctCount++;
+				clickedBtn.classList.add('correct');
+				// 오답 목록에서 제거
+				removeFromWrong(item.id);
+			} else {
+				wrongCount++;
+				clickedBtn.classList.add('wrong');
+				// 오답 저장
+				addToWrong(item.id);
+			}
+
+			// 해설 표시
+			const expBox = document.getElementById('explanation-box');
+			expBox.classList.add('show');
+			document.getElementById('exp-text').textContent = explanation || '해설이 없습니다.';
+			
+			const correctChoice = [...allBtns].find(b => b.dataset.correct === '1');
+			const correctText = correctChoice ? correctChoice.textContent.replace(/^[ABCD]/, '').trim() : '';
+			document.getElementById('exp-answer').textContent = `✅ 정답: ${correctText}`;
+
+			document.getElementById('next-btn').classList.add('show');
+			updateStats();
+		}
+
+		function nextQuestion() {
+			currentIdx++;
+			if (currentIdx >= quizQueue.length) {
+				showComplete();
+			} else {
+				// 카드 fadeIn 재시작
+				const card = document.getElementById('quiz-card');
+				card.style.animation = 'none';
+				card.offsetHeight; // reflow
+				card.style.animation = '';
+				showQuestion();
+			}
+		}
+
+		// ──────────────────────────────────────────
+		// 완료 화면
+		// ──────────────────────────────────────────
+		function showComplete() {
+			document.getElementById('quiz-card').style.display = 'none';
+			const screen = document.getElementById('complete-screen');
+			screen.classList.add('show');
+
+			const total = correctCount + wrongCount;
+			const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+			
+			let emoji, cls;
+			if (pct >= 80) { emoji = '🎉'; cls = 'score-good'; }
+			else if (pct >= 60) { emoji = '💪'; cls = 'score-mid'; }
+			else { emoji = '📚'; cls = 'score-bad'; }
+			
+			document.getElementById('complete-emoji').textContent = emoji;
+			document.getElementById('complete-score').textContent = pct + '%';
+			document.getElementById('complete-score').className = 'complete-score ' + cls;
+			document.getElementById('complete-detail').textContent = 
+				`${total}문제 중 ${correctCount}개 정답 · ${wrongCount}개 오답`;
+		}
+
+		// ──────────────────────────────────────────
+		// 오답 저장/제거
+		// ──────────────────────────────────────────
+		function addToWrong(id) {
+			const wrong = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
+			wrong.add(id);
+			localStorage.setItem(LS_WRONG, JSON.stringify([...wrong]));
+		}
+
+		function removeFromWrong(id) {
+			const wrong = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
+			wrong.delete(id);
+			localStorage.setItem(LS_WRONG, JSON.stringify([...wrong]));
+		}
+
+		// ──────────────────────────────────────────
+		// 모드 / 힌트
+		// ──────────────────────────────────────────
+		function setMode(mode) {
+			currentMode = mode;
+			document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+			const modeIds = { full: 'mode-full', 'quiz-only': 'mode-quiz-only', wrong: 'mode-wrong' };
+			if (modeIds[mode]) document.getElementById(modeIds[mode]).classList.add('active');
+			initQuiz();
+		}
+
+		function toggleHint() {
+			showHint = !showHint;
+			const btn = document.getElementById('mode-hint');
+			btn.classList.toggle('active', showHint);
+			btn.textContent = showHint ? '💡 힌트 숨기기' : '💡 힌트 보기';
+			// 현재 문제에 힌트 즉시 적용
+			if (!answered) showQuestion();
+		}
+
+		function restartQuiz() {
+			document.getElementById('complete-screen').classList.remove('show');
+			document.getElementById('quiz-card').style.display = 'block';
+			initQuiz();
+		}
+
+		function restartWrong() {
+			document.getElementById('complete-screen').classList.remove('show');
+			document.getElementById('quiz-card').style.display = 'block';
+			setMode('wrong');
+		}
+
+		// 전역 바인딩 (인라인 onclick 사용을 위함)
+		window.nextQuestion = nextQuestion;
+		window.toggleHint = toggleHint;
+		window.restartQuiz = restartQuiz;
+		window.restartWrong = restartWrong;
+		window.setMode = setMode;
+
+		// 시작
+		loadData();
+		</script>
+	</body>
+</html>

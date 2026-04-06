@@ -1,0 +1,471 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <BaseHead title="토익 RC 문법 정리 | 기초부터 완전 정복" description="토익 Part 5/6 필수 문법 10챕터 완전 정복. 품사, 시제, 수일치, 관계사, 접속사 등 실전 문제 포함." />
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #f5f5f7; }
+    main { max-width: 900px; margin: 0 auto; padding: 5rem 1.5rem; }
+
+    .page-header { text-align: center; margin-bottom: 3rem; }
+    .badge { display: inline-block; padding: .35rem 1rem; background: linear-gradient(135deg,#30d158,#34c759); color: #fff; border-radius: 999px; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem; }
+    .page-header h1 { font-size: clamp(1.8rem,5vw,2.8rem); font-weight: 800; color: #1d1d1f; letter-spacing: -.04em; margin-bottom: .75rem; }
+    .page-header p { color: #86868b; font-size: 1rem; font-weight: 500; }
+
+    /* 챕터 목록 */
+    .chapter-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; }
+    .chapter-item { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+    .chapter-header { display: flex; align-items: center; gap: 1.25rem; padding: 1.5rem 2rem; cursor: pointer; transition: background .2s; user-select: none; }
+    .chapter-header:hover { background: #f9f9fb; }
+    .chapter-num { width: 2.2rem; height: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .chapter-info { flex: 1; }
+    .chapter-info h2 { font-size: 1.05rem; font-weight: 700; color: #1d1d1f; letter-spacing: -.02em; margin: 0 0 .2rem; }
+    .chapter-info p { font-size: .82rem; color: #86868b; margin: 0; }
+    .chapter-arrow { font-size: 1rem; color: #86868b; transition: transform .3s; }
+    .chapter-item.open .chapter-arrow { transform: rotate(180deg); }
+    .chapter-body { display: none; padding: 0 2rem 2rem; }
+    .chapter-item.open .chapter-body { display: block; }
+
+    /* 이론 카드 */
+    .theory-card { background: #f5f5f7; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .theory-card h3 { font-size: .95rem; font-weight: 700; color: #1d1d1f; margin: 0 0 .75rem; }
+    .theory-card p, .theory-card li { font-size: .9rem; color: #3a3a3c; line-height: 1.7; word-break: keep-all; }
+    .theory-card ul { padding-left: 1.2rem; margin: .5rem 0; }
+
+    /* 표 */
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: .75rem 0; }
+    th { background: #1d1d1f; color: #fff; padding: .6rem .9rem; text-align: left; font-weight: 600; }
+    td { padding: .55rem .9rem; border-bottom: 1px solid #e5e5ea; color: #3a3a3c; line-height: 1.5; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #fafafa; }
+    .highlight { color: #0051c3; font-weight: 700; }
+    .danger { color: #ff3b30; font-weight: 700; }
+
+    /* 문제 */
+    .quiz-section { margin-top: 1.5rem; }
+    .quiz-section h3 { font-size: .9rem; font-weight: 700; color: #86868b; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1rem; }
+    .q-item { background: #fff; border: 2px solid #e5e5ea; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+    .q-text { font-size: .95rem; color: #1d1d1f; line-height: 1.7; margin-bottom: .75rem; word-break: keep-all; }
+    .q-text .blank { display: inline-block; background: #e8f1ff; color: #0051c3; padding: .1rem .6rem; border-radius: 6px; font-weight: 700; }
+    .q-choices { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .q-btn { background: #f5f5f7; border: 2px solid transparent; border-radius: 10px; padding: .6rem .9rem; font-size: .88rem; font-weight: 500; cursor: pointer; color: #1d1d1f; text-align: left; transition: all .15s; display: flex; align-items: center; gap: .5rem; }
+    .q-btn:hover:not(:disabled) { border-color: #0051c3; background: #e8f1ff; color: #0051c3; }
+    .q-btn.correct { background: #e8f9ee !important; border-color: #30d158 !important; color: #1a8a3c !important; }
+    .q-btn.wrong { background: #fff0f0 !important; border-color: #ff3b30 !important; color: #cc0000 !important; }
+    .q-btn:disabled { cursor: default; }
+    .q-lbl { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #fff; font-size: .72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .q-exp { display: none; margin-top: .75rem; padding: .75rem 1rem; background: #f5f5f7; border-radius: 10px; font-size: .85rem; color: #3a3a3c; line-height: 1.6; word-break: keep-all; }
+    .q-exp.show { display: block; }
+    .q-answer { color: #30d158; font-weight: 700; margin-top: .4rem; font-size: .82rem; }
+
+    @media(max-width:600px){
+      main { padding: 3rem 1rem; }
+      .chapter-header { padding: 1.25rem 1.25rem; gap: .9rem; }
+      .chapter-body { padding: 0 1.25rem 1.5rem; }
+      .q-choices { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <Header />
+  <main>
+    <div class="page-header">
+      <div class="badge">RC 문법 정리</div>
+      <h1>토익 RC 문법 완전 정복</h1>
+      <p>Part 5 / 6 필수 문법 기초부터 · 챕터별 실전 문제</p>
+    </div>
+
+    <div class="chapter-list" id="chapter-list">
+      <!-- JS로 렌더링 -->
+    </div>
+  </main>
+  <Footer />
+
+<script>
+const CHAPTERS = [
+  {
+    num: 1, title: "품사 (Parts of Speech)", sub: "명사·형용사·부사·동사 자리 구분 — 토익 Part 5 최빈출",
+    color: "#0051c3",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 핵심 원칙: 빈칸의 '자리'를 먼저 봐라</h3>
+        <p>토익 Part 5 품사 문제는 4개 보기가 같은 어근의 다른 품사입니다.<br>문장 구조에서 빈칸이 어떤 자리인지 파악하는 것이 핵심입니다.</p>
+        <table>
+          <tr><th>품사</th><th>자리</th><th>대표 예</th></tr>
+          <tr><td><span class="highlight">명사</span></td><td>주어, 목적어, 보어, 전치사+___</td><td>decision, growth, employee</td></tr>
+          <tr><td><span class="highlight">동사</span></td><td>주어 뒤, 조동사 뒤</td><td>provide, increase, submit</td></tr>
+          <tr><td><span class="highlight">형용사</span></td><td>명사 앞, be동사 뒤(보어)</td><td>available, significant, recent</td></tr>
+          <tr><td><span class="highlight">부사</span></td><td>동사·형용사·부사 앞뒤, 문장 앞뒤</td><td>significantly, recently, carefully</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 품사별 대표 어미 패턴</h3>
+        <table>
+          <tr><th>명사</th><td>-tion, -ness, -ment, -ity, -er/or, -ance/ence</td></tr>
+          <tr><th>형용사</th><td>-ive, -ful, -ous, -al, -ble, -ent/ant</td></tr>
+          <tr><th>부사</th><td>-ly (형용사+-ly)</td></tr>
+          <tr><th>동사</th><td>-ize, -ify, -en, -ate</td></tr>
+        </table>
+        <p style="margin-top:.75rem;font-size:.82rem;color:#86868b;">⚠️ 주의: <span class="danger">costly, friendly, lovely, timely</span> 등은 -ly로 끝나지만 <strong>형용사</strong>입니다!</p>
+      </div>`,
+    quizzes: [
+      { q: "The company's -------- to expand into new markets exceeded all expectations.", choices:["decide","decision","decisive","decisively"], ans:1, exp:"전치사 The company's 뒤, 주어 자리이므로 명사 <strong>decision</strong>이 정답. 동사 decide, 형용사 decisive, 부사 decisively는 주어 자리에 올 수 없습니다." },
+      { q: "The new software update will -------- improve processing speed.", choices:["significant","significance","significantly","signify"], ans:2, exp:"조동사 will 뒤에는 동사원형이 오지만, 이미 improve가 있으므로 빈칸은 동사를 꾸미는 <strong>부사(significantly)</strong>가 정답입니다." },
+      { q: "All -------- employees must complete the training program before starting work.", choices:["newly","new","newness","newer"], ans:1, exp:"명사 employees 앞에서 수식하는 역할은 <strong>형용사(new)</strong>가 합니다. newly hired employees라면 부사도 가능하지만 여기선 명사 바로 앞이므로 형용사입니다." },
+      { q: "Ms. Park showed great -------- in handling the difficult client.", choices:["patient","patiently","patience","patientness"], ans:2, exp:"형용사 great의 수식을 받으면서 동사 showed의 목적어 역할을 하는 <strong>명사(patience)</strong>가 정답입니다." },
+      { q: "The results of the survey were -------- encouraging.", choices:["extreme","extremity","extremely","extremeness"], ans:2, exp:"형용사 encouraging을 꾸미는 <strong>부사(extremely)</strong>가 정답입니다. 형용사를 강조하려면 부사가 필요합니다." }
+    ]
+  },
+  {
+    num: 2, title: "동사의 시제 (Tense)", sub: "현재·과거·미래·완료형 — 시간 표현 키워드로 판단",
+    color: "#ff9f0a",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 토익 시제 판단 핵심 키워드</h3>
+        <table>
+          <tr><th>시제</th><th>단서 표현</th></tr>
+          <tr><td><span class="highlight">현재</span></td><td>always, usually, often, every day/year, currently</td></tr>
+          <tr><td><span class="highlight">과거</span></td><td>yesterday, last week/year, ago, in 2020, previously</td></tr>
+          <tr><td><span class="highlight">미래</span></td><td>tomorrow, next week, soon, by + 미래날짜, will, be going to</td></tr>
+          <tr><td><span class="highlight">현재완료</span></td><td>since, for + 기간, recently, already, yet, just, so far</td></tr>
+          <tr><td><span class="highlight">과거완료</span></td><td>before/after + 과거, by the time + 과거절</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 미래 표현 완벽 정리</h3>
+        <table>
+          <tr><th>표현</th><th>뉘앙스</th><th>예</th></tr>
+          <tr><td>will</td><td>단순 미래/의지</td><td>The meeting will start at 9.</td></tr>
+          <tr><td>be going to</td><td>계획된 미래</td><td>We are going to launch next month.</td></tr>
+          <tr><td>be + -ing</td><td>확정된 미래 일정</td><td>She is leaving tomorrow.</td></tr>
+          <tr><td>be about to</td><td>막 ~하려는 참</td><td>The train is about to depart.</td></tr>
+        </table>
+        <p style="margin-top:.75rem;font-size:.82rem;color:#86868b;">⚠️ <span class="danger">시간/조건 부사절</span>에서는 미래 내용이라도 현재시제 사용! (when, if, after, before, until, as soon as + 현재시제)</p>
+      </div>`,
+    quizzes: [
+      { q: "The annual conference -------- in Chicago since it was first held in 2010.", choices:["has been held","held","will hold","is holding"], ans:0, exp:"since 2010이라는 시작점이 있고 현재까지 계속되므로 <strong>현재완료(has been held)</strong>가 정답입니다." },
+      { q: "The manager -------- to Tokyo last week to attend a trade fair.", choices:["travels","will travel","traveled","has traveled"], ans:2, exp:"last week이라는 명확한 과거 시점 표시어가 있으므로 <strong>단순 과거(traveled)</strong>가 정답입니다. 현재완료는 last week과 함께 쓸 수 없습니다." },
+      { q: "Please submit your report before the deadline --------.", choices:["arrive","arrives","will arrive","arrived"], ans:1, exp:"before는 시간 부사절 접속사이므로 미래 내용이어도 <strong>현재시제(arrives)</strong>를 씁니다. 'before the deadline arrives' = '마감일이 되기 전에'" },
+      { q: "The construction of the new bridge -------- by the end of next year.", choices:["will complete","will have been completed","has completed","completed"], ans:1, exp:"by the end of next year(미래 완료 시점)이므로 <strong>미래완료 수동태(will have been completed)</strong>가 정답입니다." }
+    ]
+  },
+  {
+    num: 3, title: "수일치 (Subject-Verb Agreement)", sub: "단수/복수 구분 — 수식어에 속지 마라",
+    color: "#ff3b30",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 핵심 원칙: 진짜 주어를 찾아라</h3>
+        <p>전치사구·관계절 등 수식어가 주어와 동사 사이에 끼어들어도 <strong>핵심 주어</strong>만 보고 수일치를 결정합니다.</p>
+        <table>
+          <tr><th>주어 유형</th><th>동사</th><th>예</th></tr>
+          <tr><td>단수명사 / 불가산명사</td><td>단수동사 (-s)</td><td>The information <span class="highlight">is</span> accurate.</td></tr>
+          <tr><td>복수명사</td><td>복수동사</td><td>The employees <span class="highlight">are</span> trained.</td></tr>
+          <tr><td>each/every + 단수명사</td><td>단수동사</td><td>Each employee <span class="highlight">has</span> a badge.</td></tr>
+          <tr><td>A and B</td><td>복수동사</td><td>Tom and Jane <span class="highlight">are</span> here.</td></tr>
+          <tr><td>either A or B / neither A nor B</td><td>B에 일치</td><td>Neither the CEO nor the managers <span class="highlight">were</span> present.</td></tr>
+          <tr><td>A as well as B / A along with B</td><td>A에 일치</td><td>The director, along with his team, <span class="highlight">is</span> attending.</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 헷갈리는 단수 취급 명사</h3>
+        <table>
+          <tr><th>표현</th><th>기억법</th></tr>
+          <tr><td>the number of + 복수명사</td><td>"수(number) 자체" → 단수 / a number of = 많은 → 복수</td></tr>
+          <tr><td>every, each, either, neither + 단수명사</td><td>항상 단수동사</td></tr>
+          <tr><td>불가산명사 (information, advice, equipment, furniture, luggage)</td><td>s 없음, 단수동사</td></tr>
+          <tr><td>동명사/to부정사 주어</td><td>단수동사</td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "The number of participants in the training session -------- increased significantly.", choices:["have","has","are","were"], ans:1, exp:"'the number of'는 '수'를 나타내는 단수 주어이므로 <strong>has</strong>가 정답. 반면 'a number of participants = 많은 참가자들'이면 복수동사를 씁니다." },
+      { q: "Neither the president nor the board members -------- willing to accept the proposal.", choices:["was","is","were","has been"], ans:2, exp:"'neither A nor B' 구조에서 동사는 B(board members = 복수)에 일치시키므로 <strong>were</strong>가 정답입니다." },
+      { q: "Each of the new products -------- been thoroughly tested before release.", choices:["have","has","were","are"], ans:1, exp:"'each of + 복수명사'는 단수 취급이므로 <strong>has</strong>가 정답입니다." }
+    ]
+  },
+  {
+    num: 4, title: "대명사 (Pronouns)", sub: "인칭/재귀/소유격 — 격(Case)을 맞춰라",
+    color: "#5e5ce6",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 대명사 격 정리표</h3>
+        <table>
+          <tr><th>인칭</th><th>주격</th><th>목적격</th><th>소유격</th><th>소유대명사</th><th>재귀대명사</th></tr>
+          <tr><td>1인칭 단수</td><td>I</td><td>me</td><td>my</td><td>mine</td><td>myself</td></tr>
+          <tr><td>2인칭</td><td>you</td><td>you</td><td>your</td><td>yours</td><td>yourself</td></tr>
+          <tr><td>3인칭 남</td><td>he</td><td>him</td><td>his</td><td>his</td><td>himself</td></tr>
+          <tr><td>3인칭 여</td><td>she</td><td>her</td><td>her</td><td>hers</td><td>herself</td></tr>
+          <tr><td>3인칭 복수</td><td>they</td><td>them</td><td>their</td><td>theirs</td><td>themselves</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 재귀대명사 용법</h3>
+        <ul>
+          <li><strong>재귀 용법</strong>: 주어 = 목적어일 때 → She injured <span class="highlight">herself</span>.</li>
+          <li><strong>강조 용법</strong>: 주어/목적어 바로 뒤 → The CEO <span class="highlight">himself</span> attended.</li>
+          <li>⚠️ 재귀대명사는 주어 자리에 올 수 없음!</li>
+        </ul>
+      </div>`,
+    quizzes: [
+      { q: "The marketing team submitted -------- report ahead of the deadline.", choices:["they","them","their","theirs"], ans:2, exp:"명사 report 앞에서 수식하는 자리이므로 소유격 <strong>their</strong>가 정답입니다." },
+      { q: "The director prepared the presentation -------- without any assistance.", choices:["her","hers","she","herself"], ans:3, exp:"주어(The director)와 동일 대상이 직접 했음을 강조하는 강조 용법의 <strong>재귀대명사(herself)</strong>가 정답입니다." },
+      { q: "The new policy will benefit all employees, including --------.", choices:["we","our","us","ours"], ans:2, exp:"전치사 including 뒤에는 목적격이 와야 하므로 <strong>us</strong>가 정답입니다." }
+    ]
+  },
+  {
+    num: 5, title: "관계사 (Relative Clauses)", sub: "who/which/that/where/when/whose — 선행사로 판단",
+    color: "#34aadc",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 관계대명사 선택 기준</h3>
+        <table>
+          <tr><th>선행사</th><th>주격</th><th>목적격</th><th>소유격</th></tr>
+          <tr><td>사람</td><td>who</td><td>whom</td><td>whose</td></tr>
+          <tr><td>사물/동물</td><td>which</td><td>which</td><td>whose/of which</td></tr>
+          <tr><td>사람+사물</td><td>that</td><td>that</td><td>—</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 관계부사 (선행사 + 전치사 대체)</h3>
+        <table>
+          <tr><th>관계부사</th><th>선행사</th><th>예문</th></tr>
+          <tr><td>where</td><td>장소</td><td>the city <span class="highlight">where</span> she was born</td></tr>
+          <tr><td>when</td><td>시간</td><td>the day <span class="highlight">when</span> we met</td></tr>
+          <tr><td>why</td><td>reason</td><td>the reason <span class="highlight">why</span> he left</td></tr>
+          <tr><td>how</td><td>the way (함께 못 씀)</td><td>the way <span class="highlight">he solved</span> it</td></tr>
+        </table>
+        <p style="margin-top:.75rem;font-size:.82rem;color:#86868b;">⚠️ <span class="danger">that</span>은 콤마 뒤(계속적 용법), 최상급, 서수 뒤에서 선호됨. <span class="danger">what</span>은 선행사 포함 = "~하는 것"</p>
+      </div>`,
+    quizzes: [
+      { q: "Employees -------- have worked here for over 10 years will receive a bonus.", choices:["which","who","whom","what"], ans:1, exp:"선행사가 사람(Employees)이고 관계절 안에서 주어 역할이므로 <strong>who</strong>가 정답입니다." },
+      { q: "The report -------- she submitted contained several errors.", choices:["who","whom","which","what"], ans:2, exp:"선행사가 사물(the report)이고 관계절 안에서 목적어 역할(she submitted ___)이므로 <strong>which</strong>가 정답입니다." },
+      { q: "This is the conference center -------- our annual meetings are held.", choices:["which","whom","when","where"], ans:3, exp:"선행사가 장소(the conference center)이므로 관계부사 <strong>where</strong>가 정답입니다." },
+      { q: "The candidate -------- résumé impressed the hiring manager was offered the job.", choices:["who","whose","whom","which"], ans:1, exp:"관계절에서 résumé를 수식하는 소유격 관계사 <strong>whose</strong>가 정답입니다. (whose résumé = his/her résumé)" }
+    ]
+  },
+  {
+    num: 6, title: "접속사 vs 전치사", sub: "although vs despite — 뒤에 절 vs 명사구 구분",
+    color: "#ff6b00",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 양보/역접 표현</h3>
+        <table>
+          <tr><th>의미</th><th>접속사 (+ 절)</th><th>전치사 (+ 명사)</th></tr>
+          <tr><td>~에도 불구하고</td><td>although, even though, though, while</td><td>despite, in spite of, notwithstanding</td></tr>
+          <tr><td>때문에</td><td>because, since, as</td><td>because of, due to, owing to, on account of</td></tr>
+          <tr><td>~하는 동안</td><td>while, as</td><td>during</td></tr>
+          <tr><td>~할 때까지</td><td>until/till</td><td>until/till</td></tr>
+          <tr><td>만약 ~라면</td><td>if, unless, provided (that)</td><td>—</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 자주 헷갈리는 짝</h3>
+        <table>
+          <tr><th>접속사</th><th>전치사</th></tr>
+          <tr><td>because <span class="highlight">+ S + V</span></td><td>because of <span class="highlight">+ 명사</span></td></tr>
+          <tr><td>although <span class="highlight">+ S + V</span></td><td>despite <span class="highlight">+ 명사/동명사</span></td></tr>
+          <tr><td>while <span class="highlight">+ S + V</span></td><td>during <span class="highlight">+ 명사</span></td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "-------- the heavy rain, the outdoor concert was not cancelled.", choices:["Although","Despite","Because","While"], ans:1, exp:"빈칸 뒤에 명사구(the heavy rain)가 왔으므로 <strong>전치사 Despite</strong>가 정답. Although는 접속사라 뒤에 절(S+V)이 와야 합니다." },
+      { q: "Sales declined -------- the marketing team's best efforts to attract new customers.", choices:["despite","although","because","while"], ans:0, exp:"뒤에 명사구(the marketing team's best efforts)가 왔으므로 전치사 <strong>despite</strong>가 정답입니다." },
+      { q: "The store stayed open -------- the holiday so that customers could shop.", choices:["during","while","although","unless"], ans:0, exp:"뒤에 명사(the holiday)가 왔으므로 전치사 <strong>during</strong>이 정답. while은 접속사라 절이 필요합니다." }
+    ]
+  },
+  {
+    num: 7, title: "준동사 (Verbals)", sub: "to부정사 / 동명사 / 분사 — 목적·역할 파악",
+    color: "#30d158",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 to부정사 vs 동명사 목적어</h3>
+        <table>
+          <tr><th>to부정사만 목적어</th><th>동명사만 목적어</th><th>둘 다 (뜻 다름)</th></tr>
+          <tr><td>want, wish, hope, need, plan, decide, offer, refuse, agree, expect, manage</td><td>enjoy, finish, avoid, suggest, consider, mind, quit, practice, keep, postpone</td><td>remember, forget, stop, try, regret</td></tr>
+        </table>
+        <p style="margin-top:.5rem;font-size:.82rem;color:#86868b;">remember to do = 잊지 않고 ~하다 / remember doing = ~했던 것을 기억하다</p>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 분사 (현재분사 vs 과거분사)</h3>
+        <table>
+          <tr><th></th><th>현재분사 (-ing)</th><th>과거분사 (-ed)</th></tr>
+          <tr><td>의미</td><td>능동 / 진행</td><td>수동 / 완료</td></tr>
+          <tr><td>명사 수식</td><td>the <span class="highlight">rising</span> costs (상승하는)</td><td>the <span class="highlight">completed</span> project (완료된)</td></tr>
+          <tr><td>감정 동사</td><td>surprising / interesting (놀라운/흥미로운)</td><td>surprised / interested (놀란/흥미를 느끼는)</td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "The company decided -------- a new branch in Singapore next year.", choices:["open","opening","to open","opened"], ans:2, exp:"decide는 to부정사를 목적어로 취하는 동사이므로 <strong>to open</strong>이 정답입니다." },
+      { q: "We suggest -------- the contract before signing it.", choices:["review","to review","reviewed","reviewing"], ans:3, exp:"suggest는 동명사를 목적어로 취하는 동사이므로 <strong>reviewing</strong>이 정답입니다." },
+      { q: "The -------- employee received a promotion after just six months.", choices:["dedicating","dedicated","dedication","dedicates"], ans:1, exp:"명사 employee를 수식하면서 수동의 의미(헌신된)를 나타내야 하므로 <strong>과거분사 dedicated</strong>가 정답입니다." }
+    ]
+  },
+  {
+    num: 8, title: "비교 표현 (Comparison)", sub: "원급·비교급·최상급 — as...as / -er than",
+    color: "#bf5af2",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 비교 구문 핵심 정리</h3>
+        <table>
+          <tr><th>구문</th><th>형태</th><th>예</th></tr>
+          <tr><td>원급 비교</td><td>as + 형/부 원급 + as</td><td>as fast <span class="highlight">as</span> possible</td></tr>
+          <tr><td>비교급</td><td>형/부 + -er + than / more + 형/부 + than</td><td>more efficient <span class="highlight">than</span></td></tr>
+          <tr><td>최상급</td><td>the + 형/부 + -est / the most + 형/부</td><td>the <span class="highlight">most</span> popular</td></tr>
+          <tr><td>비교급 강조</td><td>much / far / even / still / a lot + 비교급</td><td><span class="highlight">much</span> better</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 혼동하기 쉬운 비교 표현</h3>
+        <table>
+          <tr><th>표현</th><th>의미</th></tr>
+          <tr><td>no later than</td><td>늦어도 ~까지는</td></tr>
+          <tr><td>no longer</td><td>더 이상 ~않다</td></tr>
+          <tr><td>no more than</td><td>겨우, 단지 (= only)</td></tr>
+          <tr><td>not more than</td><td>최대 ~만큼 (= at most)</td></tr>
+          <tr><td>the + 비교급, the + 비교급</td><td>~할수록 더 ~하다</td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "The new model is -------- more fuel-efficient than its predecessor.", choices:["very","so","much","too"], ans:2, exp:"비교급(more fuel-efficient)을 강조하는 부사는 <strong>much</strong>(= far, even, still)입니다. very는 원급, so는 원급 강조에 씁니다." },
+      { q: "Please submit your application -------- than Friday.", choices:["no later","not latest","no late","not later"], ans:0, exp:"'늦어도 금요일까지'라는 의미는 <strong>no later than</strong>입니다. 고정 표현으로 암기하세요." }
+    ]
+  },
+  {
+    num: 9, title: "전치사 (Prepositions)", sub: "시간·장소·방법 전치사 완벽 정리",
+    color: "#ff2d55",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 시간 전치사</h3>
+        <table>
+          <tr><th>전치사</th><th>용법</th><th>예</th></tr>
+          <tr><td><span class="highlight">at</span></td><td>정확한 시각, 시점</td><td>at 9 a.m., at noon, at the end of</td></tr>
+          <tr><td><span class="highlight">on</span></td><td>날짜, 요일</td><td>on Monday, on July 4th</td></tr>
+          <tr><td><span class="highlight">in</span></td><td>월, 연도, 계절, 긴 기간</td><td>in July, in 2024, in the morning</td></tr>
+          <tr><td><span class="highlight">by</span></td><td>~까지 (기한)</td><td>by Friday, by the end of the month</td></tr>
+          <tr><td><span class="highlight">until/till</span></td><td>~까지 (계속)</td><td>open until 9 p.m.</td></tr>
+          <tr><td><span class="highlight">within</span></td><td>~이내에</td><td>within 3 days</td></tr>
+          <tr><td><span class="highlight">for</span></td><td>기간 (얼마 동안)</td><td>for two weeks</td></tr>
+          <tr><td><span class="highlight">during</span></td><td>기간 (특정 기간 중)</td><td>during the conference</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 자주 출제되는 전치사 표현</h3>
+        <table>
+          <tr><th>전치사</th><th>핵심 표현</th></tr>
+          <tr><td>by</td><td>by hand (수동으로), by mistake (실수로), by + 교통수단</td></tr>
+          <tr><td>in</td><td>in writing (서면으로), in advance (미리), be interested in</td></tr>
+          <tr><td>on</td><td>on behalf of (~을 대신하여), on time (정시에), on a budget</td></tr>
+          <tr><td>for</td><td>be responsible for, apply for, account for</td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "The shipment must arrive -------- Friday at the latest.", choices:["until","by","on","at"], ans:1, exp:"'늦어도 금요일까지는(기한)'의 의미이므로 기한을 나타내는 <strong>by</strong>가 정답입니다. until은 계속의 의미('금요일까지 계속')입니다." },
+      { q: "The store will remain open -------- the holiday season for extended hours.", choices:["by","during","for","at"], ans:1, exp:"'휴가 시즌 동안'에서 특정 기간을 나타내므로 <strong>during</strong>이 정답입니다. for 뒤에는 기간의 길이(for 3 days)가 옵니다." },
+      { q: "Please respond to this e-mail -------- two business days.", choices:["during","by","within","until"], ans:2, exp:"'2 영업일 이내에'라는 기간 내 완료를 나타내므로 <strong>within</strong>이 정답입니다." }
+    ]
+  },
+  {
+    num: 10, title: "혼동 어휘 (Confusing Vocabulary)", sub: "토익 단골 혼동어 · 동사+전치사 콜로케이션",
+    color: "#64d2ff",
+    theory: `
+      <div class="theory-card">
+        <h3>📌 토익 핵심 혼동어 쌍</h3>
+        <table>
+          <tr><th>단어 쌍</th><th>의미 차이</th></tr>
+          <tr><td>affect (동) / effect (명)</td><td>affect = ~에 영향을 미치다 / effect = 영향, 효과</td></tr>
+          <tr><td>rise (자) / raise (타)</td><td>rise = 오르다 / raise = 올리다 (목적어 필요)</td></tr>
+          <tr><td>most / almost</td><td>most + 명사 / almost + 형용사·부사·동사</td></tr>
+          <tr><td>few / a few</td><td>few = 거의 없다(부정) / a few = 약간 있다(긍정)</td></tr>
+          <tr><td>little / a little</td><td>little = 거의 없다 / a little = 약간</td></tr>
+          <tr><td>other / another / others</td><td>other+복수명사 / another+단수명사 / others (대명사)</td></tr>
+          <tr><td>beside / besides</td><td>beside = ~옆에 / besides = ~외에도</td></tr>
+          <tr><td>respectively / respectfully / respectably</td><td>각각 / 정중하게 / 훌륭하게</td></tr>
+        </table>
+      </div>
+      <div class="theory-card">
+        <h3>🔑 핵심 동사 콜로케이션</h3>
+        <table>
+          <tr><th>동사</th><th>올바른 전치사</th><th>예</th></tr>
+          <tr><td>comply</td><td>with</td><td>comply with regulations</td></tr>
+          <tr><td>specialize</td><td>in</td><td>specialize in finance</td></tr>
+          <tr><td>result</td><td>in / from</td><td>result in failure / result from negligence</td></tr>
+          <tr><td>apply</td><td>for / to</td><td>apply for a job / apply to a company</td></tr>
+          <tr><td>differ</td><td>from</td><td>differ from the original</td></tr>
+          <tr><td>consist</td><td>of</td><td>consist of five members</td></tr>
+        </table>
+      </div>`,
+    quizzes: [
+      { q: "The new regulation will significantly -------- how companies report their earnings.", choices:["effect","affect","effective","affection"], ans:1, exp:"'영향을 미치다'는 동사 <strong>affect</strong>가 정답. effect는 명사(영향)이며 동사로 쓰면 '초래하다'이지만 문맥상 affect가 적합합니다." },
+      { q: "-------- all the candidates were qualified, only three were selected for the final interview.", choices:["Most of","Almost","Most","Almost all"], ans:3, exp:"<strong>Almost all</strong>(= 거의 모든)이 정답. 'Almost' 단독으로는 명사를 수식할 수 없고, 'Most all'도 잘못된 표현입니다." },
+      { q: "All employees must -------- the company's code of conduct.", choices:["comply","comply with","comply to","complying"], ans:1, exp:"comply는 반드시 전치사 <strong>with</strong>와 함께 씁니다. 'comply with' = '~을 준수하다'" }
+    ]
+  }
+];
+
+function renderChapters() {
+  const list = document.getElementById('chapter-list');
+  list.innerHTML = CHAPTERS.map((ch, ci) => `
+    <div class="chapter-item" id="ch-${ci}">
+      <div class="chapter-header" onclick="toggleChapter(${ci})">
+        <div class="chapter-num" style="background:${ch.color}">${ch.num}</div>
+        <div class="chapter-info">
+          <h2>${ch.title}</h2>
+          <p>${ch.sub}</p>
+        </div>
+        <span class="chapter-arrow">▼</span>
+      </div>
+      <div class="chapter-body">
+        ${ch.theory}
+        <div class="quiz-section">
+          <h3>✏️ 실전 문제 (${ch.quizzes.length}문제)</h3>
+          ${ch.quizzes.map((q, qi) => renderQuiz(q, ci, qi)).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderQuiz(q, ci, qi) {
+  const labels = ['A','B','C','D'];
+  const choices = q.choices.map((c, i) => `
+    <button class="q-btn" id="qbtn-${ci}-${qi}-${i}" onclick="answerQ(${ci},${qi},${i},${q.ans})">
+      <span class="q-lbl">${labels[i]}</span>${c}
+    </button>`).join('');
+  return `
+    <div class="q-item" id="qitem-${ci}-${qi}">
+      <div class="q-text">Q${qi+1}. ${q.q.replace(/--------/g, '<span class="blank">___</span>')}</div>
+      <div class="q-choices">${choices}</div>
+      <div class="q-exp" id="qexp-${ci}-${qi}">
+        ${q.exp}
+        <div class="q-answer">✅ 정답: (${labels[q.ans]}) ${q.choices[q.ans]}</div>
+      </div>
+    </div>`;
+}
+
+function toggleChapter(ci) {
+  const item = document.getElementById('ch-' + ci);
+  item.classList.toggle('open');
+}
+
+function answerQ(ci, qi, chosen, correct) {
+  const btns = document.querySelectorAll(`[id^="qbtn-${ci}-${qi}-"]`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen && chosen !== correct) btn.classList.add('wrong');
+  });
+  document.getElementById(`qexp-${ci}-${qi}`).classList.add('show');
+}
+
+window.toggleChapter = toggleChapter;
+window.answerQ = answerQ;
+
+renderChapters();
+</script>
+</body>
+</html>
