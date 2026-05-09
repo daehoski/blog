@@ -2,11 +2,8 @@
 import BaseHead from '../../../components/BaseHead.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
-import LoginBenefitCard from '../../../components/LoginBenefitCard.astro';
 import { allJipQuizData } from '../../../data/jip-quiz-data.js';
-import '../../../styles/quiz.css';
 
-// Slug Map is simplified for JIP since we don't need obscuring yet, but keeping structure for future
 export function getStaticPaths() {
   return Object.keys(allJipQuizData).map(range => ({
     params: { slug: range }
@@ -19,300 +16,497 @@ const quizData = allJipQuizData[range] || [];
 
 const getDisplayRange = (r) => {
   if (r.includes('년') && r.includes('회')) {
-      return r.replace('년', '년 ').replace('회', '회 기출문제');
+    return r.replace('년', '년 ').replace('회', '회 기출문제');
   }
   return r;
 };
 
-const title = `정보처리 산업기사 실전 대비 (${getDisplayRange(range)})`;
+const title = `정보처리 산업기사 (${getDisplayRange(range)})`;
 const description = `정보처리 산업기사 ${getDisplayRange(range)}를 실전처럼 풀어보고 오답 노트를 확인하세요.`;
-
-// 전체 퀴즈 목록 (네비게이션용)
 const allRanges = Object.keys(allJipQuizData).sort((a, b) => b.localeCompare(a));
 ---
 
 <!doctype html>
 <html lang="ko">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<div class="quiz-container">
-				<nav class="quiz-top-nav">
-					<a href="/engineer/" id="back-to-list" class="back-link">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<polyline points="15 18 9 12 15 6"></polyline>
-						</svg>
-						목록으로
-					</a>
-				</nav>
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-g: linear-gradient(135deg, #6366f1, #8b5cf6);
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f1f5f9;
+        --card: #ffffff;
+        --text: #1e293b;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --radius: 16px;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, sans-serif;
+      }
 
-				<header id="main-quiz-header" class="mobile-hidden" style="text-align: center; margin-bottom: 2rem;">
-					<h1 style="font-size: 1.7rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing: -0.04em;">{title}</h1>
-					<p style="color: #86868b; font-size: 0.95rem; font-weight: 500;">기출문제를 풀고 실력을 점검해 보세요.</p>
-                    <div id="user-greeting" class="hidden" style="margin-top: 1.5rem; font-size: 0.95rem; color: #1d1d1f; font-weight: 600;">
-                        안녕하세요, <span id="user-name"></span>님! 📚
-                    </div>
-				</header>
+      /* ── Progress Bar ── */
+      #prog-bar-wrap {
+        position: sticky; top: 0; z-index: 200;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.7rem 1.5rem;
+        display: flex; align-items: center; gap: 1rem;
+      }
+      #prog-track {
+        flex: 1; height: 8px; background: var(--border);
+        border-radius: 99px; overflow: hidden;
+      }
+      #prog-fill {
+        height: 100%;
+        background: var(--primary-g);
+        border-radius: 99px;
+        width: 0%; transition: width 0.4s ease;
+      }
+      #prog-label { font-size: 0.8rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
 
-				{quizData.length > 0 ? (
-                    <div id="quiz-wrapper">
-                        <form id="quiz-form">
-                            {quizData.map((quiz, index) => (
-                                <article class="quiz-card" id={`quiz-${quiz.id}`} data-answer={JSON.stringify(quiz.answer)}>
-                                    <div class="quiz-question-header">
-                                        <span class="quiz-badge">Q{quiz.id}</span>
-                                        <h2 class="quiz-question-text">{quiz.question}</h2>
-                                    </div>
-                                    {quiz.image && (
-                                        <div class="quiz-image-container" style="margin-top: 1rem; margin-bottom: 1.5rem; text-align: center;">
-                                            <img src={quiz.image} alt="문제 참조 이미지" style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 2px 12px rgba(0,0,0,0.05);" />
-                                        </div>
-                                    )}
+      /* ── Layout ── */
+      .qwrap { max-width: 780px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+      .back-link {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        color: var(--muted); text-decoration: none;
+        font-size: 0.85rem; font-weight: 600; margin-bottom: 1.25rem;
+        transition: color 0.2s;
+      }
+      .back-link:hover { color: var(--primary); }
+      .qheader { text-align: center; margin-bottom: 2rem; }
+      .qheader h1 {
+        font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em;
+        background: var(--primary-g);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .qheader p { font-size: 0.88rem; color: var(--muted); margin-top: 0.4rem; }
 
-                                    <div class="quiz-options">
-                                        {quiz.options.map((option, optIndex) => (
-                                            <label class="quiz-option" for={`q${quiz.id}-opt${optIndex}`}>
-                                                <input 
-                                                    type={Array.isArray(quiz.answer) ? "checkbox" : "radio"} 
-                                                    name={`q${quiz.id}`} 
-                                                    id={`q${quiz.id}-opt${optIndex}`} 
-                                                    value={optIndex}
-                                                />
-                                                <span class="quiz-option-text">{option}</span>
-                                            </label>
-                                        ))}
-                                    </div>
+      /* ── Card ── */
+      .qcard {
+        background: var(--card);
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        padding: 1.75rem;
+        margin-bottom: 1.25rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+      .qcard.state-correct { border-color: var(--success); box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+      .qcard.state-wrong   { border-color: var(--danger);  box-shadow: 0 0 0 3px rgba(239,68,68,0.12); }
 
-                                    <button type="button" class="quiz-btn grade-btn" data-quiz-id={quiz.id}>
-                                        정답 확인 및 해설
-                                    </button>
+      .qcard-top { display: flex; align-items: flex-start; gap: 0.85rem; margin-bottom: 1.35rem; }
+      .qbadge {
+        flex-shrink: 0;
+        background: var(--primary-g); color: white;
+        font-size: 0.72rem; font-weight: 800;
+        border-radius: 7px; padding: 0.3rem 0.6rem; letter-spacing: 0.02em;
+      }
+      .qtext { font-size: 0.97rem; font-weight: 600; line-height: 1.7; white-space: pre-wrap; }
+      .qimg {
+        width: 100%; max-height: 370px; object-fit: contain;
+        border-radius: 10px; border: 1px solid var(--border);
+        margin-bottom: 1.2rem; background: #f8fafc;
+      }
 
-                                    <div class="quiz-result-area hidden" id={`result-${quiz.id}`}>
-                                        <div class="quiz-explanation">
-                                            <div class="quiz-explanation-title">
-                                                <span>📖 해설</span>
-                                            </div>
-                                            <p class="explanation-text">{quiz.explanation}</p>
-                                        </div>
-                                    </div>
-                                </article>
-                            ))}
-                        </form>
-                    </div>
-                ) : (
-                    <div style="text-align: center; padding: 4rem; background: white; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.04);">
-                        <p style="font-size: 1.25rem; color: #666;">데이터를 준비 중입니다. 잠시만 기다려 주세요! 🚧</p>
-                    </div>
-                )}
+      /* ── Options ── */
+      .opts { display: flex; flex-direction: column; gap: 0.55rem; }
+      .opt {
+        display: flex; align-items: center; gap: 0.85rem;
+        padding: 0.85rem 1rem;
+        border: 1.5px solid var(--border);
+        border-radius: 10px; cursor: pointer;
+        font-size: 0.93rem; font-weight: 500; color: var(--text);
+        transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        position: relative;
+      }
+      .opt:hover { background: #f0f0ff; border-color: var(--primary); transform: translateX(2px); }
+      .opt.sel   { background: #ede9fe; border-color: var(--primary); }
+      .opt.corr  { background: #d1fae5; border-color: var(--success); color: #065f46; }
+      .opt.wrng  { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+      .opt.lock  { cursor: default; transform: none !important; }
 
-				<div class="quiz-summary-card">
-					<button id="show-summary-btn" class="quiz-btn summary-card-btn">
-						최종 결과 및 오답 노트 보기
-					</button>
+      /* Hidden real radio */
+      .opt input[type="radio"] {
+        position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;
+      }
 
-					<div id="summary-result" class="hidden">
-						<div class="quiz-score-circle">
-							<span id="final-score">0</span>
-							<span class="quiz-score-text">/ {quizData.length}</span>
-						</div>
-						<p id="score-message" style="font-weight: 700; font-size: 1.1rem; margin-bottom: 2rem;"></p>
-						
-						<div class="quiz-wrong-review" id="wrong-answer-note">
-							<h3 style="border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-bottom: 1rem;">📝 오답 노트</h3>
-							<div id="wrong-list-container"></div>
-						</div>
+      .opt-idx {
+        flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px;
+        background: #f1f5f9; color: var(--muted);
+        font-size: 0.73rem; font-weight: 800;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.15s, color 0.15s;
+      }
+      .opt.sel  .opt-idx { background: var(--primary); color: white; }
+      .opt.corr .opt-idx { background: var(--success); color: white; }
+      .opt.wrng .opt-idx { background: var(--danger);  color: white; }
 
-                        <LoginBenefitCard />
-					</div>
-				</div>
+      /* ── Grade Button ── */
+      .grade-btn {
+        margin-top: 1.2rem; width: 100%; padding: 0.9rem;
+        background: var(--primary-g); color: white;
+        border: none; border-radius: 10px;
+        font-size: 0.95rem; font-weight: 700; cursor: pointer;
+        transition: opacity 0.2s, transform 0.1s;
+        letter-spacing: 0.01em;
+      }
+      .grade-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+      .grade-btn:disabled { cursor: default; opacity: 0.85; }
+      .grade-btn.btn-corr { background: linear-gradient(135deg, #10b981, #059669); }
+      .grade-btn.btn-wrng { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
-				<div class="quiz-nav-section" style="margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid #e5e7eb;">
-					<h3 style="margin-bottom: 1rem; text-align: center; font-size: 1rem; color: #374151;">🎯 다른 회차 풀어보기</h3>
-					<div class="quiz-nav-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem;">
-						{allRanges.map((r) => (
-							<a 
-								href={`/engineer/quiz/${r}/`} 
-								class={`quiz-nav-item ${r === range ? 'active' : ''}`}
-								style={`
-									display: block;
-									padding: 0.6rem;
-									text-align: center;
-									background: ${r === range ? '#2563eb' : 'white'};
-									color: ${r === range ? 'white' : '#4b5563'};
-									border: 1px solid ${r === range ? '#2563eb' : '#e5e7eb'};
-									border-radius: 6px;
-									text-decoration: none;
-									font-size: 0.85rem;
-									font-weight: 500;
-									transition: all 0.2s;
-								`}
-							>
-								{getDisplayRange(r)}
-							</a>
-						))}
-					</div>
-				</div>
-			</div>
+      /* ── Explanation ── */
+      .exp-box {
+        margin-top: 1rem;
+        background: #f8faff; border-left: 3px solid var(--primary);
+        border-radius: 0 10px 10px 0; padding: 1rem 1.25rem;
+        font-size: 0.875rem; color: #334155; line-height: 1.75;
+        animation: fadeSlide 0.3s ease;
+      }
+      .exp-box strong { color: var(--primary); }
+      @keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: none; }
+      }
 
-            <div id="exit-modal" class="modal-overlay hidden">
-                <div class="modal-content glass">
-                    <h3>퀴즈를 중단하시겠습니까?</h3>
-                    <p>지금까지의 진행 상황이 저장되지 않을 수 있습니다.</p>
-                    <div class="modal-buttons">
-                        <button id="modal-continue" class="modal-btn secondary">계속 풀기</button>
-                        <button id="modal-exit" class="modal-btn primary">나가기</button>
-                    </div>
+      /* ── Summary ── */
+      .summary-card {
+        background: var(--card); border-radius: var(--radius);
+        border: 1.5px solid var(--border); padding: 2rem;
+        margin-top: 2rem; text-align: center;
+      }
+      #show-summary-btn {
+        width: 100%; padding: 1rem;
+        background: #1e293b; color: white;
+        border: none; border-radius: 12px;
+        font-size: 1rem; font-weight: 700; cursor: pointer;
+        transition: background 0.2s;
+      }
+      #show-summary-btn:hover { background: #0f172a; }
+      .score-circle {
+        width: 120px; height: 120px; border-radius: 50%;
+        background: var(--primary-g); color: white;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        margin: 1.5rem auto;
+        box-shadow: 0 8px 32px rgba(99,102,241,0.35);
+      }
+      #final-score { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+      .score-total { font-size: 0.8rem; font-weight: 600; opacity: 0.85; }
+      #score-msg   { font-weight: 700; font-size: 1rem; margin-bottom: 1.5rem; }
+
+      .wrong-note h3 {
+        text-align: left; font-size: 1rem; font-weight: 800;
+        border-bottom: 2px solid var(--border); padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .witem {
+        background: #fff5f5; border-left: 4px solid var(--danger);
+        border-radius: 0 10px 10px 0; padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem; font-size: 0.875rem; line-height: 1.6; text-align: left;
+      }
+      .wq { font-weight: 700; margin-bottom: 0.3rem; }
+      .wa { color: var(--danger); font-weight: 600; margin-bottom: 0.3rem; }
+      .we { color: #475569; }
+
+      /* ── Nav ── */
+      .nav-sec { margin-top: 2.5rem; }
+      .nav-sec h3 { text-align: center; font-size: 0.9rem; font-weight: 700; color: var(--muted); margin-bottom: 1rem; }
+      .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
+      .nav-item {
+        display: block; padding: 0.65rem 0.5rem; text-align: center;
+        background: var(--card); border: 1.5px solid var(--border);
+        border-radius: 10px; text-decoration: none;
+        font-size: 0.78rem; font-weight: 600; color: var(--muted);
+        transition: all 0.2s;
+      }
+      .nav-item:hover { border-color: var(--primary); color: var(--primary); background: #f0f0ff; }
+      .nav-item.act   { background: var(--primary); border-color: var(--primary); color: white; }
+
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <Header />
+
+    <!-- Sticky Progress Bar -->
+    <div id="prog-bar-wrap">
+      <div id="prog-track"><div id="prog-fill"></div></div>
+      <span id="prog-label">0 / {quizData.length}</span>
+    </div>
+
+    <main>
+      <div class="qwrap">
+        <a href="/engineer/" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          목록으로
+        </a>
+
+        <header class="qheader">
+          <h1>🎯 {getDisplayRange(range)}</h1>
+          <p>정보처리 산업기사 실전 모의고사 · 총 {quizData.length}문항</p>
+        </header>
+
+        {quizData.length > 0 ? (
+          <div id="quiz-list">
+            {quizData.map((quiz) => (
+              <article class="qcard" id={`qcard-${quiz.id}`}>
+                <div class="qcard-top">
+                  <span class="qbadge">Q{quiz.id}</span>
+                  <p class="qtext">{quiz.question}</p>
                 </div>
+
+                {quiz.image && <img src={quiz.image} alt="문제 이미지" class="qimg" />}
+
+                <div class="opts" id={`opts-${quiz.id}`}>
+                  {quiz.options.map((opt, idx) => (
+                    <div
+                      class="opt"
+                      id={`opt-${quiz.id}-${idx}`}
+                      data-qid={String(quiz.id)}
+                      data-idx={String(idx)}
+                      role="radio"
+                      aria-checked="false"
+                      tabindex="0"
+                    >
+                      <input type="radio" name={`q${quiz.id}`} value={String(idx)} id={`inp-${quiz.id}-${idx}`} />
+                      <span class="opt-idx">{String.fromCharCode(65 + idx)}</span>
+                      <span>{opt}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  class="grade-btn"
+                  id={`gbtn-${quiz.id}`}
+                  data-qid={String(quiz.id)}
+                  data-answer={JSON.stringify(quiz.answer)}
+                  type="button"
+                >
+                  정답 확인 및 해설 보기
+                </button>
+
+                <div class="exp-box hidden" id={`exp-${quiz.id}`}>
+                  <strong>📖 해설</strong><br />
+                  {quiz.explanation || '해설이 준비되지 않았습니다.'}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div style="text-align:center;padding:4rem;background:white;border-radius:16px;">
+            <p style="font-size:1.1rem;color:#64748b;">⏳ 데이터를 준비 중입니다. 잠시 후 새로고침 해주세요!</p>
+          </div>
+        )}
+
+        <!-- Summary -->
+        <div class="summary-card">
+          <button id="show-summary-btn" type="button">📊 최종 결과 및 오답 노트 보기</button>
+          <div id="summary-result" class="hidden">
+            <div class="score-circle">
+              <span id="final-score">0</span>
+              <span class="score-total">/ {quizData.length}</span>
             </div>
+            <p id="score-msg"></p>
+            <div class="wrong-note">
+              <h3>📝 오답 노트</h3>
+              <div id="wrong-list"></div>
+            </div>
+          </div>
+        </div>
 
-            <div id="quiz-data-store" data-quiz={JSON.stringify(quizData)} class="hidden"></div>
-		</main>
-		<Footer />
+        <!-- Nav -->
+        <nav class="nav-sec">
+          <h3>🗂 다른 회차 풀어보기</h3>
+          <div class="nav-grid">
+            {allRanges.map((r) => (
+              <a href={`/engineer/quiz/${r}/`} class={`nav-item ${r === range ? 'act' : ''}`}>
+                {getDisplayRange(r)}
+              </a>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </main>
 
-		<script>
-            import { supabase } from '../../../lib/supabase.js';
+    <Footer />
 
-			document.addEventListener('DOMContentLoaded', async () => {
-                let currentUser = null;
-                if (supabase) {
-                    const { data: { session } } = await supabase.auth.getSession();
-                    if (session) {
-                        currentUser = session.user;
-                        const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
-                        document.getElementById('user-name').textContent = name;
-                        document.getElementById('user-greeting').classList.remove('hidden');
-                    }
-                }
+    <!-- Quiz Data Store (separate script tag, not module) -->
+    <script id="qdata" type="application/json" set:html={JSON.stringify(quizData)}></script>
 
-				const gradeBtns = document.querySelectorAll('.grade-btn');
-				const showSummaryBtn = document.getElementById('show-summary-btn');
-				const summaryResult = document.getElementById('summary-result');
-				const finalScoreSpan = document.getElementById('final-score');
-				const wrongListContainer = document.getElementById('wrong-list-container');
-				const scoreMessage = document.getElementById('score-message');
-                const quizDataElement = document.getElementById('quiz-data-store');
-                const rawQuizData = quizDataElement ? quizDataElement.getAttribute('data-quiz') : '[]';
-                const quizData = JSON.parse(rawQuizData);
+    <script>
+    (function() {
+      'use strict';
 
-				let score = 0;
-				let wrongAnswers = [];
+      // ── Parse data ──────────────────────────────────────────────────────
+      var rawEl = document.getElementById('qdata');
+      var allQ = rawEl ? JSON.parse(rawEl.textContent || '[]') : [];
+      var total = allQ.length;
+      var score = 0;
+      var gradedCount = 0;
+      var wrongIds = [];
 
-				gradeBtns.forEach(btn => {
-					btn.addEventListener('click', (e) => {
-						const quizId = parseInt(e.target.getAttribute('data-quiz-id'));
-						const quizCard = document.getElementById(`quiz-${quizId}`);
-						const rawAnswer = quizCard.getAttribute('data-answer');
-						let correctAnswers = JSON.parse(rawAnswer);
-						
-						if (!Array.isArray(correctAnswers)) correctAnswers = [correctAnswers];
+      // ── Progress ────────────────────────────────────────────────────────
+      var progFill = document.getElementById('prog-fill');
+      var progLabel = document.getElementById('prog-label');
+      function updateProg() {
+        var pct = total > 0 ? (gradedCount / total * 100) : 0;
+        progFill.style.width = pct + '%';
+        progLabel.textContent = gradedCount + ' / ' + total;
+      }
+      updateProg();
 
-						const inputs = quizCard.querySelectorAll(`input[name="q${quizId}"]`);
-						const selectedVals = Array.from(inputs).filter(i => i.checked).map(i => parseInt(i.value));
+      // ── Option selection ─────────────────────────────────────────────────
+      // Using event delegation on the whole quiz list — most reliable approach
+      var quizList = document.getElementById('quiz-list');
+      if (quizList) {
+        quizList.addEventListener('click', function(e) {
+          // Find if we clicked inside an .opt div
+          var optEl = e.target.closest('.opt');
+          if (!optEl) return;
+          if (optEl.classList.contains('lock')) return; // already graded
 
-						if (selectedVals.length === 0) {
-							alert("정답을 선택해주세요.");
-							return;
-						}
+          var qid = optEl.getAttribute('data-qid');
+          var idx = optEl.getAttribute('data-idx');
 
-						const isCorrect = correctAnswers.every(v => selectedVals.includes(v)) && correctAnswers.length === selectedVals.length;
+          // Deselect all options for this question
+          var allOpts = document.querySelectorAll('.opt[data-qid="' + qid + '"]');
+          allOpts.forEach(function(o) {
+            o.classList.remove('sel');
+            o.setAttribute('aria-checked', 'false');
+            // uncheck radio
+            var inp = o.querySelector('input[type="radio"]');
+            if (inp) inp.checked = false;
+          });
 
-						inputs.forEach((input, idx) => {
-							input.disabled = true;
-							const label = input.closest('label');
-							if (correctAnswers.includes(idx)) {
-								label.classList.add('correct');
-							} else if (input.checked && !correctAnswers.includes(idx)) {
-								label.classList.add('wrong');
-							}
-						});
+          // Select this one
+          optEl.classList.add('sel');
+          optEl.setAttribute('aria-checked', 'true');
+          var thisInp = optEl.querySelector('input[type="radio"]');
+          if (thisInp) thisInp.checked = true;
+        });
+      }
 
-						if (isCorrect) {
-							score++;
-							e.target.textContent = "정답입니다! 🎉";
-							e.target.style.backgroundColor = "#22c55e";
-						} else {
-							e.target.textContent = "오답입니다.";
-							e.target.style.backgroundColor = "#ef4444";
-							wrongAnswers.push(quizId);
-						}
+      // ── Grade buttons via event delegation ───────────────────────────────
+      if (quizList) {
+        quizList.addEventListener('click', function(e) {
+          var btn = e.target.closest('.grade-btn');
+          if (!btn) return;
+          if (btn.disabled) return;
 
-						document.getElementById(`result-${quizId}`).classList.remove('hidden');
-						e.target.disabled = true;
-					});
-				});
+          var qid = btn.getAttribute('data-qid');
+          var rawAnswer = btn.getAttribute('data-answer');
+          var correctAnswers = JSON.parse(rawAnswer);
+          if (!Array.isArray(correctAnswers)) correctAnswers = [correctAnswers];
 
-				showSummaryBtn.addEventListener('click', () => {
-					summaryResult.classList.remove('hidden');
-					finalScoreSpan.textContent = score;
-					showSummaryBtn.style.display = 'none';
+          // Check selection
+          var selectedOpt = document.querySelector('.opt.sel[data-qid="' + qid + '"]');
+          if (!selectedOpt) {
+            // Wiggle feedback
+            btn.textContent = '⚠️ 먼저 정답을 선택해주세요!';
+            btn.style.background = '#f59e0b';
+            setTimeout(function() {
+              btn.textContent = '정답 확인 및 해설 보기';
+              btn.style.background = '';
+            }, 1500);
+            return;
+          }
 
-					const ratio = score / quizData.length;
-					if (ratio === 1) scoreMessage.textContent = "완벽합니다! 백점 만점! 🏆";
-					else if (ratio >= 0.8) scoreMessage.textContent = "훌륭합니다! 조금만 더 다듬으면 완벽해요. 👍";
-					else if (ratio >= 0.5) scoreMessage.textContent = "절반 이상 맞추셨군요! 오답 노트를 확인해 보세요. 😊";
-					else scoreMessage.textContent = "오답 노트를 통해 다시 한번 복습해 봅시다! 💪";
+          var selectedIdx = parseInt(selectedOpt.getAttribute('data-idx'), 10);
+          var isCorrect = correctAnswers.length === 1 && correctAnswers[0] === selectedIdx;
 
-					if (wrongAnswers.length > 0) {
-						let wrongHtml = '';
-						wrongAnswers.forEach(id => {
-							const q = quizData.find(x => x.id === id);
-							if (q) {
-								let correctText = Array.isArray(q.answer) 
-									? q.answer.map(a => q.options[a]).join(', ')
-									: q.options[q.answer];
+          // Lock & color all options
+          var allOpts = document.querySelectorAll('.opt[data-qid="' + qid + '"]');
+          allOpts.forEach(function(o) {
+            var oIdx = parseInt(o.getAttribute('data-idx'), 10);
+            o.classList.add('lock');
+            o.classList.remove('sel');
+            var inp = o.querySelector('input[type="radio"]');
+            if (inp) inp.disabled = true;
 
-								wrongHtml += `
-									<div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; margin-bottom: 1rem; border-radius: 0 8px 8px 0;">
-										<p style="font-weight: bold; margin-bottom: 0.5rem; font-size: 0.95rem;">Q${q.id}. ${q.question}</p>
-										<p style="color: #ef4444; font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>정답:</strong> ${correctText}</p>
-										<p style="color: #4b5563; font-size: 0.85rem; line-height: 1.5;"><strong>해설:</strong> ${q.explanation}</p>
-									</div>
-								`;
-							}
-						});
-						wrongListContainer.innerHTML = wrongHtml;
-					} else {
-						wrongListContainer.innerHTML = '<p style="color: #10b981; font-weight: bold;">틀린 문제가 없습니다! 완벽해요 🎉</p>';
-					}
-                    
-                    window.scrollTo({
-                        top: summaryResult.offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-				});
+            if (correctAnswers.indexOf(oIdx) !== -1) {
+              o.classList.add('corr');
+            } else if (oIdx === selectedIdx) {
+              o.classList.add('wrng');
+            }
+          });
 
-                // Exit Modal Logic
-                const backBtn = document.getElementById('back-to-list');
-                const modal = document.getElementById('exit-modal');
-                const btnContinue = document.getElementById('modal-continue');
-                const btnExit = document.getElementById('modal-exit');
-                let isLeavingIntentionally = false;
+          // Update button
+          if (isCorrect) {
+            btn.textContent = '✅ 정답입니다!';
+            btn.classList.add('btn-corr');
+            score++;
+            document.getElementById('qcard-' + qid).classList.add('state-correct');
+          } else {
+            var correctText = correctAnswers.map(function(a) {
+              var q = allQ.find(function(x) { return x.id === parseInt(qid, 10); });
+              return q ? (String.fromCharCode(65 + a) + '. ' + q.options[a]) : '';
+            }).join(', ');
+            btn.textContent = '❌ 오답 — 정답: ' + correctText;
+            btn.classList.add('btn-wrng');
+            wrongIds.push(parseInt(qid, 10));
+            document.getElementById('qcard-' + qid).classList.add('state-wrong');
+          }
+          btn.disabled = true;
 
-                backBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    modal.classList.remove('hidden');
-                });
+          // Show explanation
+          var expBox = document.getElementById('exp-' + qid);
+          if (expBox) expBox.classList.remove('hidden');
 
-                btnContinue.addEventListener('click', () => {
-                    modal.classList.add('hidden');
-                });
+          gradedCount++;
+          updateProg();
+        });
+      }
 
-                btnExit.addEventListener('click', () => {
-                    isLeavingIntentionally = true;
-                    window.location.href = '/engineer/';
-                });
+      // ── Summary ───────────────────────────────────────────────────────────
+      var summaryBtn = document.getElementById('show-summary-btn');
+      if (summaryBtn) {
+        summaryBtn.addEventListener('click', function() {
+          this.classList.add('hidden');
+          var result = document.getElementById('summary-result');
+          result.classList.remove('hidden');
 
-                // Prompt user before leaving if they haven't seen the summary
-                window.addEventListener('beforeunload', (e) => {
-                    if (!isLeavingIntentionally && showSummaryBtn.style.display !== 'none' && score > 0) {
-                        e.preventDefault();
-                        e.returnValue = '';
-                    }
-                });
-			});
-		</script>
-	</body>
+          document.getElementById('final-score').textContent = String(score);
+
+          var ratio = total > 0 ? score / total : 0;
+          var msg = '';
+          if (ratio === 1)       msg = '🏆 완벽합니다! 만점이에요!';
+          else if (ratio >= 0.8) msg = '👍 훌륭해요! 거의 다 맞췄어요.';
+          else if (ratio >= 0.6) msg = '😊 절반 이상 통과! 오답 노트를 복습해요.';
+          else if (ratio >= 0.4) msg = '💪 조금 더 열심히! 할 수 있어요.';
+          else                   msg = '📚 오답 노트를 꼼꼼히 복습해봐요!';
+          document.getElementById('score-msg').textContent = msg;
+
+          var container = document.getElementById('wrong-list');
+          if (wrongIds.length === 0) {
+            container.innerHTML = '<p style="color:#10b981;font-weight:700;text-align:center;padding:1rem;">틀린 문제가 없어요! 완벽해요 🎉</p>';
+          } else {
+            container.innerHTML = wrongIds.map(function(id) {
+              var q = allQ.find(function(x) { return x.id === id; });
+              if (!q) return '';
+              var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+              var correct = answers.map(function(a) {
+                return String.fromCharCode(65 + a) + '. ' + q.options[a];
+              }).join(', ');
+              return '<div class="witem">' +
+                '<p class="wq">Q' + q.id + '. ' + q.question + '</p>' +
+                '<p class="wa">정답: ' + correct + '</p>' +
+                '<p class="we">해설: ' + (q.explanation || '해설 없음') + '</p>' +
+                '</div>';
+            }).join('');
+          }
+
+          result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    })();
+    </script>
+  </body>
 </html>
