@@ -3,323 +3,262 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
-import '../styles/quiz.css'; // Reuse some quiz card styles
+import { allQuizData } from '../data/all-quiz-data.js';
+import { quizSlugMap } from '../lib/utils.js';
 ---
 
 <!doctype html>
 <html lang="ko">
-	<head>
-		<BaseHead title={`마이페이지 | ${SITE_TITLE}`} description="나의 학습 현황과 오답 노트를 확인하세요." />
-        <style>
-            main {
-                max-width: 1000px;
-                margin: 0 auto;
-                padding: 4rem 1.5rem;
-            }
-            .dashboard-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-                margin-top: 2rem;
-            }
-            .glass-card {
-                background: rgba(255, 255, 255, 0.7);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.4);
-                border-radius: 28px;
-                padding: 2rem;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-            }
-            .full-width {
-                grid-column: 1 / -1;
-            }
-            .stats-title {
-                font-size: 0.9rem;
-                color: #86868b;
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-            .stats-value {
-                font-size: 2.5rem;
-                font-weight: 800;
-                color: #1d1d1f;
-                letter-spacing: -0.04em;
-            }
-            .coaching-box {
-                background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
-                border-radius: 20px;
-                padding: 1.5rem;
-                border: 1px solid rgba(0, 0, 0, 0.03);
-                margin-top: 1rem;
-            }
-            .progress-bar-bg {
-                background: #e5e7eb;
-                height: 8px;
-                border-radius: 4px;
-                margin-top: 1rem;
-                overflow: hidden;
-            }
-            .progress-bar-fill {
-                background: #1d1d1f;
-                height: 100%;
-                width: 0%;
-                transition: width 1s ease-out;
-            }
-            .wrong-item {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1rem 0;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            }
-            .wrong-item:last-child { border-bottom: none; }
-            .wrong-link {
-                color: #1d1d1f;
-                text-decoration: none;
-                font-weight: 500;
-                font-size: 0.95rem;
-                display: block;
-                max-width: 80%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            .wrong-link:hover { text-decoration: underline; }
-            .delete-btn {
-                background: transparent;
-                color: #ff3b30;
-                border: 1px solid rgba(255, 59, 48, 0.2);
-                padding: 0.6rem 1.2rem;
-                border-radius: 99px;
-                font-size: 0.85rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-            .delete-btn:hover {
-                background: #ff3b30;
-                color: white;
-            }
-            .skeleton {
-                background: #eeeeee;
-                height: 1.5rem;
-                border-radius: 4px;
-                margin-bottom: 0.5rem;
-                animation: pulse 1.5s infinite;
-            }
-            /* Animation for counting stats */
-            @keyframes pulse {
-                0% { opacity: 0.6; }
-                50% { opacity: 1; }
-                100% { opacity: 0.6; }
-            }
-            @media (max-width: 768px) {
-                .dashboard-grid { grid-template-columns: 1fr; }
-                main { padding-top: 2rem; }
-            }
-        </style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section id="welcome-section" class="full-width" style="margin-bottom: 2rem;">
-				<h1 id="user-greeting" style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; color: #1d1d1f;">학습 현황 분석 중...</h1>
-				<p id="coaching-message" style="color: #86868b; font-size: 1.1rem; margin-top: 0.5rem; word-break: keep-all; font-weight: 500;"></p>
-			</section>
+<head>
+    <BaseHead title={`마이페이지 | ${SITE_TITLE}`} description="나의 학습 현황과 실시간 약점 분석 레이더를 확인하세요." />
+    <style>
+        main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem; }
+        .dashboard-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 1.5rem; 
+            margin-top: 2.5rem; 
+        }
+        .stats-card { 
+            background: white; 
+            border-radius: 28px; 
+            padding: 2rem; 
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            min-height: 320px;
+        }
+        .stats-card h3 { font-size: 1rem; font-weight: 700; color: #1d1d1f; margin-bottom: 1.5rem; }
+        .full-width { grid-column: 1 / -1; }
+        
+        /* Achievement Ring */
+        .ring-container { position: relative; display: flex; justify-content: center; align-items: center; }
+        .ring-text { position: absolute; text-align: center; display: flex; flex-direction: column; }
+        .ring-percent { font-size: 1.8rem; font-weight: 800; color: #1d1d1f; }
+        .ring-label { font-size: 0.75rem; color: #86868b; font-weight: 600; margin-top: 2px; }
+        
+        /* Stats Hints */
+        .stats-hint { font-size: 0.85rem; color: #86868b; margin-top: 1rem; font-weight: 600; text-align: center; }
 
-			<div class="dashboard-grid">
-				<!-- Overall Progress -->
-				<div class="glass-card">
-					<div class="stats-title">전체 학습 진행률</div>
-					<div id="progress-value" class="stats-value">0%</div>
-					<div id="progress-detail" style="font-size: 0.9rem; color: #86868b; margin-top: 0.25rem;">0 / 723 문제 완료</div>
-					<div class="progress-bar-bg">
-						<div id="progress-fill" class="progress-bar-fill"></div>
-					</div>
-				</div>
+        /* Weekly Bars */
+        .activity-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 8px; padding: 0 0.5rem; }
+        .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .bar-fill { width: 100%; background: #0051c3; border-radius: 6px 6px 2px 2px; min-height: 4px; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .bar-label { font-size: 0.7rem; font-weight: 700; color: #86868b; }
 
-				<!-- Today's Stats -->
-				<div class="glass-card">
-					<div class="stats-title">오늘의 학습량</div>
-					<div id="today-count" class="stats-value">0</div>
-					<p style="font-size: 0.9rem; color: #86868b; margin-top: 0.5rem;">최근 24시간 내에 푼 문제 수입니다.</p>
-				</div>
+        /* Radar Chart */
+        .radar-container { position: relative; display: flex; flex-direction: column; align-items: center; }
+        .radar-legend { margin-top: 0.5rem; display: flex; gap: 1rem; font-size: 0.75rem; font-weight: 600; color: #86868b; }
+        .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+        .legend-item .dot { width: 8px; height: 8px; border-radius: 50%; }
 
-				<!-- Weak Area Analysis (Coaching) -->
-				<div class="glass-card full-width">
-					<div class="stats-title">1타 강사의 개인화 가이드</div>
-					<div class="coaching-box" id="coaching-box">
-						<p id="coaching-analysis" style="font-weight: 600; line-height: 1.6; color: #1d1d1f; font-size: 1.1rem; word-break: keep-all;">학습 데이터를 분석하고 있습니다...</p>
-					</div>
-				</div>
+        /* Lists */
+        .wrong-list-container { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .list-card { background: white; border-radius: 28px; padding: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
+        .list-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .wrong-item { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+        .wrong-link { text-decoration: none; color: #1d1d1f; font-weight: 500; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 75%; }
+        .wrong-link:hover { color: #0051c3; text-decoration: underline; }
 
-				<!-- Recent Wrong Answers -->
-				<div class="glass-card full-width">
-					<div class="stats-title">📝 최근 오답 리뷰</div>
-					<div id="wrong-list" style="margin-top: 1rem;">
-						<div class="skeleton"></div>
-						<div class="skeleton"></div>
-						<div class="skeleton"></div>
-					</div>
-				</div>
+        .delete-btn { background: transparent; color: #ff3b30; border: 1px solid rgba(255, 59, 48, 0.2); padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 2rem; }
+        .delete-btn:hover { background: #ff3b30; color: white; }
 
-				<!-- Account Settings -->
-				<div class="glass-card full-width" style="text-align: center; margin-top: 2rem; padding: 2rem; border-color: rgba(255, 59, 48, 0.1);">
-					<div class="stats-title" style="margin-bottom: 1.5rem;">계정 관리</div>
-					<button id="delete-account-btn" class="delete-btn">회원 탈퇴</button>
-                    <p style="font-size: 0.85rem; color: #86868b; margin-top: 1.5rem; font-weight: 500;">
-                        탈퇴 시 모든 학습 기록 및 오답 노트가 서버에서 영구적으로 삭제되며 복구할 수 없습니다.
-                    </p>
-				</div>
-			</div>
-		</main>
-		<Footer />
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr 1fr; } .wrong-list-container { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } main { padding-top: 2rem; } }
+    </style>
+</head>
+<body>
+    <Header />
+    <main>
+        <section id="welcome-section" style="margin-bottom: 3rem;">
+            <h1 id="user-greeting" style="font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.04em; color: #1d1d1f;">학습 현황 분석 중...</h1>
+            <div id="coaching-analysis" style="background: #f5f5f7; border-radius: 20px; padding: 1.5rem; margin-top: 1.5rem; font-weight: 600; line-height: 1.6; color: #1d1d1f; font-size: 1.05rem;">
+                데이터를 불러오고 있습니다...
+            </div>
+        </section>
 
-		<script>
-			import { supabase } from '../lib/supabase.js';
-            import { allQuizData } from '../data/all-quiz-data.js';
-            import { quizSlugMap } from '../lib/utils.js';
+        <div class="dashboard-grid">
+            <!-- Achievement Ring -->
+            <div class="stats-card">
+                <h3>오늘의 학습 달성도</h3>
+                <div class="ring-container">
+                    <svg width="160" height="160" viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="60" stroke="#f2f2f7" stroke-width="12" fill="none"></circle>
+                        <circle cx="70" cy="70" r="60" stroke="#0051c3" stroke-width="12" fill="none" 
+                            stroke-dasharray="377" stroke-dashoffset="377" stroke-linecap="round" id="goal-ring" style="transition: stroke-dashoffset 1s ease-out;"></circle>
+                    </svg>
+                    <div class="ring-text">
+                        <span class="ring-percent" id="ring-percent">0%</span>
+                        <span class="ring-label" id="streak-label">0일 연속</span>
+                    </div>
+                </div>
+                <p class="stats-hint" id="goal-text">목표 30문제 달성 중</p>
+            </div>
 
-			const initMyPage = async () => {
-				const { data: { session } } = await supabase.auth.getSession();
-				if (!session) {
-					window.location.href = '/'; 
-					return;
-				}
+            <!-- Radar Analytics -->
+            <div class="stats-card">
+                <h3>약점 분석 (Radar)</h3>
+                <div class="radar-container">
+                    <svg id="radar-chart" width="220" height="220" viewBox="0 0 300 300"></svg>
+                    <div class="radar-legend">
+                        <div class="legend-item"><span class="dot" style="background: rgba(0, 81, 195, 0.45); border: 1px solid #0051c3;"></span>성취도</div>
+                    </div>
+                </div>
+                <p class="stats-hint" id="radar-hint">데이터 분석 중...</p>
+            </div>
 
-				const user = session.user;
-				const name = user.user_metadata?.full_name || user.email?.split('@')[0];
-				
-				// 1. Basic Greeting
-				document.getElementById('user-greeting').textContent = `${name}님, 환영합니다! 👋`;
-				
-                // 2. Fetch User Stats (From wrong_answers)
-                const { data: wrongAnswers, error } = await supabase
-                    .from('wrong_answers')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .order('created_at', { ascending: false });
+            <!-- Weekly Activity -->
+            <div class="stats-card">
+                <h3>주간 학습 활동</h3>
+                <div class="activity-bars" id="activity-bars">
+                    <!-- JS -->
+                </div>
+                <div class="bar-labels" style="display: flex; justify-content: space-between; margin-top: 1rem; padding: 0 0.5rem; font-size: 0.7rem; font-weight: 700; color: #86868b;">
+                    <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+                </div>
+            </div>
+        </div>
 
-                if (error) {
-                    console.error('Data fetch error:', error);
-                    return;
+        <div class="wrong-list-container">
+            <div class="list-card">
+                <h3>📝 최신 토익 오답 리뷰</h3>
+                <div id="toeic-wrong-list"></div>
+            </div>
+            <div class="list-card">
+                <h3>📝 AWS 오답 아카이브</h3>
+                <div id="aws-wrong-list"></div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <button id="delete-account-btn" class="delete-btn">계정 데이터 초기화 및 탈퇴</button>
+        </div>
+    </main>
+    <Footer />
+
+    <script>
+        import { supabase } from '../lib/supabase.js';
+        import { allQuizData } from '../data/all-quiz-data.js';
+        import { quizSlugMap } from '../lib/utils.js';
+
+        async function initMyPage() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { window.location.href = '/'; return; }
+
+            const user = session.user;
+            const name = user.user_metadata?.full_name || user.email?.split('@')[0];
+            document.getElementById('user-greeting').textContent = `${name}님, 환영합니다! 👋`;
+
+            // 1. Fetch Data
+            const { data: toeicProgress } = await supabase.from('toeic_progress').select('*').eq('user_id', user.id);
+            const { data: awsWrong } = await supabase.from('wrong_answers').select('*').eq('user_id', user.id);
+
+            const validToeic = toeicProgress || [];
+            const validAws = awsWrong || [];
+
+            // 2. Goal Ring
+            const dailyGoal = 30;
+            const today = new Date().setHours(0,0,0,0);
+            const todayCount = validToeic.filter(r => new Date(r.updated_at).getTime() >= today).length;
+            const goalRatio = Math.min(todayCount / dailyGoal, 1);
+            const dashOffset = 377 * (1 - goalRatio);
+            document.getElementById('goal-ring').style.strokeDashoffset = dashOffset;
+            document.getElementById('ring-percent').textContent = `${Math.round(goalRatio * 100)}%`;
+            document.getElementById('goal-text').textContent = todayCount >= dailyGoal ? "🔥 오늘의 목표 달성!" : `목표까지 ${dailyGoal - todayCount}항 남음`;
+
+            // 3. Streak
+            const localToday = new Date().toLocaleDateString();
+            const lastStudy = localStorage.getItem('last_study_date');
+            let streak = parseInt(localStorage.getItem('study_streak') || '0');
+            if (lastStudy !== localToday) {
+                if (lastStudy === new Date(Date.now() - 86400000).toLocaleDateString()) streak++;
+                else streak = 1;
+                localStorage.setItem('study_streak', streak);
+                localStorage.setItem('last_study_date', localToday);
+            }
+            document.getElementById('streak-label').textContent = `${streak}일 연속`;
+
+            // 4. Radar Chart
+            const categories = ["어휘", "동사구", "품사", "접속/전치", "구조/기타"];
+            const scores = { "어휘": [], "동사구": [], "품사": [], "접속/전치": [], "구조/기타": [] };
+            validToeic.forEach(r => {
+                let cat = "어휘";
+                if (r.toeic_id.startsWith('g-')) {
+                    const ch = r.toeic_id.split('-')[1];
+                    if (ch === '0') cat = "품사";
+                    else if (['1','2','3','4'].includes(ch)) cat = "동사구";
+                    else if (['6','9'].includes(ch)) cat = "접속/전치";
+                    else cat = "구조/기타";
                 }
+                scores[cat].push(r.is_correct ? 1 : 0);
+            });
+            const radarValues = categories.map(c => {
+                const s = scores[c];
+                if (s.length === 0) return 0.2;
+                return 0.2 + ((s.reduce((a,b)=>a+b,0)/s.length) * 0.75);
+            });
+            renderRadar(radarValues, categories);
+            const weakIdx = radarValues.indexOf(Math.min(...radarValues));
+            document.getElementById('radar-hint').textContent = `${categories[weakIdx]} 파트 보강이 필요합니다.`;
 
-                // 3. Calculate Progress
-                // count unique quiz_id's solved
-                const attemptedIds = new Set(wrongAnswers.map(r => r.quiz_id));
-                const totalAttempted = attemptedIds.size;
-                const totalProgress = Math.round((totalAttempted / 723) * 100);
-                
-                document.getElementById('progress-value').textContent = `${totalProgress}%`;
-                document.getElementById('progress-detail').textContent = `${totalAttempted} / 723 문제 완료`;
-                document.getElementById('progress-fill').style.width = `${totalProgress}%`;
+            // 5. Weekly Bars
+            const bars = document.getElementById('activity-bars');
+            const weekStats = Array(7).fill(0);
+            for(let i=0; i<7; i++) {
+                const d = new Date(); d.setDate(d.getDate() - (6-i));
+                const s = d.setHours(0,0,0,0); const e = d.setHours(23,59,59,999);
+                weekStats[i] = validToeic.filter(r => { const t = new Date(r.updated_at).getTime(); return t>=s && t<=e; }).length;
+            }
+            const maxVal = Math.max(...weekStats, 5);
+            bars.innerHTML = weekStats.map(count => `<div class="bar-item"><div class="bar-fill" style="height:${(count/maxVal)*100}%"></div></div>`).join('');
 
-                // 4. Calculate Today's Count (Past 24h)
-                const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                const todayAnswers = wrongAnswers.filter(r => new Date(r.created_at) > oneDayAgo);
-                document.getElementById('today-count').textContent = todayAnswers.length.toString();
+            // 6. Lists
+            const toeicList = document.getElementById('toeic-wrong-list');
+            toeicList.innerHTML = validToeic.filter(r => !r.is_correct).slice(0, 5).map(r => `
+                <div class="wrong-item">
+                    <a href="/toeic/phrases/?mode=review" class="wrong-link">${r.toeic_id.startsWith('g-') ? '[문법]' : '[어휘]'} ${r.toeic_id}</a>
+                    <span style="font-size:0.75rem; color:#86868b;">${new Date(r.updated_at).toLocaleDateString()}</span>
+                </div>
+            `).join('') || '<p style="color:#86868b;">오답이 없습니다.</p>';
 
-                // 5. Build Wrong List & Analyze Weakness
-                const wrongList = document.getElementById('wrong-list');
-                wrongList.innerHTML = '';
-                
-                const keywords = {};
-                
-                // Flatten all quiz data to find questions efficiently
-                const flatQuizzes = {};
-                Object.values(allQuizData).forEach(group => {
-                    group.forEach(q => { flatQuizzes[q.id] = q; });
-                });
+            // 7. Coaching Analysis
+            const weakCategory = categories[weakIdx];
+            document.getElementById('coaching-analysis').innerHTML = `현재 ${name}님은 **[${weakCategory}]** 파트에서 가장 많은 오답이 발생하고 있습니다. 보관소에서 해당 영역의 어휘를 다시 복습해보세요!`;
 
-                if (wrongAnswers.length === 0) {
-                    wrongList.innerHTML = '<p style="color: #86868b; text-align: center; padding: 2rem; font-weight: 500;">아직 틀린 문제가 없습니다. 완벽한 주행이네요! 🎉</p>';
-                    document.getElementById('coaching-analysis').textContent = '데이터가 부족하지만, 지금까지의 성적은 최고입니다! 계속 정진하세요.';
-                } else {
-                    // Populate recent fails (last 10 unique ones)
-                    const uniqueFails = [];
-                    const seen = new Set();
-                    for (const r of wrongAnswers) {
-                        if (!seen.has(r.quiz_id)) {
-                            uniqueFails.push(r);
-                            seen.add(r.quiz_id);
-                        }
-                        if (uniqueFails.length >= 10) break;
-                    }
-
-                    uniqueFails.forEach(record => {
-                        const quiz = flatQuizzes[record.quiz_id];
-                        if (quiz) {
-                            const item = document.createElement('div');
-                            item.className = 'wrong-item';
-                            
-                            // Map the quiz ID to a slug range
-                            const setStart = Math.floor((quiz.id - 1) / 25) * 25 + 1;
-                            const rangeKey = `q${setStart}-${setStart + 24}`;
-                            const slug = quizSlugMap[rangeKey] || rangeKey;
-
-                            item.innerHTML = `
-                                <a href="/quiz/${slug}/#quiz-${quiz.id}" class="wrong-link">Q${quiz.id}. ${quiz.question}</a>
-                                <span style="font-size: 0.75rem; color: #86868b; font-weight: 600;">${new Date(record.created_at).toLocaleDateString()}</span>
-                            `;
-                            wrongList.appendChild(item);
-                        }
-                    });
-
-                    // 6. Analyze Weakness (Keywords Extraction)
-                    // We look at ALL wrong answers to find the pattern
-                    wrongAnswers.forEach(record => {
-                        const quiz = flatQuizzes[record.quiz_id];
-                        if (quiz) {
-                            const text = quiz.question.toUpperCase();
-                            ["VPC", "S3", "EC2", "IAM", "RDS", "LAMBDA", "DYNAMODB", "ROUTE 53", "ELB", "ASG", "KINESIS", "CLOUDFRONT", "CLOUD FORMATION"].forEach(k => {
-                                if (text.includes(k)) keywords[k] = (keywords[k] || 0) + 1;
-                            });
-                        }
-                    });
-
-                    const sortedKeywords = Object.entries(keywords).sort((a, b) => b[1] - a[1]);
-                    if (sortedKeywords.length > 0) {
-                        const weak = sortedKeywords[0][0];
-                        document.getElementById('coaching-analysis').textContent = 
-                            `${name}님, 최근 **${weak}** 관련 문제에서 실수가 잦은 것으로 분석됩니다. 해당 파트의 핵심 개념을 다시 한번 복습해 보는 건 어떨까요?`;
-                    } else {
-                        document.getElementById('coaching-analysis').textContent = 
-                            `${name}님, 현재 전 분야에서 고르게 오답이 발생하고 있습니다. 기초부터 다시 다지며 꼼꼼히 리뷰해 보세요!`;
-                    }
+            // 8. Delete
+            document.getElementById('delete-account-btn').onclick = async () => {
+                if(confirm("정말 탈퇴하시겠습니까? 데이터는 복구되지 않습니다.")) {
+                    await supabase.from('toeic_progress').delete().eq('user_id', user.id);
+                    await supabase.auth.signOut();
+                    window.location.href = '/';
                 }
+            };
+        }
 
-                // 7. Delete Account Logic
-                const deleteBtn = document.getElementById('delete-account-btn');
-                deleteBtn.addEventListener('click', async () => {
-                    const confirmMsg = "잠시만요! 정말 탈퇴하시겠습니까?\n그동안의 모든 학습 기록과 오답 노트가 영구적으로 삭제됩니다. 보관할 데이터가 없는지 확인하세요.";
-                    if (confirm(confirmMsg)) {
-                        try {
-                            // Wipe user data from the DB
-                            const { error: deleteError } = await supabase
-                                .from('wrong_answers')
-                                .delete()
-                                .eq('user_id', user.id);
-                            
-                            if (deleteError) throw deleteError;
+        function renderRadar(values, cats) {
+            const svg = document.getElementById('radar-chart');
+            const centerX = 150, centerY = 150, radius = 100, step = (Math.PI*2)/cats.length;
+            let bg = '', axes = '', pts = '', poly = '';
+            for(let i=1; i<=5; i++) {
+                let p = ''; const r = (radius/5)*i;
+                for(let j=0; j<=cats.length; j++) { const a = j*step - Math.PI/2; p += `${centerX+Math.cos(a)*r},${centerY+Math.sin(a)*r} `; }
+                bg += `<polygon points="${p}" fill="none" stroke="#f0f0f5" stroke-width="1" />`;
+            }
+            cats.forEach((c, i) => {
+                const a = i*step - Math.PI/2;
+                const x = centerX+Math.cos(a)*radius, y = centerY+Math.sin(a)*radius;
+                const lx = centerX+Math.cos(a)*130, ly = centerY+Math.sin(a)*120;
+                axes += `<line x1="${centerX}" y1="${centerY}" x2="${x}" y2="${y}" stroke="#f0f0f5" />`;
+                axes += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="11" font-weight="700" fill="#1d1d1f">${c}</text>`;
+                const rv = values[i]*radius;
+                pts += `${centerX+Math.cos(a)*rv},${centerY+Math.sin(a)*rv} `;
+            });
+            poly = `<polygon points="${pts}" fill="rgba(0, 81, 195, 0.2)" stroke="#0051c3" stroke-width="2.5" />`;
+            svg.innerHTML = bg + axes + poly;
+        }
 
-                            // Actual account deletion (Requires Admin rights or special setup)
-                            // For now, we sign out and alert success to simulate deletion flow.
-                            await supabase.auth.signOut();
-                            alert("탈퇴 처리가 정상적으로 완료되었습니다. 이용해 주셔서 감사합니다.");
-                            window.location.href = '/';
-                        } catch (e) {
-                            console.error('Account deletion error:', e);
-                            alert("오류가 발생했습니다: " + e.message);
-                        }
-                    }
-                });
-			};
-
-			initMyPage();
-		</script>
-	</body>
+        initMyPage();
+    </script>
+</body>
 </html>

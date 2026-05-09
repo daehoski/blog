@@ -140,14 +140,45 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 			}
 
 			/* ── 퀴즈 카드 ── */
-			.quiz-card {
+			.quiz-box {
 				background: white;
-				border-radius: 28px;
-				padding: 2.5rem;
-				box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-				margin-bottom: 1.5rem;
-				animation: fadeIn 0.3s ease;
+				border-radius: 32px;
+				padding: 3rem;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+				margin-bottom: 2rem;
+				position: relative;
+				overflow: hidden;
+                min-height: 480px;
+                display: flex;
+                flex-direction: column;
 			}
+            .mode-belt {
+                display: flex;
+                gap: 0.75rem;
+                margin-bottom: 2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .mode-chip {
+                padding: 0.5rem 1rem;
+                border: 1px solid #e5e5ea;
+                border-radius: 99px;
+                font-size: 0.8rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+                background: white;
+                color: #86868b;
+            }
+            .mode-chip.active {
+                background: #0051c3;
+                color: white;
+                border-color: #0051c3;
+            }
+            .mode-chip.audio-chip.active {
+                background: #34aadc;
+                border-color: #34aadc;
+            }
 			@keyframes fadeIn {
 				from { opacity: 0; transform: translateY(12px); }
 				to { opacity: 1; transform: translateY(0); }
@@ -181,10 +212,14 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 				font-style: normal;
 			}
 			.question-translation {
-				font-size: 0.88rem;
+				font-size: 1rem;
 				color: #86868b;
-				margin-bottom: 2rem;
-				line-height: 1.5;
+				margin-top: 0.5rem;
+				font-weight: 500;
+				display: none; /* 파트 5 실전 모드: 초기 숨김 */
+			}
+			.question-translation.show {
+				display: block;
 			}
 
 			/* 프레이즈 뜻 힌트 (모드에 따라 표시) */
@@ -261,59 +296,122 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 				background: #0051c3;
 				color: white;
 			}
+			/* -- 프리미엄 효과 -- */
+			@keyframes pop {
+				0% { transform: scale(1); }
+				50% { transform: scale(1.08); }
+				100% { transform: scale(1); }
+			}
+			@keyframes shake {
+				0%, 100% { transform: translateX(0); }
+				25% { transform: translateX(-8px); }
+				75% { transform: translateX(8px); }
+			}
+			.pop-effect { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+			.shake-effect { animation: shake 0.3s ease-in-out 2; }
+
 			.choice-btn.correct {
 				background: #e8f9ee !important;
 				border-color: #30d158 !important;
 				color: #1a8a3c !important;
-			}
-			.choice-btn.correct .choice-label {
-				background: #30d158;
-				color: white;
+				animation: pop 0.4s ease;
 			}
 			.choice-btn.wrong {
 				background: #fff0f0 !important;
 				border-color: #ff3b30 !important;
 				color: #cc0000 !important;
+				animation: shake 0.3s ease;
 			}
-			.choice-btn.wrong .choice-label {
-				background: #ff3b30;
-				color: white;
+
+			/* 상단 컨트롤 바 */
+			.quiz-controls {
+				display: flex;
+				justify-content: flex-end;
+				gap: 1.5rem;
+				margin-bottom: 1.5rem;
+				padding: 0 0.5rem;
 			}
-			.choice-btn:disabled {
-				cursor: default;
-				transform: none !important;
+			.toggle-control {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.85rem;
+				color: #86868b;
+				font-weight: 600;
+				cursor: pointer;
 			}
+			.toggle-control input {
+				cursor: pointer;
+			}
+
+			/* 별표 버튼 */
+			.action-buttons {
+				display: flex;
+				gap: 0.75rem;
+				margin-top: 1rem;
+			}
+			.action-btn {
+				background: white;
+				border: 1px solid rgba(0, 0, 0, 0.05);
+				border-radius: 12px;
+				padding: 0.6rem 1rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.85rem;
+				font-weight: 600;
+				color: #1d1d1f;
+				cursor: pointer;
+				transition: all 0.2s;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+			}
+			.action-btn:hover {
+				background: #f5f5f7;
+				transform: translateY(-1px);
+			}
+			.action-btn.active {
+				color: #ffb800;
+				border-color: #ffb800;
+				background: rgba(255, 184, 0, 0.05);
+			}
+			.action-btn svg { width: 18px; height: 18px; }
 
 			/* 해설 */
 			.explanation-box {
-				background: #f5f5f7;
-				border-radius: 18px;
-				padding: 1.5rem;
+				background: #f8f9ff;
+				border: 1px solid rgba(0, 81, 195, 0.1);
+				border-radius: 20px;
+				padding: 1.75rem;
 				display: none;
-				animation: fadeIn 0.3s ease;
+				animation: fadeIn 0.4s ease;
+				margin-top: 1.5rem;
 			}
 			.explanation-box.show { display: block; }
 			.explanation-box .exp-header {
-				font-size: 0.72rem;
-				font-weight: 700;
+				font-size: 0.75rem;
+				font-weight: 800;
 				text-transform: uppercase;
-				letter-spacing: 0.06em;
-				color: #86868b;
-				margin-bottom: 0.6rem;
+				letter-spacing: 0.1em;
+				color: #0051c3;
+				margin-bottom: 0.75rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
 			}
 			.explanation-box .exp-text {
-				font-size: 0.95rem;
+				font-size: 1rem;
 				color: #1d1d1f;
-				line-height: 1.7;
+				line-height: 1.75;
 				word-break: keep-all;
+				margin-bottom: 1rem;
 			}
-			.explanation-box .exp-answer {
-				margin-top: 0.75rem;
-				padding-top: 0.75rem;
-				border-top: 1px solid #e5e5ea;
-				font-size: 0.85rem;
-				color: #30d158;
-				font-weight: 700;
+			.explanation-box .exp-translation {
+				font-size: 0.95rem;
+				color: #86868b;
+				padding-top: 1rem;
+				border-top: 1px solid rgba(0, 0, 0, 0.05);
+				font-weight: 500;
+				font-style: italic;
 			}
 
 			/* 다음 버튼 */
@@ -449,8 +547,14 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 				<div class="progress-container">
 					<div class="progress-label">진도</div>
 					<div class="progress-bar">
-						<div class="progress-fill" id="progress-fill"></div>
-					</div>
+					<div class="progress-fill" id="progress-fill"></div>
+				</div>
+
+                <div class="mode-belt">
+                    <div id="mode-normal" class="mode-chip active" onclick="setStudyMode('normal')">✨ 일반 모드</div>
+                    <div id="mode-shadow" class="mode-chip audio-chip" onclick="toggleShadowMode()">🎧 섀도잉 (LC 연습)</div>
+                    <div id="mode-review-chip" class="mode-chip" style="display:none;" onclick="location.search='?mode=review'">📚 오답 집중 복습</div>
+                </div>
 				</div>
 			</div>
 
@@ -483,14 +587,21 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 				<div class="question-sentence" id="question-sentence"></div>
 				<div class="question-translation" id="question-translation"></div>
 
+				<!-- 액션 버튼들 (북마크) -->
+				<div class="action-buttons" style="margin: 1rem 0; display: flex; gap: 0.5rem;">
+					<button class="action-btn" id="bookmark-btn" onclick="toggleBookmark()">⭐ 북마크</button>
+				</div>
+
 				<!-- 보기 -->
 				<div class="choices" id="choices"></div>
 
 				<!-- 해설 -->
 				<div class="explanation-box" id="explanation-box">
-					<div class="exp-header">해설</div>
+					<div class="exp-header">
+						<span>💡 LEARNING NOTES</span>
+					</div>
 					<div class="exp-text" id="exp-text"></div>
-					<div class="exp-answer" id="exp-answer"></div>
+					<div class="exp-translation" id="exp-translation"></div>
 				</div>
 
 				<button class="next-btn" id="next-btn" onclick="nextQuestion()">다음 문제 →</button>
@@ -519,7 +630,7 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 
 	<script>
 		// Vite HMR 강제 새로고침용 로그
-		console.log("Toeic Phrases Script Mounted Successfully! HMR Busted.");
+		console.log("Toeic Phrases Script Mounted Successfully! [Phase 8: ETS Integration Active]");
 
 		// ──────────────────────────────────────────
 		// 데이터 로딩
@@ -530,12 +641,167 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 		let correctCount = 0;
 		let wrongCount = 0;
 		let currentMode = 'full';
+        let etsDay = null;
 		let showHint = false;
 		let answered = false;
+        let shadowMode = false;
 
-		// 로컬스토리지 키
 		const LS_WRONG = 'toeic_wrong_ids';
-		const LS_ATTEMPTS = 'toeic_attempt_ids';
+		const LS_BOOKMARKS = 'toeic_bookmarks';
+
+		let currentUser = null;
+
+		import { supabase } from '../../lib/supabase.js';
+
+		let autoAdvance = false;
+
+		// 외부 라이브러리 (Confetti) 로드
+		const confettiScript = document.createElement('script');
+		confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+		document.head.appendChild(confettiScript);
+
+		document.addEventListener('DOMContentLoaded', async () => {
+			if (supabase) {
+				const { data: { session } } = await supabase.auth.getSession();
+				if (session) {
+					currentUser = session.user;
+					await syncWrongIdsFromCloud();
+				}
+			}
+
+			// 컨트롤 바 초기화
+			const aaToggle = document.getElementById('auto-advance-toggle');
+			if (aaToggle) aaToggle.onchange = (e) => autoAdvance = e.target.checked;
+
+			// URL 파라미터 체크 (?mode=review, ?mode=ets)
+			const params = new URLSearchParams(window.location.search);
+			const mode = params.get('mode');
+            etsDay = params.get('day');
+
+			if (mode === 'wrong' || mode === 'review') {
+				setMode('wrong');
+			} else if (mode === 'ets') {
+                loadEtsData(etsDay);
+            } else {
+				loadData();
+			}
+		});
+
+        async function loadEtsData(day) {
+            document.getElementById('loading-screen').style.display = 'block';
+            document.getElementById('quiz-card').style.display = 'none';
+
+            if (!supabase) return alert("DB 연결이 필요합니다.");
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return alert("로그인 후 이용 가능합니다.");
+
+            let query = supabase.from('ets_voca').select('*').eq('user_id', session.user.id);
+            if (day) query = query.eq('day', parseInt(day));
+            
+            const { data, error } = await query;
+            
+            if (error || !data || data.length === 0) {
+                alert("데이터가 없습니다. 스튜디오에서 단어를 먼저 입력해 주세요!");
+                window.location.href = '/toeic/studio/';
+                return;
+            }
+
+            // Normalize to Quiz Format
+            ALL_PHRASES = data.map(v => {
+                // Create a simple blank quiz if sentence exists
+                let quiz = null;
+                if (v.sentence_en) {
+                    const lowerWord = v.word.toLowerCase();
+                    const sentence = v.sentence_en;
+                    // Try to replace the word with blanks
+                    const regex = new RegExp(`\\b${v.word}\\b`, 'gi');
+                    const blanked = sentence.replace(regex, '-------');
+                    
+                    quiz = {
+                        sentence: blanked,
+                        choices: [v.word, "dummy1", "dummy2", "dummy3"].sort(() => Math.random() - 0.5),
+                        answerIndex: 0, // Will be fixed after shuffle
+                        explanation: v.exam_tips || "기출 포인트가 없습니다.",
+                        translation: v.sentence_ko || ""
+                    };
+                    quiz.answerIndex = quiz.choices.indexOf(v.word);
+                }
+
+                return {
+                    id: v.id,
+                    phrase: v.word,
+                    meaning: v.meaning,
+                    synonyms: v.synonyms ? v.synonyms.split(',') : [],
+                    examples: v.sentence_en ? [{ en: v.sentence_en, ko: v.sentence_ko }] : [],
+                    quiz: quiz
+                };
+            });
+
+			document.getElementById('stat-total').textContent = ALL_PHRASES.length;
+			document.getElementById('loading-screen').style.display = 'none';
+			document.getElementById('quiz-card').style.display = 'block';
+            
+            if (day) {
+                document.querySelector('.page-header h1').textContent = `ETS VOCA - DAY ${day}`;
+                document.querySelector('.page-header p').textContent = `내가 직접 타이핑하며 공부한 ${day}일차 기출 어휘`;
+            }
+
+			initQuiz();
+        }
+
+		// ──────────────────────────────────────────
+		// 별표 기능
+		// ──────────────────────────────────────────
+
+		async function toggleBookmark() {
+			const item = quizQueue[currentIdx];
+			if (!item) return;
+
+			const btn = document.getElementById('bookmark-btn');
+			const bookmarks = new Set(JSON.parse(localStorage.getItem(LS_BOOKMARKS) || '[]'));
+			const isCurrentlyActive = bookmarks.has(item.id);
+			
+			if (isCurrentlyActive) {
+				bookmarks.delete(item.id);
+				btn.classList.remove('active');
+			} else {
+				bookmarks.add(item.id);
+				btn.classList.add('active');
+			}
+			localStorage.setItem(LS_BOOKMARKS, JSON.stringify([...bookmarks]));
+
+			// Supabase 클라우드 동기화 (is_bookmarked 필드 업데이트)
+			if (currentUser && supabase) {
+				const { error } = await supabase.from('toeic_progress').upsert({
+					user_id: currentUser.id,
+					toeic_id: item.id,
+					is_bookmarked: !isCurrentlyActive,
+					updated_at: new Date().toISOString()
+				}, { onConflict: ['user_id', 'toeic_id'] });
+				
+				if (error) console.error('Supabase Bookmark Sync Error:', error);
+			}
+		}
+
+		async function syncWrongIdsFromCloud() {
+			if (!currentUser) return;
+			try {
+				const { data, error } = await supabase
+					.from('toeic_progress')
+					.select('toeic_id')
+					.eq('user_id', currentUser.id)
+					.eq('is_correct', false);
+
+				if (!error && data) {
+					const cloudWrongIds = data.map(r => r.toeic_id);
+					const localWrongIds = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
+					cloudWrongIds.forEach(id => localWrongIds.add(id));
+					localStorage.setItem(LS_WRONG, JSON.stringify([...localWrongIds]));
+				}
+			} catch (e) {
+				console.error("Cloud sync failed:", e);
+			}
+		}
 
 		function loadData() {
 			if (window.IMPORTED_PHRASES && window.IMPORTED_PHRASES.length > 0) {
@@ -653,6 +919,12 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 			document.getElementById('stat-wrong').textContent = wrongCount;
 			const pct = quizQueue.length > 0 ? ((currentIdx / quizQueue.length) * 100) : 0;
 			document.getElementById('progress-fill').style.width = pct + '%';
+			
+			// 모드 타일 업데이트
+			document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+			if (currentMode === 'full') document.getElementById('mode-full').classList.add('active');
+			else if (currentMode === 'quiz-only') document.getElementById('mode-quiz-only').classList.add('active');
+			else if (currentMode === 'wrong') document.getElementById('mode-wrong').classList.add('active');
 		}
 
 		// ──────────────────────────────────────────
@@ -661,11 +933,16 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 		function showQuestion() {
 			if (currentIdx >= quizQueue.length) {
 				showComplete();
+				if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 				return;
 			}
 
 			const item = quizQueue[currentIdx];
 			answered = false;
+
+			// 북마크 상태
+			const bookmarks = new Set(JSON.parse(localStorage.getItem(LS_BOOKMARKS) || '[]'));
+			document.getElementById('bookmark-btn').classList.toggle('active', bookmarks.has(item.id));
 
 			// 힌트
 			const hintEl = document.getElementById('phrase-hint');
@@ -689,21 +966,19 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 			// 퀴즈 데이터가 있으면 → 빈칸 문제 모드
 			if (item.quiz) {
 				const q = item.quiz;
-				// 빈칸을 span으로 치환
 				const sentence = q.sentence.replace(
 					/(-{3,}|\[BLANK\])/g,
 					'<em class="blank">___</em>'
 				);
 				document.getElementById('question-sentence').innerHTML = sentence;
 				document.getElementById('question-translation').textContent = q.translation || '';
+				document.getElementById('question-translation').classList.remove('show');
 
-				// 보기 셔플 (정답 인덱스 추적)
 				const origChoices = q.choices.map((c, i) => ({ text: c, isCorrect: i === q.answerIndex }));
 				const shuffled = origChoices.sort(() => Math.random() - 0.5);
 
 				renderChoices(shuffled, q.explanation);
 			} else {
-				// 퀴즈 없는 항목 → 프레이즈 의미 4지선다 생성
 				generateMeaningQuiz(item);
 			}
 
@@ -745,6 +1020,7 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 				document.getElementById('question-sentence').innerHTML = `다음 중 "<strong>${item.phrase}</strong>"의 뜻으로 알맞은 것은?`;
 				document.getElementById('question-translation').textContent = '';
 			}
+			document.getElementById('question-translation').classList.remove('show');
 
 			// 오답 보기: 다른 항목의 meaning에서 랜덤 추출
 			const others = ALL_PHRASES.filter(p => p.id !== item.id && p.meaning).sort(() => Math.random() - 0.5).slice(0, 3);
@@ -788,7 +1064,9 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 			// 해설 표시
 			const expBox = document.getElementById('explanation-box');
 			expBox.classList.add('show');
+			document.getElementById('question-translation').classList.add('show');
 			document.getElementById('exp-text').textContent = explanation || '해설이 없습니다.';
+			document.getElementById('exp-translation').textContent = `🎯 해석: ${CURRENT_QUESTION.quiz ? CURRENT_QUESTION.quiz.translation : CURRENT_QUESTION.meaning}`;
 			
 			const correctChoice = [...allBtns].find(b => b.dataset.correct === '1');
 			const correctText = correctChoice ? correctChoice.textContent.replace(/^[ABCD]/, '').trim() : '';
@@ -838,16 +1116,38 @@ import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
 		// ──────────────────────────────────────────
 		// 오답 저장/제거
 		// ──────────────────────────────────────────
-		function addToWrong(id) {
+		async function addToWrong(id) {
 			const wrong = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
 			wrong.add(id);
 			localStorage.setItem(LS_WRONG, JSON.stringify([...wrong]));
+
+			if (currentUser && supabase) {
+				const { error } = await supabase.from('toeic_progress').upsert({
+					user_id: currentUser.id,
+					toeic_id: id,
+					is_correct: false,
+					updated_at: new Date().toISOString()
+				}, { onConflict: ['user_id', 'toeic_id'] });
+				if (error) console.error('Supabase addToWrong ERROR:', error);
+			}
 		}
 
-		function removeFromWrong(id) {
+		async function removeFromWrong(id) {
 			const wrong = new Set(JSON.parse(localStorage.getItem(LS_WRONG) || '[]'));
-			wrong.delete(id);
-			localStorage.setItem(LS_WRONG, JSON.stringify([...wrong]));
+			if (wrong.has(id)) {
+				wrong.delete(id);
+				localStorage.setItem(LS_WRONG, JSON.stringify([...wrong]));
+
+				if (currentUser && supabase) {
+					const { error } = await supabase.from('toeic_progress').upsert({
+						user_id: currentUser.id,
+						toeic_id: id,
+						is_correct: true,
+						updated_at: new Date().toISOString()
+					}, { onConflict: ['user_id', 'toeic_id'] });
+					if (error) console.error('Supabase removeFromWrong ERROR:', error);
+				}
+			}
 		}
 
 		// ──────────────────────────────────────────

@@ -1,0 +1,266 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
+---
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <BaseHead title="토익 파워토익 보관소 | 전술적 어휘 사사" description="박혜원 파워토익 핵심 어휘와 예문을 한눈에 검색하고 복습하세요." />
+  <style>
+    body { background: #f5f5f7; }
+    main { max-width: 1100px; margin: 0 auto; padding: 5rem 1.5rem; }
+    
+    .vault-header { text-align: center; margin-bottom: 3rem; }
+    .vault-header h1 { font-size: 3rem; font-weight: 800; color: #1d1d1f; letter-spacing: -0.04em; }
+    .vault-header p { color: #86868b; font-size: 1.1rem; margin-top: 0.5rem; }
+
+    /* 검색 및 필터 UI */
+    .controls-wrapper {
+        position: sticky;
+        top: 80px;
+        z-index: 100;
+        background: rgba(245, 245, 247, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    .search-container {
+        display: flex;
+        gap: 1rem;
+        background: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    #search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #1d1d1f;
+    }
+    .filter-chips {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        -ms-overflow-style: none; scrollbar-width: none;
+    }
+    .filter-chips::-webkit-scrollbar { display: none; }
+    .chip {
+        background: white;
+        border: 1px solid rgba(0,0,0,0.05);
+        padding: 0.5rem 1.25rem;
+        border-radius: 99px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #86868b;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+    }
+    .chip.active {
+        background: #0051c3;
+        color: white;
+        border-color: #0051c3;
+    }
+
+    /* 보관소 갤러리 */
+    .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+    }
+    .vocab-card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.75rem;
+        border: 1px solid rgba(0,0,0,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .vocab-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    .top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .vocab-id { font-size: 0.7rem; font-weight: 700; color: #0051c3; background: rgba(0, 81, 195, 0.05); padding: 0.2rem 0.6rem; border-radius: 6px; }
+    .star-btn { background: transparent; border: none; cursor: pointer; color: #d2d2d7; transition: color 0.2s; padding: 0; }
+    .star-btn.active { color: #ffb800; }
+    
+    .phrase-title { font-size: 1.4rem; font-weight: 800; color: #1d1d1f; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    .phrase-meaning { font-size: 0.95rem; font-weight: 600; color: #0051c3; margin-bottom: 1rem; }
+    .synonym-item { font-size: 0.75rem; color: #86868b; background: #f5f5f7; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 500; }
+    
+    .example-box { background: #f5f5f7; border-radius: 12px; padding: 1rem; margin-top: auto; }
+    .example-en { font-size: 0.88rem; color: #1d1d1f; line-height: 1.5; font-weight: 500; margin-bottom: 0.4rem; }
+    .example-ko { font-size: 0.82rem; color: #86868b; line-height: 1.4; }
+
+    .speaker-icon { margin-left: 0.5rem; opacity: 0.3; transition: opacity 0.2s; }
+    .phrase-title:hover .speaker-icon { opacity: 1; }
+
+    @media (max-width: 600px) {
+        .vocab-grid { grid-template-columns: 1fr; }
+        .vault-header h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <Header />
+  <main>
+    <div class="vault-header">
+      <h1>The Vault</h1>
+      <p>박혜원 파워토익 VOCA 800개 전술적 데이터베이스</p>
+    </div>
+
+    <div class="controls-wrapper">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="단어, 뜻, 예문 검색..." />
+            <button style="background:none; border:none; cursor:pointer;">🔍</button>
+        </div>
+        <div class="filter-chips">
+            <div class="chip active" data-filter="all">전체보기</div>
+            <div class="chip" data-filter="bookmarked">⭐ 북마크</div>
+            <div class="chip" data-filter="wrong">❌ 오답노트</div>
+            <div class="chip" data-filter="unseen">🆕 학습 전</div>
+        </div>
+    </div>
+
+    <div class="vocab-grid" id="vocab-grid">
+        <!-- JS 렌더링 -->
+    </div>
+  </main>
+  <Footer />
+
+  <script>
+    import { ALL_TOEIC_PHRASES } from '../../data/toeic-phrases-index.js';
+    import { supabase } from '../../lib/supabase.js';
+
+    let phrases = [...ALL_TOEIC_PHRASES];
+    let userWrongIds = new Set();
+    let userBookmarkIds = new Set();
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    const initVault = async () => {
+        // Fetch User Data from Supabase
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            const { data } = await supabase.from('toeic_progress')
+                .select('toeic_id, is_correct, is_bookmarked')
+                .eq('user_id', session.user.id);
+            
+            if (data) {
+                data.forEach(r => {
+                    if (!r.is_correct) userWrongIds.add(r.toeic_id);
+                    if (r.is_bookmarked) userBookmarkIds.add(r.toeic_id);
+                });
+            }
+        } else {
+            // Local fallback
+            const localWrong = JSON.parse(localStorage.getItem('toeic_wrong_ids') || '[]');
+            const localStars = JSON.parse(localStorage.getItem('toeic_bookmarks') || '[]');
+            localWrong.forEach(id => userWrongIds.add(id));
+            localStars.forEach(id => userBookmarkIds.add(id));
+        }
+
+        renderGrid();
+    };
+
+    function renderGrid() {
+        const grid = document.getElementById('vocab-grid');
+        let filtered = phrases.filter(p => {
+            const matchSearch = p.phrase.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                p.meaning.includes(searchQuery) ||
+                                p.examples.some(ex => ex.en.toLowerCase().includes(searchQuery.toLowerCase()));
+            
+            if (!matchSearch) return false;
+
+            if (currentFilter === 'bookmarked') return userBookmarkIds.has(p.id);
+            if (currentFilter === 'wrong') return userWrongIds.has(p.id);
+            if (currentFilter === 'unseen') return !userWrongIds.has(p.id) && !userBookmarkIds.has(p.id);
+            return true;
+        });
+
+        grid.innerHTML = filtered.map(p => `
+            <div class="vocab-card">
+                <div class="top-row">
+                    <span class="vocab-id">#${p.id}</span>
+                    <button class="star-btn ${userBookmarkIds.has(p.id) ? 'active' : ''}" onclick="window.vaultToggleStar('${p.id}')">
+                        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </button>
+                </div>
+                <div class="phrase-title">
+                    ${p.phrase}
+                </div>
+                <div class="phrase-meaning">${p.meaning}</div>
+                <div class="synonym-list">
+                    ${p.synonyms.map(s => `<span class="synonym-item">${s}</span>`).join('')}
+                </div>
+                <div class="example-box">
+                    <div class="example-en">${p.examples[0].en}</div>
+                    <div class="example-ko">${p.examples[0].ko}</div>
+                </div>
+            </div>
+        `).join('');
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 5rem; color: #86868b; font-weight: 600;">검색 결과가 없습니다.</div>';
+        }
+    }
+
+    window.vaultToggleStar = async (id) => {
+        const isCurrentlyActive = userBookmarkIds.has(id);
+        if (isCurrentlyActive) userBookmarkIds.delete(id);
+        else userBookmarkIds.add(id);
+        
+        renderGrid();
+
+        // Local store
+        localStorage.setItem('toeic_bookmarks', JSON.stringify([...userBookmarkIds]));
+
+        // DB sync (if logged in)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            await supabase.from('toeic_progress').upsert({
+                user_id: session.user.id,
+                toeic_id: id,
+                is_bookmarked: !isCurrentlyActive,
+                updated_at: new Date().toISOString()
+            }, { onConflict: ['user_id', 'toeic_id'] });
+        }
+    };
+
+    // Events
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderGrid();
+    });
+
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            currentFilter = chip.dataset.filter;
+            renderGrid();
+        });
+    });
+
+    initVault();
+  </script>
+</body>
+</html>

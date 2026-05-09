@@ -1,0 +1,131 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+import { allJipQuizData } from '../../data/jip-quiz-data.js';
+
+// 전체 퀴즈 목록 (네비게이션용) - 연도/회차 기준 내림차순 정렬 (최신순)
+const allRanges = Object.keys(allJipQuizData).sort((a, b) => b.localeCompare(a));
+
+const getDisplayRange = (r) => {
+  if (r.includes('년') && r.includes('회')) {
+      return r.replace('년', '년 ').replace('회', '회 기출문제');
+  }
+  return r;
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`정보처리 산업기사 실전 연습 문제 | ${SITE_TITLE}`} description="2026년 정보처리 산업기사 실전 대비 문제 목록입니다. 합격을 위한 필수 기출 문제를 풀어보세요." />
+		<style>
+			main {
+				width: 100%;
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+				overflow-x: hidden;
+			}
+			.quiz-list-container {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+				max-width: 100%;
+			}
+			.quiz-card {
+				background: white;
+				padding: 3rem 2rem;
+				border-radius: 24px;
+				box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+				text-decoration: none;
+				color: inherit;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				border: 1px solid rgba(0,0,0,0.05);
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.quiz-card:hover {
+				transform: translateY(-8px);
+				box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+                border-color: #0051c3;
+			}
+			.quiz-card h3 {
+				margin: 0 0 0.75rem 0;
+				font-size: 1.35rem;
+				color: #1d1d1f;
+				font-weight: 700;
+				letter-spacing: -0.03em;
+				word-break: keep-all;
+			}
+			.quiz-card p {
+				margin: 0;
+				font-size: 0.95rem;
+				color: #86868b;
+				line-height: 1.5;
+				font-weight: 400;
+				word-break: keep-all;
+			}
+			.quiz-badge {
+				display: inline-block;
+				padding: 0.35rem 0.9rem;
+				background: linear-gradient(135deg, #0051c3, #34aadc);
+				color: white;
+				border-radius: 9999px;
+				font-size: 0.75rem;
+				font-weight: 700;
+				margin-bottom: 1.25rem;
+				align-self: flex-start;
+				letter-spacing: 0.05em;
+			}
+			.quiz-link-text {
+				margin-top: 2rem;
+				font-weight: 700;
+				color: #0051c3;
+				font-size: 0.9rem;
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				transition: gap 0.2s;
+			}
+			.quiz-card:hover .quiz-link-text {
+				gap: 0.6rem;
+			}
+			@media (max-width: 768px) {
+				main { padding: 3rem 1.25rem; }
+				.quiz-list-container { grid-template-columns: 1fr; gap: 1.25rem; }
+				.quiz-card { padding: 2rem 1.5rem; }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section style="text-align: center; margin-bottom: 5rem;">
+				<h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; color: #1d1d1f; font-weight: 800; letter-spacing: -0.04em;">정보처리 산업기사 실전 연습 문제</h1>
+				<p style="color: #86868b; font-size: 1.2rem; line-height: 1.6; font-weight: 500; max-width: 600px; margin: 0 auto;">
+					다가오는 5월 17일 시험 합격을 위한 완벽 대비! <br>기출 문제를 가장 직관적인 환경에서 풀어보세요.
+				</p>
+			</section>
+
+			<div class="quiz-list-container">
+				{allRanges.map((range) => (
+					<a href={`/engineer/quiz/${range}/`} class="quiz-card">
+                        <div>
+                            <span class="quiz-badge">기출 실전 모의고사</span>
+						    <h3>{getDisplayRange(range)}</h3>
+						    <p>총 3과목, {allJipQuizData[range].length}개의 문항이 포함되어 있습니다.</p>
+                        </div>
+                        <div class="quiz-link-text">
+                            도전하기 →
+                        </div>
+					</a>
+				))}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

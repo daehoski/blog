@@ -51,13 +51,94 @@ import Footer from '../../components/Footer.astro';
 			}
 			.hero p {
 				color: #86868b;
-				font-size: 1.2rem;
+				font-size: 1.15rem;
 				line-height: 1.6;
 				max-width: 600px;
-				margin: 0 auto 3rem;
+				margin: 0 auto 2.5rem;
 				word-break: keep-all;
 				font-weight: 500;
 			}
+
+            /* --- 통합 검색 바 --- */
+            .search-container {
+                max-width: 600px;
+                margin: 0 auto 4rem;
+                position: relative;
+            }
+            .search-input-wrapper {
+                position: relative;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                background: white;
+                border: 2px solid #e5e5ea;
+                border-radius: 20px;
+                padding: 0.25rem 0.5rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            }
+            .search-input-wrapper:focus-within {
+                border-color: #0051c3;
+                box-shadow: 0 8px 30px rgba(0, 81, 195, 0.08);
+                transform: translateY(-2px);
+            }
+            .search-input {
+                width: 100%;
+                border: none;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                font-weight: 600;
+                color: #1d1d1f;
+                background: transparent;
+                outline: none;
+            }
+            .search-input::placeholder { color: #86868b; font-weight: 500; }
+            .search-btn {
+                background: #0051c3;
+                color: white;
+                border: none;
+                width: 3rem;
+                height: 2.6rem;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .search-btn:hover { background: #0041a3; }
+            
+            .search-results {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 20px;
+                margin-top: 0.75rem;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+                border: 1px solid rgba(0,0,0,0.05);
+                z-index: 100;
+                max-height: 400px;
+                overflow-y: auto;
+                display: none;
+                padding: 1rem;
+            }
+            .search-results.active { display: block; }
+            .result-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                padding: 1rem;
+                border-radius: 12px;
+                text-decoration: none;
+                color: inherit;
+                transition: background 0.2s;
+            }
+            .result-item:hover { background: #f5f5f7; }
+            .result-cat { font-size: 0.65rem; font-weight: 800; color: #0051c3; text-transform: uppercase; letter-spacing: 0.05em; }
+            .result-title { font-size: 0.95rem; font-weight: 700; color: #1d1d1f; }
+            .result-desc { font-size: 0.85rem; color: #86868b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 			/* ── 카드 그리드 ── */
 			.modules {
 				display: grid;
@@ -211,13 +292,23 @@ import Footer from '../../components/Footer.astro';
 		<Header />
 		<main>
 			<section class="hero">
-				<div class="badge">TOEIC Study Hub</div>
-				<h1>토익 실전 완벽 대비<br><span>프레이즈 · 문법 · 문제풀이</span></h1>
+				<div class="badge">TOEIC Premium Hub</div>
+				<h1>토익 실전 완벽 대비<br><span>인텔리전스 학습 허브</span></h1>
 				<p>
-					박혜원 파워토익 VOCA + 토익 RC 문법 총정리.<br>
-					뇌과학 기반 악랄한 4지선다로 실전 감각을 키우세요.
+					박혜원 파워토익 VOCA + 1:1 맞춤형 오답 관리 시스템.<br>
+					데이터 분석으로 당신의 취약점만 골라 파괴합니다.
 				</p>
 			</section>
+
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <input type="text" id="global-search" class="search-input" placeholder="어휘 또는 문법 개념을 검색하세요 (e.g. deliver, 관계사)" autocomplete="off" />
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div id="search-results" class="search-results">
+                    <!-- Results populated by JS -->
+                </div>
+            </div>
 
 			<div class="modules">
 				<!-- 프레이즈 퀴즈 -->
@@ -242,10 +333,32 @@ import Footer from '../../components/Footer.astro';
 					<div class="module-cta">퀴즈 시작하기 →</div>
 				</a>
 
+				<!-- ETS 30일 완성 -->
+				<a href="/toeic/ets/" class="module-card green" style="background: linear-gradient(135deg, #ffffff 0%, #f1f8f1 100%);">
+					<div class="module-icon">🏆</div>
+					<span class="module-tag tag-green">ETS 기출 VOCA</span>
+					<h2>ETS 30일 완성</h2>
+					<p>
+						기출 보카 30일 완성 챌린지.<br>
+						내가 직접 타이핑하며 구축하는 퍼스널 데이터베이스.
+					</p>
+					<div class="module-stats">
+						<div class="stat">
+							<span class="stat-num">30</span>
+							<span class="stat-label">학습 DAY</span>
+						</div>
+						<div class="stat">
+							<span class="stat-num" id="ets-total-count">0</span>
+							<span class="stat-label">수집 어휘</span>
+						</div>
+					</div>
+					<div class="module-cta">30일 챌린지 시작 →</div>
+				</a>
+
 				<!-- RC 문법 -->
-				<a href="/toeic/grammar/" class="module-card green">
+				<a href="/toeic/grammar/" class="module-card orange">
 					<div class="module-icon">📐</div>
-					<span class="module-tag tag-green">RC 문법 정리</span>
+					<span class="module-tag tag-orange">RC 문법 정리</span>
 					<h2>RC 문법 총정리</h2>
 					<p>
 						토익 Part 5/6 필수 문법 기초부터 완전 정복.<br>
@@ -264,27 +377,27 @@ import Footer from '../../components/Footer.astro';
 					<div class="module-cta">문법 정리 보기 →</div>
 				</a>
 
-				<!-- 오답 노트 (Coming Soon) -->
-				<div class="module-card orange" style="cursor: default; opacity: 0.85;">
+				<!-- 오답 노트 (Real Integration) -->
+				<a href="/mypage/" class="module-card blue" style="border-color: rgba(0, 81, 195, 0.2);">
 					<div class="module-icon">📊</div>
-					<span class="module-tag tag-orange">Coming Soon</span>
-					<h2>오답 노트</h2>
+					<span class="module-tag tag-blue">Smart Analytics</span>
+					<h2>지능형 레포트</h2>
 					<p>
-						틀린 문제만 모아 집중 복습.<br>
-						스페이스드 리피티션으로 장기 기억화.
+						나의 학습 성취도를 다각도로 분석.<br>
+						레이더 차트와 오답 리스트로 약점 완벽 보완.
 					</p>
 					<div class="module-stats">
 						<div class="stat">
 							<span class="stat-num" id="wrong-count">0</span>
-							<span class="stat-label">오답 문제</span>
+							<span class="stat-label">누적 오답</span>
 						</div>
 						<div class="stat">
 							<span class="stat-num" id="acc-rate">—</span>
-							<span class="stat-label">정답률</span>
+							<span class="stat-label">성취 지수</span>
 						</div>
 					</div>
-					<div class="module-cta" style="color: #86868b;">준비 중 ...</div>
-				</div>
+					<div class="module-cta">나의 통계 보기 →</div>
+				</a>
 			</div>
 
 			<!-- 학습 팁 -->
@@ -318,18 +431,77 @@ import Footer from '../../components/Footer.astro';
 		<Footer />
 
 		<script>
-			// 로컬스토리지에서 학습 통계 로드
-			const wrongAnswers = JSON.parse(localStorage.getItem('toeic_wrong') || '[]');
-			const allAttempts = JSON.parse(localStorage.getItem('toeic_attempts') || '[]');
-			
-			const wrongEl = document.getElementById('wrong-count');
-			const accEl = document.getElementById('acc-rate');
-			
-			if (wrongEl) wrongEl.textContent = wrongAnswers.length;
-			if (accEl && allAttempts.length > 0) {
-				const correct = allAttempts.length - wrongAnswers.length;
-				accEl.textContent = Math.round((correct / allAttempts.length) * 100) + '%';
-			}
+            import { supabase } from '../../lib/supabase.js';
+
+			async function initPortal() {
+                // 1. Stats from Supabase
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    const { data: progress } = await supabase.from('toeic_progress').select('*').eq('user_id', session.user.id);
+                    if (progress) {
+                        const wrong = progress.filter(r => !r.is_correct).length;
+                        const correct = progress.length - wrong;
+                        const rate = progress.length > 0 ? Math.round((correct / progress.length) * 100) : 0;
+                        
+                        document.getElementById('wrong-count').textContent = wrong;
+                        document.getElementById('acc-rate').textContent = rate + '%';
+                    }
+
+                    // 1.1 ETS Stats
+                    const { data: etsData } = await supabase.from('ets_voca').select('id').eq('user_id', session.user.id);
+                    if (etsData) {
+                        document.getElementById('ets-total-count').textContent = etsData.length;
+                    }
+                }
+
+                // 2. Global Search Logic
+                // We'll need a way to access CHAPTERS and PHRASES. 
+                // Since CHAPTERS is in grammar.astro script, we'll recreate a light index here or fetch.
+                const G_INDEX = [
+                    { t: "품사 (Parts of Speech)", d: "명사·형용사·부사·동사 자리 파악", l: "/toeic/grammar/" },
+                    { t: "동사의 시제 (Tense)", d: "현재·과거·미래·완료형 키워드", l: "/toeic/grammar/" },
+                    { t: "수일치 (Agreement)", d: "단수/복수 주어 동사 일치", l: "/toeic/grammar/" },
+                    { t: "관계사 (Relative Clauses)", d: "who/which/that/where/when", l: "/toeic/grammar/" },
+                    { t: "접속사 vs 전치사", d: "although vs despite 구분", l: "/toeic/grammar/" }
+                ];
+
+                const searchInput = document.getElementById('global-search');
+                const searchResults = document.getElementById('search-results');
+
+                searchInput.addEventListener('input', (e) => {
+                    const q = e.target.value.toLowerCase().trim();
+                    if (q.length < 2) {
+                        searchResults.classList.remove('active');
+                        return;
+                    }
+
+                    const filtered = G_INDEX.filter(item => 
+                        item.t.toLowerCase().includes(q) || item.d.toLowerCase().includes(q)
+                    );
+
+                    if (filtered.length > 0) {
+                        searchResults.innerHTML = filtered.map(item => `
+                            <a href="${item.l}" class="result-item">
+                                <span class="result-cat">Grammar Rule</span>
+                                <span class="result-title">${item.t}</span>
+                                <span class="result-desc">${item.d}</span>
+                            </a>
+                        `).join('');
+                        searchResults.classList.add('active');
+                    } else {
+                        searchResults.innerHTML = '<div style="padding: 1rem; color: #86868b; font-size: 0.9rem;">검색 결과가 없습니다.</div>';
+                        searchResults.classList.add('active');
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.classList.remove('active');
+                    }
+                });
+            }
+
+            initPortal();
 		</script>
 	</body>
 </html>

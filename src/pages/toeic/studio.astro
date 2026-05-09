@@ -1,0 +1,282 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+---
+
+<!doctype html>
+<html lang="ko">
+<head>
+    <BaseHead title={`VOCA 스튜디오 | ${SITE_TITLE}`} description="ETS 기출 VOCA를 직접 타이핑하고 자산화하세요." />
+    <style>
+        body { background: #fbfbfd; }
+        main { max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem; display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
+        
+        .studio-header { grid-column: 1 / -1; margin-bottom: 2rem; border-bottom: 1px solid #e5e5ea; padding-bottom: 2rem; }
+        .studio-header h1 { font-size: 2.5rem; font-weight: 800; color: #1d1d1f; letter-spacing: -0.05em; }
+        
+        .tabs { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .tab-btn { padding: 0.6rem 1.2rem; border-radius: 12px; border: 1px solid #e5e5ea; background: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: #0051c3; color: white; border-color: #0051c3; }
+
+        .entry-container { background: white; padding: 2.5rem; border-radius: 28px; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
+        .form-grid { display: grid; grid-template-columns: 120px 1fr; gap: 1.5rem; align-items: center; }
+        .form-label { font-size: 0.9rem; font-weight: 700; color: #86868b; text-transform: uppercase; }
+        input, textarea, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #d2d2d7; border-radius: 12px; font-size: 1rem; font-weight: 500; outline: none; transition: border-color 0.2s; }
+        input:focus, textarea:focus { border-color: #0051c3; }
+        
+        .btn-row { margin-top: 3rem; display: flex; gap: 1rem; }
+        .save-btn { flex: 1; background: #0051c3; color: white; border: none; padding: 1rem; border-radius: 14px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
+        .save-btn:active { transform: scale(0.98); }
+        
+        /* Stats Sidebar */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .stat-card { background: #f5f5f7; padding: 1.5rem; border-radius: 20px; margin-bottom: 1.5rem; }
+        .stat-card h3 { font-size: 0.85rem; color: #86868b; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #1d1d1f; }
+        
+        .recent-list { max-height: 400px; overflow-y: auto; }
+        .recent-item { padding: 1rem; border-bottom: 1px solid #e5e5ea; display: flex; justify-content: space-between; align-items: center; }
+        .recent-item:last-child { border-bottom: none; }
+        .delete-small { background: none; border: none; color: #ff3b30; font-size: 0.75rem; font-weight: 700; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; }
+        .delete-small:hover { opacity: 1; text-decoration: underline; }
+        
+        /* Bulk Importer Overlay */
+        #bulk-importer { display: none; }
+        .bulk-area { height: 300px; font-family: monospace; font-size: 0.85rem; }
+
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+    <Header />
+    <main>
+        <div class="studio-header">
+            <h1>ETS VOCA 라이팅 스튜디오</h1>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('single')">개별 입력</button>
+                <button class="tab-btn" onclick="switchTab('bulk')">엑셀 임포터</button>
+            </div>
+        </div>
+
+        <!-- Single Entry -->
+        <div id="single-entry" class="entry-container">
+            <div class="form-grid">
+                <span class="form-label">Day</span>
+                <select id="day-select">
+                    {Array.from({ length: 30 }, (_, i) => (
+                        <option value={i + 1}>Day {i + 1}</option>
+                    ))}
+                </select>
+
+                <span class="form-label">단어 (Word)</span>
+                <input type="text" id="word" placeholder="e.g. deliver" autocomplete="off" />
+
+                <span class="form-label">뜻 (Meaning)</span>
+                <input type="text" id="meaning" placeholder="e.g. (동) 연설하다, (물건을) 배달하다" autocomplete="off" />
+
+                <span class="form-label">유의어</span>
+                <input type="text" id="synonyms" placeholder="e.g. give, make, hand over" />
+
+                <span class="form-label">예문(En)</span>
+                <textarea id="sentence-en" rows="2" placeholder="e.g. Ms. Clark will be delivering the keynote speech tomorrow."></textarea>
+
+                <span class="form-label">예문(Ko)</span>
+                <textarea id="sentence-ko" rows="2" placeholder="e.g. Clark 씨는 내일 기조연설을 할 예정입니다."></textarea>
+
+                <span class="form-label">기출 팁</span>
+                <textarea id="exam-tips" rows="3" placeholder="e.g. deliver a speech (연설하다) / deliver on one's promise (약속을 이행하다)"></textarea>
+            </div>
+            <div class="btn-row">
+                <button class="save-btn" id="save-btn">저장 및 다음 (Ctrl+S)</button>
+            </div>
+        </div>
+
+        <!-- Bulk Importer -->
+        <div id="bulk-importer" class="entry-container">
+            <h3 style="margin-bottom: 1rem;">엑셀 데이터 붙여넣기</h3>
+            <p style="font-size: 0.85rem; color: #86868b; margin-bottom: 1.5rem;">엑셀에서 범위를 복사하여 아래에 붙여넣으세요. (순서: 영어, 뜻, 유의어, 예문En, 예문Ko, 팁)</p>
+            <textarea id="bulk-data" class="bulk-area" placeholder="단어	뜻	유의어	예문En	예문Ko	팁..."></textarea>
+            <div class="btn-row">
+                <button class="save-btn" id="bulk-save-btn" style="background: #1d1d1f;">벌크 데이터 업로드</button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="stat-card">
+                <h3>오늘 입력한 단어</h3>
+                <div class="stat-value" id="today-count">0</div>
+            </div>
+            <div class="stat-card" style="background: white; border: 1px solid #e5e5ea;">
+                <h3 style="display: flex; justify-content: space-between;">최근 입력 <span id="sync-status" style="font-size: 0.7rem; color: #30d158; font-weight: 800;">SYNCED</span></h3>
+                <div class="recent-list" id="recent-list">
+                    <!-- JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <Footer />
+
+    <script>
+        import { supabase } from '../../lib/supabase.js';
+
+        let currentUser = null;
+        let todayEntries = [];
+
+        async function initStudio() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { alert("로그인이 필요합니다."); window.location.href = '/'; return; }
+            currentUser = session.user;
+            loadRecent();
+        }
+
+        async function loadRecent() {
+            const today = new Date().toISOString().split('T')[0];
+            const { data } = await supabase
+                .from('ets_voca')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .gte('created_at', today)
+                .order('created_at', { ascending: false });
+            
+            if (data) {
+                todayEntries = data;
+                document.getElementById('today-count').textContent = data.length;
+                renderRecent();
+            }
+        }
+
+        function renderRecent() {
+            const list = document.getElementById('recent-list');
+            list.innerHTML = todayEntries.slice(0, 15).map(entry => `
+                <div class="recent-item">
+                    <div>
+                        <span style="font-weight: 700;">${entry.word}</span>
+                        <span style="font-size: 0.8rem; color: #86868b; margin-left:10px;">Day ${entry.day}</span>
+                    </div>
+                    <button class="delete-small" onclick="window.deleteEntry('${entry.id}')">삭제</button>
+                </div>
+            `).join('') || '<p style="padding:1rem;color:#86868b;text-align:center;">오늘 입력한 내역이 없습니다.</p>';
+        }
+
+        window.deleteEntry = async (id) => {
+            if (!confirm("정말 이 단어를 삭제하시겠습니까?")) return;
+            
+            document.getElementById('sync-status').textContent = "DELETING...";
+            const { error } = await supabase.from('ets_voca').delete().eq('id', id);
+            
+            if (error) {
+                alert("삭제 실패: " + error.message);
+                document.getElementById('sync-status').textContent = "ERROR";
+            } else {
+                document.getElementById('sync-status').textContent = "DELETED";
+                loadRecent();
+            }
+        };
+
+        async function saveEntry() {
+            const entry = {
+                user_id: currentUser.id,
+                day: parseInt(document.getElementById('day-select').value),
+                word: document.getElementById('word').value.trim(),
+                meaning: document.getElementById('meaning').value.trim(),
+                synonyms: document.getElementById('synonyms').value.trim(),
+                sentence_en: document.getElementById('sentence-en').value.trim(),
+                sentence_ko: document.getElementById('sentence-ko').value.trim(),
+                exam_tips: document.getElementById('exam-tips').value.trim(),
+                updated_at: new Date().toISOString()
+            };
+
+            if (!entry.word || !entry.meaning) return alert("단어와 뜻은 필수입니다.");
+
+            document.getElementById('sync-status').textContent = "SAVING...";
+            const { error } = await supabase.from('ets_voca').insert(entry);
+
+            if (error) {
+                alert("저장 실패: " + error.message);
+                document.getElementById('sync-status').textContent = "ERROR";
+            } else {
+                // Success
+                document.getElementById('word').value = '';
+                document.getElementById('meaning').value = '';
+                document.getElementById('synonyms').value = '';
+                document.getElementById('sentence-en').value = '';
+                document.getElementById('sentence-ko').value = '';
+                document.getElementById('exam-tips').value = '';
+                document.getElementById('word').focus();
+                
+                document.getElementById('sync-status').textContent = "SAVED";
+                loadRecent();
+            }
+        }
+
+        // Bulk Save
+        async function bulkSave() {
+            const text = document.getElementById('bulk-data').value;
+            const day = parseInt(document.getElementById('day-select').value);
+            const rows = text.split('\n').filter(r => r.trim());
+            const entries = [];
+
+            for (let row of rows) {
+                const cols = row.split('\t');
+                if (cols.length >= 2) {
+                    entries.push({
+                        user_id: currentUser.id,
+                        day: day,
+                        word: cols[0]?.trim(),
+                        meaning: cols[1]?.trim(),
+                        synonyms: cols[2]?.trim() || null,
+                        sentence_en: cols[3]?.trim() || null,
+                        sentence_ko: cols[4]?.trim() || null,
+                        exam_tips: cols[5]?.trim() || null,
+                        updated_at: new Date().toISOString()
+                    });
+                }
+            }
+
+            if (entries.length === 0) return alert("파싱할 수 있는 데이터가 없습니다.");
+            if (confirm(`${entries.length}개의 단어를 Day ${day}에 일괄 저장할까요?`)) {
+                const { error } = await supabase.from('ets_voca').insert(entries);
+                if (error) alert(error.message);
+                else {
+                    alert("일괄 저장 성공!");
+                    document.getElementById('bulk-data').value = '';
+                    loadRecent();
+                }
+            }
+        }
+
+        // UI Helpers
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+            
+            if (tab === 'single') {
+                document.getElementById('single-entry').style.display = 'block';
+                document.getElementById('bulk-importer').style.display = 'none';
+            } else {
+                document.getElementById('single-entry').style.display = 'none';
+                document.getElementById('bulk-importer').style.display = 'block';
+            }
+        };
+
+        // Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveEntry();
+            }
+        });
+
+        document.getElementById('save-btn').onclick = saveEntry;
+        document.getElementById('bulk-save-btn').onclick = bulkSave;
+
+        initStudio();
+    </script>
+</body>
+</html>

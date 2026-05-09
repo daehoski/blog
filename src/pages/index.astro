@@ -89,8 +89,30 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			.feature-card p {
 				color: #86868b;
 				line-height: 1.6;
-				font-size: 1rem;
+				font-size: 0.95rem;
 				font-weight: 400;
+				margin-bottom: 1.5rem;
+			}
+			.feature-icon {
+				width: 60px;
+				height: 60px;
+				border-radius: 18px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.8rem;
+				margin-bottom: 1.5rem;
+			}
+			.feature-link {
+				color: #0051c3;
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 0.9rem;
+				transition: color 0.2s;
+			}
+			.feature-link:hover {
+				color: #003e96;
+				text-decoration: underline;
 			}
 			@media (max-width: 768px) {
 				main {
@@ -128,23 +150,36 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</p>
 				<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
 					<a href="/toeic/" class="cta-button" style="background-color: #0051c3; color: white;">파워토익 집중 학습하기 &rarr;</a>
+                    <a href="/engineer/" class="cta-button" style="background-color: #34aadc; color: white;">정처산기 실전 대비하기 &rarr;</a>
 				</div>
 			</section>
 
-			<section class="features">
+			<div class="features">
 				<div class="feature-card">
-					<h3>방대한 기출 데이터</h3>
-					<p>최신 TOEIC 패턴을 반영한 핵심 연어 800개 및 실전 문법 퀴즈들을 빈틈없이 체계적으로 수록했습니다.</p>
+					<div class="feature-icon" style="background: rgba(48, 209, 88, 0.1); color: #30d158;">📚</div>
+					<h3>지능형 오답 정복</h3>
+					<p>내가 틀렸던 문제들을 AI가 분석하여 복습 우선순위를 결정합니다. 데이터 기반의 반복 학습으로 취약 지형을 완벽히 소거하세요.</p>
+					<a href="/toeic/phrases/?mode=review" class="feature-link">지금 바로 복습하기 →</a>
 				</div>
 				<div class="feature-card">
-					<h3>지능형 오답 노트</h3>
-					<p>풀이 즉시 상세한 해설을 제공하고 취약점을 로컬 스토리지에 자동 저장합니다. 반복 학습으로 오답을 완벽히 소거하세요.</p>
+					<div class="feature-icon" style="background: rgba(0, 81, 195, 0.1); color: #0051c3;">📊</div>
+					<h3>Radar 분석</h3>
+					<p>어휘, 동사구, 품사 등 5가지 핵심 카테고리별 성취도를 레이더 차트로 시각화합니다. 나의 강력한 약점을 데이터로 증명하세요.</p>
+					<a href="/mypage/" class="feature-link">분석 대시보드 →</a>
 				</div>
 				<div class="feature-card">
-					<h3>미니멀리즘 엔진</h3>
-					<p>시선을 빼앗는 광고와 불필요한 노이즈를 전부 제거했습니다. 오직 어학에만 몰입할 수 있는 쾌적한 UX를 제공합니다.</p>
+					<div class="feature-icon" style="background: rgba(255, 184, 0, 0.1); color: #ffb800;">🏛️</div>
+					<h3>The Vault</h3>
+					<p>800개 이상의 파워토익 핵심 어휘와 예문을 담은 거대한 데이터베이스. 검색, 필터링 기능을 통해 나만의 지식 창고를 완성하세요.</p>
+					<a href="/toeic/vault/" class="feature-link">보관소 탐색하기 →</a>
 				</div>
-			</section>
+				<div class="feature-card">
+					<div class="feature-icon" style="background: rgba(52, 170, 220, 0.1); color: #34aadc;">💻</div>
+					<h3>정보처리 산업기사 (NEW)</h3>
+					<p>2026년 5월 17일 정처산기 시험 대비! 직관적인 인터페이스와 즉각적인 피드백으로 실전 기출문제를 완벽하게 마스터하세요.</p>
+					<a href="/engineer/" class="feature-link">기출문제 풀어보기 →</a>
+				</div>
+			</div>
 
 			<section style="text-align: center; color: #86868b; padding: 4rem 0 2rem; font-size: 0.9rem; font-weight: 500;">
 				<p>단기간 목표 점수 달성을 위해 가장 효율적인 학습 루트를 제시합니다.</p>
